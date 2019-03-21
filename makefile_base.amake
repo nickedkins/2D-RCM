@@ -1,0 +1,153 @@
+
+#
+# Absoft Developer Tools Interface requires use of this makefile.
+#
+MKDIR=mkdir -p 
+RMDIR=rm -rf 
+
+#
+# Variables for the compiler(s) and linker
+#
+ABSOFT_F95=f95
+ABSOFT_F77=f95
+VAST_PREPROCESSOR=vastfp
+RC=Rez
+GCC=gcc
+MAKE=amake2
+ABSOFT_F95_LINKER=f95
+DUMMY=
+
+#
+# Flags
+#
+ABSOFT_F95_FLAGS= -O2 -m64 -stack:1f40000
+ABSOFT_F77_FLAGS= -O2 -f77_compat -m64 -stack:1f40000
+RC_FLAGS=
+GCC_FLAGS= -O2 -m64
+MAKE_FLAGS= -k
+ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on       -stack:1f40000 -m64 -O2
+
+#
+# Name of the executable
+#
+TARGET=2D RCM GitHub
+OUTDIR=.
+OBJDIR=./Release
+
+#
+# Files for this executable
+#
+VAST_PREPROCESSOR_FILES=
+ABSOFT_F95_FILES="wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95"
+ABSOFT_F77_FILES="src/rtr.f" "src/rtrcld.f" "src/rtrcldmr.f" "src/rtreg.f" "src/rtregcld.f" "src/rtregcldmr.f" "src/taumol.f" "src/rrtm.f" "src/rrtatm.f" "src/extra.f" "src/cldprop.f" "src/ErrPack.f" "src/k_g.f" "src/LINPAK.f" "src/RDI1MACH.f" "src/setcoef.f" "src/disort.f" "src/rtrdis.f"
+GCC_FILES=
+ABSOFT_F95_LINKER_FILES=
+RC_FILES=
+MAKE_FILES=
+
+#
+# Rules and dependencies for the executable
+#
+SRCFILES=$(ABSOFT_F95_FILES) $(ABSOFT_F77_FILES)
+OBJFILES="$(OBJDIR)/wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.o" "$(OBJDIR)/MYSUBS.o" "$(OBJDIR)/VARIABLES.o" "$(OBJDIR)/myprrtm copy.o" "$(OBJDIR)/rtr.o" "$(OBJDIR)/rtrcld.o" "$(OBJDIR)/rtrcldmr.o" "$(OBJDIR)/rtreg.o" "$(OBJDIR)/rtregcld.o" "$(OBJDIR)/rtregcldmr.o" "$(OBJDIR)/taumol.o" "$(OBJDIR)/rrtm.o" "$(OBJDIR)/rrtatm.o" "$(OBJDIR)/extra.o" "$(OBJDIR)/cldprop.o" "$(OBJDIR)/ErrPack.o" "$(OBJDIR)/k_g.o" "$(OBJDIR)/LINPAK.o" "$(OBJDIR)/RDI1MACH.o" "$(OBJDIR)/setcoef.o" "$(OBJDIR)/disort.o" "$(OBJDIR)/rtrdis.o"
+all: "$(OBJDIR)" "$(OUTDIR)/$(TARGET)"
+	
+
+"$(OUTDIR)/$(TARGET)":  $(OBJFILES) $(ABSOFT_F95_LINKER_FILES) $(MODFILES)
+	$(ABSOFT_F95_LINKER)  $(LPATHS) $(OBJFILES) $(ABSOFT_F95_LINKER_FILES) $(LIBS) -o "$(OUTDIR)/$(TARGET)" $(ABSOFT_F95_LINKER_FLAGS)
+
+
+
+"$(OBJDIR)/wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.o": "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)/wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.o" "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95"
+
+"$(OBJDIR)/MYSUBS.o": "MYSUBS.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)/MYSUBS.o" "MYSUBS.f95"
+
+"$(OBJDIR)/VARIABLES.o": "VARIABLES.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)/VARIABLES.o" "VARIABLES.f95"
+
+"$(OBJDIR)/myprrtm copy.o": "myprrtm copy.f95"
+	$(ABSOFT_F95) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F95_FLAGS) -o "$(OBJDIR)/myprrtm copy.o" "myprrtm copy.f95"
+
+"$(OBJDIR)/rtr.o": "src/rtr.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtr.o" "src/rtr.f"
+
+"$(OBJDIR)/rtrcld.o": "src/rtrcld.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtrcld.o" "src/rtrcld.f"
+
+"$(OBJDIR)/rtrcldmr.o": "src/rtrcldmr.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtrcldmr.o" "src/rtrcldmr.f"
+
+"$(OBJDIR)/rtreg.o": "src/rtreg.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtreg.o" "src/rtreg.f"
+
+"$(OBJDIR)/rtregcld.o": "src/rtregcld.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtregcld.o" "src/rtregcld.f"
+
+"$(OBJDIR)/rtregcldmr.o": "src/rtregcldmr.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtregcldmr.o" "src/rtregcldmr.f"
+
+"$(OBJDIR)/taumol.o": "src/taumol.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/taumol.o" "src/taumol.f"
+
+"$(OBJDIR)/rrtm.o": "src/rrtm.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rrtm.o" "src/rrtm.f"
+
+"$(OBJDIR)/rrtatm.o": "src/rrtatm.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rrtatm.o" "src/rrtatm.f"
+
+"$(OBJDIR)/extra.o": "src/extra.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/extra.o" "src/extra.f"
+
+"$(OBJDIR)/cldprop.o": "src/cldprop.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/cldprop.o" "src/cldprop.f"
+
+"$(OBJDIR)/ErrPack.o": "src/ErrPack.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/ErrPack.o" "src/ErrPack.f"
+
+"$(OBJDIR)/k_g.o": "src/k_g.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/k_g.o" "src/k_g.f"
+
+"$(OBJDIR)/LINPAK.o": "src/LINPAK.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/LINPAK.o" "src/LINPAK.f"
+
+"$(OBJDIR)/RDI1MACH.o": "src/RDI1MACH.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/RDI1MACH.o" "src/RDI1MACH.f"
+
+"$(OBJDIR)/setcoef.o": "src/setcoef.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/setcoef.o" "src/setcoef.f"
+
+"$(OBJDIR)/disort.o": "src/disort.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/disort.o" "src/disort.f"
+
+"$(OBJDIR)/rtrdis.o": "src/rtrdis.f"
+	$(ABSOFT_F77) -c -nowdir -YLOOP_ANALYZER -LNO:simd_verbose=on -LNO:apo_verbose=on -CG:filetable_verbose=on $(ABSOFT_F77_FLAGS) -o "$(OBJDIR)/rtrdis.o" "src/rtrdis.f"
+
+"$(OBJDIR)":
+	$(MKDIR) "$(OBJDIR)"
+#
+# Clean Rules
+#
+clean:
+	$(RMDIR) "$(OBJDIR)"
+	$(RMDIR) "$(TARGET)"
+	rm -f makefile.amake
+	rm -f makefile.amake.bk
+	rm -f makefile_base.amake
+
+#
+# Define necessary macros for dependency scanning.
+#
+MKDEP=amakedepend
+MKDEP_FLAGS= -quiet "-pre$(OBJDIR)/" -Y -modInfo -errdel -f90 -f makefile.amake
+#
+# Generate dependencies for the project
+#
+ScanAll: "$(OUTDIR)" "$(OBJDIR)" MakeDepsAll
+
+#
+# Scan for all F77/F95, and c/c++ dependencies
+#
+MakeDepsAll:
+	$(MKDEP) -quiet "-pre./Release/" -Y -modInfo -errdel -f90 -f makefile.amake -a -info  -O2 -m64 -stack:1f40000 -info "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95" "src/rtr.f" "src/rtrcld.f" "src/rtrcldmr.f" "src/rtreg.f" "src/rtregcld.f" "src/rtregcldmr.f" "src/taumol.f" "src/rrtm.f" "src/rrtatm.f" "src/extra.f" "src/cldprop.f" "src/ErrPack.f" "src/k_g.f" "src/LINPAK.f" "src/RDI1MACH.f" "src/setcoef.f" "src/disort.f" "src/rtrdis.f" 
