@@ -96,11 +96,13 @@ subroutine wrapper
 
     outputfileloc = trim('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/_Raw Output Data/')&
     &//trim(my_output_file)
+    ! nje locref
 
     OPEN (50,FILE=outputfileloc,FORM='FORMATTED')
 
     ! Read input parameters from the file 'Earth RCM Parameters' with is created by the Python script 'Call Fortran from Python.py'
     open(73,file=trim('/Users/nickedkins/Dropbox/RCM with new PRRTM/Earth RCM Parameters'),form='formatted')
+    ! change this to a local reference nje locref
 
 
     read(73,*) ncols
@@ -171,6 +173,7 @@ subroutine wrapper
     close(73)
 
     open(81,file=('/Users/nickedkins/Dropbox/RCM with new PRRTM/Input Distributions/fal lats'),form='formatted')
+    ! nje locref
 
     !Read in lat profiles of 1D variables
     do col=1,ncols
@@ -471,6 +474,7 @@ subroutine wrapper
 
     if(fp==1) then
         open(91,file='/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/fixed_profile')
+        ! nje locref
         do col=1,ncols
             do i=0,nlayersm
                 read(91,1110) tzmcols(i,col)
@@ -505,6 +509,8 @@ subroutine wrapper
             surf_rh = surf_rhcols(col)
             R_g = R_gcols(col)
             mu_0 = zencols(col)
+
+            ! nje locref
 
             write(qfn,"(A83,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/o3 vert col ', col-1
@@ -1080,6 +1086,8 @@ subroutine wrapper
 
             call writeoutputfile
 
+            ! nje locref
+
             do col=1,ncols
 
                 write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ccfracs col '&
@@ -1372,6 +1380,8 @@ subroutine wrapper
                     ! end do
 
                     call writeoutputfile
+
+                    ! nje locref
 
                     do i=1,ncols
 

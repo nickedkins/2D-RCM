@@ -1,3 +1,14 @@
 
 2D RCM GitHub
 absoft_run_env.sh
+.DS_Store
+2D RCM GitHub
+2D RCM GitHub.atools
+2D RCM GitHub.dSYM/Contents/Info.plist
+2D RCM GitHub_for_atools.fx3
+absoft_run_env.sh
+*.o
+*.mod
+absoft_run_env.sh
+*.amake
+makefile.amake.bk
