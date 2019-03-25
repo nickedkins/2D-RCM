@@ -506,24 +506,9 @@ subroutine wrapper
             R_g = R_gcols(col)
             mu_0 = zencols(col)
 
-            ! nje locref
-
-            ! write(qfn,"(A83,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/q vert col ', col-1
-            ! write(o3fn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/o3 vert col ', col-1
-            ! !            write(ccfn,"(A65,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/cc vert col ', col-1
-            ! !            write(clwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/clwc vert col ', col-1               
-            ! !            write(ciwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ciwc vert col ', col-1   
-
-            ! write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccfracs col '&
-            ! &, col-1      
-            ! write(cctausfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/cctaus col ', col-1   
-            ! write(ccaltsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccalts col ', col-1   
-
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
-            !            write(ccfn,"(A65,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/cc vert col ', col-1
-            !            write(clwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/clwc vert col ', col-1               
-            !            write(ciwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ciwc vert col ', col-1   
+
 
             write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col '&
             &, col-1      
@@ -541,7 +526,7 @@ subroutine wrapper
             open(88,file=trim(cctausfn),form='formatted')
             open(89,file=trim(ccaltsfn),form='formatted')
 
-            open(92,file=('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/extra_clds'),form='formatted')
+                open(92,file=('extra_clds'),form='formatted')
 
             read(92,*) extra_cld_tau
             read(92,*) extra_cld_frac
@@ -1094,22 +1079,20 @@ subroutine wrapper
 
             call writeoutputfile
 
-            ! nje locref
-
             do col=1,ncols
 
-                write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ccfracs col '&
+                write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col '&
                 &, col-1      
-                write(cctausfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/cctaus col ', &
+                write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', &
                 &col-1   
-                write(ccaltsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ccalts col ', &
+                write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', &
                 &col-1   
 
                 open(87,file=trim(ccfracsfn),form='formatted')
                 open(88,file=trim(cctausfn),form='formatted')
                 open(89,file=trim(ccaltsfn),form='formatted')
 
-                open(92,file=('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/extra_clds'),form='formatted')
+                open(92,file=('extra_clds'),form='formatted')
 
                 read(92,*) extra_cld_tau
                 read(92,*) extra_cld_frac
@@ -1389,22 +1372,18 @@ subroutine wrapper
 
                     call writeoutputfile
 
-                    ! nje locref
 
                     do i=1,ncols
 
-                        write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/&
-                        &Input Distributions/ccfracs col ', col-1      
-                        write(cctausfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/&
-                        &Input Distributions/cctaus col ', col-1   
-                        write(ccaltsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/&
-                        &Input Distributions/ccalts col ', col-1   
+                        write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
+                        write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
+                        write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
 
                         open(87,file=trim(ccfracsfn),form='formatted')
                         open(88,file=trim(cctausfn),form='formatted')
                         open(89,file=trim(ccaltsfn),form='formatted')
 
-                        open(92,file=('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/extra_clds'),form='formatted')
+                        open(92,file=('extra_clds'),form='formatted')
 
                         read(92,*) extra_cld_tau
                         read(92,*) extra_cld_frac
