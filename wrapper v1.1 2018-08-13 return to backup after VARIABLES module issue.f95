@@ -508,28 +508,16 @@ subroutine wrapper
 
             ! nje locref
 
-            ! write(qfn,"(A83,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/q vert col ', col-1
-            ! write(o3fn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/o3 vert col ', col-1
-            ! !            write(ccfn,"(A65,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/cc vert col ', col-1
-            ! !            write(clwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/clwc vert col ', col-1               
-            ! !            write(ciwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ciwc vert col ', col-1   
-
-            ! write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccfracs col '&
-            ! &, col-1      
-            ! write(cctausfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/cctaus col ', col-1   
-            ! write(ccaltsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccalts col ', col-1   
-
-            write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
-            write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
+            write(qfn,"(A83,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/q vert col ', col-1
+            write(o3fn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/o3 vert col ', col-1
             !            write(ccfn,"(A65,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/cc vert col ', col-1
             !            write(clwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/clwc vert col ', col-1               
             !            write(ciwcfn,"(A67,I2)") '/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/Input Distributions/ciwc vert col ', col-1   
 
-            write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col '&
+            write(ccfracsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccfracs col '&
             &, col-1      
-            write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
-            write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
-
+            write(cctausfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/cctaus col ', col-1   
+            write(ccaltsfn,"(A84,I2)") '/Users/nickedkins/Dropbox/RCM in Dropbox/Input Distributions/ccalts col ', col-1   
 
             open(82,file=(trim(qfn)),form='formatted')
             open(83,file=(trim(o3fn)),form='formatted')

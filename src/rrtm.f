@@ -621,7 +621,6 @@ C Open Cloud Input File
          OPEN(IRDCLD,FILE=
      &'/Users/nickedkins/Dropbox/RCM with new PRRTM/My IN_CLD_RRTM',
      &FORM='FORMATTED')
-!     locref
 C     Read in cloud input option.  
       
       READ(IRDCLD,9050) INFLAG, ICEFLAG, LIQFLAG
