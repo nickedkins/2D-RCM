@@ -94,13 +94,15 @@ subroutine wrapper
     write(my_output_file,1100) values(1),values(2),values(3),&
     &values(5),values(6),values(7)
 
-    outputfileloc = trim('_Raw Output Data/')&
-    &//trim(my_output_file)    
+    outputfileloc = trim('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/_Raw Output Data/')&
+    &//trim(my_output_file)
+    ! nje locref
 
     OPEN (50,FILE=outputfileloc,FORM='FORMATTED')
 
     ! Read input parameters from the file 'Earth RCM Parameters' with is created by the Python script 'Call Fortran from Python.py'
-    open(73,file=trim('Earth RCM Parameters'),form='formatted')
+    open(73,file=trim('/Users/nickedkins/Dropbox/RCM with new PRRTM/Earth RCM Parameters'),form='formatted')
+    ! change this to a local reference nje locref
 
 
     read(73,*) ncols
@@ -170,7 +172,8 @@ subroutine wrapper
 
     close(73)
 
-    open(81,file=('Input Distributions/fal lats'),form='formatted')
+    open(81,file=('/Users/nickedkins/Dropbox/RCM with new PRRTM/Input Distributions/fal lats'),form='formatted')
+    ! nje locref
 
     !Read in lat profiles of 1D variables
     do col=1,ncols
@@ -470,7 +473,8 @@ subroutine wrapper
     enddo
 
     if(fp==1) then
-        open(91,file='fixed_profile')
+        open(91,file='/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/fixed_profile')
+        ! nje locref
         do col=1,ncols
             do i=0,nlayersm
                 read(91,1110) tzmcols(i,col)
