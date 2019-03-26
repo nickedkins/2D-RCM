@@ -241,12 +241,12 @@ for directory in directories:
         # plt.xlabel('Temperature (K)')
         # plt.legend(title='$p_{I,N_2}$')
 
-        # plt.figure(1)
-        # plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
-        # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.ylabel('Pressure (hPa)')
-        # plt.xlabel('Net Flux (Wm$^{-2}$)')
-        # plt.legend(title='$p_{I,N_2}$')
+        plt.figure(1)
+        plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
+        plt.ylim(pzmcols[0]*1.1,1)
+        plt.ylabel('Pressure (hPa)')
+        plt.xlabel('Net Flux (Wm$^{-2}$)')
+        plt.legend(title='$p_{I,N_2}$')
 
         plt.figure(1)
         plt.subplot(331)
@@ -288,7 +288,7 @@ for directory in directories:
         plt.ylim(pzmcols[0]*1.1,1)
         plt.legend()
 
-        print sum(abspncols*1362./4.), sum(A_oz_lcols*1362./4.), abs_surf_lhcols[1]
+        # print sum(abspncols*1362./4.), sum(A_oz_lcols*1362./4.), abs_surf_lhcols[1]
 
         # for i in range(nlayersm-1):
         #     print pzmcols[i][0],',',abspncols[i][0]*1362./4.,',',A_oz_lcols[i][0]*1362./4.
@@ -328,6 +328,13 @@ for directory in directories:
 
         
         # plt.imshow(tzmcols,interpolation='none')
+
+        # plt.plot(tzmcols[0,:],label='tzm[0]')
+        # plt.plot(tavelmcols[1,:],label='tavelm[1]')
+        # plt.legend()
+
+        # plt.semilogy(tavelmcols[:,0],pzmcols[1:,0],'-o')
+        # plt.ylim( max(pzmcols[:,2]), min(pzmcols[:,2]) )
 
         i2 += 1
 

@@ -54,7 +54,7 @@ pin2s = [1.0]
 print(pico2s)
 
 #pico2s = [400e-6,3200e-6]
-ncols = 5
+ncols = 1
 ncloudcols = 1
 nlays = 30
 
@@ -466,8 +466,8 @@ for pin2 in pin2s:
         lch = createlatdistbn('Cloud Top Height')
         srh = createlatdistbn('Relative Humidity')
         # srh = [0.99] * ncols
-        sa = createlatdistbn('Surface Reflectance')
-        # sa = [0.99] * ncols
+        # sa = createlatdistbn('Surface Reflectance')
+        sa = [0.9] * ncols
         # sa = [0.0] * ncols
         lcf = createlatdistbn('Cloud Fraction')
         lcod = createlatdistbn('Cloud Optical Thickness')
