@@ -13,9 +13,6 @@ directories = [
 '_Current Output/'
 ]
 
-
-
-
 linestyles = ['-','--','-o']
 
 colors = ['b','r','g']
@@ -241,18 +238,19 @@ for directory in directories:
         # plt.xlabel('Temperature (K)')
         # plt.legend(title='$p_{I,N_2}$')
 
-        plt.figure(1)
-        plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
-        plt.ylim(pzmcols[0]*1.1,1)
-        plt.ylabel('Pressure (hPa)')
-        plt.xlabel('Net Flux (Wm$^{-2}$)')
-        plt.legend(title='$p_{I,N_2}$')
+        # plt.figure(1)
+        # plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
+        # plt.ylim(pzmcols[0]*1.1,1)
+        # plt.ylabel('Pressure (hPa)')
+        # plt.xlabel('Net Flux (Wm$^{-2}$)')
+        # plt.legend(title='$p_{I,N_2}$')
 
         plt.figure(1)
         plt.subplot(331)
         plt.title('tzm')
-        plt.semilogy(tzmcols,pzmcols,'-o',label=pico2)
-        plt.ylim(pzmcols[0]*1.1,1)
+        # plt.semilogy(tzmcols,pzmcols,'-o',label=pico2)
+        plt.plot(tzmcols,altzmcols,'-o',label=pico2)
+        # plt.ylim(pzmcols[0]*1.1,1)
         plt.legend()
         
         plt.subplot(332)

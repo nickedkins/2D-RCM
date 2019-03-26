@@ -535,6 +535,8 @@ MODULE MYSUBS
             enddo
             Ag2 = mu_0*(0.647-A_oz_x(refl_lay_ind))*(1.0-Rbar_a)*(1.0-R_g)/(1.0-Rbarbarstar_a*R_g)
         endif
+        
+        abs_surf_lh = 0.
 
         abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
 
@@ -751,5 +753,19 @@ MODULE MYSUBS
 
 
     end subroutine writeoutputfile
+    
+    subroutine add_seb_to_tboundm
+    
+      use VARIABLES
+
+            lhf = 0.
+            shf = 0.
+            sebfac = 0.0
+            seb = 0.
+!
+            seb = (totdflum(0) - totuflum(0) - lhf - shf)
+            tboundm = tboundm + seb * sebfac
+    
+    end subroutine add_seb_to_tboundm
 
 END MODULE MYSUBS

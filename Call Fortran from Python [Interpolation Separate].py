@@ -23,7 +23,7 @@ from scipy import stats
 # from pandas import *
 
 # project_dir = '/Users/nickedkins/Dropbox/RCM in Dropbox/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -467,7 +467,7 @@ for pin2 in pin2s:
         srh = createlatdistbn('Relative Humidity')
         # srh = [0.99] * ncols
         # sa = createlatdistbn('Surface Reflectance')
-        sa = [0.9] * ncols
+        sa = [0.2] * ncols
         # sa = [0.0] * ncols
         lcf = createlatdistbn('Cloud Fraction')
         lcod = createlatdistbn('Cloud Optical Thickness')
@@ -505,7 +505,7 @@ for pin2 in pin2s:
         #lct = 250.0
         #lcf = 0.5
         #lcod = 5.0
-        tp = 5.0
+        tp = 5.0 * 1e12
         # sa = 0.18
         #fth = 5.0
         #fth = np.zeros(ncols)
@@ -523,7 +523,7 @@ for pin2 in pin2s:
         ps1 = 0
         af = 1.0
         dalr = 0
-        npb = 0
+        npb = 1
         o3sw = 1
         h2osw = 1
         nl = nlays
@@ -585,7 +585,7 @@ for pin2 in pin2s:
         for i in range(1,2):
     
             loc = project_dir+'2D RCM GitHub'
-            os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM')
+            os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')
             print(os.getcwd())  # Prints the current working directory
             print('path above')
             p = subprocess.Popen([loc])
@@ -606,5 +606,5 @@ for pin2 in pin2s:
 
 ########################################################################################################################
 
-os.system('say "All done bro"')
+#os.system('say "All done bro"')
 show()

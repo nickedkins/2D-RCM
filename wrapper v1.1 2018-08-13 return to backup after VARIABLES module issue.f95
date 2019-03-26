@@ -629,6 +629,7 @@ subroutine wrapper
 
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
+                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
                 mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -657,6 +658,7 @@ subroutine wrapper
             !Need this block if mixh2o varies with temperature, otherwise it can go outside
             do i=1,nlayersm
                 rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1-0.02) !MW67 RH to replicate Hu !NJE changed to Q = pzm(i) / 1000 instead of /pzm(0)      
+                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04))
                 mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -745,11 +747,6 @@ subroutine wrapper
 
             htrm = htrmwghtd / sum(ccfracs(:ncloudcols))
             
-
-
-
-
-
             totuflum = totuflumwghtd / sum(ccfracs(:ncloudcols))
             totdflum = totdflumwghtd / sum(ccfracs(:ncloudcols))
             htrlh = htrlhwghtd / sum(ccfracs(:ncloudcols))
@@ -761,6 +758,9 @@ subroutine wrapper
             abs_surf_lh = abs_surf_lhwghtd / sum(ccfracs(:ncloudcols))
 
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
+          
+            call add_seb_to_tboundm
+
 
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
@@ -881,6 +881,9 @@ subroutine wrapper
                 endif
             enddo
 
+            ! create surface energy budget terms
+
+
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
            do i=1,nlayersm
                tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
@@ -901,6 +904,7 @@ subroutine wrapper
             ! if (col==inversion_col) then
             !     tzm(0) = tboundm + inversion_strength
             ! endif
+            
 
             tzm(0) = tboundm
 
