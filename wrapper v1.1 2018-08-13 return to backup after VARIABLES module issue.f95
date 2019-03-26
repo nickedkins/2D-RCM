@@ -124,7 +124,7 @@ subroutine wrapper
     read(73,*) frac_lccols(:ncols) !fraction of the lowest cloud
     read(73,*) od_lccols(:ncols) !optical depth of the lowest cloud
     read(73,*) toa_precision !eqb is reached when |OLR - abs SW| < toa_precision
-    read(73,*) !R_gcols !surface albedo
+    read(73,*) R_gcols(:ncols) !surface albedo
     read(73,*) fixed_trop(:ncols) !height to which convection is forced to go
     read(73,*) OLR_layer !layer regarded as top (NJE remove this)
     read(73,*) adj_speed !NJE improve this (make this the initial guess, then use Newtonian)
@@ -170,15 +170,15 @@ subroutine wrapper
 
     close(73)
 
-    open(81,file=('Input Distributions/fal lats'),form='formatted')
+    ! open(81,file=('Input Distributions/fal lats'),form='formatted')
 
-    !Read in lat profiles of 1D variables
-    do col=1,ncols
-        read(81,*) R_gcols(col)
-        R_gcols(col) = R_gcols(col)
-    enddo
+    ! !Read in lat profiles of 1D variables
+    ! do col=1,ncols
+    !     read(81,*) R_gcols(col)
+    !     R_gcols(col) = R_gcols(col)
+    ! enddo
 
-    close(81)
+    ! close(81)
 
     ! Write input parameters to output file to keep a record of them for each run
     ! write(50,*) tot_albedo !NJE delete this
@@ -367,7 +367,7 @@ subroutine wrapper
 
     pzm(0)=surfacep/100.
     tzm(0)=tboundm
-    tavelm(1) = tzm(0) !NJE strong coupling between surface and bottom layer of atmosphere.
+    ! tavelm(1) = tzm(0) !NJE strong coupling between surface and bottom layer of atmosphere.
 
     ! Initialise with an isothermal profile
     do i=1,nlayersm
@@ -578,7 +578,7 @@ subroutine wrapper
                 tboundm = tboundmcols(col) + tempchanges(col)
                 tzm(0) = tboundm
 
-                do i=1,nlayersm
+                do i=0,nlayersm
                     tzm(i) = tzmcols(i,col) + tempchanges(col)
                     tavelm(i) = tavelmcols(i,col) + tempchanges(col)
                 enddo
@@ -882,16 +882,16 @@ subroutine wrapper
             enddo
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
-!            do i=1,nlayersm
-!!                tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
-!                if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
-!                if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
-!                if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
-!                if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
-!
-!                htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
-!                if (tavelm(i) < t_min) tavelm(i) = t_min
-!            enddo
+           do i=1,nlayersm
+               tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+               if (tavelm(i) < t_min) tavelm(i) = t_min
+               ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
+               ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
+               ! if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
+               ! if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
+               ! htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
+               
+           enddo
 
             ! do i=1,nlayersm
             !   tzm(i) = tzm(i) + htrm(i-1)/(newur(i))
@@ -901,6 +901,8 @@ subroutine wrapper
             ! if (col==inversion_col) then
             !     tzm(0) = tboundm + inversion_strength
             ! endif
+
+            tzm(0) = tboundm
 
             do i=1,nlayersm-1
                 tzm(i)=(tavelm(i)+tavelm(i+1))/2
@@ -921,11 +923,11 @@ subroutine wrapper
             end do
 
             !            call levconvect(col,tzm,altzm,altlaym,lapsecrit,fixed_trop,conv,int(convecttype),malr)
-            call levconvect
+            call levconvect !nje t0
 
             conv_trop_ind(col) = minloc(conv(:,col),dim=1)
 
-            do i=1,nlayersm
+            do i=2,nlayersm
                 tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
             end do
 

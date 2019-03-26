@@ -54,7 +54,7 @@ pin2s = [1.0]
 print(pico2s)
 
 #pico2s = [400e-6,3200e-6]
-ncols = 1
+ncols = 5
 ncloudcols = 1
 nlays = 30
 
@@ -460,21 +460,19 @@ for pin2 in pin2s:
         lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
         print(lc)
         lcmean = np.mean(lc)
-        # lc = [-6.5]
-        #lc[0] = -10.0
-        #lc[ncols-1] = -10.0
+        lc = [-1e2] * ncols
         #for i in range(len(lc)):
         #    lc[i] = lcmean
         lch = createlatdistbn('Cloud Top Height')
         srh = createlatdistbn('Relative Humidity')
-        srh = [0.99] * ncols
-        # sa = createlatdistbn('Surface Reflectance')
-        sa = [0.22] * ncols
+        # srh = [0.99] * ncols
+        sa = createlatdistbn('Surface Reflectance')
+        # sa = [0.99] * ncols
         # sa = [0.0] * ncols
         lcf = createlatdistbn('Cloud Fraction')
         lcod = createlatdistbn('Cloud Optical Thickness')
         tg = createlatdistbn('Surface Temperature')
-        # tg = [288.0]
+        # tg = [160.] * ncols
     
     
         #for i in range(len(tg)):
@@ -507,21 +505,21 @@ for pin2 in pin2s:
         #lct = 250.0
         #lcf = 0.5
         #lcod = 5.0
-        tp = 1.0
-        sa = 0.18
+        tp = 5.0
+        # sa = 0.18
         #fth = 5.0
         #fth = np.zeros(ncols)
         #for i in range(ncols):
         #    fth[i] = 15.0 - abs(collats[i])/18.0
-        fth = [200.]
+        fth = [200.*1e12]*ncols
         ol = nlays
         asp = 2.0   
         cs = 0
         pbo = 0 
-        fswon = 1  
+        fswon = 0  
         fsw = 239.4
         fp = 0
-        srh = 0.8
+        # srh = 0.8
         ps1 = 0
         af = 1.0
         dalr = 0
@@ -548,7 +546,7 @@ for pin2 in pin2s:
         eta = 0.75
         planet_radius = 6.37e6
         planet_rotation = 7.29e-5
-        t_min = 150.0
+        t_min = 100.
     
         ur1 = ur
     
@@ -608,5 +606,5 @@ for pin2 in pin2s:
 
 ########################################################################################################################
 
-#os.system('say "All done bro"')
+os.system('say "All done bro"')
 show()

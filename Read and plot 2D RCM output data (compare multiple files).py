@@ -196,7 +196,7 @@ def readfile(fn,counter):
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols
 
 nlayersms=[31]
 ncols=1
@@ -229,7 +229,7 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols = readfile(fn,counter)
         pico2 = (pzmcols[0] - 800.0)/1000.0
         # pico2 = (pzmcols[0]/2.0)/1000.0
 
@@ -282,7 +282,13 @@ for directory in directories:
         plt.semilogy(abspncols*1362./4.,pzmcols[1:],'-o',ls=ls)
         plt.ylim(pzmcols[0]*1.1,1)
 
-        # print sum(abspncols*1362./4.), sum(A_oz_lcols*1362./4.), abs_surf_lhcols[1]
+        plt.subplot(337)
+        plt.title('tavelm')
+        plt.semilogy(tavelmcols,pzmcols[1:],'-o',label=pico2)
+        plt.ylim(pzmcols[0]*1.1,1)
+        plt.legend()
+
+        print sum(abspncols*1362./4.), sum(A_oz_lcols*1362./4.), abs_surf_lhcols[1]
 
         # for i in range(nlayersm-1):
         #     print pzmcols[i][0],',',abspncols[i][0]*1362./4.,',',A_oz_lcols[i][0]*1362./4.
@@ -309,16 +315,19 @@ for directory in directories:
         # plt.grid(which='both')
         
 
-        pico2_store[i1,i2] = pico2
+        # pico2_store[i1,i2] = pico2
 
-        tzm_store[:nlayersm,i1,i2] = tzmcols[:,0]
+        # tzm_store[:nlayersm,i1,i2] = tzmcols[:,0]
 
-        pico2_wklm = wklm2cols[1,0]/4.649531e+23
+        # pico2_wklm = wklm2cols[1,0]/4.649531e+23
         
         # plt.figure(2)
         # plt.semilogx(pico2_wklm,tzmcols[0,0],'o',c=color)
         # plt.xlabel('CO$_2$ Inventory (bar)')
         # plt.ylabel('OLR (Wm$^{-2}$)')
+
+        
+        # plt.imshow(tzmcols,interpolation='none')
 
         i2 += 1
 
