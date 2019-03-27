@@ -124,7 +124,7 @@ subroutine wrapper
     read(73,*) frac_lccols(:ncols) !fraction of the lowest cloud
     read(73,*) od_lccols(:ncols) !optical depth of the lowest cloud
     read(73,*) toa_precision !eqb is reached when |OLR - abs SW| < toa_precision
-    read(73,*) !R_gcols !surface albedo
+    read(73,*) R_gcols(:ncols) !surface albedo
     read(73,*) fixed_trop(:ncols) !height to which convection is forced to go
     read(73,*) OLR_layer !layer regarded as top (NJE remove this)
     read(73,*) adj_speed !NJE improve this (make this the initial guess, then use Newtonian)
@@ -167,18 +167,19 @@ subroutine wrapper
     read(73,*) planet_rotation
     read(73,*) latbounds(0:ncols)
     read(73,*) t_min
+    read(73,*) sebfac
 
     close(73)
 
-    open(81,file=('Input Distributions/fal lats'),form='formatted')
+    ! open(81,file=('Input Distributions/fal lats'),form='formatted')
 
-    !Read in lat profiles of 1D variables
-    do col=1,ncols
-        read(81,*) R_gcols(col)
-        R_gcols(col) = R_gcols(col)
-    enddo
+    ! !Read in lat profiles of 1D variables
+    ! do col=1,ncols
+    !     read(81,*) R_gcols(col)
+    !     R_gcols(col) = R_gcols(col)
+    ! enddo
 
-    close(81)
+    ! close(81)
 
     ! Write input parameters to output file to keep a record of them for each run
     ! write(50,*) tot_albedo !NJE delete this
@@ -367,7 +368,7 @@ subroutine wrapper
 
     pzm(0)=surfacep/100.
     tzm(0)=tboundm
-    tavelm(1) = tzm(0) !NJE strong coupling between surface and bottom layer of atmosphere.
+    ! tavelm(1) = tzm(0) !NJE strong coupling between surface and bottom layer of atmosphere.
 
     ! Initialise with an isothermal profile
     do i=1,nlayersm
@@ -578,7 +579,7 @@ subroutine wrapper
                 tboundm = tboundmcols(col) + tempchanges(col)
                 tzm(0) = tboundm
 
-                do i=1,nlayersm
+                do i=0,nlayersm
                     tzm(i) = tzmcols(i,col) + tempchanges(col)
                     tavelm(i) = tavelmcols(i,col) + tempchanges(col)
                 enddo
@@ -629,6 +630,7 @@ subroutine wrapper
 
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
+                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
                 mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -657,6 +659,7 @@ subroutine wrapper
             !Need this block if mixh2o varies with temperature, otherwise it can go outside
             do i=1,nlayersm
                 rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1-0.02) !MW67 RH to replicate Hu !NJE changed to Q = pzm(i) / 1000 instead of /pzm(0)      
+                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04))
                 mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -745,11 +748,6 @@ subroutine wrapper
 
             htrm = htrmwghtd / sum(ccfracs(:ncloudcols))
             
-
-
-
-
-
             totuflum = totuflumwghtd / sum(ccfracs(:ncloudcols))
             totdflum = totdflumwghtd / sum(ccfracs(:ncloudcols))
             htrlh = htrlhwghtd / sum(ccfracs(:ncloudcols))
@@ -761,7 +759,11 @@ subroutine wrapper
             abs_surf_lh = abs_surf_lhwghtd / sum(ccfracs(:ncloudcols))
 
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
+            
+            call add_seb_to_tboundm
+            tzm(0) = tboundm
 
+          
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
             !Apply SW heating rates if applicable
@@ -881,17 +883,20 @@ subroutine wrapper
                 endif
             enddo
 
+            ! create surface energy budget terms
+
+
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
-!            do i=1,nlayersm
-!!                tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
-!                if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
-!                if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
-!                if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
-!                if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
-!
-!                htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
-!                if (tavelm(i) < t_min) tavelm(i) = t_min
-!            enddo
+           do i=1,nlayersm
+               tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+               if (tavelm(i) < t_min) tavelm(i) = t_min
+               ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
+               ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
+               ! if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
+               ! if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
+               ! htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
+               
+           enddo
 
             ! do i=1,nlayersm
             !   tzm(i) = tzm(i) + htrm(i-1)/(newur(i))
@@ -901,6 +906,9 @@ subroutine wrapper
             ! if (col==inversion_col) then
             !     tzm(0) = tboundm + inversion_strength
             ! endif
+            
+
+            tzm(0) = tboundm
 
             do i=1,nlayersm-1
                 tzm(i)=(tavelm(i)+tavelm(i+1))/2
@@ -921,13 +929,15 @@ subroutine wrapper
             end do
 
             !            call levconvect(col,tzm,altzm,altlaym,lapsecrit,fixed_trop,conv,int(convecttype),malr)
-            call levconvect
+            call levconvect !nje t0
 
             conv_trop_ind(col) = minloc(conv(:,col),dim=1)
 
-            do i=1,nlayersm
+            do i=2,nlayersm
                 tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
             end do
+
+            sigma(0) = 1.0
 
             do i =1,nlayersm
 !                logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
@@ -1001,6 +1011,7 @@ subroutine wrapper
                 else
                     write(*,1102) conv_trop_ind(col), currentmaxhtrcols(col)
                 endif
+
 
 
             endif
@@ -1243,7 +1254,7 @@ subroutine wrapper
         transpcalled = 0
 
 
-
+        ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
             if (stepssinceboxadj > 50) then
@@ -1352,11 +1363,24 @@ subroutine wrapper
                         write(*,1103) abs_sw(col)
                     endif
                 enddo
+                
+                write(*,1106,advance='no') 'Box SEB | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') seb
+                    else
+                        write(*,1103) seb
+                    endif
+                enddo
 
                 print*, ('----------------------------------------------')
                 print*,
 
-                if (maxval(abs(boxnettotflux)) < toa_precision) then
+!                call add_seb_to_tboundm
+
+
+
+                if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
                     if(detailprint==1) then
                         print*, "Equilibrium reached in ",nint(j/undrelax),"days"
                         print*,

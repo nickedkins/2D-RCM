@@ -32,7 +32,7 @@ MODULE MYSUBS
 
         select case(convecttype)
         case(0) !critical lapse rate
-            do i=1,nlayersm
+            do i=2,nlayersm
                 if( (tzm(i) - tzm(i-1))/(altzm(i)-altzm(i-1))*1000.0 < lapsecrit .or. pzm(i) > fixed_trop(col)) then
                     tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000.0
                     if (tzm(i) < t_min) tzm(i) = t_min
@@ -42,7 +42,7 @@ MODULE MYSUBS
                 endif
             end do
         case(2) !moist adiabatic lapse rate
-            do i=1,nlayersm
+            do i=2,nlayersm
                 if( (tavelm(i) - tzm(i-1))/(altlaym(i)-altzm(i-1))*1000.0 < (malr(i)*1000.0) .or. &
                     pavelm(i) > fixed_trop(col)) then
                     tzm(i) = tzm(i-1) + malr(i) * 1000.0*(altzm(i)-altzm(i-1))/1000.0
@@ -535,8 +535,10 @@ MODULE MYSUBS
             enddo
             Ag2 = mu_0*(0.647-A_oz_x(refl_lay_ind))*(1.0-Rbar_a)*(1.0-R_g)/(1.0-Rbarbarstar_a*R_g)
         endif
+        
+        abs_surf_lh = 0.
 
-        abs_surf_lh = (Ag1+Ag2)*sol_inc *2.0 !Unsure about that factor of 2.0
+        abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
 
         abs_surf_lhcols(col) = abs_surf_lh
 
@@ -751,5 +753,30 @@ MODULE MYSUBS
 
 
     end subroutine writeoutputfile
+    
+    subroutine add_seb_to_tboundm
+    
+      use VARIABLES
+
+            lhf = 10.
+            shf = 0.
+            ! sebfac = 0.01
+            seb = 0.
+!
+            seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
+!            tboundm = tboundm + seb * sebfac
+            
+            tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+            
+!            print*, ('----------------------------------------------')
+!                print*,
+!            print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf ', seb, totdflum(0),totuflum(0),abs_surf_lh, lhf
+!            print*, 'tboundm: ', tboundm
+!            print*, ('----------------------------------------------')
+!            print*,         
+            tboundmcols(col-1) = tboundm
+            tzm(0) = tboundm
+    
+    end subroutine add_seb_to_tboundm
 
 END MODULE MYSUBS
