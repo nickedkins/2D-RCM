@@ -23,7 +23,7 @@ from scipy import stats
 # from pandas import *
 
 # project_dir = '/Users/nickedkins/Dropbox/RCM in Dropbox/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -585,7 +585,7 @@ for pin2 in pin2s:
         for i in range(1,2):
     
             loc = project_dir+'2D RCM GitHub'
-            os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')
+            os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM')
             print(os.getcwd())  # Prints the current working directory
             print('path above')
             p = subprocess.Popen([loc])

@@ -935,6 +935,8 @@ subroutine wrapper
                 tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
             end do
 
+            sigma(0) = 1.0
+
             do i =1,nlayersm
 !                logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
 !                pzm(i) = exp(logpzm(i))
