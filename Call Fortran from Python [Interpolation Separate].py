@@ -23,7 +23,8 @@ from scipy import stats
 # from pandas import *
 
 # project_dir = '/Users/nickedkins/Dropbox/RCM in Dropbox/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -69,9 +70,12 @@ inversion_col = 1
 #polar_tgs = [240,250,260,270,280]
 
 # sebfacs = np.linspace(0.0,1e-1,num=5)
-sebfacs = [0.0]
+#sebfacs = [0.2]
+sebfac = 0.2
 
-for sebfac in sebfacs:
+sas = np.linspace(0.0,1.0,num=5)
+
+for sa in sas:
 
     for pin2 in pin2s:
 
@@ -472,7 +476,7 @@ for sebfac in sebfacs:
             srh = createlatdistbn('Relative Humidity')
             # srh = [0.99] * ncols
             # sa = createlatdistbn('Surface Reflectance')
-            sa = [0.2] * ncols
+            #sa = [0.2] * ncols
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
@@ -540,9 +544,9 @@ for sebfac in sebfacs:
             o2inv = 0.0
             htransp = 1.0 #reduce lapse rate to account for horizontal transport
             ipe = 1
-            dp = 1
+            dp = 0
             mtranspfac = 2.0
-            boxnetfluxfac = 0.2
+            boxnetfluxfac = 0.2 * 1e1
             twarm = 288
             tcold = 268
             phim = 45 * 3.14 / 180
@@ -591,7 +595,8 @@ for sebfac in sebfacs:
             for i in range(1,2):
         
                 loc = project_dir+'2D RCM GitHub'
-                os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM')
+                os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')
+                #os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')                
                 print(os.getcwd())  # Prints the current working directory
                 print('path above')
                 p = subprocess.Popen([loc])

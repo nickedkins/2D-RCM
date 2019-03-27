@@ -759,6 +759,10 @@ subroutine wrapper
             abs_surf_lh = abs_surf_lhwghtd / sum(ccfracs(:ncloudcols))
 
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
+            
+            call add_seb_to_tboundm
+            tzm(0) = tboundm
+
           
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
@@ -1009,6 +1013,7 @@ subroutine wrapper
                 endif
 
 
+
             endif
 
         enddo !columns do loop
@@ -1249,10 +1254,10 @@ subroutine wrapper
         transpcalled = 0
 
 
-
+        ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 30) then
+            if (stepssinceboxadj > 50) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
@@ -1358,11 +1363,20 @@ subroutine wrapper
                         write(*,1103) abs_sw(col)
                     endif
                 enddo
+                
+                write(*,1106,advance='no') 'Box SEB | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') seb
+                    else
+                        write(*,1103) seb
+                    endif
+                enddo
 
                 print*, ('----------------------------------------------')
                 print*,
 
-                call add_seb_to_tboundm
+!                call add_seb_to_tboundm
 
 
 

@@ -13,9 +13,10 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/_Useful Data/tp=5, sebfac varied/'
-# ]
+directories = [
+# '_Useful Data/vary sa/',
+'_Useful Data/vary sa tboundm tweak/',
+]
 
 
 linestyles = ['-','--','-o']
@@ -200,7 +201,7 @@ def readfile(fn,counter):
 
     return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols
 
-nlayersms=[31]
+nlayersms=[31,31]
 ncols=1
 
 
