@@ -167,6 +167,7 @@ subroutine wrapper
     read(73,*) planet_rotation
     read(73,*) latbounds(0:ncols)
     read(73,*) t_min
+    read(73,*) sebfac
 
     close(73)
 
@@ -759,9 +760,6 @@ subroutine wrapper
 
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
           
-            call add_seb_to_tboundm
-
-
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
             !Apply SW heating rates if applicable
@@ -1254,7 +1252,7 @@ subroutine wrapper
 
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 50) then
+            if (stepssinceboxadj > 30) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
@@ -1364,7 +1362,11 @@ subroutine wrapper
                 print*, ('----------------------------------------------')
                 print*,
 
-                if (maxval(abs(boxnettotflux)) < toa_precision) then
+                call add_seb_to_tboundm
+
+
+
+                if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
                     if(detailprint==1) then
                         print*, "Equilibrium reached in ",nint(j/undrelax),"days"
                         print*,

@@ -13,6 +13,11 @@ directories = [
 '_Current Output/'
 ]
 
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/_Useful Data/tp=5, sebfac varied/'
+# ]
+
+
 linestyles = ['-','--','-o']
 
 colors = ['b','r','g']

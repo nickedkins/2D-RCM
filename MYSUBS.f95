@@ -758,13 +758,20 @@ MODULE MYSUBS
     
       use VARIABLES
 
-            lhf = 0.
+            lhf = -50.
             shf = 0.
-            sebfac = 0.0
+            ! sebfac = 0.01
             seb = 0.
 !
-            seb = (totdflum(0) - totuflum(0) - lhf - shf)
+            seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
             tboundm = tboundm + seb * sebfac
+            print*, ('----------------------------------------------')
+                print*,
+            print*, 'seb: ', seb, totdflum(0), totuflum(0)
+            print*, 'tboundm: ', tboundm
+            print*, ('----------------------------------------------')
+            print*,         
+            tboundmcols(col) = tboundm
     
     end subroutine add_seb_to_tboundm
 
