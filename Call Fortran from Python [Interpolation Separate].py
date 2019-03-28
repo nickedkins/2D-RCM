@@ -424,18 +424,6 @@ for sa in sas:
                         file.write('\n')
         
                     file.close()
-
-    
-            elif(disttypesfc[shortname]=='lat'):
-                filename = '%s lats' % (shortname)
-                fileloc = outdir + filename
-                file = open(fileloc,'w')
-    
-                for i in range(len(varss_int)):
-                    file.write(str(varss_int[i]))
-                    file.write('\n')
-    
-                file.close()
     
     
         #outdir = '/Users/nickedkins/prrtm2017nov17/Input Distributions/' #output file directory
