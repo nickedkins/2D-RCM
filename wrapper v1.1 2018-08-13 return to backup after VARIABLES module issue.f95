@@ -1295,33 +1295,34 @@ subroutine wrapper
 
 
                 lhf = 10.
-                shf = 0.
+                shf = 17.
                 bowen = 0.2125
                 seb = 0.
                 c_drag = 0.00001
                 meanwind = 5.0
-    !             density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
+                density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
 
-    !             ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
-    !             ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
-    !             shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tzm(1))
-    !             lhf = shf / bowen
+                ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
+                ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
+                ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tzm(1))
+                lhf = shf / bowen
 
-    !             seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
-    ! !            tboundm = tboundm + seb * sebfac
+                seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
+    !            tboundm = tboundm + seb * sebfac
                 
-    !             ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-    !             tboundm = 1.0*tboundm + 0.0*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+                ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+                ! tboundm = 0.5*tboundm + 0.5*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+                ! tboundm = tboundm + sebfac * seb
                 
-    !             print*, ('----------------------------------------------')
-    !                 print*,
-    !             print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf '
-    !             print*,  seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf
-    !             print*, 'tboundm: ', tboundm
-    !             print*, ('----------------------------------------------')
-    !             print*,         
-    !             tboundmcols(col-1) = tboundm
-    !             tzm(0) = tboundm
+                print*, ('----------------------------------------------')
+                    print*,
+                print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf '
+                print*,  seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf
+                print*, 'tboundm: ', tboundm
+                print*, ('----------------------------------------------')
+                print*,         
+                ! tboundmcols(col-1) = tboundm
+                ! tzm(0) = tboundm
 
 
                 write(*,1106,advance='no') ''

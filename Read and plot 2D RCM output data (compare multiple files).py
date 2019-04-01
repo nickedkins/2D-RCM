@@ -13,10 +13,10 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-'_Useful Data/vary sa/',
-# '_Useful Data/vary sa tboundm tweak/',
-]
+# directories = [
+# '_Useful Data/vary sa/',
+# # '_Useful Data/vary sa tboundm tweak/',
+# ]
 
 
 linestyles = ['-','--','-o']
