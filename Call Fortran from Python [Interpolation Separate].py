@@ -43,7 +43,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 500 #model days
+days = 5000 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -546,7 +546,7 @@ for sa in sas:
         o2inv = 0.0
         htransp = 1.0 #reduce lapse rate to account for horizontal transport
         ipe = 1
-        dp = 1
+        dp = 0
         mtranspfac = 2.0
         boxnetfluxfac = 0.2
         twarm = 288
@@ -558,7 +558,7 @@ for sa in sas:
         planet_radius = 6.37e6
         planet_rotation = 7.29e-5
         t_min = 100.0
-        sebfac = 0.0005
+        sebfac = 0.001
     
         ur1 = ur
     

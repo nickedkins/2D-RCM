@@ -1314,7 +1314,7 @@ subroutine wrapper
                 lhf = shf / bowen
 
                 seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
-    !            tboundm = tboundm + seb * sebfac
+                tboundm = tboundm + seb * sebfac
                 
                 ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
                 ! tboundm = 0.5*tboundm + 0.5*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
@@ -1420,8 +1420,9 @@ subroutine wrapper
 !                call add_seb_to_tboundm
 
 
-
-                if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
+                ! toaeqbcheck
+                if (maxval(abs(boxnettotflux)) < toa_precision) then
+                ! if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
                     if(detailprint==1) then
                         print*, "Equilibrium reached in ",nint(j/undrelax),"days"
                         print*,
