@@ -251,8 +251,8 @@ subroutine wrapper
     do col = 1,ncols
         do day = 1,365
             do hour=1,24
-                hourang = 15.0 * (hour-12.0)
-                declin = -23.5 * cosd(360.0/365.0 + (day + 10.0))
+                hourang = 15.0 * (float(hour)-12.0)
+                declin = -23.5 * cosd(360.0/365.0 + (float(day) + 10.0))
                 !                Xrad = boxlats(col) * 2.0*pi/360.0
                 Xrad = boxlats(col) * 2.0*3.14/360.0
                 !                Yrad = declin * 2.0*pi/360.0
@@ -581,7 +581,7 @@ subroutine wrapper
 
                 do i=0,nlayersm
                     tzm(i) = tzmcols(i,col) + tempchanges(col)
-                    tavelm(i) = tavelmcols(i,col) + tempchanges(col)
+                    if (i>1) tavelm(i) = tavelmcols(i,col) + tempchanges(col)
                 enddo
 
             elseif (transpcalled == 0 .and. j > 1) then
@@ -760,7 +760,7 @@ subroutine wrapper
 
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
             
-            call add_seb_to_tboundm
+            ! call add_seb_to_tboundm
             tzm(0) = tboundm
 
           
@@ -770,7 +770,7 @@ subroutine wrapper
             !            do i=1,nlayersm-1
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i) = htrm(i) + htrlh(i)
-                if(swo3 == 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
+                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
             do i=1,nlayersm
@@ -961,13 +961,13 @@ subroutine wrapper
 
             ! Calculate quantities relevant to isentropic coordinates
 
-            do i=0,nlayersm
-                kappa(i) = rsp_tot(i)/cptot(i)
-                theta(i) = tzm(i) * ((pzm(0) / pzm(i)) ** kappa(i)) !potential temperature
-                exner(i) = cptot(i) * ((pzm(i) / pzm(0)) ** kappa(i))
-                geopotential(i) = gravity * altzm(i)
-                montgomery(i) = cptot(i) * tzm(i) + geopotential(i)
-            enddo
+            ! do i=0,nlayersm
+            !     kappa(i) = rsp_tot(i)/cptot(i)
+            !     theta(i) = tzm(i) * ((pzm(0) / pzm(i)) ** kappa(i)) !potential temperature
+            !     exner(i) = cptot(i) * ((pzm(i) / pzm(0)) ** kappa(i))
+            !     geopotential(i) = gravity * altzm(i)
+            !     montgomery(i) = cptot(i) * tzm(i) + geopotential(i)
+            ! enddo
 
             tzmcols(:,col) = tzm
             altzmcols(:,col) = altzm
@@ -1031,12 +1031,14 @@ subroutine wrapper
 
         ! todo tboundm_edges here
 
-        do i=1,ncols-1
-            tboundm_edges(i) = (tboundmcols(i+1) + tboundmcols(i)) / 2.0
-        enddo
+        if (ncols > 1) then
+            do i=1,ncols-1
+                tboundm_edges(i) = (tboundmcols(i+1) + tboundmcols(i)) / 2.0
+            enddo
 
-        tboundm_edges(0) = 2.0 * tboundm_edges(1) - tboundm_edges(2)
-        tboundm_edges(ncols) = 2.0 * tboundm_edges(ncols-1) - tboundm_edges(ncols-2)
+            tboundm_edges(0) = 2.0 * tboundm_edges(1) - tboundm_edges(2)
+            tboundm_edges(ncols) = 2.0 * tboundm_edges(ncols-1) - tboundm_edges(ncols-2)
+        end if
 
 
 
@@ -1289,6 +1291,38 @@ subroutine wrapper
                     boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
                     tempchanges(col) = boxnettotflux(col) * boxnetfluxfac 
                 enddo
+
+
+
+                lhf = 10.
+                shf = 0.
+                bowen = 0.2125
+                seb = 0.
+                c_drag = 0.00001
+                meanwind = 5.0
+    !             density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
+
+    !             ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
+    !             ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
+    !             shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tzm(1))
+    !             lhf = shf / bowen
+
+    !             seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
+    ! !            tboundm = tboundm + seb * sebfac
+                
+    !             ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+    !             tboundm = 1.0*tboundm + 0.0*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+                
+    !             print*, ('----------------------------------------------')
+    !                 print*,
+    !             print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf '
+    !             print*,  seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf
+    !             print*, 'tboundm: ', tboundm
+    !             print*, ('----------------------------------------------')
+    !             print*,         
+    !             tboundmcols(col-1) = tboundm
+    !             tzm(0) = tboundm
+
 
                 write(*,1106,advance='no') ''
 

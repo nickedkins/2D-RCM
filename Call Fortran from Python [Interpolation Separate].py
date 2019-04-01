@@ -556,7 +556,8 @@ for sa in sas:
         eta = 0.75
         planet_radius = 6.37e6
         planet_rotation = 7.29e-5
-        t_min = 150.0
+        t_min = 100.0
+        sebfac = 0.1
     
         ur1 = ur
     
@@ -566,7 +567,7 @@ for sa in sas:
     
         params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min]
+        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac]
         
     
         f = open(project_dir+'/Earth RCM Parameters','w')
@@ -613,197 +614,6 @@ for sa in sas:
             continue
     
             counter = counter + 1
-
-        
-        
-            #outdir = '/Users/nickedkins/prrtm2017nov17/Input Distributions/' #output file directory
-        
-            #latgrid = np.linspace(-90,90,ncols)
-            #pgrid = np.linspace(1000,1,nlays)
-        
-        
-        
-            # shortnameslev = ['cc','clwc','o3','q','ciwc']
-            shortnameslev = ['q', 'o3']
-            longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
-            #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-            #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-            disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-        
-            shortnamessfc = ['fal']
-            longnamessfc = {'fal':'Surface albedo'}
-            disttypesfc = {'fal':'lat'}
-        
-            loop = 1
-        
-            print("Creating input files by interpolating ERA-Interim data")
-        
-            # for shortname in shortnameslev:
-        
-            #     interpolate_createprrtminput_lev(shortname,loop)
-        
-            #     loop = loop + 1
-        
-            interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats)
-            interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
-            interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
-        
-        
-            # for shortname in shortnamessfc:
-        
-            #     interpolate_createprrtminput_sfc(shortname,loop)
-        
-            #     loop = loop + 1
-        
-            lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-            print(lc)
-            lcmean = np.mean(lc)
-            lc = [-1e2] * ncols
-            #for i in range(len(lc)):
-            #    lc[i] = lcmean
-            lch = createlatdistbn('Cloud Top Height')
-            srh = createlatdistbn('Relative Humidity')
-            # srh = [0.99] * ncols
-            # sa = createlatdistbn('Surface Reflectance')
-            #sa = [0.2] * ncols
-            # sa = [0.0] * ncols
-            lcf = createlatdistbn('Cloud Fraction')
-            lcod = createlatdistbn('Cloud Optical Thickness')
-            tg = createlatdistbn('Surface Temperature')
-            # tg = [160.] * ncols
-        
-        
-            #for i in range(len(tg)):
-            #    tg[i] = tg[i] - 2.0
-        
-            #tg[ncols-1] = tg[ncols-1] + 10.0
-        
-            #tg = [288.8]
-            #tg = [244.63,287.63,305.85,288.43,244.68]
-            #tg = [ 250.93,   286.667,  306.764,  290.113,  259.191]
-        
-            #lc = [-5.88]*ncols
-            #lch = [4.46]*ncols
-            #srh = [0.787]*ncols
-            #lcf = [0.657]*ncols
-            #lcod = [3.978]*ncols
-        
-            mc = pico2  
-        
-            #sa = 0.2
-            ur = 0.5
-            cld = 1
-            rmin = 3e-6
-            hct = 230.0
-            hcf = 0.04e-9   
-            hcod = 0.7e-9
-            mct = 235.0
-            mcf = 0.05e-9
-            mcod = 1.5e-9
-            #lct = 250.0
-            #lcf = 0.5
-            #lcod = 5.0
-            tp = 2.0
-            # sa = 0.18
-            #fth = 5.0
-            #fth = np.zeros(ncols)
-            #for i in range(ncols):
-            #    fth[i] = 15.0 - abs(collats[i])/18.0
-            fth = [200.*1e12]*ncols
-            ol = nlays
-            asp = 2.0   
-            cs = 0
-            pbo = 0 
-            fswon = 0  
-            fsw = 239.4
-            fp = 0
-            # srh = 0.8
-            ps1 = 0
-            af = 1.0
-            dalr = 0
-            npb = 1
-            o3sw = 1
-            h2osw = 1
-            nl = nlays
-            maxhtr = 0.03
-            asf = 4.0
-            tuf = 1.0   
-            n2inv = pin2
-            #n2inv = 0.8
-            o2inv = 0.0
-            htransp = 1.0 #reduce lapse rate to account for horizontal transport
-            ipe = 1
-            dp = 0
-            mtranspfac = 2.0
-            boxnetfluxfac = 0.2 * 1e1
-            twarm = 288
-            tcold = 268
-            phim = 45 * 3.14 / 180
-            ks = 0.25
-            kl = 0.25
-            eta = 0.75
-            planet_radius = 6.37e6
-            planet_rotation = 7.29e-5
-            t_min = 100.
-            # sebfac = 0.1
-        
-            ur1 = ur
-        
-            counter = 0
-        
-            ur = ur1
-        
-            params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
-            npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac]
-            
-        
-            f = open(project_dir+'/Earth RCM Parameters','w')
-            #f = open('/Users/nickedkins/prrtmgithubtest/Earth RCM Parameters','w')
-        
-            print(len(params),'params')
-        
-            for m in params:
-                if type(m) is list:
-                    for i in range(len(m)-1):
-                        f.write(str(m[i]))
-                        f.write(',')
-                    f.write(str(m[len(m)-1]))
-                    f.write('\n')
-                else:
-                    f.write(str(m))
-                    f.write('\n')
-        
-            f.write('$')
-            f.close()
-        
-            print("Calling PRRTM")
-        
-            time.sleep(2)
-        
-            for i in range(1,2):
-        
-                loc = project_dir+'2D RCM GitHub'
-                os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')
-                #os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')                
-                print(os.getcwd())  # Prints the current working directory
-                print('path above')
-                p = subprocess.Popen([loc])
-        
-                stdoutdata, stderrdata = p.communicate()
-                # print 'return code = %4d' % (p.returncode)
-                print('return code = {}'.format(p.returncode))
-                print('------------------------------------------------------------------------------------------')
-                print
-        
-                if (p.returncode == 0):
-                    break
-                elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
-                    ur = ur*2
-                continue
-        
-                counter = counter + 1
-
 
 ########################################################################################################################
 

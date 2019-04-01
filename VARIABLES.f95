@@ -119,10 +119,9 @@ MODULE VARIABLES
     integer :: htrmaxloc
     real,dimension(maxlaym,2) :: htrm_store,undrelax_store,tavelm_store
     real,dimension(maxlaym) :: temp_tendency
-    real,dimension(maxlaym) :: sigma
+    real,dimension(0:maxlaym) :: sigma
     real :: t_min
     real,dimension(0:maxlaym) :: htrm_over_newur
-    real :: lhf,shf,seb,sebfac
 
 
     !Lacis and Hansen Ozone variables
@@ -137,6 +136,7 @@ MODULE VARIABLES
     !Surface
     real :: w_t,ylh,A_wv,Ag1,Ag2,Rbar_r,abs_h2o,abs_o3,abs_surf,tot_sol_abs_lh,abs_surf_lh
     real :: abs_surf_lhwghtd
+    real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind
 
     !To keep the terminal open
     character*1 KeyBuf

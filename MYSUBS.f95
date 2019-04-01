@@ -206,7 +206,7 @@ MODULE MYSUBS
 
         do i=1,nlayersm
             do n=2,8
-                ssa(i,n) = tau_cld(i) / ( tau_cld(i) + tau(i,n) )
+                if (tau_cld(i) + tau(i,n) .ne. 0) ssa(i,n) = tau_cld(i) / ( tau_cld(i) + tau(i,n) )
                 if (ssa(i,n) .ge. 1.0-sw_eps) ssa(i,n) = 1.0-sw_eps
             enddo
         enddo
@@ -754,29 +754,29 @@ MODULE MYSUBS
 
     end subroutine writeoutputfile
     
-    subroutine add_seb_to_tboundm
+!     subroutine add_seb_to_tboundm
     
-      use VARIABLES
+!       use VARIABLES
 
-            lhf = 10.
-            shf = 0.
-            ! sebfac = 0.01
-            seb = 0.
-!
-            seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
-!            tboundm = tboundm + seb * sebfac
+!             lhf = 10.
+!             shf = 0.
+!             ! sebfac = 0.01
+!             seb = 0.
+! !
+!             seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
+! !            tboundm = tboundm + seb * sebfac
             
-            tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
+!             tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
             
-!            print*, ('----------------------------------------------')
-!                print*,
-!            print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf ', seb, totdflum(0),totuflum(0),abs_surf_lh, lhf
-!            print*, 'tboundm: ', tboundm
-!            print*, ('----------------------------------------------')
-!            print*,         
-            tboundmcols(col-1) = tboundm
-            tzm(0) = tboundm
+! !            print*, ('----------------------------------------------')
+! !                print*,
+! !            print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf ', seb, totdflum(0),totuflum(0),abs_surf_lh, lhf
+! !            print*, 'tboundm: ', tboundm
+! !            print*, ('----------------------------------------------')
+! !            print*,         
+!             tboundmcols(col-1) = tboundm
+!             tzm(0) = tboundm
     
-    end subroutine add_seb_to_tboundm
+!     end subroutine add_seb_to_tboundm
 
 END MODULE MYSUBS
