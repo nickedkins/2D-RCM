@@ -23,7 +23,7 @@ from scipy import stats
 # from pandas import *
 
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -43,7 +43,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 50 #model days
+days = 500 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -72,7 +72,8 @@ inversion_col = 1
 #sebfacs = [0.2]
 sebfac = 0.2
 
-sas = np.linspace(0.0,1.0,num=5)
+# sas = np.linspace(0.0,1.0,num=5)
+sas = [0.2]
 
 for sa in sas:
 
@@ -475,7 +476,7 @@ for sa in sas:
         #    lc[i] = lcmean
         lch = createlatdistbn('Cloud Top Height')
         srh = createlatdistbn('Relative Humidity')
-        srh = [0.99] * ncols
+        srh = [0.8] * ncols
         # sa = createlatdistbn('Surface Reflectance')
         sa = [0.22] * ncols
         # sa = [0.0] * ncols
@@ -545,7 +546,7 @@ for sa in sas:
         o2inv = 0.0
         htransp = 1.0 #reduce lapse rate to account for horizontal transport
         ipe = 1
-        dp = 0
+        dp = 1
         mtranspfac = 2.0
         boxnetfluxfac = 0.2
         twarm = 288
@@ -596,7 +597,7 @@ for sa in sas:
         for i in range(1,2):
     
             loc = project_dir+'2D RCM GitHub'
-            os.chdir('/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM')
+            os.chdir(project_dir)
             print(os.getcwd())  # Prints the current working directory
             print('path above')
             p = subprocess.Popen([loc])

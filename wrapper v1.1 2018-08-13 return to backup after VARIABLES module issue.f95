@@ -577,7 +577,8 @@ subroutine wrapper
             if (transpcalled == 1) then
 
                 tboundm = tboundmcols(col) + tempchanges(col)
-                tzm(0) = tboundm
+                ! tzm(0) = tboundm
+                ! tavelm(1) = tzm(0)
 
                 do i=0,nlayersm
                     tzm(i) = tzmcols(i,col) + tempchanges(col)
@@ -586,7 +587,8 @@ subroutine wrapper
 
             elseif (transpcalled == 0 .and. j > 1) then
                 tboundm = tboundmcols(col)
-                tzm(0) = tboundm
+                ! tzm(0) = tboundm
+                ! tavelm(1) = tzm(0)
 
                 do i=1,nlayersm
                     tzm(i) = tzmcols(i,col)
@@ -761,7 +763,8 @@ subroutine wrapper
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
             
             ! call add_seb_to_tboundm
-            tzm(0) = tboundm
+            ! tzm(0) = tboundm
+            ! tavelm(1) = tzm(0)
 
           
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
@@ -908,12 +911,15 @@ subroutine wrapper
             ! endif
             
 
-            tzm(0) = tboundm
+            ! tzm(0) = tboundm
+            ! tavelm(1) = tzm(0)
+
 
             do i=1,nlayersm-1
                 tzm(i)=(tavelm(i)+tavelm(i+1))/2
                 if (tzm(i) < t_min) tzm(i) = t_min
             enddo
+
             !            
             !
             !Set temperature of very top level

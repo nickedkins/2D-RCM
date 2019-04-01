@@ -7,6 +7,7 @@ MODULE MYSUBS
 
     !         subroutine printtime(whencalled)
     subroutine printtime
+	!nnn
         use VARIABLES
         ! character(8)  :: date
         ! character(10) :: time
@@ -32,7 +33,7 @@ MODULE MYSUBS
 
         select case(convecttype)
         case(0) !critical lapse rate
-            do i=2,nlayersm
+            do i=1,nlayersm
                 if( (tzm(i) - tzm(i-1))/(altzm(i)-altzm(i-1))*1000.0 < lapsecrit .or. pzm(i) > fixed_trop(col)) then
                     tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000.0
                     if (tzm(i) < t_min) tzm(i) = t_min

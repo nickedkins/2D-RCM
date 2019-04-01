@@ -237,70 +237,70 @@ for directory in directories:
         # pico2 = (pzmcols[0]/2.0)/1000.0
 
         
-        # plt.figure(1)
-        # plt.semilogy(tzmcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
-        # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.ylabel('Pressure (hPa)')
-        # plt.xlabel('Temperature (K)')
-        # plt.legend(title='$p_{I,N_2}$')
-
-        # plt.figure(1)
-        # plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
-        # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.ylabel('Pressure (hPa)')
-        # plt.xlabel('Net Flux (Wm$^{-2}$)')
-        # plt.legend(title='$p_{I,N_2}$')
-
-        # plt.figure(1)
-        # plt.subplot(331)
-        # plt.title('tzm')
-        # # plt.semilogy(tzmcols,pzmcols,'-o',label=pico2)
-        # plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
-        # # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
-        
-        # plt.subplot(332)
-        # plt.title('htrm')
-        # plt.semilogy(htrmcols,pzmcols,'-o',ls=ls)
-        # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.axvline(-0.03,ls='--')
-        # plt.axvline(0.03,ls='--')
-        
-        # plt.subplot(333)
-        # plt.title('totuflum')
-        # plt.semilogy(totuflumcols,pzmcols,'-o',ls=ls)
-        # plt.ylim(pzmcols[0]*1.1,1)
-        
-        # plt.subplot(334)
-        # plt.title('totdfllum')
-        # plt.semilogy(totdflumcols,pzmcols,'-o',ls=ls)
-        # plt.ylim(pzmcols[0]*1.1,1)
-
-        # plt.subplot(335)
-        # plt.title('abs_o3')
-        # plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:],'-o',ls=ls)
-        # plt.ylim(pzmcols[0]*1.1,1)        
-
-        # plt.subplot(336)
-        # plt.title('abspn')
-        # plt.semilogy(abspncols*1362./4.,pzmcols[1:],'-o',ls=ls)
-        # plt.ylim(pzmcols[0]*1.1,1)
-
-        # plt.subplot(337)
-        # plt.title('tavelm')
-        # plt.semilogy(tavelmcols,pzmcols[1:],'-o',label=str(fn))
-        # plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
-
+        plt.figure(1)
+        plt.semilogy(tzmcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
+        plt.ylim(pzmcols[0]*1.1,1)
+        plt.ylabel('Pressure (hPa)')
+        plt.xlabel('Temperature (K)')
+        plt.legend(title='$p_{I,N_2}$')
 
         plt.figure(1)
-        # plt.subplot(337)
-        plt.title(r'Inversion develops with increased $\alpha_{surf}$')
+        plt.semilogy(totdflumcols-totuflumcols,pzmcols,ls=ls,label='{:3.0f} bar'.format(pico2[0]))
+        plt.ylim(pzmcols[0]*1.1,1)
+        plt.ylabel('Pressure (hPa)')
+        plt.xlabel('Net Flux (Wm$^{-2}$)')
+        plt.legend(title='$p_{I,N_2}$')
+
+        plt.figure(1)
+        plt.subplot(331)
+        plt.title('tzm')
+        # plt.semilogy(tzmcols,pzmcols,'-o',label=pico2)
+        plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
+        # plt.ylim(pzmcols[0]*1.1,1)
+        plt.legend()
+        
+        plt.subplot(332)
+        plt.title('htrm')
+        plt.semilogy(htrmcols,pzmcols,'-o',ls=ls)
+        plt.ylim(pzmcols[0]*1.1,1)
+        plt.axvline(-0.03,ls='--')
+        plt.axvline(0.03,ls='--')
+        
+        plt.subplot(333)
+        plt.title('totuflum')
+        plt.semilogy(totuflumcols,pzmcols,'-o',ls=ls)
+        plt.ylim(pzmcols[0]*1.1,1)
+        
+        plt.subplot(334)
+        plt.title('totdfllum')
+        plt.semilogy(totdflumcols,pzmcols,'-o',ls=ls)
+        plt.ylim(pzmcols[0]*1.1,1)
+
+        plt.subplot(335)
+        plt.title('abs_o3')
+        plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:],'-o',ls=ls)
+        plt.ylim(pzmcols[0]*1.1,1)        
+
+        plt.subplot(336)
+        plt.title('abspn')
+        plt.semilogy(abspncols*1362./4.,pzmcols[1:],'-o',ls=ls)
+        plt.ylim(pzmcols[0]*1.1,1)
+
+        plt.subplot(337)
+        plt.title('tavelm')
         plt.semilogy(tavelmcols,pzmcols[1:],'-o',label=str(fn))
         plt.ylim(pzmcols[0]*1.1,1)
-        plt.xlabel('Temperature (K)')
-        plt.ylabel('Pressure (hPa)')
         plt.legend()
+
+
+        # plt.figure(1)
+        # # plt.subplot(337)
+        # plt.title(r'Inversion develops with increased $\alpha_{surf}$')
+        # plt.semilogy(tavelmcols,pzmcols[1:],'-o',label=str(fn))
+        # plt.ylim(pzmcols[0]*1.1,1)
+        # plt.xlabel('Temperature (K)')
+        # plt.ylabel('Pressure (hPa)')
+        # plt.legend()
 
         # print sum(abspncols*1362./4.), sum(A_oz_lcols*1362./4.), abs_surf_lhcols[1]
 
