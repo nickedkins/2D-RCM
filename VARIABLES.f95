@@ -137,6 +137,7 @@ MODULE VARIABLES
     real :: w_t,ylh,A_wv,Ag1,Ag2,Rbar_r,abs_h2o,abs_o3,abs_surf,tot_sol_abs_lh,abs_surf_lh
     real :: abs_surf_lhwghtd
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
+    real, dimension(maxncols) :: sebcols
 
     !To keep the terminal open
     character*1 KeyBuf
