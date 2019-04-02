@@ -1025,7 +1025,7 @@ subroutine wrapper
             shf = 30.
             bowen = 0.2125
             seb = 0.
-            c_drag = 0.005 * 0.0
+            c_drag = 0.001
             meanwind = 5.0
             density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
 
@@ -1038,8 +1038,8 @@ subroutine wrapper
             & rel_hum(1) * exp( 17.625 * ( tavelm(1) - 273.15 ) / ( tavelm(1) - 273.15 + 243.04 ) ) ) 
             ! shf = lhf * bowen
 
-            ! seb = totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf
-            seb = totdflum(0) + abs_surf_lh - totuflum(0)
+            seb = totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf
+            ! seb = totdflum(0) + abs_surf_lh - totuflum(0)
             ! seb = (300. + 250. - totuflum(0) - 0. - 0.)
             sebcols(col) = seb
             ! tboundm = tboundm + seb * sebfac

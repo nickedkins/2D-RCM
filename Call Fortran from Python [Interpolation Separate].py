@@ -75,7 +75,7 @@ sebfac = 0.2
 
 # sas = np.linspace(0.0,1.0,num=5)
 sas = [0.2]
-tboundms = np.linspace(290,350,num=5)
+tboundms = np.linspace(250,335,num=10)
 #tboundms = [288.0]
 
 for tboundm in tboundms:
@@ -483,7 +483,7 @@ for tboundm in tboundms:
             srh = createlatdistbn('Relative Humidity')
             srh = [0.8] * ncols
             # sa = createlatdistbn('Surface Reflectance')
-            sa = [0.22] * ncols
+            sa = [0.5] * ncols
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
@@ -523,7 +523,7 @@ for tboundm in tboundms:
             #lcf = 0.5
             #lcod = 5.0
             tp = 1.0
-            sa = 0.18
+            #sa = 0.21
             #fth = 5.0
             #fth = np.zeros(ncols)
             #for i in range(ncols):
@@ -539,7 +539,7 @@ for tboundm in tboundms:
             srh = 0.8
             ps1 = 0
             af = 1.0
-            dalr = 0
+            dalr = 2
             npb = 0
             o3sw = 1
             h2osw = 1
@@ -624,5 +624,5 @@ for tboundm in tboundms:
 
 ########################################################################################################################
 
-#os.system('say "All done bro"')
+os.system('say "Done"')
 show()

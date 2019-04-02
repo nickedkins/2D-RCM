@@ -43,7 +43,7 @@ MODULE MYSUBS
                 endif
             end do
         case(2) !moist adiabatic lapse rate
-            do i=2,nlayersm
+            do i=1,nlayersm
                 if( (tavelm(i) - tzm(i-1))/(altlaym(i)-altzm(i-1))*1000.0 < (malr(i)*1000.0) .or. &
                     pavelm(i) > fixed_trop(col)) then
                     tzm(i) = tzm(i-1) + malr(i) * 1000.0*(altzm(i)-altzm(i-1))/1000.0
