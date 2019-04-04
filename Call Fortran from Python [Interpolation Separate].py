@@ -44,15 +44,13 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 200 #model days
+days = 5000 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
 pico2s = [400e-6]
 # pin2s = np.logspace(-1,2,num=10,base=10.0)
 pin2s = [1.0]
-
-print(pico2s)
 
 #pico2s = [400e-6,3200e-6]
 ncols = 1
@@ -71,12 +69,18 @@ inversion_col = 1
 
 # sebfacs = np.linspace(0.0,1e-1,num=5)
 #sebfacs = [0.2]
-sebfac = 0.2
 
-# sas = np.linspace(0.0,1.0,num=5)
-sas = [0.2]
-tboundms = np.linspace(250,335,num=10)
-#tboundms = [288.0]
+
+surf_layer_depth = 0.1
+surf_layer_density = 3.e3
+surf_layer_shc = 3.e3
+
+sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc)
+
+sas = np.linspace(0.2,0.8,num=5)
+#sas = [0.2]
+#tboundms = np.linspace(250,335,num=10)
+tboundms = [288.0]
 
 for tboundm in tboundms:
 
@@ -472,7 +476,6 @@ for tboundm in tboundms:
             #     loop = loop + 1
         
             lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-            print(lc)
             lcmean = np.mean(lc)
             # lc = [-6.5]
             #lc[0] = -10.0
@@ -483,7 +486,7 @@ for tboundm in tboundms:
             srh = createlatdistbn('Relative Humidity')
             srh = [0.8] * ncols
             # sa = createlatdistbn('Surface Reflectance')
-            sa = [0.5] * ncols
+            #sa = [0.5] * ncols
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
@@ -528,7 +531,7 @@ for tboundm in tboundms:
             #fth = np.zeros(ncols)
             #for i in range(ncols):
             #    fth[i] = 15.0 - abs(collats[i])/18.0
-            fth = [800.]
+            fth = [300.]
             ol = nlays
             asp = 2.0   
             cs = 0
@@ -552,9 +555,9 @@ for tboundm in tboundms:
             o2inv = 0.0
             htransp = 1.0 #reduce lapse rate to account for horizontal transport
             ipe = 1
-            dp = 0
+            dp = 1
             mtranspfac = 2.0
-            boxnetfluxfac = 0.0
+            boxnetfluxfac = 0.2
             twarm = 288
             tcold = 268
             phim = 45 * 3.14 / 180
@@ -564,7 +567,8 @@ for tboundm in tboundms:
             planet_radius = 6.37e6
             planet_rotation = 7.29e-5
             t_min = 100.0
-            sebfac = 0.02
+            # sebfac = 0.02
+            sfc_heating = 1 #surface energy budget warms/cools surface? 1=yes, 0=no
         
             ur1 = ur
         
@@ -574,14 +578,11 @@ for tboundm in tboundms:
         
             params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
             npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac]
+            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating]
             
         
             f = open(project_dir+'/Earth RCM Parameters','w')
-            #f = open('/Users/nickedkins/prrtmgithubtest/Earth RCM Parameters','w')
-        
-            print(len(params),'params')
-        
+            #f = open('/Users/nickedkins/prrtmgithubtest/Earth RCM Parameters','w')        
             for m in params:
                 if type(m) is list:
                     for i in range(len(m)-1):
@@ -605,7 +606,6 @@ for tboundm in tboundms:
                 loc = project_dir+'2D RCM GitHub'
                 os.chdir(project_dir)
                 print(os.getcwd())  # Prints the current working directory
-                print('path above')
                 p = subprocess.Popen([loc])
         
                 stdoutdata, stderrdata = p.communicate()

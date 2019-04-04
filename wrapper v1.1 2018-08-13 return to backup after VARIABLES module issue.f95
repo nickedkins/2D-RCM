@@ -9,7 +9,7 @@ subroutine wrapper
 
 
     !    call printtime('START')
-    ! call printtime
+    call printtime
 
     !Green's analytic ozone variables
     a = 0.4
@@ -168,6 +168,7 @@ subroutine wrapper
     read(73,*) latbounds(0:ncols)
     read(73,*) t_min
     read(73,*) sebfac
+    read(73,*) sfc_heating
 
     close(73)
 
@@ -725,10 +726,6 @@ subroutine wrapper
                 !     wklm(1,:) = wklm(1,:) / 10.0
                 ! endif
 
-                ! if(j==10 .and. col==2) then
-                !     print*, cloudcol, totuflum(nlayersm)
-                ! endif
-
                 htrmwghtd = htrmwghtd + htrm * cloudcolfrac
                 totuflumwghtd = totuflumwghtd + totuflum * cloudcolfrac
                 totdflumwghtd = totdflumwghtd + totdflum * cloudcolfrac
@@ -800,27 +797,6 @@ subroutine wrapper
             ! do i=1,nlayersm
             !     temp_tendency(i) = (tavelm_store(i,1) - tavelm_store(i,2)) / newur(i)
             ! enddo
-
-
-
-            !           if(j==31 .and. col==2) then
-            !             do i=1,nlayersm
-            !               print*, i, altzm(i)/1000.0, pzm(i), tzm(i), tavelm(i), totuflum(i), htrm(i)
-            !             enddo
-            !           endif
-
-            ! if(j==18 .and. col==3) then
-            !   do i=1,nlayersm
-!     print*, i, altzm(i)/1000.0, pzm(i), tzm(i), tavelm(i), totuflum(i)
-            !   enddo
-            ! endif
-
-            ! if(j==19 .and. col==3) then
-            !   do i=1,nlayersm
-!     print*, i, altzm(i)/1000.0, pzm(i), tzm(i), tavelm(i), totuflum(i)
-            !   enddo
-            ! endif
-
 
             ! Undo the if block from before the call to rrtm (i.e., set the surface pressure back to whatever it was before it was set to 1 bar)
             if (pb_new == 0) then
@@ -1021,6 +997,7 @@ subroutine wrapper
 
             endif
 
+            ! Calculate surface energy budget (SEB) and perturb tboundm if chosen
             lhf = 10.
             shf = 30.
             bowen = 0.2125
@@ -1028,33 +1005,20 @@ subroutine wrapper
             c_drag = 0.001
             meanwind = 5.0
             density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
-
-            ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
-            ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
             shf = cptot(1) * density * c_drag * meanwind * (tboundm - tavelm(1))
             lhf = (Lv * c_drag * meanwind) / (461.52 * tavelm(1)) * &
             & 6.1094*100. * &
             &( exp( 17.625 * ( tboundm - 273.15 ) / ( tboundm - 273.15 + 243.04 ) ) -&
             & rel_hum(1) * exp( 17.625 * ( tavelm(1) - 273.15 ) / ( tavelm(1) - 273.15 + 243.04 ) ) ) 
-            ! shf = lhf * bowen
-
             seb = totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf
-            ! seb = totdflum(0) + abs_surf_lh - totuflum(0)
-            ! seb = (300. + 250. - totuflum(0) - 0. - 0.)
             sebcols(col) = seb
-            ! tboundm = tboundm + seb * sebfac
-            ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-            ! ! tboundm = 0.95*tboundm + 0.05*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-            ! tboundmcols(col) = tboundm
-            
-            ! print*, ('----------------------------------------------')
-            ! print*,
-            ! print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf '
-            if (mod(j,50) == 0) then
-                print*,  seb,',',totdflum(0),',',totuflum(0),',',abs_surf_lh,',',lhf,',',shf,',',tboundm,',',&
-                &boxnetradflux(col)
-            end if
-
+            select case(sfc_heating)
+                case(0) ! SEB doesn't affect surface temperature
+                    tboundm = tboundm 
+                case(1) ! SEB warms/cools surface
+                    tboundm = tboundm + seb * sebfac    
+            end select
+            tboundmcols(col) = tboundm
         enddo !columns do loop
 
         tglobsum = 0.
@@ -1173,23 +1137,14 @@ subroutine wrapper
 
             enddo
 
-            ! print*,
-            ! print*, 'Reached maximum timestep'
-            ! print*, 
-            ! print*, ('----------------------------------------------')
-            ! print*, 'Global Mean Temperature: ', tglobmean
-            ! print*,
+            print*,
+            print*, 'Reached maximum timestep'
+            print*, 
+            print*, ('----------------------------------------------')
+            print*, 'Global Mean Temperature: ', tglobmean
+            print*,
             transpcalled = 1
             stepssinceboxadj = 0
-
-            ! NJE putting in fixed meridtransp to start with
-            ! meridtransp(1) = 25.08
-            ! meridtransp(2) = -6.52 
-            ! meridtransp(3) = -17.46
-            ! meridtransp(4) = -14.07
-            ! meridtransp(5) = -20.56
-            ! meridtransp(6) = 13.42
-            ! meridtransp(7) = 20.10
 
             do col=1,ncols
                 boxnetradflux(col) = abs_sw(col)-olrcols(col)
@@ -1213,82 +1168,91 @@ subroutine wrapper
                 tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
             enddo
 
-            ! write(*,1106,advance='no') ''
+            write(*,1106,advance='no') ''
 
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1104,advance='no') boxlats(col)
-            !     else
-            !         write(*,1104) boxlats(col)
-            !     endif
-            ! enddo
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1104,advance='no') boxlats(col)
+                else
+                    write(*,1104) boxlats(col)
+                endif
+            enddo
 
 
 
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1105,advance='no') '-------------'
-            !     else
-            !         write(*,1105) '-------------'
-            !     endif
-            ! enddo
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1105,advance='no') '-------------'
+                else
+                    write(*,1105) '-------------'
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Box Net Radiative Flux | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') boxnetradflux(col)
-            !     else
-            !         write(*,1103) boxnetradflux(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Box Net Radiative Flux | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') boxnetradflux(col)
+                else
+                    write(*,1103) boxnetradflux(col)
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Meridional Transport | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') meridtransp(col)
-            !     else
-            !         write(*,1103) meridtransp(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Meridional Transport | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') meridtransp(col)
+                else
+                    write(*,1103) meridtransp(col)
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Box Total Net Flux | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') boxnettotflux(col)
-            !     else
-            !         write(*,1103) boxnettotflux(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Box Total Net Flux | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') boxnettotflux(col)
+                else
+                    write(*,1103) boxnettotflux(col)
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Box Surface Temperature | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') tboundmcols(col)
-            !     else
-            !         write(*,1103) tboundmcols(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Box Surface Temperature | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') tboundmcols(col)
+                else
+                    write(*,1103) tboundmcols(col)
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Box OLR | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') olrcols(col)
-            !     else
-            !         write(*,1103) olrcols(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Box OLR | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') olrcols(col)
+                else
+                    write(*,1103) olrcols(col)
+                endif
+            enddo
 
-            ! write(*,1106,advance='no') 'Box Abs SW | '
-            ! do col=1,ncols
-            !     if (col < ncols) then
-            !         write(*,1103,advance='no') abs_sw(col)
-            !     else
-            !         write(*,1103) abs_sw(col)
-            !     endif
-            ! enddo
+            write(*,1106,advance='no') 'Box Abs SW | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') abs_sw(col)
+                else
+                    write(*,1103) abs_sw(col)
+                endif
+            enddo
 
-            ! print*, ('----------------------------------------------')
-            ! print*,
+            write(*,1106,advance='no') 'Box SEB | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') seb
+                else
+                    write(*,1103) seb
+                endif
+            enddo
+
+            print*, ('----------------------------------------------')
+            print*,
 
         endif
 
@@ -1299,20 +1263,12 @@ subroutine wrapper
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
             if (stepssinceboxadj > 50) then
-                ! print*, 
-                ! print*, ('----------------------------------------------')
-                ! print*, 'Global Mean Temperature: ', tglobmean
-                ! print*,
+                print*, 
+                print*, ('----------------------------------------------')
+                print*, 'Global Mean Temperature: ', tglobmean
+                print*,
                 transpcalled = 1
                 stepssinceboxadj = 0
-
-                ! meridtransp(1) = 25.08
-                ! meridtransp(2) = -6.52 
-                ! meridtransp(3) = -17.46
-                ! meridtransp(4) = -14.07
-                ! meridtransp(5) = -20.56
-                ! meridtransp(6) = 13.42
-                ! meridtransp(7) = 20.10
 
                 do col=1,ncols
                     boxnetradflux(col) = abs_sw(col)-olrcols(col)
@@ -1332,160 +1288,95 @@ subroutine wrapper
                 enddo
 
 
+                write(*,1106,advance='no') ''
 
-                ! lhf = 10.
-                ! shf = 17.
-                ! bowen = 0.2125
-                ! seb = 0.
-                ! c_drag = 0.00001
-                ! meanwind = 5.0
-                ! density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1104,advance='no') boxlats(col)
+                    else
+                        write(*,1104) boxlats(col)
+                    endif
+                enddo
 
-                ! ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
-                ! ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
-                ! ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tzm(1))
-                ! lhf = shf / bowen
 
-                ! seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
-                ! tboundm = tboundm + seb * sebfac
+
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1105,advance='no') '-------------'
+                    else
+                        write(*,1105) '-------------'
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Net Radiative Flux | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') boxnetradflux(col)
+                    else
+                        write(*,1103) boxnetradflux(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Meridional Transport | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') meridtransp(col)
+                    else
+                        write(*,1103) meridtransp(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Total Net Flux | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') boxnettotflux(col)
+                    else
+                        write(*,1103) boxnettotflux(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Surface Temperature | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') tboundmcols(col)
+                    else
+                        write(*,1103) tboundmcols(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box OLR | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') olrcols(col)
+                    else
+                        write(*,1103) olrcols(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Abs SW | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') abs_sw(col)
+                    else
+                        write(*,1103) abs_sw(col)
+                    endif
+                enddo
                 
-                ! ! tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-                ! ! tboundm = 0.5*tboundm + 0.5*((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-                ! tboundm = tboundm + sebfac * seb
-                ! tboundmcols(col) = tboundm
-                
-                ! ! print*, ('----------------------------------------------')
-                ! ! print*,
-                ! ! print*, 'seb, totdflum(0),totuflum(0),abs_surf_lh, lhf, shf '
-                ! print*,  seb,',',totdflum(0),',',totuflum(0),',',abs_surf_lh,',',lhf,',',shf,',',tboundm,',',&
-                ! &boxnetradflux(1)
-                ! print*, 'tboundm: ', tboundm
-                ! print*, ('----------------------------------------------')
-                ! print*,         
-                ! tboundmcols(col-1) = tboundm
-                ! tzm(0) = tboundm
+                write(*,1106,advance='no') 'Box SEB | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') seb
+                    else
+                        write(*,1103) seb
+                    endif
+                enddo
 
-
-                ! write(*,1106,advance='no') ''
-
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1104,advance='no') boxlats(col)
-                !     else
-                !         write(*,1104) boxlats(col)
-                !     endif
-                ! enddo
-
-
-
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1105,advance='no') '-------------'
-                !     else
-                !         write(*,1105) '-------------'
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Box Net Radiative Flux | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') boxnetradflux(col)
-                !     else
-                !         write(*,1103) boxnetradflux(col)
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Meridional Transport | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') meridtransp(col)
-                !     else
-                !         write(*,1103) meridtransp(col)
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Box Total Net Flux | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') boxnettotflux(col)
-                !     else
-                !         write(*,1103) boxnettotflux(col)
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Box Surface Temperature | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') tboundmcols(col)
-                !     else
-                !         write(*,1103) tboundmcols(col)
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Box OLR | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') olrcols(col)
-                !     else
-                !         write(*,1103) olrcols(col)
-                !     endif
-                ! enddo
-
-                ! write(*,1106,advance='no') 'Box Abs SW | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') abs_sw(col)
-                !     else
-                !         write(*,1103) abs_sw(col)
-                !     endif
-                ! enddo
-                
-                ! write(*,1106,advance='no') 'Box SEB | '
-                ! do col=1,ncols
-                !     if (col < ncols) then
-                !         write(*,1103,advance='no') seb
-                !     else
-                !         write(*,1103) seb
-                !     endif
-                ! enddo
-
-                ! print*, ('----------------------------------------------')
-                ! print*,
-
-!                call add_seb_to_tboundm
-
-                ! if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) > toa_precision) then
-                !     lhf = 10.
-                !     shf = 30.
-                !     bowen = 0.2125
-                !     seb = 0.
-                !     c_drag = 0.005 * 0.0
-                !     meanwind = 5.0
-                !     density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
-
-                !     ! sensible heat flux = cp * density * drag coeff * wind speed * ( T_surf - T_lowestlayer )
-                !     ! shf = cptot(1) * density * c_drag * meanwind * (tzm(0) - tavelm(1))
-                !     shf = cptot(1) * density * c_drag * meanwind * (tboundm - tavelm(1))
-                !     lhf = (Lv * c_drag * meanwind) / (461.52 * tavelm(1)) * &
-                !     & 6.1094*100. * &
-                !     &( exp( 17.625 * ( tboundm - 273.15 ) / ( tboundm - 273.15 + 243.04 ) ) -&
-                !     & rel_hum(1) * exp( 17.625 * ( tavelm(1) - 273.15 ) / ( tavelm(1) - 273.15 + 243.04 ) ) ) 
-                !     ! shf = lhf * bowen
-
-                !     seb = (totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf)
-                !     ! seb = (300. + 250. - totuflum(0) - 0. - 0.)
-                !     sebcols(col) = seb
-                !     ! tboundm = tboundm + seb * sebfac
-                !     tboundm = ((totdflum(0) + abs_surf_lh - lhf - shf)/5.67e-8)**0.25
-                ! end if
-                
+                print*, ('----------------------------------------------')
+                print*,
 
                 ! toaeqbcheck
-                if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
+                if (maxval(abs(boxnettotflux)) < toa_precision) then                    
 
-                    
-
-                ! if (maxval(abs(boxnettotflux)) < toa_precision .and. abs(seb) < toa_precision) then
                     if(detailprint==1) then
                         print*, "Equilibrium reached in ",nint(j/undrelax),"days"
                         print*,
@@ -1558,7 +1449,7 @@ subroutine wrapper
     enddo !Main do
 
     !    call printtime('END')
-    ! call printtime
+    call printtime
 
     tot_albedo = 1.0 - tot_sol_abs_lh / sol_inc
 

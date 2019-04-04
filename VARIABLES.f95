@@ -138,6 +138,7 @@ MODULE VARIABLES
     real :: abs_surf_lhwghtd
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
     real, dimension(maxncols) :: sebcols
+    integer :: sfc_heating
 
     !To keep the terminal open
     character*1 KeyBuf
