@@ -1245,9 +1245,9 @@ subroutine wrapper
             write(*,1106,advance='no') 'Box SEB | '
             do col=1,ncols
                 if (col < ncols) then
-                    write(*,1103,advance='no') seb
+                    write(*,1103,advance='no') sebcols(col)
                 else
-                    write(*,1103) seb
+                    write(*,1103) sebcols(col)
                 endif
             enddo
 
@@ -1365,9 +1365,9 @@ subroutine wrapper
                 write(*,1106,advance='no') 'Box SEB | '
                 do col=1,ncols
                     if (col < ncols) then
-                        write(*,1103,advance='no') seb
+                        write(*,1103,advance='no') sebcols(col)
                     else
-                        write(*,1103) seb
+                        write(*,1103) sebcols(col)
                     endif
                 enddo
 
@@ -1485,7 +1485,7 @@ subroutine wrapper
     !     rsp_tot(i), cptot(i), theta(i),kappa(i),montgomery(i),exner(i),geopotential(i)
     ! enddo
 
-    do i=nlayersm,0,-1
+    do i=nlayersm,1,-1
         write(61,1003) wklm(1,i),wklm(2,i),wklm(3,i),wklm(4,i),wklm(5,i),wklm(6,i),wklm(7,i),wklm(8,i),wklm(9,i)
     enddo
 

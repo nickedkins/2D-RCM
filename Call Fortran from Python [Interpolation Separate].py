@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -53,7 +53,7 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 1
+ncols = 3
 ncloudcols = 1
 nlays = 30
 
@@ -71,20 +71,23 @@ inversion_col = 1
 #sebfacs = [0.2]
 
 
-surf_layer_depth = 0.1
+surf_layer_depth = 1.0
 surf_layer_density = 3.e3
 surf_layer_shc = 3.e3
 
 sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc)
 
-sas = np.linspace(0.2,0.8,num=5)
-#sas = [0.2]
+# sas = np.linspace(0.2,0.8,num=5)
+sas = [0.2]
 #tboundms = np.linspace(250,335,num=10)
 tboundms = [288.0]
 
 for tboundm in tboundms:
 
     for sa in sas:
+
+        sa = [sa] * ncols
+        
 
         for pin2 in pin2s:
 
@@ -483,15 +486,14 @@ for tboundm in tboundms:
             #for i in range(len(lc)):
             #    lc[i] = lcmean
             lch = createlatdistbn('Cloud Top Height')
-            srh = createlatdistbn('Relative Humidity')
-            srh = [0.8] * ncols
+            # srh = createlatdistbn('Relative Humidity')
             # sa = createlatdistbn('Surface Reflectance')
             #sa = [0.5] * ncols
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
             # tg = createlatdistbn('Surface Temperature')
-            tg = tboundm
+            tg = [tboundm] * ncols
             # tg = [288.0]
         
         
@@ -525,13 +527,13 @@ for tboundm in tboundms:
             #lct = 250.0
             #lcf = 0.5
             #lcod = 5.0
-            tp = 1.0
+            tp = 5.0
             #sa = 0.21
             #fth = 5.0
             #fth = np.zeros(ncols)
             #for i in range(ncols):
             #    fth[i] = 15.0 - abs(collats[i])/18.0
-            fth = [300.]
+            fth = [300.] * ncols
             ol = nlays
             asp = 2.0   
             cs = 0
@@ -539,7 +541,7 @@ for tboundm in tboundms:
             fswon = 0  
             fsw = 239.4
             fp = 0
-            srh = 0.8
+            srh = [0.8] * ncols
             ps1 = 0
             af = 1.0
             dalr = 2
