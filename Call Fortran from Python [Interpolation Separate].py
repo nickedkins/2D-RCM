@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -533,7 +533,7 @@ for tboundm in tboundms:
             #fth = np.zeros(ncols)
             #for i in range(ncols):
             #    fth[i] = 15.0 - abs(collats[i])/18.0
-            fth = [300.] * ncols
+            fth = [300.*1e10] * ncols
             ol = nlays
             asp = 2.0   
             cs = 0
@@ -559,7 +559,7 @@ for tboundm in tboundms:
             ipe = 1
             dp = 1
             mtranspfac = 2.0
-            boxnetfluxfac = 0.2
+            boxnetfluxfac = 0.04
             twarm = 288
             tcold = 268
             phim = 45 * 3.14 / 180
@@ -570,7 +570,7 @@ for tboundm in tboundms:
             planet_rotation = 7.29e-5
             t_min = 100.0
             # sebfac = 0.02
-            sfc_heating = 1 #surface energy budget warms/cools surface? 1=yes, 0=no
+            sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
         
             ur1 = ur
         

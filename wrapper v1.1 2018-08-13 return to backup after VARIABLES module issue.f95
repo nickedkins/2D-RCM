@@ -1006,10 +1006,10 @@ subroutine wrapper
             meanwind = 5.0
             density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
             shf = cptot(1) * density * c_drag * meanwind * (tboundm - tavelm(1))
-            lhf = (Lv * c_drag * meanwind) / (461.52 * tavelm(1)) * &
+            lhf = (Lv * c_drag * meanwind) / (461.52 * tzm(0)) * &
             & 6.1094*100. * &
             &( exp( 17.625 * ( tboundm - 273.15 ) / ( tboundm - 273.15 + 243.04 ) ) -&
-            & rel_hum(1) * exp( 17.625 * ( tavelm(1) - 273.15 ) / ( tavelm(1) - 273.15 + 243.04 ) ) ) 
+            & rel_hum(1) * exp( 17.625 * ( tzm(0) - 273.15 ) / ( tzm(0) - 273.15 + 243.04 ) ) ) 
             seb = totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf
             sebcols(col) = seb
             select case(sfc_heating)
