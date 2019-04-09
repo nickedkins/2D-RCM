@@ -20,19 +20,19 @@ DUMMY=
 #
 # Flags
 #
-ABSOFT_F95_FLAGS= -O2 -m64 -s -stack:1f40000
-ABSOFT_F77_FLAGS= -O2 -f77_compat -m64 -s -stack:1f40000
+ABSOFT_F95_FLAGS= -Rb -Rc -Rp -Rs -g -m64 -s -stack:1f40000 -trapuv
+ABSOFT_F77_FLAGS= -Rb -Rc -Rp -Rs -f77_compat -g -m64 -s -stack:1f40000 -trapuv
 RC_FLAGS=
-GCC_FLAGS= -O2 -m64
+GCC_FLAGS= -g -m64
 MAKE_FLAGS= -k
-ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on       -stack:1f40000 -m64 -O2
+ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on       -stack:1f40000 -m64 -g
 
 #
 # Name of the executable
 #
 TARGET=2D RCM GitHub
 OUTDIR=.
-OBJDIR=./Release
+OBJDIR=./Debug
 
 #
 # Files for this executable
@@ -150,4 +150,4 @@ ScanAll: "$(OUTDIR)" "$(OBJDIR)" MakeDepsAll
 # Scan for all F77/F95, and c/c++ dependencies
 #
 MakeDepsAll:
-	$(MKDEP) -quiet "-pre./Release/" -Y -modInfo -errdel -f90 -f makefile.amake -a -info  -O2 -m64 -s -stack:1f40000 -info "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95" "src/rtr.f" "src/rtrcld.f" "src/rtrcldmr.f" "src/rtreg.f" "src/rtregcld.f" "src/rtregcldmr.f" "src/taumol.f" "src/rrtm.f" "src/rrtatm.f" "src/extra.f" "src/cldprop.f" "src/ErrPack.f" "src/k_g.f" "src/LINPAK.f" "src/RDI1MACH.f" "src/setcoef.f" "src/disort.f" "src/rtrdis.f" 
+	$(MKDEP) -quiet "-pre./Debug/" -Y -modInfo -errdel -f90 -f makefile.amake -a -info  -Rb -Rc -Rp -Rs -g -m64 -s -stack:1f40000 -trapuv -info "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95" "src/rtr.f" "src/rtrcld.f" "src/rtrcldmr.f" "src/rtreg.f" "src/rtregcld.f" "src/rtregcldmr.f" "src/taumol.f" "src/rrtm.f" "src/rrtatm.f" "src/extra.f" "src/cldprop.f" "src/ErrPack.f" "src/k_g.f" "src/LINPAK.f" "src/RDI1MACH.f" "src/setcoef.f" "src/disort.f" "src/rtrdis.f" 

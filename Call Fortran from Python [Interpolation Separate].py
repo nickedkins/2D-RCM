@@ -492,8 +492,8 @@ for tboundm in tboundms:
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
-            # tg = createlatdistbn('Surface Temperature')
-            tg = [tboundm] * ncols
+            tg = createlatdistbn('Surface Temperature')
+            #tg = [tboundm] * ncols
             # tg = [288.0]
         
         

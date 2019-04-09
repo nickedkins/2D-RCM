@@ -768,7 +768,7 @@ subroutine wrapper
             !Apply SW heating rates if applicable
             !            do i=1,nlayersm-1
             do i=1,nlayersm
-                if(swh2o == 1) htrm(i) = htrm(i) + htrlh(i)
+                if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
@@ -894,6 +894,8 @@ subroutine wrapper
                 tzm(i)=(tavelm(i)+tavelm(i+1))/2
                 if (tzm(i) < t_min) tzm(i) = t_min
             enddo
+
+            tzm(0) = 2.0 * tzm(1) - tzm(2)
 
             !            
             !
@@ -1032,15 +1034,14 @@ subroutine wrapper
 
         tglobmean = tglobsum / cossums
 
-        ! todo tboundm_edges here
 
         if (ncols > 1) then
             do i=1,ncols-1
-                tboundm_edges(i) = (tboundmcols(i+1) + tboundmcols(i)) / 2.0
+                tair_lowest_edges(i) = (tavelmcols(1,i+1) + tavelmcols(1,i)) / 2.0
             enddo
 
-            tboundm_edges(0) = 2.0 * tboundm_edges(1) - tboundm_edges(2)
-            tboundm_edges(ncols) = 2.0 * tboundm_edges(ncols-1) - tboundm_edges(ncols-2)
+            tair_lowest_edges(0) = 2.0 * tair_lowest_edges(1) - tair_lowest_edges(2)
+            tair_lowest_edges(ncols) = 2.0 * tair_lowest_edges(ncols-1) - tair_lowest_edges(ncols-2)
         end if
 
 
@@ -1079,7 +1080,7 @@ subroutine wrapper
 
 
         do i=1,ncols-1
-            delta_T_edge(i) = tboundm_edges(i) - tboundm_edges(i+1)
+            delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
             delta_x_edge(i) = x_edge(i) - x_edge(i+1)
             meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
         enddo
@@ -1262,7 +1263,7 @@ subroutine wrapper
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 50) then
+            if (stepssinceboxadj > 10) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean

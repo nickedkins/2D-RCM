@@ -84,7 +84,7 @@ MODULE VARIABLES
     integer :: col, transpcalled, stepssinceboxadj
     real,dimension(MAXNCOLS):: olrcols,insolcols,boxnetradflux,boxnettotflux,meridtransp,currentmaxhtrcols,tempchanges,&
     solar_constants,zencols
-    real,dimension(0:MAXNCOLS) :: tboundm_edges
+    real,dimension(0:MAXNCOLS) :: tair_lowest_edges
     real :: mtranspfac, boxnetfluxfac
     real :: tglobsum, tglobmean
     real,dimension(MAXNCOLS) :: solar_constantcols
