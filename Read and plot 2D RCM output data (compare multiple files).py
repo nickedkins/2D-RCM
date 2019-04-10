@@ -207,7 +207,6 @@ ncols=3
 
 
 i1 = 0
-i2 = 0
 
 tzm_store = np.zeros( ( 200, len(directories), 100 ) )
 pico2_store = np.zeros( (len(directories), 100 ) )
@@ -228,6 +227,8 @@ for directory in directories:
     print a
 
     counter=0
+
+    i2 = 0
 
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
@@ -258,7 +259,7 @@ for directory in directories:
             plt.figure(1)
             plt.subplot(331)
             plt.title('tzm')
-            plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=pico2,c=colors[i3])
+            plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=pico2,c=colors[i3],ls=linestyles[i2])
             # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
             plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3])
             plt.ylim(pzmcols[0,col]*1.1,1)

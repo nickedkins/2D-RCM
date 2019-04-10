@@ -601,14 +601,16 @@ subroutine wrapper
                 tzm(0) = tboundm + inversion_strength
             endif
 
-
+            sigma(0) = 1.0
             if (fp==1) then
                 do i=0,nlayersm
                     tzm(i) = tzmcols(i,col)
                 enddo
                 do i =1,nlayersm
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-                    pzm(i)=pzm(i-1)-surfacep/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    ! pzm(i)=pzm(i-1)-surfacep/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                    pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
 !                    if (pzm(i) < 0.0) then
 !                        pzm(i) = 0.0
 !                    endif

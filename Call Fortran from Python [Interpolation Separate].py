@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 5000 #model days
+days = 100 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -71,7 +71,7 @@ inversion_col = 1
 #sebfacs = [0.2]
 
 
-surf_layer_depth = 1.0
+surf_layer_depth = 1000000.0
 surf_layer_density = 3.e3
 surf_layer_shc = 3.e3
 
@@ -545,9 +545,9 @@ for tboundm in tboundms:
             ps1 = 0
             af = 1.0
             dalr = 2
-            npb = 0
+            npb = 1
             o3sw = 1
-            h2osw = 1
+            h2osw = 0
             nl = nlays
             maxhtr = 0.03
             asf = 4.0
@@ -570,7 +570,7 @@ for tboundm in tboundms:
             planet_rotation = 7.29e-5
             t_min = 100.0
             # sebfac = 0.02
-            sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
+            sfc_heating = 1 #surface energy budget warms/cools surface? 1=yes, 0=no
         
             ur1 = ur
         
