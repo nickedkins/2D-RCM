@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 100 #model days
+days = 5000 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -71,7 +71,7 @@ inversion_col = 1
 #sebfacs = [0.2]
 
 
-surf_layer_depth = 1000000.0
+surf_layer_depth = 1e1
 surf_layer_density = 3.e3
 surf_layer_shc = 3.e3
 
@@ -480,7 +480,7 @@ for tboundm in tboundms:
         
             lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
             lcmean = np.mean(lc)
-            # lc = [-6.5]
+            lc = [-6.5*1e12]*ncols
             #lc[0] = -10.0
             #lc[ncols-1] = -10.0
             #for i in range(len(lc)):
@@ -544,7 +544,7 @@ for tboundm in tboundms:
             srh = [0.8] * ncols
             ps1 = 0
             af = 1.0
-            dalr = 2
+            dalr = 0 #convection type
             npb = 1
             o3sw = 1
             h2osw = 0
@@ -558,8 +558,8 @@ for tboundm in tboundms:
             htransp = 1.0 #reduce lapse rate to account for horizontal transport
             ipe = 1
             dp = 1
-            mtranspfac = 2.0
-            boxnetfluxfac = 0.04
+            mtranspfac = 2.0 * 0.0
+            boxnetfluxfac = 0.2
             twarm = 288
             tcold = 268
             phim = 45 * 3.14 / 180
@@ -571,6 +571,7 @@ for tboundm in tboundms:
             t_min = 100.0
             # sebfac = 0.02
             sfc_heating = 1 #surface energy budget warms/cools surface? 1=yes, 0=no
+            playtype = 1 #pressure layer type. 0=equal p thickness, 1=sigma
         
             ur1 = ur
         
@@ -580,7 +581,7 @@ for tboundm in tboundms:
         
             params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
             npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating]
+            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype]
             
         
             f = open(project_dir+'/Earth RCM Parameters','w')

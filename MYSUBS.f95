@@ -430,7 +430,7 @@ MODULE MYSUBS
 
         do l=2,Llh+1
             i=l-1
-            htrlh(i) = sol_inc * abspn(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0
+            htrlh(i) = sol_inc * abspn(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0 !cplh is specific heat constant pressure dry air
             ! htrlh(i) = sol_inc / 3.0 * abspn(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0 !NJE
             if (htrlh(i) .ne. htrlh(i)) htrlh(i) = 0.0            
         enddo

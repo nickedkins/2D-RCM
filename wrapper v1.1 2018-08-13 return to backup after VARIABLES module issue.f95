@@ -169,6 +169,7 @@ subroutine wrapper
     read(73,*) t_min
     read(73,*) sebfac
     read(73,*) sfc_heating
+    read(73,*) playtype
 
     close(73)
 
@@ -388,12 +389,13 @@ subroutine wrapper
         do i =1,nlayersm
 !            logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
 !            pzm(i) = exp(logpzm(i))
-            sigma(i)=sigma(i-1) - 0.9 / nlayersm
-            pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
-!            pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-!            if (pzm(i) < 0.0) then
-!                pzm(i) = 0.0
-!            endif
+            select case(playtype)
+                case(0)
+                    pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                case(1)
+                    sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                    pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+            end select            
             if (pzm(i) < min_press) then
                 pzm(i) = min_press
             endif            
@@ -597,9 +599,9 @@ subroutine wrapper
 
             endif
 
-            if (col==inversion_col) then
-                tzm(0) = tboundm + inversion_strength
-            endif
+            ! if (col==inversion_col) then
+            !     tzm(0) = tboundm + inversion_strength
+            ! endif
 
             sigma(0) = 1.0
             if (fp==1) then
@@ -608,15 +610,16 @@ subroutine wrapper
                 enddo
                 do i =1,nlayersm
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-                    ! pzm(i)=pzm(i-1)-surfacep/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                    sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                    pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
-!                    if (pzm(i) < 0.0) then
-!                        pzm(i) = 0.0
-!                    endif
+                    select case(playtype)
+                        case(0)
+                            pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                        case(1)
+                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                            pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
-                    endif
+                    endif            
                     pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
                     altzm(i)=altzm(i-1)+(pzm(i-1)-pzm(i))*rsp_tot(i)*tavelm(i)/pavelm(i)/gravity !Rearrange the hydrostatic equation
                     altlaym(i)=(altzm(i)+altzm(i-1))/2 !Set the altitude of the middle of the layer
@@ -673,11 +676,18 @@ subroutine wrapper
             ! If pressure broadening is off, feed a pressure profile with surface pressure = 1 bar to the subroutine that picks the correlated-k distribution
             if (pb_new == 0) then
                 pzm(0) = 1000.0
+                sigma(0) = 1.0
                 do i =1,nlayersm
-                    pzm(i)=pzm(i-1)-100000.0/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    select case(playtype)
+                        case(0)
+                            pzm(i)=pzm(i-1)-(100000.-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                        case(1)
+                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                            pzm(i) = 1000. * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
-                    endif
+                    endif            
                     pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
                 enddo
             endif 
@@ -802,13 +812,20 @@ subroutine wrapper
 
             ! Undo the if block from before the call to rrtm (i.e., set the surface pressure back to whatever it was before it was set to 1 bar)
             if (pb_new == 0) then
-                pzm(0) = surfacep/100.0
-                do i =1,nlayersm
-                    pzm(i)=pzm(i-1)-surfacep/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                pzm(0)=surfacep/100.
+                sigma(0) = 1.0
+                do i=1,nlayersm
+                    select case(playtype)
+                        case(0)
+                            pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                        case(1)
+                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                            pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
-                    endif
-                    pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
+                    endif            
+                        pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
                 enddo
             endif
 
@@ -927,12 +944,13 @@ subroutine wrapper
             do i =1,nlayersm
 !                logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
 !                pzm(i) = exp(logpzm(i))
-                 sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                 pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
-!                 pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb
-!                if (pzm(i) < 0.0) then
-!                    pzm(i) = 0.0
-!                endif
+                 select case(playtype)
+                    case(0)
+                        pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    case(1)
+                        sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                        pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                end select            
                 if (pzm(i) < min_press) then
                     pzm(i) = min_press
                 endif
@@ -1023,6 +1041,7 @@ subroutine wrapper
                     tboundm = tboundm + seb * sebfac    
             end select
             tboundmcols(col) = tboundm
+
         enddo !columns do loop
 
         tglobsum = 0.
@@ -1265,7 +1284,7 @@ subroutine wrapper
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
 !           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 10) then
+            if (stepssinceboxadj > 50) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
