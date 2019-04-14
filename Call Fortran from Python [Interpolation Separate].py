@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 5000 #model days
+days = 100 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -53,9 +53,9 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 3
+ncols = 1
 ncloudcols = 1
-nlays = 60
+nlays = 30
 
 pertlay=0
 pertcol=0
@@ -492,9 +492,9 @@ for tboundm in tboundms:
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
-            tg = createlatdistbn('Surface Temperature')
+            # tg = createlatdistbn('Surface Temperature')
             #tg = [tboundm] * ncols
-            # tg = [288.0]
+            tg = [250.] * ncols
         
         
             #for i in range(len(tg)):
@@ -546,7 +546,7 @@ for tboundm in tboundms:
             af = 1.0
             dalr = 0 #convection type
             npb = 1
-            o3sw = 0
+            o3sw = 1
             h2osw = 0
             nl = nlays
             maxhtr = 0.1
@@ -571,10 +571,11 @@ for tboundm in tboundms:
             t_min = 100.0
             # sebfac = 0.02
             sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
-            playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
+            playtype = 1 #pressure layer type. 0=equal p thickness, 1=sigma
             ur_htr = 0.5
             ur_toafnet = 0.0
-            ur_seb = 0.2
+            ur_seb = 0.0
+            couple_tgta = 0
         
             ur1 = ur
         
@@ -584,7 +585,7 @@ for tboundm in tboundms:
         
             params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
             npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb]
+            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
             
         
             f = open(project_dir+'/Earth RCM Parameters','w')

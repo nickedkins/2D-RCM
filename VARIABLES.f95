@@ -123,6 +123,7 @@ MODULE VARIABLES
     real :: t_min
     real,dimension(0:maxlaym) :: htrm_over_newur
     real :: ur_htr,ur_toafnet,ur_seb
+    integer :: couple_tgta
 
 
     !Lacis and Hansen Ozone variables

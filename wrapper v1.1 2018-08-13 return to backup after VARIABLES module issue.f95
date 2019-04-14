@@ -172,6 +172,7 @@ subroutine wrapper
     read(73,*) ur_htr
     read(73,*) ur_toafnet
     read(73,*) ur_seb
+    read(73,*) couple_tgta
 
     close(73)
 
@@ -581,8 +582,10 @@ subroutine wrapper
             if (transpcalled == 1) then
 
                 tboundm = tboundmcols(col) + tempchanges(col)
-                ! tzm(0) = tboundm
-                ! tavelm(1) = tzm(0)
+                if (couple_tgta == 1) then
+                    tzm(0) = tboundm
+                    tavelm(1) = tzm(0)
+                end if
 
                 do i=0,nlayersm
                     tzm(i) = tzmcols(i,col) + tempchanges(col)
@@ -591,8 +594,10 @@ subroutine wrapper
 
             elseif (transpcalled == 0 .and. j > 1) then
                 tboundm = tboundmcols(col)
-                ! tzm(0) = tboundm
-                ! tavelm(1) = tzm(0)
+                if (couple_tgta == 1) then
+                    tzm(0) = tboundm
+                    tavelm(1) = tzm(0)
+                end if
 
                 do i=1,nlayersm
                     tzm(i) = tzmcols(i,col)
@@ -773,8 +778,10 @@ subroutine wrapper
             tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
             
             ! call add_seb_to_tboundm
-            ! tzm(0) = tboundm
-            ! tavelm(1) = tzm(0)
+            if (couple_tgta == 1) then
+                tzm(0) = tboundm
+                tavelm(1) = tzm(0)
+            end if
 
           
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
@@ -783,7 +790,7 @@ subroutine wrapper
             !            do i=1,nlayersm-1
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
-                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
+                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i)
             enddo
 
             ! do i=1,nlayersm
@@ -882,8 +889,6 @@ subroutine wrapper
                 endif
             enddo
 
-            ! create surface energy budget terms
-
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
            do i=1,nlayersm
@@ -907,8 +912,10 @@ subroutine wrapper
             ! endif
             
 
-            ! tzm(0) = tboundm
-            ! tavelm(1) = tzm(0)
+            if (couple_tgta == 1) then
+                    tzm(0) = tboundm
+                    tavelm(1) = tzm(0)
+                end if
 
 
             do i=1,nlayersm-1
@@ -916,7 +923,7 @@ subroutine wrapper
                 if (tzm(i) < t_min) tzm(i) = t_min
             enddo
 
-            tzm(0) = 2.0 * tzm(1) - tzm(2)
+            ! tzm(0) = 2.0 * tzm(1) - tzm(2)
 
             !            
             !
@@ -1286,8 +1293,8 @@ subroutine wrapper
 
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
-          if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            ! if (stepssinceboxadj > 50) then
+          ! if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
+            if (stepssinceboxadj > 50) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
