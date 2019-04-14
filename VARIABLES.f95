@@ -122,6 +122,7 @@ MODULE VARIABLES
     real,dimension(0:maxlaym) :: sigma
     real :: t_min
     real,dimension(0:maxlaym) :: htrm_over_newur
+    real :: ur_htr,ur_toafnet,ur_seb
 
 
     !Lacis and Hansen Ozone variables

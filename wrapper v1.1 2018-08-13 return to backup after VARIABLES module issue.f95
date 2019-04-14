@@ -7,7 +7,6 @@ subroutine wrapper
 
     implicit none
 
-
     !    call printtime('START')
     call printtime
 
@@ -170,6 +169,9 @@ subroutine wrapper
     read(73,*) sebfac
     read(73,*) sfc_heating
     read(73,*) playtype
+    read(73,*) ur_htr
+    read(73,*) ur_toafnet
+    read(73,*) ur_seb
 
     close(73)
 
@@ -284,13 +286,13 @@ subroutine wrapper
         zencols(col) = sum(zen(col,:,:)) / size(zen(col,:,:))
     enddo
 
-    timesteps = int(days*undrelax) ! number of time steps that the model runs for 
+    timesteps = int(days*ur_htr) ! number of time steps that the model runs for 
 
     tboundm = tboundmcols(1)
 
     ! undrelax is a single float, but now we have newur, which is an under-relaxation constant for each model layer
     do i=1,nlayersm
-        newur(i) = undrelax
+        newur(i) = ur_htr
     enddo
 
     totuflum = 0.
@@ -784,9 +786,9 @@ subroutine wrapper
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
-            do i=1,nlayersm
-              htrm(i-1) = htrm(i-1)/newur(i)
-            enddo
+            ! do i=1,nlayersm
+            !   htrm(i-1) = htrm(i-1)/newur(i)
+            ! enddo
             
             htrm(nlayersm) = 0.0
 
@@ -865,17 +867,17 @@ subroutine wrapper
 
             ! Progressively decrease the under-relaxation constant as currentmaxhtr increases (which means equilibrium is approaching)
             do i=1,nlayersm
-                newur(i) = undrelax / 1.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                newur(i) = ur_htr / 1.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                 if (currentmaxhtr < 2.0 .and. stepssinceadj > 5 .and. adj1<1) then
-                    newur(i) = undrelax / 2.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    newur(i) = ur_htr / 2.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj1 = 1
                 endif
                 if (currentmaxhtr < 0.5 .and. stepssinceadj > 5 .and. adj2<1) then
-                    newur(i) = undrelax / 4.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    newur(i) = ur_htr / 4.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj2 = 1
                 endif
                 if (currentmaxhtr < 0.2 .and. stepssinceadj > 5 .and. adj3<1) then
-                    newur(i) = undrelax / 8.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    newur(i) = ur_htr / 8.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj3 = 1
                 endif
             enddo
@@ -885,7 +887,7 @@ subroutine wrapper
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
            do i=1,nlayersm
-               tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+               tavelm(i) = tavelm(i) + htrm(i)/(newur(i))
                if (tavelm(i) < t_min) tavelm(i) = t_min
                ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
                ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
@@ -1038,7 +1040,7 @@ subroutine wrapper
                 case(0) ! SEB doesn't affect surface temperature
                     tboundm = tboundm 
                 case(1) ! SEB warms/cools surface
-                    tboundm = tboundm + seb * sebfac    
+                    tboundm = tboundm + seb * ur_seb   
             end select
             tboundmcols(col) = tboundm
 
@@ -1187,7 +1189,8 @@ subroutine wrapper
                 ! meridtransp(col) = -1/(x_lat(col))
 
                 boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                tempchanges(col) = boxnettotflux(col) * ur_toafnet
             enddo
 
             write(*,1106,advance='no') ''
@@ -1283,8 +1286,8 @@ subroutine wrapper
 
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
-!           if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 50) then
+          if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
+            ! if (stepssinceboxadj > 50) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
@@ -1306,7 +1309,8 @@ subroutine wrapper
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
                     boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                    tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                    ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                    tempchanges(col) = boxnettotflux(col) * ur_toafnet
                 enddo
 
 
@@ -1400,7 +1404,7 @@ subroutine wrapper
                 if (maxval(abs(boxnettotflux)) < toa_precision) then                    
 
                     if(detailprint==1) then
-                        print*, "Equilibrium reached in ",nint(j/undrelax),"days"
+                        print*, "Equilibrium reached in ",nint(j/ur_htr),"days"
                         print*,
                         print*, 'Tsgm: ',tglobmean
                     endif

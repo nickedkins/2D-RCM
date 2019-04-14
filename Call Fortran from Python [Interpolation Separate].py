@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -55,7 +55,7 @@ pin2s = [1.0]
 #pico2s = [400e-6,3200e-6]
 ncols = 3
 ncloudcols = 1
-nlays = 30
+nlays = 60
 
 pertlay=0
 pertcol=0
@@ -546,10 +546,10 @@ for tboundm in tboundms:
             af = 1.0
             dalr = 0 #convection type
             npb = 1
-            o3sw = 1
+            o3sw = 0
             h2osw = 0
             nl = nlays
-            maxhtr = 0.03
+            maxhtr = 0.1
             asf = 4.0
             tuf = 1.0   
             n2inv = pin2
@@ -570,8 +570,11 @@ for tboundm in tboundms:
             planet_rotation = 7.29e-5
             t_min = 100.0
             # sebfac = 0.02
-            sfc_heating = 1 #surface energy budget warms/cools surface? 1=yes, 0=no
-            playtype = 1 #pressure layer type. 0=equal p thickness, 1=sigma
+            sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
+            playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
+            ur_htr = 0.5
+            ur_toafnet = 0.0
+            ur_seb = 0.2
         
             ur1 = ur
         
@@ -581,7 +584,7 @@ for tboundm in tboundms:
         
             params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
             npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype]
+            twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb]
             
         
             f = open(project_dir+'/Earth RCM Parameters','w')
