@@ -512,6 +512,13 @@ subroutine wrapper
             R_g = R_gcols(col)
             mu_0 = zencols(col)
 
+            tzm(0) = tboundm
+
+            do i=1,nlayersm
+                tavelm(i) = tboundm
+                tzm(i) = tboundm
+            enddo
+
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
 
@@ -797,7 +804,7 @@ subroutine wrapper
             !   htrm(i-1) = htrm(i-1)/newur(i)
             ! enddo
             
-            htrm(nlayersm) = 0.0
+            ! htrm(nlayersm) = 0.0
 
             ! if (j>2) then
             !     htrm_store(:,1) = htrm_store(:,2)
@@ -891,8 +898,9 @@ subroutine wrapper
 
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
+            ! applyhtr
            do i=1,nlayersm
-               tavelm(i) = tavelm(i) + htrm(i)/(newur(i))
+               tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
                if (tavelm(i) < t_min) tavelm(i) = t_min
                ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
                ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0

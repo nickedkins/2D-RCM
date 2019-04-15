@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 100 #model days
+days = 5000 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -53,7 +53,7 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 1
+ncols = 5
 ncloudcols = 1
 nlays = 30
 
@@ -480,21 +480,21 @@ for tboundm in tboundms:
         
             lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
             lcmean = np.mean(lc)
-            lc = [-6.5*1e12]*ncols
+            # lc = [-6.5]*ncols
             #lc[0] = -10.0
             #lc[ncols-1] = -10.0
             #for i in range(len(lc)):
             #    lc[i] = lcmean
             lch = createlatdistbn('Cloud Top Height')
             # srh = createlatdistbn('Relative Humidity')
-            # sa = createlatdistbn('Surface Reflectance')
+            sa = createlatdistbn('Surface Reflectance')
             #sa = [0.5] * ncols
             # sa = [0.0] * ncols
             lcf = createlatdistbn('Cloud Fraction')
             lcod = createlatdistbn('Cloud Optical Thickness')
-            # tg = createlatdistbn('Surface Temperature')
+            tg = createlatdistbn('Surface Temperature')
             #tg = [tboundm] * ncols
-            tg = [250.] * ncols
+            # tg = [250.] * ncols
         
         
             #for i in range(len(tg)):
@@ -546,7 +546,7 @@ for tboundm in tboundms:
             af = 1.0
             dalr = 0 #convection type
             npb = 1
-            o3sw = 1
+            o3sw = 0
             h2osw = 0
             nl = nlays
             maxhtr = 0.1
@@ -571,9 +571,9 @@ for tboundm in tboundms:
             t_min = 100.0
             # sebfac = 0.02
             sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
-            playtype = 1 #pressure layer type. 0=equal p thickness, 1=sigma
+            playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
             ur_htr = 0.5
-            ur_toafnet = 0.0
+            ur_toafnet = 0.2
             ur_seb = 0.0
             couple_tgta = 0
         

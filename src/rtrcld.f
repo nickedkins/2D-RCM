@@ -341,7 +341,7 @@ C ***    Calculate upward, downward, and net flux.
 C        Calculate Heating Rates.
          HTR(L)=HEATFAC*(FNET(L)-FNET(LEV))/(PZ(L)-PZ(LEV)) 
  7000 CONTINUE
-      HTR(NLAYERS) = 0.0
+C       HTR(NLAYERS) = 0.0
 
  9000 CONTINUE
 

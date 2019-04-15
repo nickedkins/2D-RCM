@@ -21,7 +21,7 @@ directories = [
 
 linestyles = ['-','--','--']
 
-colors = ['b','r','g']
+colors = ['b','r','g','orange','purple']
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -202,7 +202,7 @@ def readfile(fn,counter):
     return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols
 
 nlayersms=[31,31]
-ncols=3
+ncols=5
 
 
 
@@ -237,7 +237,7 @@ for directory in directories:
         pico2 = (pzmcols[0] - 800.0)/1000.0
         # pico2 = (pzmcols[0]/2.0)/1000.0
 
-        
+
         # plt.figure(1)
         # plt.semilogy(tzmcols,pzmcols,ls=linestyles[i2],label='{:3.0f} bar'.format(pico2[0]))
         # # plt.ylim(pzmcols[0]*1.1,1)
@@ -254,93 +254,93 @@ for directory in directories:
 
         i3=0
 
-        # for col in range(ncols):
+        for col in range(ncols):
 
-        #     plt.figure(1)
-        #     plt.subplot(331)
-        #     plt.title('tzm')
-        #     plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=pico2,c=colors[i3],ls=linestyles[i2])
-        #     # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-        #     plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
-        #     # plt.legend()
+            plt.figure(1)
+            plt.subplot(331)
+            plt.title('tzm')
+            plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=pico2,c=colors[i3],ls=linestyles[i2])
+            # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
+            plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
+            plt.ylim(pzmcols[0,col]*1.1,1)
+            # plt.legend()
             
-        #     plt.subplot(332)
-        #     plt.title('htrm')
-        #     plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
-        #     plt.axvline(-0.03,ls='--')
-        #     plt.axvline(0.03,ls='--')
+            plt.subplot(332)
+            plt.title('htrm')
+            plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+            plt.ylim(pzmcols[0,col]*1.1,1)
+            plt.axvline(-0.03,ls='--')
+            plt.axvline(0.03,ls='--')
             
-        #     plt.subplot(333)
-        #     plt.title('totuflum')
-        #     plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
+            plt.subplot(333)
+            plt.title('totuflum')
+            plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+            plt.ylim(pzmcols[0,col]*1.1,1)
             
-        #     plt.subplot(334)
-        #     plt.title('totdfllum')
-        #     plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
+            plt.subplot(334)
+            plt.title('totdfllum')
+            plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+            plt.ylim(pzmcols[0,col]*1.1,1)
 
-        #     plt.subplot(335)
-        #     plt.title('abs_o3')
-        #     plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)      
+            plt.subplot(335)
+            plt.title('abs_o3')
+            plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+            plt.ylim(pzmcols[0,col]*1.1,1)      
 
-        #     plt.subplot(336)
-        #     plt.title('abspn')
-        #     plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
+            plt.subplot(336)
+            plt.title('abspn')
+            plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+            plt.ylim(pzmcols[0,col]*1.1,1)
 
-        #     plt.subplot(337)
-        #     plt.title('tavelm')
-        #     plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
-        #     plt.ylim(pzmcols[0,col]*1.1,1)
-        #     # plt.legend()
+            plt.subplot(337)
+            plt.title('tavelm')
+            plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+            plt.ylim(pzmcols[0,col]*1.1,1)
+            # plt.legend()
 
-        #     i3+=1
+            i3+=1
 
-        plt.figure(1)
-        plt.subplot(331)
-        plt.title('tzm')
-        plt.semilogy(tzmcols,pzmcols,label=pico2,c=colors[i3],ls=linestyles[i2])
-        # plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
-        plt.plot(tboundmcols[0],pzmcols[0],'*',c=colors[i3],markersize=20)
-        plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
+        # plt.figure(1)
+        # plt.subplot(331)
+        # plt.title('tzm')
+        # plt.semilogy(tzmcols,pzmcols,label=pico2,c=colors[i3],ls=linestyles[i2])
+        # # plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
+        # plt.plot(tboundmcols[0],pzmcols[0],'*',c=colors[i3],markersize=20)
+        # plt.ylim(pzmcols[0]*1.1,1)
+        # # plt.legend()
         
-        plt.subplot(332)
-        plt.title('htrm')
-        plt.semilogy(htrmcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
-        plt.axvline(-0.03,ls='--')
-        plt.axvline(0.03,ls='--')
+        # plt.subplot(332)
+        # plt.title('htrm')
+        # plt.semilogy(htrmcols,pzmcols,ls=linestyles[i2],c=colors[i3])
+        # plt.ylim(pzmcols[0]*1.1,1)
+        # plt.axvline(-0.03,ls='--')
+        # plt.axvline(0.03,ls='--')
         
-        plt.subplot(333)
-        plt.title('totuflum')
-        plt.semilogy(totuflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
+        # plt.subplot(333)
+        # plt.title('totuflum')
+        # plt.semilogy(totuflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
+        # plt.ylim(pzmcols[0]*1.1,1)
         
-        plt.subplot(334)
-        plt.title('totdfllum')
-        plt.semilogy(totdflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
+        # plt.subplot(334)
+        # plt.title('totdfllum')
+        # plt.semilogy(totdflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
+        # plt.ylim(pzmcols[0]*1.1,1)
 
-        plt.subplot(335)
-        plt.title('abs_o3')
-        plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)      
+        # plt.subplot(335)
+        # plt.title('abs_o3')
+        # plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
+        # plt.ylim(pzmcols[0]*1.1,1)      
 
-        plt.subplot(336)
-        plt.title('abspn')
-        plt.semilogy(abspncols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
+        # plt.subplot(336)
+        # plt.title('abspn')
+        # plt.semilogy(abspncols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
+        # plt.ylim(pzmcols[0]*1.1,1)
 
-        plt.subplot(337)
-        plt.title('tavelm')
-        plt.semilogy(tavelmcols,pzmcols[1:],label=str(fn),c=colors[i3],ls=linestyles[i2])
-        plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
+        # plt.subplot(337)
+        # plt.title('tavelm')
+        # plt.semilogy(tavelmcols,pzmcols[1:],label=str(fn),c=colors[i3],ls=linestyles[i2])
+        # plt.ylim(pzmcols[0]*1.1,1)
+        # # plt.legend()
 
 
         # plt.figure(1)
