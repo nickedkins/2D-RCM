@@ -54,7 +54,7 @@ pin2s = [1.0]
 print(pico2s)
 
 #pico2s = [400e-6,3200e-6]
-ncols = 1
+ncols = 3
 ncloudcols = 1
 nlays = 30
 
@@ -508,12 +508,12 @@ for pin2 in pin2s:
         #lcf = 0.5
         #lcod = 5.0
         tp = 1.0
-        sa = 0.18
+        # sa = 0.18
         #fth = 5.0
         #fth = np.zeros(ncols)
         #for i in range(ncols):
         #    fth[i] = 15.0 - abs(collats[i])/18.0
-        fth = [200.]
+        fth = [200.] * ncols
         ol = nlays
         asp = 2.0   
         cs = 0
@@ -521,7 +521,7 @@ for pin2 in pin2s:
         fswon = 1  
         fsw = 239.4
         fp = 0
-        srh = 0.8
+        srh = [0.8] * ncols
         ps1 = 0
         af = 1.0
         dalr = 0
