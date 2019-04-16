@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -81,6 +81,8 @@ sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc
 sas = [0.2]
 #tboundms = np.linspace(250,335,num=10)
 tboundms = [288.0]
+
+#for pertcol in range(ncols):
 
 for tboundm in tboundms:
 
@@ -479,6 +481,7 @@ for tboundm in tboundms:
             #     loop = loop + 1
         
             lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+            lc[pertcol] *= pert
             lcmean = np.mean(lc)
             # lc = [-6.5]*ncols
             #lc[0] = -10.0
@@ -486,7 +489,7 @@ for tboundm in tboundms:
             #for i in range(len(lc)):
             #    lc[i] = lcmean
             lch = createlatdistbn('Cloud Top Height')
-            # srh = createlatdistbn('Relative Humidity')
+            srh = createlatdistbn('Relative Humidity')
             sa = createlatdistbn('Surface Reflectance')
             #sa = [0.5] * ncols
             # sa = [0.0] * ncols
@@ -541,7 +544,7 @@ for tboundm in tboundms:
             fswon = 0  
             fsw = 239.4
             fp = 0
-            srh = [0.8] * ncols
+            #srh = [0.8] * ncols
             ps1 = 0
             af = 1.0
             dalr = 0 #convection type
