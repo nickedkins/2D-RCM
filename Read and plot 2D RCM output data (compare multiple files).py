@@ -7,9 +7,14 @@ import matplotlib.pyplot as plt
 from pylab import *
 from scipy import interpolate
 from os import listdir
+import pandas as pd
+
+# directories = [
+# '_Current Output/'
+# ]
 
 directories = [
-'_Current Output/'
+'_Useful Data/lapse pert/nl=100/'
 ]
 
 linestyles = ['-','--','--']
@@ -168,28 +173,31 @@ def readfile(fn,counter):
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols
 
-nlayersms=[31,100]
-ncols=5
+# nlayersms=[31,100]
+# ncols=5
+
+plot_all_vert_profiles = 0
 
 i1 = 0
 
 tzm_store = np.zeros( ( 200, len(directories), 100 ) )
 pico2_store = np.zeros( (len(directories), 100 ) )
 
-for directory in directories:
+tzm_master = []
+pzm_master = []
 
-    nlayersm = nlayersms[i1]
-    p = np.linspace(1000,1000.0/nlayersm,nlayersm)
-    p1 = np.linspace(1000,1000.0/(nlayersm+1),nlayersm+1)
+filenames = []
+
+for directory in directories:
 
     ls = linestyles[i1]
     color = colors[i1]
 
     a = sorted(listdir(directory))
 
-    print a
+    filenames.append(a)
 
     counter=0
 
@@ -198,60 +206,85 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols = readfile(fn,counter)
+        tzm_master.append(tzmcols)  
+        pzm_master.append(pzmcols)
 
         i3=0
 
-        for col in range(ncols):
+        if (plot_all_vert_profiles == 1):
 
-            plt.figure(1)
-            plt.subplot(331)
-            plt.title('tzm')
-            plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=pico2,c=colors[i3],ls=linestyles[i2])
-            # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-            plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
-            plt.ylim(pzmcols[0,col]*1.1,1)
-            # plt.legend()
-            
-            plt.subplot(332)
-            plt.title('htrm')
-            plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-            plt.ylim(pzmcols[0,col]*1.1,1)
-            plt.axvline(-0.03,ls='--')
-            plt.axvline(0.03,ls='--')
-            
-            plt.subplot(333)
-            plt.title('totuflum')
-            plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-            plt.ylim(pzmcols[0,col]*1.1,1)
-            
-            plt.subplot(334)
-            plt.title('totdfllum')
-            plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
-            plt.ylim(pzmcols[0,col]*1.1,1)
+            for col in range(ncols):
 
-            plt.subplot(335)
-            plt.title('abs_o3')
-            plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
-            plt.ylim(pzmcols[0,col]*1.1,1)      
+                plt.figure(1)
+                plt.subplot(331)
+                plt.title('tzm')
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+                # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
+                plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
+                plt.ylim(pzmcols[0,col]*1.1,1)
+                # plt.legend()
+                
+                plt.subplot(332)
+                plt.title('htrm')
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.axvline(-0.03,ls='--')
+                plt.axvline(0.03,ls='--')
+                
+                plt.subplot(333)
+                plt.title('totuflum')
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.ylim(pzmcols[0,col]*1.1,1)
+                
+                plt.subplot(334)
+                plt.title('totdfllum')
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.ylim(pzmcols[0,col]*1.1,1)
 
-            plt.subplot(336)
-            plt.title('abspn')
-            plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
-            plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.subplot(335)
+                plt.title('abs_o3')
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+                plt.ylim(pzmcols[0,col]*1.1,1)      
 
-            plt.subplot(337)
-            plt.title('tavelm')
-            plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
-            plt.ylim(pzmcols[0,col]*1.1,1)
-            # plt.legend()
+                plt.subplot(336)
+                plt.title('abspn')
+                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+                plt.ylim(pzmcols[0,col]*1.1,1)
 
-            i3+=1
+                plt.subplot(337)
+                plt.title('tavelm')
+                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+                plt.ylim(pzmcols[0,col]*1.1,1)
+                # plt.legend()
+
+                i3+=1
 
         i2 += 1
 
     i1 += 1
 
-plt.tight_layout()
+# master indices: master[file][layer][column]
+tzm_master = np.array(tzm_master)
+pzm_master = np.array(pzm_master)
+
+filenames = np.array(filenames[0])
+
+# for file in range(len(a)):
+#     if(filenames[file]=='baseline'):
+#         plt.plot(tzm_master[file,0,:],label=filenames[file],linestyle='--')    
+#     else:
+#         plt.plot(tzm_master[file,0,:],label=filenames[file])
+# plt.legend()
+
+# print np.mean( tzm_master[ :,0,: ], axis=1 )
+
+plt.plot( np.mean( tzm_master[ :,0,: ], axis=1 ) - np.mean( tzm_master[ 0,0,: ], axis=0 ),'-o' )
+    
+
+
 print 'Done'
+
+############################################################
+plt.tight_layout()
 show()

@@ -55,7 +55,7 @@ pin2s = [1.0]
 #pico2s = [400e-6,3200e-6]
 ncols = 5
 ncloudcols = 1
-nlays = 30
+nlays = 99
 
 pertlay=0
 pertcol=0
@@ -530,7 +530,7 @@ for tboundm in tboundms:
             #lct = 250.0
             #lcf = 0.5
             #lcod = 5.0
-            tp = 5.0
+            tp = 1.0
             #sa = 0.21
             #fth = 5.0
             #fth = np.zeros(ncols)
