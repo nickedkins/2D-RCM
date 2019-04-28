@@ -7,19 +7,19 @@ import matplotlib.pyplot as plt
 from pylab import *
 from scipy import interpolate
 from os import listdir
-import pandas as pd
+# import pandas as pd
 
 # directories = [
 # '_Current Output/'
 # ]
 
 directories = [
-'_Useful Data/lapse pert/nl=100/'
+'_Useful Data/lapse rate varied/'
 ]
 
 linestyles = ['-','--','--']
 
-colors = ['b','r','g','orange','purple']
+colors = ['b','r','g','orange','purple','yellow','pink']
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -178,7 +178,7 @@ def readfile(fn,counter):
 # nlayersms=[31,100]
 # ncols=5
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 
 i1 = 0
 
@@ -220,6 +220,7 @@ for directory in directories:
                 plt.subplot(331)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+                # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
                 plt.ylim(pzmcols[0,col]*1.1,1)
@@ -265,6 +266,7 @@ for directory in directories:
     i1 += 1
 
 # master indices: master[file][layer][column]
+
 tzm_master = np.array(tzm_master)
 pzm_master = np.array(pzm_master)
 
@@ -279,7 +281,12 @@ filenames = np.array(filenames[0])
 
 # print np.mean( tzm_master[ :,0,: ], axis=1 )
 
-plt.plot( np.mean( tzm_master[ :,0,: ], axis=1 ) - np.mean( tzm_master[ 0,0,: ], axis=0 ),'-o' )
+lapses = np.linspace(0,10,6)
+# plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ) - np.mean( tzm_master[ 0,0,: ], axis=0 ),'-o' )
+# plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ),'-o' )
+# plt.plot( lapses,tzm_master[ :,0,0],'-o')
+# plt.xlabel('Polar box lapse rate (K/km)')
+# plt.ylabel(r'$\Delta T$ compared to $\Gamma=0$')
     
 
 
