@@ -14,7 +14,7 @@ from os import listdir
 # ]
 
 directories = [
-'_Useful Data/lapse rate varied/'
+'_Useful Data/polar lapse vary sw htr on/'
 ]
 
 linestyles = ['-','--','--']
@@ -284,7 +284,7 @@ filenames = np.array(filenames[0])
 lapses = np.linspace(0,10,6)
 # plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ) - np.mean( tzm_master[ 0,0,: ], axis=0 ),'-o' )
 # plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ),'-o' )
-# plt.plot( lapses,tzm_master[ :,0,0],'-o')
+plt.plot( lapses,tzm_master[ :,0,0],'-o')
 # plt.xlabel('Polar box lapse rate (K/km)')
 # plt.ylabel(r'$\Delta T$ compared to $\Gamma=0$')
     

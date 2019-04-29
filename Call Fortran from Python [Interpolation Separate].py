@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -53,7 +53,7 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 5
+ncols = 1
 ncloudcols = 1
 nlays = 30
 
@@ -78,15 +78,16 @@ surf_layer_shc = 3.e3
 sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc)
 
 # sas = np.linspace(0.2,0.8,num=5)
-sas = [0.2]
+sas = [0.4]
 #tboundms = np.linspace(250,335,num=10)
 tboundms = [288.0]
 
 #for pertcol in range(ncols):
 
-polar_lapses = np.linspace(0,-10,6)
+global_lapses = np.linspace(-2,-8,5)
+#global_lapses = [-5.7]
 
-for polar_lapse in polar_lapses:
+for global_lapse in global_lapses:
 
     for tboundm in tboundms:
     
@@ -484,24 +485,24 @@ for polar_lapse in polar_lapses:
             
                 #     loop = loop + 1
             
-                lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                lc[0] = polar_lapse
+                #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+            
                 # lc[pertcol] *= pert
-                lcmean = np.mean(lc)
-                # lc = [-6.5]*ncols
+                #lcmean = np.mean(lc)
+                lc = global_lapse*ncols
                 #lc[0] = -10.0
                 #lc[ncols-1] = -10.0
                 #for i in range(len(lc)):
                 #    lc[i] = lcmean
                 lch = createlatdistbn('Cloud Top Height')
                 srh = createlatdistbn('Relative Humidity')
-                sa = createlatdistbn('Surface Reflectance')
+                #sa = createlatdistbn('Surface Reflectance')
                 #sa = [0.5] * ncols
                 # sa = [0.0] * ncols
                 lcf = createlatdistbn('Cloud Fraction')
                 lcod = createlatdistbn('Cloud Optical Thickness')
-                tg = createlatdistbn('Surface Temperature')
-                #tg = [tboundm] * ncols
+                #tg = createlatdistbn('Surface Temperature')
+                tg = [tboundm] * ncols
                 # tg = [250.] * ncols
             
             
@@ -535,13 +536,13 @@ for polar_lapse in polar_lapses:
                 #lct = 250.0
                 #lcf = 0.5
                 #lcod = 5.0
-                tp = 2.0
+                tp = 0.2
                 #sa = 0.21
                 #fth = 5.0
                 #fth = np.zeros(ncols)
                 #for i in range(ncols):
                 #    fth[i] = 15.0 - abs(collats[i])/18.0
-                fth = [300.*1e10] * ncols
+                fth = [500.] * ncols
                 ol = nlays
                 asp = 2.0   
                 cs = 0
@@ -554,8 +555,8 @@ for polar_lapse in polar_lapses:
                 af = 1.0
                 dalr = 0 #convection type
                 npb = 1
-                o3sw = 1
-                h2osw = 1
+                o3sw = 0
+                h2osw = 0
                 nl = nlays
                 maxhtr = 0.1
                 asf = 4.0
@@ -581,9 +582,9 @@ for polar_lapse in polar_lapses:
                 sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                 playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                 ur_htr = 0.5
-                ur_toafnet = 0.2
-                ur_seb = 0.0
-                couple_tgta = 0
+                ur_toafnet = 5.0
+                ur_seb = 1e10
+                couple_tgta = 1
             
                 ur1 = ur
             

@@ -12,8 +12,12 @@ directories = [
 '_Current Output/'
 ]
 
+# directories = [
+# '_Useful Data/lapse vary/'
+# ]
+
 linestyles = ['-','--','--']
-colors = ['b','r','g','orange','purple']
+colors = ['b','r','g','orange','purple','pink']
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -172,8 +176,13 @@ def readfile(fn,counter):
 nlayersms=[31,100]
 i1 = 0
 
+plot_all_vertical_profiles = 1
+
 tzm_store = np.zeros( ( 200, len(directories), 100 ) )
 pico2_store = np.zeros( (len(directories), 100 ) )
+
+tzm_master = []
+pzm_master = []
 
 for directory in directories:
 
@@ -192,6 +201,7 @@ for directory in directories:
     counter=0
 
     i2 = 0
+    i3 = 0
 
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
@@ -199,51 +209,69 @@ for directory in directories:
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols = readfile(fn,counter)
         pico2 = (pzmcols[0] - 800.0)/1000.0
 
-        plt.figure(1)
-        plt.subplot(331)
-        plt.title('tzm')
-        plt.semilogy(tzmcols,pzmcols,label=pico2,c=colors[i3],ls=linestyles[i2])
-        # plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
-        plt.plot(tboundmcols[0],pzmcols[0],'*',c=colors[i3],markersize=20)
-        plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
-        
-        plt.subplot(332)
-        plt.title('htrm')
-        plt.semilogy(htrmcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
-        plt.axvline(-0.03,ls='--')
-        plt.axvline(0.03,ls='--')
-        
-        plt.subplot(333)
-        plt.title('totuflum')
-        plt.semilogy(totuflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
-        
-        plt.subplot(334)
-        plt.title('totdfllum')
-        plt.semilogy(totdflumcols,pzmcols,ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
+        tzm_master.append(tzmcols)  
+        pzm_master.append(pzmcols)
 
-        plt.subplot(335)
-        plt.title('abs_o3')
-        plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)      
+        if(plot_all_vertical_profiles==1):
 
-        plt.subplot(336)
-        plt.title('abspn')
-        plt.semilogy(abspncols*1362./4.,pzmcols[1:],ls=linestyles[i2],c=colors[i3])
-        plt.ylim(pzmcols[0]*1.1,1)
+            plt.figure(1)
+            plt.subplot(331)
+            plt.title('tzm')
+            plt.semilogy(tzmcols,pzmcols)
+            # plt.plot(tzmcols,altzmcols,'-o',label=str(fn))
+            plt.plot(tboundmcols[0],pzmcols[0],'*',c=colors[i3],markersize=20)
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+            # plt.legend()
+            
+            plt.subplot(332)
+            plt.title('htrm')
+            plt.semilogy(htrmcols,pzmcols,'-o')
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+            plt.axvline(-0.03,ls='--')
+            plt.axvline(0.03,ls='--')
+            
+            plt.subplot(333)
+            plt.title('totuflum')
+            plt.semilogy(totuflumcols,pzmcols)
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+            
+            plt.subplot(334)
+            plt.title('totdfllum')
+            plt.semilogy(totdflumcols,pzmcols)
+            plt.ylim(pzmcols[0]*1.1,1e-2)
 
-        plt.subplot(337)
-        plt.title('tavelm')
-        plt.semilogy(tavelmcols,pzmcols[1:],label=str(fn),c=colors[i3],ls=linestyles[i2])
-        plt.ylim(pzmcols[0]*1.1,1)
-        # plt.legend()
+            plt.subplot(335)
+            plt.title('abs_o3')
+            plt.semilogy(A_oz_lcols*1362./4.,pzmcols[1:])
+            plt.ylim(pzmcols[0]*1.1,1e-2)      
+
+            plt.subplot(336)
+            plt.title('abspn')
+            plt.semilogy(abspncols*1362./4.,pzmcols[1:])
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+
+            plt.subplot(337)
+            plt.title('tavelm')
+            plt.semilogy(tavelmcols,pzmcols[1:])
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+            # plt.legend()
 
         i2 += 1
 
     i1 += 1
+
+tzm_master = np.array(tzm_master)
+pzm_master = np.array(pzm_master)
+
+lapses = np.linspace(2,8,5)
+
+# for i in range(len(lapses)):
+#     print lapses[i], ',', tzm_master[i,0,0]
+
+plt.figure()
+plt.plot(lapses[:1],tzm_master[:1,0,0],'-o')
+plt.xlabel('Critical Lapse Rate (K/km)')
+plt.ylabel('Global Mean Surface Temperature (K)')
 
 plt.tight_layout()
 print 'Done'

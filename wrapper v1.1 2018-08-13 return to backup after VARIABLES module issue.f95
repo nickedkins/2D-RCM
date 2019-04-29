@@ -793,10 +793,12 @@ subroutine wrapper
           
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
+            ! addhtr
             !Apply SW heating rates if applicable
             !            do i=1,nlayersm-1
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
+                ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i)
             enddo
 
@@ -1055,7 +1057,7 @@ subroutine wrapper
                 case(0) ! SEB doesn't affect surface temperature
                     tboundm = tboundm 
                 case(1) ! SEB warms/cools surface
-                    tboundm = tboundm + seb * ur_seb   
+                    tboundm = tboundm + seb / ur_seb   
             end select
             tboundmcols(col) = tboundm
 
@@ -1205,7 +1207,7 @@ subroutine wrapper
 
                 boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
                 ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
-                tempchanges(col) = boxnettotflux(col) * ur_toafnet
+                tempchanges(col) = boxnettotflux(col) / ur_toafnet
             enddo
 
             write(*,1106,advance='no') ''
@@ -1325,7 +1327,7 @@ subroutine wrapper
 
                     boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
                     ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
-                    tempchanges(col) = boxnettotflux(col) * ur_toafnet
+                    tempchanges(col) = boxnettotflux(col) / ur_toafnet
                 enddo
 
 
