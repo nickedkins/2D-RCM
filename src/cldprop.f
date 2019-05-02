@@ -18,7 +18,7 @@ C  --------------------------------------------------------------------------
 C     Purpose:  Compute the cloud optical depth(s) for each cloudy
 C               layer.
 
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (NBANDS = 16)
       PARAMETER (N_ICE_M = 300)
 

@@ -66,7 +66,7 @@ C         and a maximum/random cloud overlap scheme
 C     d) writes out the upward, downward, and net flux for each
 C        level and the heating rate for each layer
 
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (MG = 16)
       PARAMETER (NBANDS = 16)
       PARAMETER (NTBL = 10000,TBLINT=10000.0)
@@ -378,7 +378,7 @@ C     Read in atmospheric profile.
 
       IMPLICIT DOUBLE PRECISION (V)                                      
                                                                          
-      PARAMETER (MXLAY=203, MXMOL=38)
+      PARAMETER (mxlay=203, MXMOL=38)
       PARAMETER (NBANDS = 16)
       PARAMETER (MAXINPX=MXMOL)
       PARAMETER (MAXXSEC=4)
@@ -573,7 +573,7 @@ C************************  SUBROUTINE READCLD  *****************************C
 C     Purpose:  To read in IN_CLD_RRTM, the file that contains input 
 C               cloud properties.
 
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (NBANDS = 16)
       PARAMETER (NDAT = 19)
 
@@ -819,7 +819,7 @@ C        Left-justify all inputed names.
 
       PARAMETER (MG = 16)
       PARAMETER (NBANDS = 16)
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (MAXXSEC=4)
       PARAMETER (MAXPROD = MXLAY*MAXXSEC)
 

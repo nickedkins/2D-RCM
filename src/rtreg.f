@@ -22,7 +22,7 @@ C     function information.  First-order standard Gaussian quadrature
 C     is used for the angle integration.
 
       PARAMETER (mg=16)
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (MXANG = 4)
       PARAMETER (NBANDS = 16)
       PARAMETER (NTBL = 10000, TBLINT=10000.0)

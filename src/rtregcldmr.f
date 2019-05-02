@@ -25,7 +25,7 @@ C     integration.
 C     Clouds are treated with maximum/random overlap scheme.
 
       PARAMETER (mg=16)
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (MXANG = 4)
       PARAMETER (NBANDS = 16)
       PARAMETER (NTBL = 10000,TBLINT = 10000.0)

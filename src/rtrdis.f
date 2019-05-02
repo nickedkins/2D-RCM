@@ -13,7 +13,7 @@ C     angle integration, i.e. only one exponential is computed per layer
 C     per g-value per band.
 
       IMPLICIT DOUBLE PRECISION (V)
-      PARAMETER (MXLAY=203)
+      PARAMETER (mxlay=203)
       PARAMETER (MG = 16)
       PARAMETER (NBANDS = 16)
       PARAMETER (MXANG = 4)

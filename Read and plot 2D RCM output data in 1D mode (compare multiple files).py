@@ -256,6 +256,11 @@ for directory in directories:
             plt.ylim(pzmcols[0]*1.1,1e-2)
             # plt.legend()
 
+            plt.subplot(338)
+            plt.title('fnet')
+            plt.semilogy(totuflumcols-totdflumcols,pzmcols)
+            plt.ylim(pzmcols[0]*1.1,1e-2)
+
         i2 += 1
 
     i1 += 1

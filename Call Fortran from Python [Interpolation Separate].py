@@ -23,8 +23,8 @@ from scipy import stats
 # from pandas import *
 
 
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
 
 interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 5000 #model days
+days = 50 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -84,8 +84,8 @@ tboundms = [288.0]
 
 #for pertcol in range(ncols):
 
-global_lapses = np.linspace(-2,-8,5)
-#global_lapses = [-5.7]
+# global_lapses = np.linspace(-2,-8,5)
+global_lapses = [-5.7]
 
 for global_lapse in global_lapses:
 
@@ -555,7 +555,7 @@ for global_lapse in global_lapses:
                 af = 1.0
                 dalr = 0 #convection type
                 npb = 1
-                o3sw = 0
+                o3sw = 1
                 h2osw = 0
                 nl = nlays
                 maxhtr = 0.1

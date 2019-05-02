@@ -152,7 +152,7 @@ C     NOTE: Previous versions of RRTM BAND 1:
 C           10-250 cm-1 (low - H2O; high - H2O)
 
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL = 38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL = 38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71,NCO2=2)
 
 C  Output
@@ -600,7 +600,7 @@ C     NOTE: Previous versions of RRTM BAND 1:
 C           10-250 cm-1 (low - H2O; high - H2O)
 
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL = 38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL = 38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71,NCO2=2)
 
 C  Output
@@ -1046,7 +1046,7 @@ C     BAND 2:  350-500 cm-1 (key - H2O, CO2)
 C     NOTE: Previous version of RRTM BAND 2: 
 C           250 - 500 cm-1 (low - H2O; high - H2O)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL = 38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL = 38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71,NCO2=2)
 
 C  Output
@@ -1419,7 +1419,7 @@ C----------------------------------------------------------------------------
 C     BAND 3:  500-630 cm-1 (low key - H2O,CO2; low minor - n2o)
 C                           (high key - H2O,CO2; high minor - n2o)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71,NCO2=2)
 
 C  Output
@@ -1812,7 +1812,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 4:  630-700 cm-1 (low key - H2O,CO2; high - none)
 
-      PARAMETER (mg=16, MXLAY=203, NBANDS=16,NREF=71)
+      PARAMETER (mg=16, mxlay=203, NBANDS=16,NREF=71)
       PARAMETER (NTEMP=14,NETA=9)
 
 C  Output
@@ -2083,7 +2083,7 @@ C----------------------------------------------------------------------------
 C     BAND 5:  700-820 cm-1 (low key - H2O,CO2; low minor - O3)
 
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, MAXXSEC=4,NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, MAXXSEC=4,NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71,NCO2=2)
 
 C  Output
@@ -2468,7 +2468,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 6:  820-1000 cm-1 (low key - H2O, CO2)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, MAXXSEC=4, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, MAXXSEC=4, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -2798,7 +2798,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 7:  1000-1110 cm-1 (low key - H2O,CO2; low minor - O3)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -3116,7 +3116,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 7:  1000-1110 cm-1 (low key - CO2,O3; low minor - H2O)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -3437,7 +3437,7 @@ C     (in temperature) separately.
 
 C     BAND 8:  1110-1210 cm-1 (key - H2O,CH4; minor - O3,N2O)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, MAXXSEC=4,NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, MAXXSEC=4,NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -3865,7 +3865,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 9:  1210-1430 cm-1 (key - H2O,CO2; minor - N2O,CH4)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -4251,7 +4251,7 @@ c     to obtain the proper contribution.
 
 C     BAND 10:  1390-1480 cm-1 (low key - H2O, CO2; minor - O2)
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -4605,7 +4605,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 12:  1800-2080 cm-1 (low - H2O,CO2)
 
-      PARAMETER (mg=16, MXLAY=203, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -4881,7 +4881,7 @@ C----------------------------------------------------------------------------
 
 C     BAND 13:  2080-2250 cm-1 (low key - H2O,CO2; low minor - N2O )
 
-      PARAMETER (mg=16, MXLAY=203, MXMOL=38,NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, MXMOL=38,NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -5209,7 +5209,7 @@ C     (in temperature) separately.
 
 C     BAND 14:  2250-2700 cm-1 (low - CO2 - minor N2)
 
-      PARAMETER (mg=16, MXLAY=203, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
@@ -5322,7 +5322,7 @@ C----------------------------------------------------------------------------
 C     BAND 15:  2700-3250 cm-1 (low key- H2O,CO2 - minor CH4)
 c     (used to be band 16, more or less)
 
-      PARAMETER (mg=16, MXLAY=203, NBANDS=16)
+      PARAMETER (mg=16, mxlay=203, NBANDS=16)
       PARAMETER (NTEMP=14,NETA=9,NREF=71)
 
 C  Output
