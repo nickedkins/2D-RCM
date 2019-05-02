@@ -1,6 +1,6 @@
 MODULE VARIABLES
 
-    integer,parameter				::MAXLAYM=203,MXMOLM=38,NBANDSM=16,MAXNCOLS=7,MAXNCLOUDCOLS=10,maxextraclds=2
+    integer,parameter				::MAXLAYM=203,MXMOLM=38,NBANDSM=16,MAXNCOLS=30,MAXNCLOUDCOLS=10,maxextraclds=2
     real,dimension(MAXLAYM)			::pavelm,tavelm,wbrodlm
     real,dimension(0:MAXLAYM)		::altzm,tzm,pzm,totuflum,totdflum,fnetm,htrm=0.,logpzm
     real,dimension(MXMOLM,MAXLAYM)	::wklm
@@ -81,7 +81,7 @@ MODULE VARIABLES
     real,dimension(maxlaym,MAXNCOLS) :: tavelmcols,htrh2ocols,htro3cols,wklm1cols,wklm2cols,wklm3cols,wbrodlmcols,abspncols,&
     a_oz_lcols,altlaymcols,pavelmcols,tboundmcols,tau_cldcols,fracscols
     real,dimension(maxncols) :: abs_surf_lhcols
-    integer :: col, transpcalled, stepssinceboxadj
+    integer :: col=0, transpcalled, stepssinceboxadj
     real,dimension(MAXNCOLS):: olrcols,insolcols,boxnetradflux,boxnettotflux,meridtransp,currentmaxhtrcols,tempchanges,&
     solar_constants,zencols
     real,dimension(0:MAXNCOLS) :: tair_lowest_edges

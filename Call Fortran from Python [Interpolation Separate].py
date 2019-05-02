@@ -44,7 +44,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 50 #model days
+days = 5000 #model days
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -53,7 +53,7 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 1
+ncols = 21
 ncloudcols = 1
 nlays = 30
 
@@ -485,24 +485,24 @@ for global_lapse in global_lapses:
             
                 #     loop = loop + 1
             
-                #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
             
                 # lc[pertcol] *= pert
                 #lcmean = np.mean(lc)
-                lc = global_lapse*ncols
+                # lc = [global_lapse]*ncols
                 #lc[0] = -10.0
                 #lc[ncols-1] = -10.0
                 #for i in range(len(lc)):
                 #    lc[i] = lcmean
                 lch = createlatdistbn('Cloud Top Height')
                 srh = createlatdistbn('Relative Humidity')
-                #sa = createlatdistbn('Surface Reflectance')
+                sa = createlatdistbn('Surface Reflectance')
                 #sa = [0.5] * ncols
                 # sa = [0.0] * ncols
                 lcf = createlatdistbn('Cloud Fraction')
                 lcod = createlatdistbn('Cloud Optical Thickness')
-                #tg = createlatdistbn('Surface Temperature')
-                tg = [tboundm] * ncols
+                tg = createlatdistbn('Surface Temperature')
+                # tg = [tboundm] * ncols
                 # tg = [250.] * ncols
             
             
@@ -536,7 +536,7 @@ for global_lapse in global_lapses:
                 #lct = 250.0
                 #lcf = 0.5
                 #lcod = 5.0
-                tp = 0.2
+                tp = 5.0
                 #sa = 0.21
                 #fth = 5.0
                 #fth = np.zeros(ncols)
