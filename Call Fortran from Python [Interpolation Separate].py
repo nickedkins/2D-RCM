@@ -54,7 +54,7 @@ pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
 ncols = 7
-ncloudcols = 1
+# ncloudcols = 1
 nlays = 30
 
 pertlay=0
@@ -89,11 +89,9 @@ global_lapses = [-5.7]
 
 cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)
 clouds = []
-
 clouds.append([600.,0.5,3.0])
 clouds.append([800.,0.2,1.0])
-
-
+ncloudcols = shape(clouds)[0]
 
 for global_lapse in global_lapses:
 
@@ -217,7 +215,7 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write(str(clearfrac[col]))
                             file.write('\n')
-                            file.close()
+                        file.close()
                 
                     for col in range(ncols):
                         filename = 'ccalts col %2d' % (col)
@@ -228,7 +226,7 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write('1.0')
                             file.write('\n')
-                            file.close()
+                        file.close()
                 
                 
                     for col in range(ncols):
@@ -240,7 +238,7 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write('0.0')
                             file.write('\n')
-                            file.close()
+                        file.close()
                 
                     latweights = np.cos(radians(collats))
                 
