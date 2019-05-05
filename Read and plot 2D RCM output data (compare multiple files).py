@@ -9,13 +9,13 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-# directories = [
-# '_Current Output/'
-# ]
-
 directories = [
-'_Useful Data/polar lapse vary sw htr on/'
+'_Current Output/'
 ]
+
+# directories = [
+# '_Useful Data/polar lapse vary sw htr on/'
+# ]
 
 linestyles = ['-','--','--']
 
@@ -272,21 +272,9 @@ pzm_master = np.array(pzm_master)
 
 filenames = np.array(filenames[0])
 
-# for file in range(len(a)):
-#     if(filenames[file]=='baseline'):
-#         plt.plot(tzm_master[file,0,:],label=filenames[file],linestyle='--')    
-#     else:
-#         plt.plot(tzm_master[file,0,:],label=filenames[file])
-# plt.legend()
+plt.imshow(tzm_master[0,:,:])
 
-# print np.mean( tzm_master[ :,0,: ], axis=1 )
 
-lapses = np.linspace(0,10,6)
-# plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ) - np.mean( tzm_master[ 0,0,: ], axis=0 ),'-o' )
-# plt.plot(lapses, np.mean( tzm_master[ :,0,:], axis=1 ),'-o' )
-plt.plot( lapses,tzm_master[ :,0,0],'-o')
-# plt.xlabel('Polar box lapse rate (K/km)')
-# plt.ylabel(r'$\Delta T$ compared to $\Gamma=0$')
     
 
 
