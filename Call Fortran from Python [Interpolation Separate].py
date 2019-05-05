@@ -53,7 +53,7 @@ pico2s = [400e-6]
 pin2s = [1.0]
 
 #pico2s = [400e-6,3200e-6]
-ncols = 21
+ncols = 7
 ncloudcols = 1
 nlays = 30
 
@@ -86,6 +86,14 @@ tboundms = [288.0]
 
 # global_lapses = np.linspace(-2,-8,5)
 global_lapses = [-5.7]
+
+cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)
+clouds = []
+
+clouds.append([600.,0.5,3.0])
+clouds.append([800.,0.2,1.0])
+
+
 
 for global_lapse in global_lapses:
 
@@ -124,43 +132,6 @@ for global_lapse in global_lapses:
                     od_mid = 3.0 * 0.0
                     od_high = 0.3 * 0.0
                 
-                    #extra_cld_tau = 0.3 
-                    extra_cld_frac = 0.2
-                    #extra_cld_alt = 2.0
-                    extra_cld_latcol = 2
-                    extra_cld_cldcol = 2
-                
-                    #extra_cld_taus = [1.0e-3,0.15,0.8,2.45,6.5,16.2,41.5,99.0]
-                    #extra_cld_taus = np.logspace(-3,2,num=20,base=10.0)
-                
-                    #extra_cld_alts = [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0]
-                    #extra_cld_alts = [2.0]
-                
-                    extra_cld_taus = [1e-5]
-                    extra_cld_alts = [2.0]
-                
-                    for extra_cld_tau in extra_cld_taus:
-                        for extra_cld_alt in extra_cld_alts:
-                
-                            fileloc= project_dir+'/extra_clds'
-                            file = open(fileloc,'w')
-                            file.write(str(extra_cld_tau))
-                            file.write('\n')
-                            file.write(str(extra_cld_frac))
-                            file.write('\n')
-                            file.write(str(extra_cld_alt))
-                            file.write('\n')
-                            file.write(str(extra_cld_latcol))
-                            file.write('\n')
-                            file.write(str(extra_cld_cldcol))
-                            file.write('\n')
-                            file.close()
-                
-                
-                
-                    add_frac = 0.2 #*0.0
-                    add_z = 5.0
-                    add_tau = 1.0  #*0.0
                 
                     for i in range(len(altbins)):
                         if (altbins[i] < 3.0):
@@ -246,11 +217,6 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write(str(clearfrac[col]))
                             file.write('\n')
-                            file.write(str(extra_cld_frac))
-                            #if(col==extra_cld_latcol):
-                            #    file.write(str(extra_cld_frac))
-                            #else:
-                            #    file.write(str('0.0'))
                             file.close()
                 
                     for col in range(ncols):
@@ -262,7 +228,6 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write('1.0')
                             file.write('\n')
-                            file.write(str(extra_cld_alt))
                             file.close()
                 
                 
@@ -275,7 +240,6 @@ for global_lapse in global_lapses:
                             file.write('\n')
                             file.write('0.0')
                             file.write('\n')
-                            file.write(str(extra_cld_tau))
                             file.close()
                 
                     latweights = np.cos(radians(collats))
@@ -566,7 +530,7 @@ for global_lapse in global_lapses:
                 o2inv = 0.0
                 htransp = 1.0 #reduce lapse rate to account for horizontal transport
                 ipe = 1
-                dp = 0
+                dp = 1
                 mtranspfac = 2.0 * 0.0
                 boxnetfluxfac = 0.2
                 twarm = 288
@@ -592,7 +556,7 @@ for global_lapse in global_lapses:
             
                 ur = ur1
             
-                params = [ncols,ncloudcols+2,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
+                params = [ncols,ncloudcols,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                 npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
                 twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
                 
