@@ -108,6 +108,140 @@ def create_misr_cloud_inputs():
                             file.write('0.0') # set tau of clear column to 0
                             file.write('\n')
                             file.close()
+def createlatdistbn(filename):
+    fileloc = '/Users/nickedkins/Dropbox/Latitudinal Distributions/'+filename+'.txt'
+    file = open(fileloc,'r')
+    lat = []
+    var = []
+    with file as f:
+        for l in f:
+            lat.append(float(l.split(',')[0]))
+            var.append(float(l.split(',')[1]))
+    # lat = data[:,0]
+    # var = data[:,1]    
+    f = interpolate.interp1d(lat,var)    
+    varinterp = list(f(latgrid))
+    return varinterp
+def findweightedglobavg(var):
+    weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
+    return weightedglobalavgvar
+def interpolate_createprrtminput_lev(shortname,latparray,ps,lats):
+    lats = lats
+    pressures = ps
+    xx,yy = np.meshgrid(lats[::-1],pressures)
+
+    if(disttypelev[shortname] == 'lat'):
+
+        z = latparray
+        f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0)
+        xnew = latgrid
+        ynew = pgrid
+        xxnew, yynew = np.meshgrid(xnew,ynew)
+        (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
+        znew = f((xxnewr,yynewr),method='linear')
+        znew=znew.reshape(nlays,ncols)
+        znew = znew[:,::-1]
+
+        if (shortname == pertvar):
+            znew = znew * pert
+
+            xnew = xnew[::-1]
+            ynew = ynew[::-1]
+
+    elif(disttypelev[shortname]=='avg'):
+            
+        z = latparray
+        f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0)
+
+        xnew = latgrid
+        ynew = pgrid
+        xxnew, yynew = np.meshgrid(xnew,ynew)
+        (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
+        znew = f((xxnewr,yynewr),method='linear')
+        znew=znew.reshape(nlays,ncols)
+
+        znew = znew[:,::-1]
+
+        if (shortname == pertvar):
+            znew = znew * pert
+
+
+            xnew = xnew[::-1]
+            ynew = ynew[::-1]
+
+            zavg = np.zeros(nlays)
+
+        for col in range(0,ncols):
+            zavg = zavg + znew[:,col] * latweights[col]    
+
+        zavg = zavg / sum(latweights)
+
+
+    #f = interpolate.interp1d(pressures,zavg)        
+    #znew = f(pgrid)
+
+    if (disttypelev[shortname]=='lat'):            
+
+        # Write input files for PRRTM
+        for col in range(ncols):
+
+            filename = '%s vert col %2d' % (shortname,col)
+            fileloc = outdir + filename
+            file = open(fileloc,'w')
+
+            for i in range(len(znew[:,col])):
+                file.write(str(znew[i,col]))
+                file.write('\n')
+
+            file.write('&')
+
+            file.close()
+
+    elif (disttypelev[shortname]=='avg'):
+
+        for col in range(ncols):
+
+            filename = '%s vert col %2d' % (shortname,col)
+            fileloc = outdir + filename
+            file = open(fileloc,'w')
+
+            for i in range(nlays):
+                file.write(str(zavg[i]))
+                file.write('\n')
+
+            file.close()
+def interpolate_createprrtminput_sfc(shortname,latarray,lats):
+    lats = lats
+    z = latarray
+    f = interp1d(lats,z)
+    varss_int = f(latgrid)
+
+    if (shortname == pertvar):
+        varss_int = varss_int * pert
+
+    if (disttypesfc[shortname]=='avg'):
+        zavg = 0.0
+        for col in range(0,ncols):
+            zavg = zavg + varss_int[col] * latweights[col]        
+            zavg = zavg / sum(latweights)
+            filename = '%s lats' % (shortname)
+            fileloc = outdir + filename
+            file = open(fileloc,'w')
+            for i in range(len(varss_int)):
+                file.write(str(zavg))
+                file.write('\n')
+            file.close()
+
+    elif(disttypesfc[shortname]=='lat'):
+        filename = '%s lats' % (shortname)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+
+        for i in range(len(varss_int)):
+            file.write(str(varss_int[i]))
+            file.write('\n')
+
+        file.close()
 
 #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
@@ -206,311 +340,161 @@ for global_lapse in global_lapses:
 
                     create_misr_cloud_inputs()
                 
-                    
-
                     #pertvars = ['q','cc','ciwc','clwc','o3']
                     pertvars = ['q']
-                
-                    def createlatdistbn(filename):
-                        fileloc = '/Users/nickedkins/Dropbox/Latitudinal Distributions/'+filename+'.txt'
-                        file = open(fileloc,'r')
-                        lat = []
-                        var = []
-                        with file as f:
-                            for l in f:
-                                lat.append(float(l.split(',')[0]))
-                                var.append(float(l.split(',')[1]))
-                        # lat = data[:,0]
-                        # var = data[:,1]    
-                        f = interpolate.interp1d(lat,var)    
-                        varinterp = list(f(latgrid))
-                        return varinterp
-                
-                    def findweightedglobavg(var):
-                        weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
-                        return weightedglobalavgvar
-                
-                    def interpolate_createprrtminput_lev(shortname,latparray,ps,lats):
-                
-                        lats = lats
-                        pressures = ps
-                        xx,yy = np.meshgrid(lats[::-1],pressures)
-                
-                        if(disttypelev[shortname] == 'lat'):
-                
-                            z = latparray
-                            f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0)
-                            xnew = latgrid
-                            ynew = pgrid
-                            xxnew, yynew = np.meshgrid(xnew,ynew)
-                            (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
-                            znew = f((xxnewr,yynewr),method='linear')
-                            znew=znew.reshape(nlays,ncols)
-                            znew = znew[:,::-1]
-                
-                            if (shortname == pertvar):
-                                znew = znew * pert
-                
-                                xnew = xnew[::-1]
-                                ynew = ynew[::-1]
-                
-                        elif(disttypelev[shortname]=='avg'):
-                                
-                            z = latparray
-                            f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0)
-                
-                            xnew = latgrid
-                            ynew = pgrid
-                            xxnew, yynew = np.meshgrid(xnew,ynew)
-                            (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
-                            znew = f((xxnewr,yynewr),method='linear')
-                            znew=znew.reshape(nlays,ncols)
-                
-                            znew = znew[:,::-1]
-                
-                            if (shortname == pertvar):
-                                znew = znew * pert
-                
-                
-                                xnew = xnew[::-1]
-                                ynew = ynew[::-1]
-                
-                                zavg = np.zeros(nlays)
-                
-                            for col in range(0,ncols):
-                                zavg = zavg + znew[:,col] * latweights[col]    
-                
-                            zavg = zavg / sum(latweights)
-                
-                
-                        #f = interpolate.interp1d(pressures,zavg)        
-                        #znew = f(pgrid)
-                
-                        if (disttypelev[shortname]=='lat'):            
-                
-                            # Write input files for PRRTM
-                            for col in range(ncols):
-                
-                                filename = '%s vert col %2d' % (shortname,col)
-                                fileloc = outdir + filename
-                                file = open(fileloc,'w')
-                
-                                for i in range(len(znew[:,col])):
-                                    file.write(str(znew[i,col]))
-                                    file.write('\n')
-                
-                                file.write('&')
-                
-                                file.close()
-                
-                        elif (disttypelev[shortname]=='avg'):
-                
-                            for col in range(ncols):
-                
-                                filename = '%s vert col %2d' % (shortname,col)
-                                fileloc = outdir + filename
-                                file = open(fileloc,'w')
-                
-                                for i in range(nlays):
-                                    file.write(str(zavg[i]))
-                                    file.write('\n')
-                
-                                file.close()
-                
-                            # if (shortname == pertvar):
-                            #         znew[pertlay,pertcol] = znew[pertlay,pertcol] / pert
-                
-                
-                
-                
-                    def interpolate_createprrtminput_sfc(shortname,latarray,lats):
-                
-                        lats = lats
-                
-                        z = latarray
-                
-                        f = interp1d(lats,z)
-                        varss_int = f(latgrid)
-                
-                        if (shortname == pertvar):
-                            varss_int = varss_int * pert
-                
-                        if (disttypesfc[shortname]=='avg'):
-                            zavg = 0.0
-                            for col in range(0,ncols):
-                                zavg = zavg + varss_int[col] * latweights[col]        
-                                zavg = zavg / sum(latweights)
-                                filename = '%s lats' % (shortname)
-                                fileloc = outdir + filename
-                                file = open(fileloc,'w')
-                                for i in range(len(varss_int)):
-                                    file.write(str(zavg))
-                                    file.write('\n')
-                                file.close()
-                
-                        elif(disttypesfc[shortname]=='lat'):
-                            filename = '%s lats' % (shortname)
-                            fileloc = outdir + filename
-                            file = open(fileloc,'w')
-                
-                            for i in range(len(varss_int)):
-                                file.write(str(varss_int[i]))
-                                file.write('\n')
-                
-                            file.close()
     
-                # shortnameslev = ['cc','clwc','o3','q','ciwc']
-                shortnameslev = ['q', 'o3']
-                longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
-                #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-                #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-                disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-            
-                shortnamessfc = ['fal']
-                longnamessfc = {'fal':'Surface albedo'}
-                disttypesfc = {'fal':'lat'}
-            
-                loop = 1
-            
-                print("Creating input files by interpolating ERA-Interim data")
-            
-                interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats)
-                interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
-                interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
-            
-                lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                # lc = [global_lapse]*ncols
-                #lc[0] = -10.0
-                #lc[ncols-1] = -10.0
-                #for i in range(len(lc)):
-                #    lc[i] = lcmean
-
-                lch = createlatdistbn('Cloud Top Height')
-                srh = createlatdistbn('Relative Humidity')
-                # srh = [0.8] * ncols
-                sa = createlatdistbn('Surface Reflectance')
-                #sa = [0.5] * ncols
-                lcf = createlatdistbn('Cloud Fraction')
-                lcod = createlatdistbn('Cloud Optical Thickness')
-                tg = createlatdistbn('Surface Temperature')
-                # tg = [tboundm] * ncols
-                # tg = [250.] * ncols
-            
-                #lc = [-5.88]*ncols
-                #lch = [4.46]*ncols
-                #srh = [0.787]*ncols
-                #lcf = [0.657]*ncols
-                #lcod = [3.978]*ncols
-            
-                mc = pico2  
-            
-                ur = 0.5
-                cld = 1
-                rmin = 3e-6
-                hct = 230.0
-                hcf = 0.04e-9   
-                hcod = 0.7e-9
-                mct = 235.0
-                mcf = 0.05e-9
-                mcod = 1.5e-9
-                #lct = 250.0
-                #lcf = 0.5
-                #lcod = 5.0
-                tp = 5.0
-                #fth = np.zeros(ncols)
-                #for i in range(ncols):
-                #    fth[i] = 15.0 - abs(collats[i])/18.0
-                fth = [500.] * ncols
-                ol = nlays
-                asp = 2.0   
-                cs = 0
-                pbo = 0 
-                fswon = 0  
-                fsw = 239.4
-                fp = 0
-                ps1 = 0
-                af = 1.0
-                dalr = 0 #convection type
-                npb = 1
-                o3sw = 1
-                h2osw = 0
-                nl = nlays
-                maxhtr = 0.1
-                asf = 4.0
-                tuf = 1.0   
-                n2inv = pin2
-                #n2inv = 0.8
-                o2inv = 0.0
-                htransp = 1.0 #reduce lapse rate to account for horizontal transport
-                ipe = 1
-                dp = 1
-                mtranspfac = 2.0 * 0.0
-                boxnetfluxfac = 0.2
-                twarm = 288
-                tcold = 268
-                phim = 45 * 3.14 / 180
-                ks = 0.25
-                kl = 0.25
-                eta = 0.75
-                planet_radius = 6.37e6
-                planet_rotation = 7.29e-5
-                t_min = 100.0
-                sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
-                playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                ur_htr = 0.5
-                ur_toafnet = 5.0
-                ur_seb = 1e10
-                couple_tgta = 1
-            
-                ur1 = ur
-            
-                counter = 0
-            
-                ur = ur1
-            
-                params = [ncols,ncloudcols,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
-                npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-                twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
+                    # shortnameslev = ['cc','clwc','o3','q','ciwc']
+                    shortnameslev = ['q', 'o3']
+                    longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
+                    #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                    #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                    disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
                 
-                f = open(project_dir+'/Earth RCM Parameters','w')
-                for m in params:
-                    if type(m) is list:
-                        for i in range(len(m)-1):
-                            f.write(str(m[i]))
-                            f.write(',')
-                        f.write(str(m[len(m)-1]))
-                        f.write('\n')
-                    else:
-                        f.write(str(m))
-                        f.write('\n')
-            
-                f.write('$')
-                f.close()
-            
-                print("Calling PRRTM")
-            
-                time.sleep(2)
-            
-                for i in range(1,2):
-            
-                    loc = project_dir+'2D RCM GitHub'
-                    os.chdir(project_dir)
-                    print(os.getcwd())  # Prints the current working directory
-                    p = subprocess.Popen([loc])
-            
-                    stdoutdata, stderrdata = p.communicate()
-                    # print 'return code = %4d' % (p.returncode)
-                    print('return code = {}'.format(p.returncode))
-                    print('------------------------------------------------------------------------------------------')
-                    print
-            
-                    if (p.returncode == 0):
-                        break
-                    elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
-                        ur = ur*2
-                    continue
-            
-                    counter = counter + 1
+                    shortnamessfc = ['fal']
+                    longnamessfc = {'fal':'Surface albedo'}
+                    disttypesfc = {'fal':'lat'}
+                
+                    loop = 1
+                
+                    print("Creating input files by interpolating ERA-Interim data")
+                
+                    interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats)
+                    interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
+                    interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
+                
+                    lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                    # lc = [global_lapse]*ncols
+                    #lc[0] = -10.0
+                    #lc[ncols-1] = -10.0
+                    #for i in range(len(lc)):
+                    #    lc[i] = lcmean
+
+                    lch = createlatdistbn('Cloud Top Height')
+                    srh = createlatdistbn('Relative Humidity')
+                    # srh = [0.8] * ncols
+                    sa = createlatdistbn('Surface Reflectance')
+                    #sa = [0.5] * ncols
+                    lcf = createlatdistbn('Cloud Fraction')
+                    lcod = createlatdistbn('Cloud Optical Thickness')
+                    tg = createlatdistbn('Surface Temperature')
+                    # tg = [tboundm] * ncols
+                    # tg = [250.] * ncols
+                
+                    #lc = [-5.88]*ncols
+                    #lch = [4.46]*ncols
+                    #srh = [0.787]*ncols
+                    #lcf = [0.657]*ncols
+                    #lcod = [3.978]*ncols
+                
+                    mc = pico2  
+                
+                    ur = 0.5
+                    cld = 1
+                    rmin = 3e-6
+                    hct = 230.0
+                    hcf = 0.04e-9   
+                    hcod = 0.7e-9
+                    mct = 235.0
+                    mcf = 0.05e-9
+                    mcod = 1.5e-9
+                    #lct = 250.0
+                    #lcf = 0.5
+                    #lcod = 5.0
+                    tp = 5.0
+                    #fth = np.zeros(ncols)
+                    #for i in range(ncols):
+                    #    fth[i] = 15.0 - abs(collats[i])/18.0
+                    fth = [500.] * ncols
+                    ol = nlays
+                    asp = 2.0   
+                    cs = 0
+                    pbo = 0 
+                    fswon = 0  
+                    fsw = 239.4
+                    fp = 0
+                    ps1 = 0
+                    af = 1.0
+                    dalr = 0 #convection type
+                    npb = 1
+                    o3sw = 1
+                    h2osw = 0
+                    nl = nlays
+                    maxhtr = 0.1
+                    asf = 4.0
+                    tuf = 1.0   
+                    n2inv = pin2
+                    #n2inv = 0.8
+                    o2inv = 0.0
+                    htransp = 1.0 #reduce lapse rate to account for horizontal transport
+                    ipe = 1
+                    dp = 1
+                    mtranspfac = 2.0 * 0.0
+                    boxnetfluxfac = 0.2
+                    twarm = 288
+                    tcold = 268
+                    phim = 45 * 3.14 / 180
+                    ks = 0.25
+                    kl = 0.25
+                    eta = 0.75
+                    planet_radius = 6.37e6
+                    planet_rotation = 7.29e-5
+                    t_min = 100.0
+                    sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
+                    playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
+                    ur_htr = 0.5
+                    ur_toafnet = 5.0
+                    ur_seb = 1e10
+                    couple_tgta = 1
+                
+                    ur1 = ur
+                
+                    counter = 0
+                
+                    ur = ur1
+                
+                    params = [ncols,ncloudcols,pa,sc,tg,lc,days,mc,ur,cld,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
+                    npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
+                    twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
+                    
+                    f = open(project_dir+'/Earth RCM Parameters','w')
+                    for m in params:
+                        if type(m) is list:
+                            for i in range(len(m)-1):
+                                f.write(str(m[i]))
+                                f.write(',')
+                            f.write(str(m[len(m)-1]))
+                            f.write('\n')
+                        else:
+                            f.write(str(m))
+                            f.write('\n')
+                
+                    f.write('$')
+                    f.close()
+                
+                    print("Calling PRRTM")
+                
+                    time.sleep(2)
+                
+                    for i in range(1,2):
+                
+                        loc = project_dir+'2D RCM GitHub'
+                        os.chdir(project_dir)
+                        print(os.getcwd())  # Prints the current working directory
+                        p = subprocess.Popen([loc])
+                
+                        stdoutdata, stderrdata = p.communicate()
+                        # print 'return code = %4d' % (p.returncode)
+                        print('return code = {}'.format(p.returncode))
+                        print('------------------------------------------------------------------------------------------')
+                        print
+                
+                        if (p.returncode == 0):
+                            break
+                        elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
+                            ur = ur*2
+                        continue
+                
+                        counter = counter + 1
 
 ########################################################################################################################
 
