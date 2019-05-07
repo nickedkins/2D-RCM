@@ -178,7 +178,7 @@ def readfile(fn,counter):
 # nlayersms=[31,100]
 # ncols=5
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 
 i1 = 0
 
@@ -272,8 +272,29 @@ pzm_master = np.array(pzm_master)
 
 filenames = np.array(filenames[0])
 
-plt.imshow(tzm_master[0,:,:])
+x = np.linspace(-90,90,ncols)
+y = pzm_master[0,:,0]
 
+print shape(tzm_master)
+
+for i in range( shape(tzm_master)[0] ):
+
+    plt.figure(1)
+    plt.subplot(221+i)
+    plt.gca().set_yscale('log')
+    plt.ylim(1000,10)
+    plt.contourf(x,y,tzm_master[i,:,:],20)
+    plt.xlabel('Latitude')
+    plt.ylabel('Altitude')
+    plt.colorbar()
+
+plt.subplot(223)
+plt.gca().set_yscale('log')
+plt.ylim(1000,10)
+plt.contourf(x,y,tzm_master[1,:,:]-tzm_master[0,:,:],20)
+plt.xlabel('Latitude')
+plt.ylabel('Altitude')
+plt.colorbar()
 
     
 

@@ -20,6 +20,7 @@ from scipy import stats
 
 ncols = 7
 nlays = 30
+days = 500 #model days
 
 def create_misr_cloud_inputs():
                 
@@ -253,7 +254,7 @@ def create_manual_cloud_inputs():
         c2 = ctot
     clearfrac = np.ones(ncols) * ( 1.0 - ctot )
     manual_clouds_wghtd_frac = np.zeros(ncloudcols)
-    print 'here', np.array(manual_clouds)[:,1]
+    
     for cloudcol in range(ncloudcols):
         manual_clouds_wghtd_frac[cloudcol] = manual_clouds[cloudcol][1] * ctot / sum(np.array(manual_clouds)[:,1])
 
@@ -324,7 +325,7 @@ fal_lats = np.load(interpdir+'fal_lats.npy')
 
 pa = 0.3    
 sc = [1362.0]
-days = 20 #model days
+
 #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
 #pico2s = np.logspace(-4,2,num=5,base=10.0)
@@ -366,15 +367,18 @@ tboundms = [288.0]
 global_lapses = [-5.7]
 
 cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)
-manual_clouds = []
-manual_clouds.append([5.,0.5,3.0])
-manual_clouds.append([3.,0.2,1.0])
-manual_clouds.append([10.,0.1,9.9])
-ncloudcols = shape(manual_clouds)[0]
+
 
 cloud_source = 0
 
-for global_lapse in global_lapses:
+cld_heights = np.linspace(1,10,10)
+cld_heights = [5.0]
+
+for cld_height in cld_heights:
+
+    manual_clouds = []
+    manual_clouds.append([cld_height,0.5,3.0])
+    ncloudcols = shape(manual_clouds)[0]
 
     for tboundm in tboundms:
     
@@ -418,7 +422,6 @@ for global_lapse in global_lapses:
                     interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                 
                     lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                    # lc = [global_lapse]*ncols
                     #lc[0] = -10.0
                     #lc[ncols-1] = -10.0
                     #for i in range(len(lc)):
@@ -507,7 +510,7 @@ for global_lapse in global_lapses:
                 
                     ur = ur1
                 
-                    params = [ncols,ncloudcols,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
+                    params = [ncols,ncloudcols+1,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                     npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
                     twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
                     
