@@ -23,91 +23,91 @@ nlays = 30
 
 def create_misr_cloud_inputs():
                 
-                        cfs = misr_cf_latalt_max
-                        misr_alts = np.linspace(0,20,num=39) # altitudes in original MISR data
-                        misr_lats = np.linspace(-90,90,num=360)
-                        latbins = np.linspace(-90,90,num=ncols)
-                        altbin_edges = np.linspace(0,10,num=ncloudcols+1)
-                        altbins = np.zeros(ncloudcols)
-                        cld_taus = np.zeros(ncloudcols)
-                    
-                        for i in range(len(altbins)+1):
-                            altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
-                    
-                        od_low = 3.0 * 0.0
-                        od_mid = 3.0 * 0.0
-                        od_high = 0.3 * 0.0
-                    
-                        for i in range(len(altbins)):
-                            if (altbins[i] < 3.0):
-                                cld_taus[i] = od_low
-                            elif(altbins[i] < 7.0):
-                                cld_taus[i] = od_mid
-                            else:
-                                cld_taus[i] = od_high
-                    
-                        binned_cf_lat = np.zeros((ncols,len(misr_alts)))
-                        cf_lat_bincounts = np.zeros((ncols,len(misr_alts)))
-                        binned_cf = np.zeros((ncols,ncloudcols))
-                        cf_bincounts = np.zeros((ncols,ncloudcols))
-                
-                        for i in range(len(misr_lats)):
-                            ibin = np.argmin(abs(misr_lats[i] - collats))
-                            for j in range(len(misr_alts)):
-                                binned_cf_lat[ibin,j] = binned_cf_lat[ibin,j] + cfs[i,j]
-                                cf_lat_bincounts[ibin,j] = cf_lat_bincounts[ibin,j] + 1
-                    
-                        binned_cf_lat= binned_cf_lat / cf_lat_bincounts                
-                            
-                        for ibin in range(ncols):
-                            for j in range(len(misr_alts)):
-                                jbin = np.argmin(abs(misr_alts[j] - altbins))
-                                binned_cf[ibin,jbin] = binned_cf[ibin,jbin] + binned_cf_lat[ibin,j]
-                                cf_bincounts[ibin,jbin] = cf_bincounts[ibin,jbin] + 1
-                    
-                        clearfrac = np.zeros(ncols)
-                    
-                        binned_cf[0,0] = binned_cf[0,0] * 1.0
-                    
-                        for col in range(ncols):
-                            tempcloudfrac = 0.0
-                            for cloudcol in range(ncloudcols-1):
-                                tempcloudfrac = tempcloudfrac + binned_cf[col,cloudcol] - tempcloudfrac * binned_cf[col,cloudcol]
-                                clearfrac[col] = (1.0 - tempcloudfrac) / 2.0
-                    
-                        for col in range(ncols):
-                            filename = 'ccfracs col %2d' % (col)
-                            fileloc = outdir + filename
-                            file = open(fileloc,'w')
-                            for cloudcol in range(ncloudcols):
-                                file.write(str(binned_cf[col,cloudcol]))
-                                file.write('\n')
-                            file.write(str(clearfrac[col])) # add the clear fraction on at the end
-                            file.write('\n')
-                            file.close()
-                    
-                        for col in range(ncols):
-                            filename = 'ccalts col %2d' % (col)
-                            fileloc = outdir + filename
-                            file = open(fileloc,'w')
-                            for cloudcol in range(ncloudcols):
-                                file.write(str(altbins[cloudcol]))
-                                file.write('\n')
-                            file.write('1.0') # set altitude for clear column to 1 km
-                            file.write('\n')
-                            file.close()
-                    
-                    
-                        for col in range(ncols):
-                            filename = 'cctaus col %2d' % (col)
-                            fileloc = outdir + filename
-                            file = open(fileloc,'w')
-                            for cloudcol in range(ncloudcols):
-                                file.write(str(cld_taus[cloudcol]))
-                                file.write('\n')
-                            file.write('0.0') # set tau of clear column to 0
-                            file.write('\n')
-                            file.close()
+    cfs = misr_cf_latalt_max
+    misr_alts = np.linspace(0,20,num=39) # altitudes in original MISR data
+    misr_lats = np.linspace(-90,90,num=360)
+    latbins = np.linspace(-90,90,num=ncols)
+    altbin_edges = np.linspace(0,10,num=ncloudcols+1)
+    altbins = np.zeros(ncloudcols)
+    cld_taus = np.zeros(ncloudcols)
+
+    for i in range(len(altbins)+1):
+        altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
+
+    od_low = 3.0 * 0.0
+    od_mid = 3.0 * 0.0
+    od_high = 0.3 * 0.0
+
+    for i in range(len(altbins)):
+        if (altbins[i] < 3.0):
+            cld_taus[i] = od_low
+        elif(altbins[i] < 7.0):
+            cld_taus[i] = od_mid
+        else:
+            cld_taus[i] = od_high
+
+    binned_cf_lat = np.zeros((ncols,len(misr_alts)))
+    cf_lat_bincounts = np.zeros((ncols,len(misr_alts)))
+    binned_cf = np.zeros((ncols,ncloudcols))
+    cf_bincounts = np.zeros((ncols,ncloudcols))
+
+    for i in range(len(misr_lats)):
+        ibin = np.argmin(abs(misr_lats[i] - collats))
+        for j in range(len(misr_alts)):
+            binned_cf_lat[ibin,j] = binned_cf_lat[ibin,j] + cfs[i,j]
+            cf_lat_bincounts[ibin,j] = cf_lat_bincounts[ibin,j] + 1
+
+    binned_cf_lat= binned_cf_lat / cf_lat_bincounts                
+        
+    for ibin in range(ncols):
+        for j in range(len(misr_alts)):
+            jbin = np.argmin(abs(misr_alts[j] - altbins))
+            binned_cf[ibin,jbin] = binned_cf[ibin,jbin] + binned_cf_lat[ibin,j]
+            cf_bincounts[ibin,jbin] = cf_bincounts[ibin,jbin] + 1
+
+    clearfrac = np.zeros(ncols)
+
+    binned_cf[0,0] = binned_cf[0,0] * 1.0
+
+    for col in range(ncols):
+        tempcloudfrac = 0.0
+        for cloudcol in range(ncloudcols-1):
+            tempcloudfrac = tempcloudfrac + binned_cf[col,cloudcol] - tempcloudfrac * binned_cf[col,cloudcol]
+            clearfrac[col] = (1.0 - tempcloudfrac) / 2.0
+
+    for col in range(ncols):
+        filename = 'ccfracs col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            file.write(str(binned_cf[col,cloudcol]))
+            file.write('\n')
+        file.write(str(clearfrac[col])) # add the clear fraction on at the end
+        file.write('\n')
+        file.close()
+
+    for col in range(ncols):
+        filename = 'ccalts col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            file.write(str(altbins[cloudcol]))
+            file.write('\n')
+        file.write('1.0') # set altitude for clear column to 1 km
+        file.write('\n')
+        file.close()
+
+
+    for col in range(ncols):
+        filename = 'cctaus col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            file.write(str(cld_taus[cloudcol]))
+            file.write('\n')
+        file.write('0.0') # set tau of clear column to 0
+        file.write('\n')
+        file.close()
 def createlatdistbn(filename):
     fileloc = '/Users/nickedkins/Dropbox/Latitudinal Distributions/'+filename+'.txt'
     file = open(fileloc,'r')
@@ -242,6 +242,57 @@ def interpolate_createprrtminput_sfc(shortname,latarray,lats):
             file.write('\n')
 
         file.close()
+def create_manual_cloud_inputs():
+    
+    # Calculate clear sky fraction with random overlap assumption
+    c1 = 0.
+    c2 = 0.
+    for cloudcol in range(ncloudcols):
+        c1 = manual_clouds[cloudcol][1]
+        ctot = c1 + c2 - c1*c2
+        c2 = ctot
+    clearfrac = np.ones(ncols) * ( 1.0 - ctot )
+    manual_clouds_wghtd_frac = np.zeros(ncloudcols)
+    print 'here', np.array(manual_clouds)[:,1]
+    for cloudcol in range(ncloudcols):
+        manual_clouds_wghtd_frac[cloudcol] = manual_clouds[cloudcol][1] * ctot / sum(np.array(manual_clouds)[:,1])
+
+    for col in range(ncols):
+        filename = 'ccfracs col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            file.write( str( manual_clouds_wghtd_frac[cloudcol] ) )
+            file.write('\n')
+        file.write(str(clearfrac[col])) # add the clear fraction on at the end
+        file.write('\n')
+        file.close()
+
+    for col in range(ncols):
+        filename = 'ccalts col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            file.write( str( manual_clouds[cloudcol][0] ) )
+            file.write('\n')
+        file.write('1.0') # set altitude for clear column to 1 km
+        file.write('\n')
+        file.close()
+
+
+    for col in range(ncols):
+        filename = 'cctaus col %2d' % (col)
+        fileloc = outdir + filename
+        file = open(fileloc,'w')
+        for cloudcol in range(ncloudcols):
+            # file.write(str(cld_taus[cloudcol]))
+            file.write( str( manual_clouds[cloudcol][2] ) )
+            file.write('\n')
+        file.write('0.0') # set tau of clear column to 0
+        file.write('\n')
+        file.close()
+
+
 
 #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
@@ -318,12 +369,13 @@ tboundms = [288.0]
 global_lapses = [-5.7]
 
 cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)
-clouds = []
-clouds.append([600.,0.5,3.0])
-clouds.append([800.,0.2,1.0])
-ncloudcols = shape(clouds)[0]
+manual_clouds = []
+manual_clouds.append([5.,0.5,3.0])
+manual_clouds.append([3.,0.2,1.0])
+manual_clouds.append([2.,0.1,0.1])
+ncloudcols = shape(manual_clouds)[0]
 
-
+cloud_source = 0
 
 for global_lapse in global_lapses:
 
@@ -338,7 +390,13 @@ for global_lapse in global_lapses:
     
                 for pico2 in pico2s:
 
-                    create_misr_cloud_inputs()
+                    if ( cloud_source == 0 ):
+
+                        create_manual_cloud_inputs()
+
+                    elif ( cloud_source == 1 ):
+
+                        create_misr_cloud_inputs()
                 
                     #pertvars = ['q','cc','ciwc','clwc','o3']
                     pertvars = ['q']

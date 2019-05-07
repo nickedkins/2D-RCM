@@ -719,7 +719,7 @@ subroutine wrapper
             tot_sol_abs_lhwghtd = 0.
 
 !            print*, 'ncloudcols = ',ncloudcols !NJE temporarily suppressing cloudcols
-            ncloudcols = 1
+            ! ncloudcols = 1
 
             do cloudcol = 1,ncloudcols
 
@@ -735,7 +735,7 @@ subroutine wrapper
 
 
                 ! call createcloudfile(cloudcolp,cloudcoltau)
-                call createcloudfile
+                call createcloudfile(cloudcolalt,cloudcoltau)
 
                 ! Call the subroutine rrtm, which calculates the upward and downward fluxes and the heating rates
                 ! call rrtm(band_flux_up,band_flux_down)

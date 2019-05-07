@@ -557,15 +557,19 @@ MODULE MYSUBS
     end subroutine calcswhtr
 
     ! subroutine createcloudfile(cloudp,cloudcoltau)
-    subroutine createcloudfile
+    subroutine createcloudfile(cca,cct)
         use VARIABLES
         ! real,dimension(maxlaym) :: fracs,tau_cld
         ! integer :: irdcld,i
         INTEGER :: cloudindex
         real :: cloudalt
 
+        cloudcolalt = cca
+        cloudcoltau = cct
+
         irdcld = 25
-        OPEN(IRDCLD,FILE='/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/My IN_CLD_RRTM',FORM='FORMATTED')
+        ! OPEN(IRDCLD,FILE='/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/My IN_CLD_RRTM',FORM='FORMATTED')
+        OPEN(IRDCLD,FILE='My IN_CLD_RRTM',FORM='FORMATTED')
         tau_cld = 0.
         fracs = 0.
         cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)

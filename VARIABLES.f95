@@ -19,7 +19,7 @@ MODULE VARIABLES
     real	::tboundm
     real	::scalep,surfacep
     integer :: cloudcol
-    real :: cloudcolfrac,cloudcolalt,cloudcoltau
+    real :: cloudcolfrac=0.,cloudcolalt=0.,cloudcoltau=0.
 !    real,dimension(maxextraclds) :: extra_cld_taus,extra_cld_alts,extra_cld_fracs,extra_cld_latcols,extra_cld_cldcols
     REAL :: extra_cld_tau,extra_cld_alt,extra_cld_frac,extra_cld_latcol,extra_cld_cldcol
     integer :: extra_cloudindex
