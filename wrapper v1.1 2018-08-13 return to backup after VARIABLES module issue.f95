@@ -111,7 +111,7 @@ subroutine wrapper
     read(73,*) days !number of model days
     read(73,*) mixco2_in !CO2 mixing ratio (volumetric)
     read(73,*) undrelax !under-relaxation constant
-    read(73,*) cld !clouds on/off
+    read(73,*) icldm !clouds on/off
     read(73,*) rmin !minimum water vapour mixing ratio
     read(73,*) height_hc !temperature of the highest cloud
     read(73,*) frac_hc !fraction of the highest cloud

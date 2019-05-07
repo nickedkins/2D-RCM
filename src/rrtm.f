@@ -192,6 +192,8 @@ C      DATA HEATFAC /8.4391/
 
       HVRRTM = '$Revision: 11240 $'
 
+      icld = icldm
+
 C  Compute lookup tables for transmittance, tau transition function,
 C  and clear sky tau (for the cloudy sky radiative transfer).  Tau is 
 C  computed as a function of the tau transition function, transmittance 
@@ -282,6 +284,8 @@ C    ***    Call the radiative transfer routine.
 	    totdflum=totdflux
 	    fnetm=fnet
 	    htrm=htr
+      
+C       icldm = icld
          
          IF (IOUT .LT. 0) GO TO 4000
 
@@ -618,9 +622,7 @@ C Open OUT_CLD_RRTM to output the cloud optical properties
 
 C Open Cloud Input File
 !      OPEN(IRDCLD,FILE='IN_CLD_RRTM',FORM='FORMATTED')
-         OPEN(IRDCLD,FILE=
-     &'/Users/nickedkins/Dropbox/RCM with new PRRTM/My IN_CLD_RRTM',
-     &FORM='FORMATTED')
+         OPEN(IRDCLD,FILE='My IN_CLD_RRTM',FORM='FORMATTED')
 !     locref
 C     Read in cloud input option.  
       
