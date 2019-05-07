@@ -285,7 +285,6 @@ def create_manual_cloud_inputs():
         fileloc = outdir + filename
         file = open(fileloc,'w')
         for cloudcol in range(ncloudcols):
-            # file.write(str(cld_taus[cloudcol]))
             file.write( str( manual_clouds[cloudcol][2] ) )
             file.write('\n')
         file.write('0.0') # set tau of clear column to 0

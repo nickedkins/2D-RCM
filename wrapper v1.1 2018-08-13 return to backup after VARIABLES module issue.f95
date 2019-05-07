@@ -767,22 +767,6 @@ subroutine wrapper
                 latcol_cloudcol_olrs(cloudcol,col) = totuflum(nlayersm)
 
             enddo !cloudcol
-
-
-
-            htrm = htrmwghtd / sum(ccfracs(:ncloudcols))
-            
-            totuflum = totuflumwghtd / sum(ccfracs(:ncloudcols))
-            totdflum = totdflumwghtd / sum(ccfracs(:ncloudcols))
-            htrlh = htrlhwghtd / sum(ccfracs(:ncloudcols))
-            htro3_lh = htro3_lhwghtd * 1.0 / sum(ccfracs(:ncloudcols))
-
-
-            abspn = abspnwghtd / sum(ccfracs(:ncloudcols))
-            A_oz_l = A_oz_lwghtd / sum(ccfracs(:ncloudcols))
-            abs_surf_lh = abs_surf_lhwghtd / sum(ccfracs(:ncloudcols))
-
-            tot_sol_abs_lh = tot_sol_abs_lhwghtd / sum(ccfracs(:ncloudcols))
             
             ! call add_seb_to_tboundm
             if (couple_tgta == 1) then
@@ -794,7 +778,7 @@ subroutine wrapper
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
             ! addhtr
-            !Apply SW heating rates if applicable
+            ! Apply SW heating rates if applicable
             !            do i=1,nlayersm-1
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
