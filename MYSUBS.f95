@@ -757,6 +757,12 @@ MODULE MYSUBS
             enddo
         enddo
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) boxlats(col)
+            enddo
+        enddo
+
 
     end subroutine writeoutputfile
     

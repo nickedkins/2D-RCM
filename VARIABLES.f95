@@ -1,6 +1,6 @@
 MODULE VARIABLES
 
-    integer,parameter				::MAXLAYM=203,MXMOLM=38,NBANDSM=16,MAXNCOLS=30,MAXNCLOUDCOLS=10,maxextraclds=2
+    integer,parameter				::MAXLAYM=203,MXMOLM=38,NBANDSM=16,MAXNCOLS=99,MAXNCLOUDCOLS=10,maxextraclds=2
     real,dimension(MAXLAYM)			::pavelm,tavelm,wbrodlm
     real,dimension(0:MAXLAYM)		::altzm,tzm,pzm,totuflum,totdflum,fnetm,htrm=0.,logpzm
     real,dimension(MXMOLM,MAXLAYM)	::wklm

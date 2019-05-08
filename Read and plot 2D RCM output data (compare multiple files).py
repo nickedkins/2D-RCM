@@ -86,6 +86,7 @@ def readfile(fn,counter):
     tavelmcols = np.zeros((nlayersm,ncols))
     tboundmcols= np.zeros((nlayersm,ncols))
     R_gcols = np.zeros((nlayersm,ncols))
+    boxlatcols = np.zeros((nlayersm,ncols))
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -167,13 +168,17 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             R_gcols[i,col] = f.readline()
 
+    for col in range(ncols):    
+        for i in range(nlayersm):
+            boxlatcols[i,col] = f.readline()
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -206,7 +211,7 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
 
@@ -219,43 +224,43 @@ for directory in directories:
                 plt.figure(1)
                 plt.subplot(331)
                 plt.title('tzm')
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-                plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',c=colors[i3],markersize=20)
+                plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',markersize=20)
                 plt.ylim(pzmcols[0,col]*1.1,1)
                 # plt.legend()
                 
                 plt.subplot(332)
                 plt.title('htrm')
-                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col])
                 plt.ylim(pzmcols[0,col]*1.1,1)
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
                 
                 plt.subplot(333)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col])
                 plt.ylim(pzmcols[0,col]*1.1,1)
                 
                 plt.subplot(334)
                 plt.title('totdfllum')
-                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i2],c=colors[i3])
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col])
                 plt.ylim(pzmcols[0,col]*1.1,1)
 
                 plt.subplot(335)
                 plt.title('abs_o3')
-                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col])
                 plt.ylim(pzmcols[0,col]*1.1,1)      
 
                 plt.subplot(336)
                 plt.title('abspn')
-                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i2],c=colors[i3])
+                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col])
                 plt.ylim(pzmcols[0,col]*1.1,1)
 
                 plt.subplot(337)
                 plt.title('tavelm')
-                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn),c=colors[i3],ls=linestyles[i2])
+                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn))
                 plt.ylim(pzmcols[0,col]*1.1,1)
                 # plt.legend()
 
@@ -265,8 +270,10 @@ for directory in directories:
 
     i1 += 1
 
-# master indices: master[file][layer][column]
 
+lats = boxlatcols[0,:]
+
+# master indices: master[file][layer][column]
 tzm_master = np.array(tzm_master)
 pzm_master = np.array(pzm_master)
 
@@ -275,29 +282,28 @@ filenames = np.array(filenames[0])
 x = np.linspace(-90,90,ncols)
 y = pzm_master[0,:,0]
 
-print shape(tzm_master)
 
 for i in range( shape(tzm_master)[0] ):
 
     plt.figure(1)
-    plt.subplot(221+i)
+    plt.subplot(121+i)
+    plt.contourf(lats,y,tzm_master[i,:,:],151)
     plt.gca().set_yscale('log')
     plt.ylim(1000,10)
-    plt.contourf(x,y,tzm_master[i,:,:],20)
     plt.xlabel('Latitude')
     plt.ylabel('Altitude')
     plt.colorbar()
 
-plt.subplot(223)
-plt.gca().set_yscale('log')
-plt.ylim(1000,10)
-plt.contourf(x,y,tzm_master[1,:,:]-tzm_master[0,:,:],20)
-plt.xlabel('Latitude')
-plt.ylabel('Altitude')
-plt.colorbar()
+    plt.figure(2)
+    plt.plot(lats,tzm_master[i,0,:])
 
-    
-
+# plt.subplot(223)
+# plt.gca().set_yscale('log')
+# plt.ylim(1000,10)
+# plt.contourf(x,y,tzm_master[1,:,:]-tzm_master[0,:,:],20)
+# plt.xlabel('Latitude')
+# plt.ylabel('Altitude')
+# plt.colorbar()
 
 print 'Done'
 

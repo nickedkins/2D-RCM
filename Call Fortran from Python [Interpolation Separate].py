@@ -18,9 +18,9 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-ncols = 7
+ncols = 31
 nlays = 30
-days = 500 #model days
+days = 5000 #model days
 
 def create_misr_cloud_inputs():
                 
@@ -254,7 +254,7 @@ def create_manual_cloud_inputs():
         c2 = ctot
     clearfrac = np.ones(ncols) * ( 1.0 - ctot )
     manual_clouds_wghtd_frac = np.zeros(ncloudcols)
-    
+
     for cloudcol in range(ncloudcols):
         manual_clouds_wghtd_frac[cloudcol] = manual_clouds[cloudcol][1] * ctot / sum(np.array(manual_clouds)[:,1])
 
@@ -500,7 +500,7 @@ for cld_height in cld_heights:
                     sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                     playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                     ur_htr = 0.5
-                    ur_toafnet = 5.0
+                    ur_toafnet = 50.
                     ur_seb = 1e10
                     couple_tgta = 1
                 
