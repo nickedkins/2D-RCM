@@ -183,7 +183,7 @@ def readfile(fn,counter):
 # nlayersms=[31,100]
 # ncols=5
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 
 i1 = 0
 
@@ -192,6 +192,7 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 
 tzm_master = []
 pzm_master = []
+boxlatcols_master = []
 
 filenames = []
 
@@ -214,6 +215,7 @@ for directory in directories:
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
+        boxlatcols_master.append(boxlatcols)
 
         i3=0
 
@@ -224,7 +226,7 @@ for directory in directories:
                 plt.figure(1)
                 plt.subplot(331)
                 plt.title('tzm')
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',markersize=20)
@@ -271,31 +273,36 @@ for directory in directories:
     i1 += 1
 
 
-lats = boxlatcols[0,:]
-
 # master indices: master[file][layer][column]
 tzm_master = np.array(tzm_master)
 pzm_master = np.array(pzm_master)
+boxlatcols_master = np.array(boxlatcols_master)
 
 filenames = np.array(filenames[0])
 
 x = np.linspace(-90,90,ncols)
-y = pzm_master[0,:,0]
 
 
-for i in range( shape(tzm_master)[0] ):
 
-    plt.figure(1)
-    plt.subplot(121+i)
-    plt.contourf(lats,y,tzm_master[i,:,:],151)
-    plt.gca().set_yscale('log')
-    plt.ylim(1000,10)
-    plt.xlabel('Latitude')
-    plt.ylabel('Altitude')
-    plt.colorbar()
+# for i in range( shape(tzm_master)[0] ):
 
-    plt.figure(2)
-    plt.plot(lats,tzm_master[i,0,:])
+#     lats = boxlatcols_master[i,0,:]
+#     pzms = pzm_master[i,:,0]
+#     tzms = tzm_master[i,:,:]
+#     tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
+
+#     plt.figure(1)
+#     plt.subplot(121+i)
+#     plt.contourf(lats,pzms,tzms,20)
+#     plt.gca().set_yscale('log')
+#     plt.ylim(1000,10)
+#     plt.xlabel('Latitude')
+#     plt.ylabel('Altitude')
+#     plt.colorbar()
+
+#     plt.figure(2)
+#     plt.plot(lats,tzms[0,:])
+    
 
 # plt.subplot(223)
 # plt.gca().set_yscale('log')
