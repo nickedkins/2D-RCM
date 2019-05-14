@@ -19,8 +19,8 @@ from time import localtime, strftime
 from scipy import stats
 
 # ncols = 31
-ncolss = np.linspace(3,11,5)
-ncolss = [13]
+# ncolss = np.linspace(3,11,5)
+ncolss = [5]
 
 for ncols in ncolss:
 
@@ -300,7 +300,7 @@ for ncols in ncolss:
             file.close()
 
     #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-    project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM/2D-RCM/'
+    project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
     interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
     outdir = project_dir+'Input Distributions/' #output file directory
@@ -385,7 +385,7 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([cld_height,0.5,3.0])
+        manual_clouds.append([cld_height,0.5,0.0])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -466,7 +466,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 1.
+                        tp = 5.0
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
