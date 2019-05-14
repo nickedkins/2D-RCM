@@ -20,14 +20,14 @@ from scipy import stats
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [5]
+ncolss = [15]
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 30
-    days = 5000 #model days
+    nlays = 99
+    days = 20000 #model days
 
     def create_misr_cloud_inputs():
                     
@@ -483,7 +483,7 @@ for ncols in ncolss:
                         dalr = 0 #convection type
                         npb = 1
                         o3sw = 1
-                        h2osw = 0
+                        h2osw = 1
                         nl = nlays
                         maxhtr = 0.1
                         asf = 4.0
