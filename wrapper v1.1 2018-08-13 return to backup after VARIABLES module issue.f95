@@ -173,6 +173,7 @@ subroutine wrapper
     read(73,*) ur_toafnet
     read(73,*) ur_seb
     read(73,*) couple_tgta
+    read(73,*) mtranspon
 
     close(73)
 
@@ -783,7 +784,7 @@ subroutine wrapper
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
                 ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
-                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
+                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)*10.
             enddo
 
             ! do i=1,nlayersm
@@ -1080,6 +1081,7 @@ subroutine wrapper
             lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
             d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
+
             ! if(col==ncols) then
             !     ! delta_x_lats = x_lats(col-1) - x_lats(col) 
             !     delta_x_lats = boxlats(col-1) - boxlats(col) 
@@ -1107,6 +1109,7 @@ subroutine wrapper
             delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
             delta_x_edge(i) = x_edge(i) - x_edge(i+1)
             meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
+            ! print*, delta_T_edge(i),',',delta_x_edge(i),x_edge(i),',',1.0 - (x_edge(i))**2.0
         enddo
 
         meridtransp_edge(0) = 0.0
@@ -1114,6 +1117,9 @@ subroutine wrapper
 
         do col=1,ncols
             delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1)) !* 5.0
+            if (j==70) then
+                print*, ddry(col), lambda(col), meridtransp_edge(col), delta_meridtransp_edge(col)
+            end if
         enddo
 
         if (j==timesteps) then
@@ -1189,9 +1195,13 @@ subroutine wrapper
 
                 ! meridtransp(col) = -1/(x_lat(col))
 
-                boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                if (mtranspon == 1) then
+                    boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                else
+                    boxnettotflux(col) = boxnetradflux(col)
+                end if
                 tempchanges(col) = boxnettotflux(col) / ur_toafnet
+
             enddo
 
             write(*,1106,advance='no') ''
@@ -1309,8 +1319,11 @@ subroutine wrapper
                     lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
-                    boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                    ! tempchanges(col) = boxnettotflux(col) * boxnetfluxfac
+                    if (mtranspon == 1) then
+                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                    else
+                        boxnettotflux(col) = boxnetradflux(col)
+                    end if
                     tempchanges(col) = boxnettotflux(col) / ur_toafnet
                 enddo
 

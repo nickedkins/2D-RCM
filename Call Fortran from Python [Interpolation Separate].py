@@ -20,14 +20,14 @@ from scipy import stats
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [15]
+ncolss = [21]
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 99
-    days = 20000 #model days
+    nlays = 30
+    days = 5000 #model days
 
     def create_misr_cloud_inputs():
                     
@@ -299,8 +299,8 @@ for ncols in ncolss:
             file.write('\n')
             file.close()
 
-    #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/2D-RCM-Home/2D-RCM/'
-    project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+    project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+    #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
     interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
     outdir = project_dir+'Input Distributions/' #output file directory
@@ -438,8 +438,8 @@ for ncols in ncolss:
                         lch = createlatdistbn('Cloud Top Height')
                         srh = createlatdistbn('Relative Humidity')
                         # srh = [0.8] * ncols
-                        sa = createlatdistbn('Surface Reflectance')
-                        #sa = [0.5] * ncols
+                        #sa = createlatdistbn('Surface Reflectance')
+                        sa = [0.3] * ncols
                         lcf = createlatdistbn('Cloud Fraction')
                         lcod = createlatdistbn('Cloud Optical Thickness')
                         tg = createlatdistbn('Surface Temperature')
@@ -508,9 +508,10 @@ for ncols in ncolss:
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                         ur_htr = 0.5
-                        ur_toafnet = 5.0
+                        ur_toafnet = 3.0
                         ur_seb = 1e10
                         couple_tgta = 1
+                        mtranspon = 1
                     
                         ur1 = ur
                     
@@ -520,7 +521,7 @@ for ncols in ncolss:
                     
                         params = [ncols,ncloudcols+1,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta]
+                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon]
                         
                         f = open(project_dir+'/Earth RCM Parameters','w')
                         for m in params:
