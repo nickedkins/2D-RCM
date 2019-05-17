@@ -20,13 +20,13 @@ from scipy import stats
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [21]
+ncolss = [1]
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 30
+    nlays = 150
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -385,7 +385,7 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([cld_height,0.5,0.0])
+        manual_clouds.append([2.0,0.5,0.0])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -433,16 +433,17 @@ for ncols in ncolss:
                         #lc[0] = -10.0
                         #lc[ncols-1] = -10.0
                         #for i in range(len(lc)):
-                        #    lc[i] = lcmean
+                        #   lc[i] *= 1.5
 
                         lch = createlatdistbn('Cloud Top Height')
                         srh = createlatdistbn('Relative Humidity')
                         # srh = [0.8] * ncols
-                        #sa = createlatdistbn('Surface Reflectance')
-                        sa = [0.3] * ncols
+                        sa = createlatdistbn('Surface Reflectance')
+                        # sa = [0.3] * ncols
                         lcf = createlatdistbn('Cloud Fraction')
                         lcod = createlatdistbn('Cloud Optical Thickness')
                         tg = createlatdistbn('Surface Temperature')
+
                         # tg = [tboundm] * ncols
                         # tg = [250.] * ncols
                     
@@ -466,7 +467,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 5.0
+                        tp = 5.0 * 1e3
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -494,7 +495,7 @@ for ncols in ncolss:
                         htransp = 1.0 #reduce lapse rate to account for horizontal transport
                         ipe = 1
                         dp = 1
-                        mtranspfac = 2.0 * 0.0
+                        mtranspfac = 2.0
                         boxnetfluxfac = 0.2
                         twarm = 288
                         tcold = 268
@@ -504,10 +505,10 @@ for ncols in ncolss:
                         eta = 0.75
                         planet_radius = 6.37e6
                         planet_rotation = 7.29e-5
-                        t_min = 100.0
+                        t_min = 180
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                        ur_htr = 0.5
+                        ur_htr = 0.1
                         ur_toafnet = 3.0
                         ur_seb = 1e10
                         couple_tgta = 1

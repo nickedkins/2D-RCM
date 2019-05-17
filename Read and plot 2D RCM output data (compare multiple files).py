@@ -178,7 +178,7 @@ def readfile(fn,counter):
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm1cols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -212,10 +212,12 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm1cols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
+
+        htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
 
         i3=0
 
@@ -223,48 +225,80 @@ for directory in directories:
 
             for col in range(ncols):
 
-                plt.figure(1)
-                plt.subplot(331)
+                plt.figure(i2+1)
+                plt.subplot(341)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',markersize=20)
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 # plt.legend()
                 
-                plt.subplot(332)
+                plt.figure(i2+1)
+                plt.subplot(342)
                 plt.title('htrm')
-                plt.semilogy(htrmcols[:,col],pzmcols[:,col])
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o')
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
                 
-                plt.subplot(333)
+                plt.figure(i2+1)
+                plt.subplot(343)
                 plt.title('totuflum')
                 plt.semilogy(totuflumcols[:,col],pzmcols[:,col])
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 
-                plt.subplot(334)
-                plt.title('totdfllum')
+                plt.figure(i2+1)
+                plt.subplot(344)
+                plt.title('totdflum')
                 plt.semilogy(totdflumcols[:,col],pzmcols[:,col])
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
-                plt.subplot(335)
+                plt.figure(i2+1)
+                plt.subplot(345)
                 plt.title('abs_o3')
                 plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col])
-                plt.ylim(pzmcols[0,col]*1.1,1)      
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))      
 
-                plt.subplot(336)
+                plt.figure(i2+1)
+                plt.subplot(346)
                 plt.title('abspn')
                 plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col])
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
-                plt.subplot(337)
+                plt.figure(i2+1)
+                plt.subplot(347)
                 plt.title('tavelm')
                 plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn))
-                plt.ylim(pzmcols[0,col]*1.1,1)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 # plt.legend()
+
+                plt.figure(i2+1)
+                plt.subplot(348)
+                plt.title('htro3')
+                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+
+                plt.figure(i2+1)
+                plt.subplot(349)
+                plt.title('htrh2o')
+                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+
+                plt.figure(i2+1)
+                plt.subplot(3,4,10)
+                plt.title('wklm1 (h2o)')
+                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+
+                plt.figure(i2+1)
+                plt.subplot(3,4,11)
+                plt.title('htrmlw')
+                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col])
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                plt.axvline(-0.03,ls='--')
+                plt.axvline(0.03,ls='--')
 
                 i3+=1
 
@@ -274,13 +308,13 @@ for directory in directories:
 
 
 # master indices: master[file][layer][column]
-tzm_master = np.array(tzm_master)
-pzm_master = np.array(pzm_master)
-boxlatcols_master = np.array(boxlatcols_master)
+# tzm_master = np.array(tzm_master)
+# pzm_master = np.array(pzm_master)
+# boxlatcols_master = np.array(boxlatcols_master)
 
-filenames = np.array(filenames[0])
+# filenames = np.array(filenames[0])
 
-x = np.linspace(-90,90,ncols)
+# x = np.linspace(-90,90,ncols)
 
 
 

@@ -503,8 +503,10 @@ MODULE MYSUBS
 
         Rbar = Rbar_a + (1.0-Rbar_a)*(1.0-Rbarbarstar_a)*R_g/(1.0-Rbarbarstar_a*R_g)
 
-        do i=1,nlayersm - 1
-            A_oz_l(i) =   mu_0* ( A_oz_x(i) - A_oz_x(i+1) + Rbar * (A_oz_xstar(i+1) - A_oz_xstar(i)) ) 
+        ! do i=1,nlayersm - 1
+        do i=2,nlayersm - 1
+            ! A_oz_l(i) =   mu_0* ( A_oz_x(i) - A_oz_x(i+1) + Rbar * (A_oz_xstar(i+1) - A_oz_xstar(i)) ) 
+            A_oz_l(i) =   mu_0* ( A_oz_x(i-1) - A_oz_x(i) + Rbar * (A_oz_xstar(i) - A_oz_xstar(i-1)) ) 
             htro3_lh(i) = sol_inc  *  A_oz_l(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0 !May need to add mu_0 and /2.0 (for night/day) in here
             htro3_lh(i) = htro3_lh(i) * 3.14 !  Check the validity of this line and the one above - do I have the correct incident flux?
             if (i < 4) htro3_lh(i) = 0.0
@@ -541,6 +543,7 @@ MODULE MYSUBS
         abs_surf_lh = 0.
 
         abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
+        ! abs_surf_lh = (Ag1+Ag2)*sol_inc
 
         abs_surf_lhcols(col) = abs_surf_lh
 
@@ -552,7 +555,6 @@ MODULE MYSUBS
         abs_h2o = sum(abspn(:nlayersm-1))*sol_inc !total absorption of SW by H2O  
         abs_o3 = sum(A_oz_l(2:nlayersm))*sol_inc ! total absorption of SW by O3
         tot_sol_abs_lh = abs_h2o + abs_o3 + abs_surf_lh ! Total absorption of SW 
-
 
     end subroutine calcswhtr
 

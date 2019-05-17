@@ -311,7 +311,7 @@ subroutine wrapper
     ioutm=0 !for broadband only
     !ioutm=-1 !for broadband, no printings
     !icldm=0 !for clear sky
-    icldm=1  !for grey clouds
+    ! icldm=1  !for grey clouds
     iemissm=1 !surface emissivity. Keep this fixed for now.
     ireflecm=0 !for Lambert reflection
     semism=1. !all spectral bands the same as iemissm
@@ -519,6 +519,15 @@ subroutine wrapper
                 tavelm(i) = tboundm
                 tzm(i) = tboundm
             enddo
+
+            if (fp == 0) then
+                do i=1,nlayersm
+                    tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000
+                    if (tzm(i) < t_min) tzm(i) = t_min
+                    ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
+                    tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
+                enddo
+            endif
 
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
@@ -768,6 +777,18 @@ subroutine wrapper
                 latcol_cloudcol_olrs(cloudcol,col) = totuflum(nlayersm)
 
             enddo !cloudcol
+
+            htrm = htrmwghtd
+            totuflum = totuflumwghtd
+            totdflum = totdflumwghtd
+            htrlh = htrlhwghtd
+            htro3_lh = htro3_lhwghtd
+            abspn = abspnwghtd
+            A_oz_l = A_oz_lwghtd
+            abs_surf_lh = abs_surf_lhwghtd
+            tot_sol_abs_lh = tot_sol_abs_lhwghtd
+
+
             
             ! call add_seb_to_tboundm
             if (couple_tgta == 1) then
@@ -784,14 +805,14 @@ subroutine wrapper
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
                 ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
-                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)*10.
+                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
             ! do i=1,nlayersm
             !   htrm(i-1) = htrm(i-1)/newur(i)
             ! enddo
             
-            ! htrm(nlayersm) = 0.0
+            htrm(nlayersm) = 0.0
 
             ! if (j>2) then
             !     htrm_store(:,1) = htrm_store(:,2)
@@ -847,7 +868,7 @@ subroutine wrapper
             !            
             !            currentmaxhtr = max(currentmaxhtr1, currentmaxhtr2 )
 
-            currentmaxhtr = maxval( abs( htrm( conv_trop_ind(col)+1:nlayersm-3 ) ) ) ! Current maximum heating rate for the whole atmosphere
+            currentmaxhtr = maxval( abs( htrm( conv_trop_ind(col)+1:nlayersm-5 ) ) ) ! Current maximum heating rate for the whole atmosphere
             !            if (conv_trop_ind(col)+4 > nlayersm-4) then 
             !              currentmaxhtr = maxval(abs(htrm(conv_trop_ind(col)+1:-1)))
             !            endif
@@ -869,16 +890,24 @@ subroutine wrapper
             ! Progressively decrease the under-relaxation constant as currentmaxhtr increases (which means equilibrium is approaching)
             do i=1,nlayersm
                 newur(i) = ur_htr / 1.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
-                if (currentmaxhtr < 2.0 .and. stepssinceadj > 5 .and. adj1<1) then
+                if (currentmaxhtr < 10.0 .and. stepssinceadj > 5 .and. adj1<1) then
                     newur(i) = ur_htr / 2.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj1 = 1
                 endif
-                if (currentmaxhtr < 0.5 .and. stepssinceadj > 5 .and. adj2<1) then
+                if (currentmaxhtr < 5.0 .and. stepssinceadj > 5 .and. adj1<1) then
                     newur(i) = ur_htr / 4.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    if (i==nlayersm) adj1 = 1
+                endif
+                if (currentmaxhtr < 2.0 .and. stepssinceadj > 5 .and. adj1<1) then
+                    newur(i) = ur_htr / 8.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    if (i==nlayersm) adj1 = 1
+                endif
+                if (currentmaxhtr < 0.5 .and. stepssinceadj > 5 .and. adj2<1) then
+                    newur(i) = ur_htr / 16.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj2 = 1
                 endif
                 if (currentmaxhtr < 0.2 .and. stepssinceadj > 5 .and. adj3<1) then
-                    newur(i) = ur_htr / 8.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
+                    newur(i) = ur_htr / 32.0 * (pzm(0) - pzm(1)) / (pzm(i-1) - pzm(i))
                     if (i==nlayersm) adj3 = 1
                 endif
             enddo
@@ -1117,9 +1146,9 @@ subroutine wrapper
 
         do col=1,ncols
             delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1)) !* 5.0
-            if (j==70) then
-                print*, ddry(col), lambda(col), meridtransp_edge(col), delta_meridtransp_edge(col)
-            end if
+            ! if (j==70) then
+            !     print*, ddry(col), lambda(col), meridtransp_edge(col), delta_meridtransp_edge(col)
+            ! end if
         enddo
 
         if (j==timesteps) then
@@ -1179,8 +1208,8 @@ subroutine wrapper
 
             do col=1,ncols
                 boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                meridtransp(col) = delta_meridtransp_edge(col)
+                meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                ! meridtransp(col) = delta_meridtransp_edge(col)
                 ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / gravity *&
                 & planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                 tcels = twarm - 273.15
@@ -1308,8 +1337,8 @@ subroutine wrapper
 
                 do col=1,ncols
                     boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                    ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                    meridtransp(col) = delta_meridtransp_edge(col)
+                    meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                    ! meridtransp(col) = delta_meridtransp_edge(col)
                     ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
                     &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                     tcels = twarm - 273.15
