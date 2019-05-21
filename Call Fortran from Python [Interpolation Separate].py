@@ -21,6 +21,7 @@ from scipy import stats
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
+min_press = 10.
 
 for ncols in ncolss:
 
@@ -317,7 +318,8 @@ for ncols in ncolss:
 
     latweights = np.cos(radians(collats))
     latgrid = collats
-    pgrid = np.linspace(1000,1,nlays)
+    # pgrid = np.linspace(1000,1,nlays)
+    pgrid = np.linspace(1000,min_press,nlays)
 
     q_latp_max = np.load(interpdir+'q_latp.npy')
     o3_latp_max = np.load(interpdir+'o3_latp.npy')
@@ -522,7 +524,7 @@ for ncols in ncolss:
                     
                         params = [ncols,ncloudcols+1,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon]
+                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press]
                         
                         f = open(project_dir+'/Earth RCM Parameters','w')
                         for m in params:

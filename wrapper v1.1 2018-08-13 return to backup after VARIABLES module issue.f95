@@ -79,7 +79,7 @@ subroutine wrapper
     refl_lay_ind=0
     Llh=0
 
-    min_press = 0.0002 * 100.0 !minimum pressure in Pa
+    ! min_press = 0.0002 * 100.0 !minimum pressure in Pa
 
 
     Lv = 2.25e6 !latent heat of vaporisation water [J/kg]
@@ -174,6 +174,7 @@ subroutine wrapper
     read(73,*) ur_seb
     read(73,*) couple_tgta
     read(73,*) mtranspon
+    read(73,*) min_press
 
     close(73)
 
