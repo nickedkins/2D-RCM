@@ -20,7 +20,7 @@ from scipy import stats
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [1]
+ncolss = [10]
 min_press = 10.
 
 for ncols in ncolss:
@@ -431,8 +431,8 @@ for ncols in ncolss:
                         interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                         interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                     
-                        #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                        lc = [-20] * ncols
+                        lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                        #lc = [-20] * ncols
                         #for i in range(len(lc)):
                         #   lc[i] *= 1.5
 

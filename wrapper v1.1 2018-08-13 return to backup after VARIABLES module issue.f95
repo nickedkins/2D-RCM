@@ -807,7 +807,7 @@ subroutine wrapper
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
                 ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
                 ! if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
-                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
+                if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)*10.
             enddo
 
             ! do i=1,nlayersm

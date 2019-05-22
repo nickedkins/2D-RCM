@@ -308,7 +308,7 @@ for directory in directories:
 
                 i3+=1
 
-        # i2 += 1
+        i2 += 1
 
     i1 += 1
 
