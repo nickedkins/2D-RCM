@@ -178,7 +178,7 @@ def readfile(fn,counter):
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm1cols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -212,7 +212,7 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm1cols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
@@ -246,63 +246,69 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(343)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col])
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 
                 plt.figure(i2+1)
                 plt.subplot(344)
                 plt.title('totdflum')
-                plt.semilogy(totdflumcols[:,col],pzmcols[:,col])
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
                 plt.subplot(345)
                 plt.title('abs_o3')
-                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col])
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))      
 
                 plt.figure(i2+1)
                 plt.subplot(346)
                 plt.title('abspn')
-                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col])
+                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
                 plt.subplot(347)
                 plt.title('tavelm')
-                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 # plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(348)
                 plt.title('htro3')
-                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
                 plt.subplot(349)
                 plt.title('htrh2o')
-                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,10)
                 plt.title('wklm1 (h2o)')
-                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],label=str(fn))
+                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,11)
                 plt.title('htrmlw')
-                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col])
+                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
 
+                plt.figure(i2+1)
+                plt.subplot(3,4,12)
+                plt.title('wklm3 (o3)')
+                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+
                 i3+=1
 
-        i2 += 1
+        # i2 += 1
 
     i1 += 1
 

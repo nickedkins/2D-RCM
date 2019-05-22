@@ -27,7 +27,7 @@ for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 150
+    nlays = 199
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -387,7 +387,7 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([2.0,0.5,3.0])
+        manual_clouds.append([2.0,0.5,0.0])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -431,9 +431,8 @@ for ncols in ncolss:
                         interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                         interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                     
-                        lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                        #lc[0] = -10.0
-                        #lc[ncols-1] = -10.0
+                        #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                        lc = [-20] * ncols
                         #for i in range(len(lc)):
                         #   lc[i] *= 1.5
 
@@ -473,7 +472,7 @@ for ncols in ncolss:
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
-                        fth = [500.] * ncols
+                        fth = [900.] * ncols
                         ol = nlays
                         asp = 2.0   
                         cs = 0
@@ -486,7 +485,7 @@ for ncols in ncolss:
                         dalr = 0 #convection type
                         npb = 1
                         o3sw = 1
-                        h2osw = 1
+                        h2osw = 0
                         nl = nlays
                         maxhtr = 0.1
                         asf = 4.0
@@ -510,7 +509,7 @@ for ncols in ncolss:
                         t_min = 180
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                        ur_htr = 0.1
+                        ur_htr = 0.5
                         ur_toafnet = 3.0
                         ur_seb = 1e10
                         couple_tgta = 1
