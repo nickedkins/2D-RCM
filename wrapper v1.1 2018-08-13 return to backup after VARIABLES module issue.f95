@@ -1253,11 +1253,11 @@ subroutine wrapper
 
             write(*,1106,advance='no') ''
 
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1104,advance='no') boxlats(col)
                 else
-                    write(*,1104) boxlats(col)
+                    write(*,*) 'AVG'
                 endif
             enddo
 
@@ -1272,92 +1272,92 @@ subroutine wrapper
             enddo
 
             write(*,1106,advance='no') 'Box Net Radiative Flux | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') boxnetradflux(col)
                 else
-                    write(*,1103) boxnetradflux(col)
+                    write(*,1103) sum(boxnetradflux)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Meridional Transport | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') meridtransp(col)
                 else
-                    write(*,1103) meridtransp(col)
+                    write(*,1103) sum(meridtransp)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Total Net Flux | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') boxnettotflux(col)
                 else
-                    write(*,1103) boxnettotflux(col)
+                    write(*,1103) sum(boxnettotflux)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Surface Temperature | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') tboundmcols(col)
                 else
-                    write(*,1103) tboundmcols(col)
+                    write(*,1103) sum(tboundmcols)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box OLR | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') olrcols(col)
                 else
-                    write(*,1103) olrcols(col)
+                    write(*,1103) sum(olrcols)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Abs SW | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') abs_sw(col)
                 else
-                    write(*,1103) abs_sw(col)
+                    write(*,1103) sum(abs_sw)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Abs SW H2O | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') abs_h2o_cols(col)
                 else
-                    write(*,1103) abs_h2o_cols(col)
+                    write(*,1103) sum(abs_h2o_cols)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Abs SW O3 | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') abs_o3_cols(col)
                 else
-                    write(*,1103) abs_o3_cols(col)
+                    write(*,1103) sum(abs_o3_cols)/ncols
                 endif
             enddo
 
             write(*,1106,advance='no') 'Box Abs SFC | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') abs_surf_cols(col)
                 else
-                    write(*,1103) abs_surf_cols(col)
+                    write(*,1103) sum(abs_surf_cols)/ncols
                 endif
             enddo
-
+            
             write(*,1106,advance='no') 'Box SEB | '
-            do col=1,ncols
-                if (col < ncols) then
+            do col=1,ncols+1
+                if (col < ncols+1) then
                     write(*,1103,advance='no') sebcols(col)
                 else
-                    write(*,1103) sebcols(col)
+                    write(*,1103) sum(sebcols)/ncols
                 endif
             enddo
 
@@ -1404,11 +1404,11 @@ subroutine wrapper
 
                 write(*,1106,advance='no') ''
 
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1104,advance='no') boxlats(col)
                     else
-                        write(*,1104) boxlats(col)
+                        write(*,*) 'AVG'
                     endif
                 enddo
 
@@ -1423,92 +1423,92 @@ subroutine wrapper
                 enddo
 
                 write(*,1106,advance='no') 'Box Net Radiative Flux | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') boxnetradflux(col)
                     else
-                        write(*,1103) boxnetradflux(col)
+                        write(*,1103) sum(boxnetradflux)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Meridional Transport | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') meridtransp(col)
                     else
-                        write(*,1103) meridtransp(col)
+                        write(*,1103) sum(meridtransp)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Total Net Flux | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') boxnettotflux(col)
                     else
-                        write(*,1103) boxnettotflux(col)
+                        write(*,1103) sum(boxnettotflux)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Surface Temperature | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') tboundmcols(col)
                     else
-                        write(*,1103) tboundmcols(col)
+                        write(*,1103) sum(tboundmcols)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box OLR | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') olrcols(col)
                     else
-                        write(*,1103) olrcols(col)
+                        write(*,1103) sum(olrcols)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Abs SW | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') abs_sw(col)
                     else
-                        write(*,1103) abs_sw(col)
+                        write(*,1103) sum(abs_sw)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Abs SW H2O | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') abs_h2o_cols(col)
                     else
-                        write(*,1103) abs_h2o_cols(col)
+                        write(*,1103) sum(abs_h2o_cols)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Abs SW O3 | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') abs_o3_cols(col)
                     else
-                        write(*,1103) abs_o3_cols(col)
+                        write(*,1103) sum(abs_o3_cols)/ncols
                     endif
                 enddo
 
                 write(*,1106,advance='no') 'Box Abs SFC | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') abs_surf_cols(col)
                     else
-                        write(*,1103) abs_surf_cols(col)
+                        write(*,1103) sum(abs_surf_cols)/ncols
                     endif
                 enddo
                 
                 write(*,1106,advance='no') 'Box SEB | '
-                do col=1,ncols
-                    if (col < ncols) then
+                do col=1,ncols+1
+                    if (col < ncols+1) then
                         write(*,1103,advance='no') sebcols(col)
                     else
-                        write(*,1103) sebcols(col)
+                        write(*,1103) sum(sebcols)/ncols
                     endif
                 enddo
 

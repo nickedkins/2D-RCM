@@ -389,7 +389,8 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([2.0,0.5,3.0])
+        manual_clouds.append([2.0,0.3,9.0])
+        manual_clouds.append([8.0,0.5,3.0])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -470,7 +471,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 1.0
+                        tp = 1.0 * 1e3
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
