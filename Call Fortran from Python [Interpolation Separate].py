@@ -18,6 +18,9 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [10]
@@ -300,8 +303,6 @@ for ncols in ncolss:
             file.write('\n')
             file.close()
 
-    project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-    #project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
     interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
     outdir = project_dir+'Input Distributions/' #output file directory
@@ -383,11 +384,12 @@ for ncols in ncolss:
     cld_heights = np.linspace(1,10,10)
     cld_heights = [5.0]
 
+    #mnlcld
 
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([2.0,0.5,0.0])
+        manual_clouds.append([2.0,0.5,3.0])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -468,11 +470,11 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 5.0 * 1e3
+                        tp = 1.0
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
-                        fth = [900.] * ncols
+                        fth = [500.] * ncols
                         ol = nlays
                         asp = 2.0   
                         cs = 0
@@ -485,7 +487,7 @@ for ncols in ncolss:
                         dalr = 0 #convection type
                         npb = 1
                         o3sw = 1
-                        h2osw = 0
+                        h2osw = 1
                         nl = nlays
                         maxhtr = 0.1
                         asf = 4.0
@@ -509,7 +511,7 @@ for ncols in ncolss:
                         t_min = 180
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                        ur_htr = 0.5
+                        ur_htr = 1.0
                         ur_toafnet = 3.0
                         ur_seb = 1e10
                         couple_tgta = 1

@@ -522,6 +522,8 @@ MODULE MYSUBS
         Ag1 = 0.0
         Ag2 = 0.0
 
+        cld=1
+
         if (cld == 0) then
             w_t = wl(1)
             ylh = mag*w_t
@@ -542,10 +544,10 @@ MODULE MYSUBS
         
         abs_surf_lh = 0.
 
-        abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
-        ! abs_surf_lh = (Ag1+Ag2)*sol_inc
+        ! abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
+        abs_surf_lh = (Ag1+Ag2)*sol_inc
 
-        abs_surf_lhcols(col) = abs_surf_lh
+        ! abs_surf_lhcols(col) = abs_surf_lh
 
         if (abs_surf_lh .ne. abs_surf_lh) then
             print*, "abs_surf is NaN:"

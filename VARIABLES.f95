@@ -124,6 +124,7 @@ MODULE VARIABLES
     real,dimension(0:maxlaym) :: htrm_over_newur
     real :: ur_htr,ur_toafnet,ur_seb
     integer :: couple_tgta
+    real,dimension(maxncols) :: abs_h2o_cols,abs_o3_cols,abs_surf_cols
 
 
     !Lacis and Hansen Ozone variables
@@ -137,7 +138,7 @@ MODULE VARIABLES
 
     !Surface
     real :: w_t,ylh,A_wv,Ag1,Ag2,Rbar_r,abs_h2o,abs_o3,abs_surf,tot_sol_abs_lh,abs_surf_lh
-    real :: abs_surf_lhwghtd
+    real :: abs_surf_lhwghtd,abs_h2owghtd,abs_o3wghtd
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
     real, dimension(maxncols) :: sebcols
     integer :: sfc_heating,playtype,mtranspon

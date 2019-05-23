@@ -79,7 +79,7 @@ subroutine wrapper
     refl_lay_ind=0
     Llh=0
 
-    ! min_press = 0.0002 * 100.0 !minimum pressure in Pa
+    
 
 
     Lv = 2.25e6 !latent heat of vaporisation water [J/kg]
@@ -177,6 +177,8 @@ subroutine wrapper
     read(73,*) min_press
 
     close(73)
+
+    ! min_press = min_press * 100.0 !minimum pressure in Pa
 
     ! open(81,file=('Input Distributions/fal lats'),form='formatted')
 
@@ -396,7 +398,7 @@ subroutine wrapper
 !            pzm(i) = exp(logpzm(i))
             select case(playtype)
                 case(0)
-                    pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
                 case(1)
                     sigma(i)=sigma(i-1) - 0.9 / nlayersm
                     pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
@@ -411,14 +413,14 @@ subroutine wrapper
     endif
 
     !  Set up an initial temperature profile with convection up to the layer where T = t_min
-    if (fp == 0) then
-        do i=1,nlayersm
-            tzm(i) = tzm(i-1) -6.50*(altzm(i)-altzm(i-1))/1000
-            if (tzm(i) < t_min) tzm(i) = t_min
-            ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
-            tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-        enddo
-    endif
+    ! if (fp == 0) then
+    !     do i=1,nlayersm
+    !         tzm(i) = tzm(i-1) -6.50*(altzm(i)-altzm(i-1))/1000
+    !         if (tzm(i) < t_min) tzm(i) = t_min
+    !         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
+    !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
+    !     enddo
+    ! endif
 
     do i=1,nlayersm
         mperlayr(i) = totmolec/nlayersm !Divide the molecules equally between layers
@@ -521,14 +523,15 @@ subroutine wrapper
                 tzm(i) = tboundm
             enddo
 
-            if (fp == 0) then
-                do i=1,nlayersm
-                    tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000
-                    if (tzm(i) < t_min) tzm(i) = t_min
-                    ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
-                    tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-                enddo
-            endif
+
+            ! if (fp == 0 .and. j == 1) then
+            !     do i=1,nlayersm
+            !         tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000
+            !         if (tzm(i) < t_min) tzm(i) = t_min
+            !         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
+            !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
+            !     enddo
+            ! endif
 
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
@@ -637,7 +640,7 @@ subroutine wrapper
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
                     select case(playtype)
                         case(0)
-                            pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                            pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
                         case(1)
                             sigma(i)=sigma(i-1) - 0.9 / nlayersm
                             pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
@@ -726,6 +729,8 @@ subroutine wrapper
             abspnwghtd = 0.
             A_oz_lwghtd = 0.
             abs_surf_lhwghtd = 0.
+            abs_h2owghtd = 0.
+            abs_o3wghtd = 0.
 
             tot_sol_abs_lhwghtd = 0.
 
@@ -771,9 +776,14 @@ subroutine wrapper
 
                 abspnwghtd = abspnwghtd + abspn * cloudcolfrac
                 A_oz_lwghtd  = A_oz_lwghtd + A_oz_l * cloudcolfrac
-                abs_surf_lhwghtd  = abs_surf_lhwghtd + abs_surf_lh * cloudcolfrac
+                ! abs_surf_lhwghtd  = abs_surf_lhwghtd + abs_surf_lh * cloudcolfrac
+
+                abs_h2owghtd = abs_h2owghtd + abs_h2o * cloudcolfrac
+                abs_o3wghtd = abs_o3wghtd + abs_o3 * cloudcolfrac
+                abs_surf_lhwghtd = abs_surf_lhwghtd + abs_surf_lh * cloudcolfrac
 
                 tot_sol_abs_lhwghtd = tot_sol_abs_lhwghtd + tot_sol_abs_lh * cloudcolfrac
+
 
                 latcol_cloudcol_olrs(cloudcol,col) = totuflum(nlayersm)
 
@@ -788,6 +798,9 @@ subroutine wrapper
             A_oz_l = A_oz_lwghtd
             abs_surf_lh = abs_surf_lhwghtd
             tot_sol_abs_lh = tot_sol_abs_lhwghtd
+            abs_h2o = abs_h2owghtd
+            abs_o3 = abs_o3wghtd
+            abs_surf_lh = abs_surf_lhwghtd
 
 
             
@@ -843,7 +856,7 @@ subroutine wrapper
                 do i=1,nlayersm
                     select case(playtype)
                         case(0)
-                            pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                            pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
                         case(1)
                             sigma(i)=sigma(i-1) - 0.9 / nlayersm
                             pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
@@ -859,6 +872,9 @@ subroutine wrapper
                 abs_sw(col) = fixed_sw ! Feed in a fixed value of absorbed SW (for the purposes of calculating Fnet at the TOA)
             else
                 abs_sw(col) = tot_sol_abs_lh ! Use the total absorbed SW 
+                abs_h2o_cols(col) = abs_h2o
+                abs_o3_cols(col) = abs_o3
+                abs_surf_cols(col) = abs_surf_lh
             endif
 
 
@@ -981,7 +997,7 @@ subroutine wrapper
 !                pzm(i) = exp(logpzm(i))
                  select case(playtype)
                     case(0)
-                        pzm(i)=pzm(i-1)-(surfacep-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                        pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
                     case(1)
                         sigma(i)=sigma(i-1) - 0.9 / nlayersm
                         pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
@@ -1309,6 +1325,33 @@ subroutine wrapper
                 endif
             enddo
 
+            write(*,1106,advance='no') 'Box Abs SW H2O | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') abs_h2o_cols(col)
+                else
+                    write(*,1103) abs_h2o_cols(col)
+                endif
+            enddo
+
+            write(*,1106,advance='no') 'Box Abs SW O3 | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') abs_o3_cols(col)
+                else
+                    write(*,1103) abs_o3_cols(col)
+                endif
+            enddo
+
+            write(*,1106,advance='no') 'Box Abs SFC | '
+            do col=1,ncols
+                if (col < ncols) then
+                    write(*,1103,advance='no') abs_surf_cols(col)
+                else
+                    write(*,1103) abs_surf_cols(col)
+                endif
+            enddo
+
             write(*,1106,advance='no') 'Box SEB | '
             do col=1,ncols
                 if (col < ncols) then
@@ -1430,6 +1473,33 @@ subroutine wrapper
                         write(*,1103,advance='no') abs_sw(col)
                     else
                         write(*,1103) abs_sw(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Abs SW H2O | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') abs_h2o_cols(col)
+                    else
+                        write(*,1103) abs_h2o_cols(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Abs SW O3 | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') abs_o3_cols(col)
+                    else
+                        write(*,1103) abs_o3_cols(col)
+                    endif
+                enddo
+
+                write(*,1106,advance='no') 'Box Abs SFC | '
+                do col=1,ncols
+                    if (col < ncols) then
+                        write(*,1103,advance='no') abs_surf_cols(col)
+                    else
+                        write(*,1103) abs_surf_cols(col)
                     endif
                 enddo
                 
