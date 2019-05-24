@@ -23,14 +23,14 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [10]
+ncolss = [6]
 min_press = 10.
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 199
+    nlays = 60
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -389,8 +389,9 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([2.0,0.3,9.0])
-        manual_clouds.append([8.0,0.5,3.0])
+        manual_clouds.append([1.0,0.3,10.0])
+        manual_clouds.append([6.0,0.4,3.0])
+        manual_clouds.append([10.0,0.3,0.3])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -436,8 +437,8 @@ for ncols in ncolss:
                     
                         lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
                         #lc = [-20] * ncols
-                        #for i in range(len(lc)):
-                        #   lc[i] *= 1.5
+                        for i in range(len(lc)):
+                           lc[i] *= 1.5
 
                         lch = createlatdistbn('Cloud Top Height')
                         srh = createlatdistbn('Relative Humidity')
@@ -471,7 +472,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 1.0 * 1e3
+                        tp = 2.0
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -512,7 +513,7 @@ for ncols in ncolss:
                         t_min = 180
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                        ur_htr = 1.0
+                        ur_htr = 0.5
                         ur_toafnet = 3.0
                         ur_seb = 1e10
                         couple_tgta = 1

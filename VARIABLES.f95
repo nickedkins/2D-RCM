@@ -125,6 +125,8 @@ MODULE VARIABLES
     real :: ur_htr,ur_toafnet,ur_seb
     integer :: couple_tgta
     real,dimension(maxncols) :: abs_h2o_cols,abs_o3_cols,abs_surf_cols
+    real :: xglobsum,xglobmean,netradflux_globmean,meridtransp_globmean,nettotflux_globmean
+    real :: olr_globmean,abs_sw_globmean,abs_h2o_globmean,abs_o3_globmean,abs_surf_globmean,seb_globmean
 
 
     !Lacis and Hansen Ozone variables

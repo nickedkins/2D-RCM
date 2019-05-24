@@ -1251,6 +1251,38 @@ subroutine wrapper
 
             enddo
 
+
+            xglobsum = 0.
+            xglobmean = 0.
+            cossums = 0.
+            do col=1,ncols
+                xglobsum = xglobsum + boxnetradflux(col) * cosd(boxlats(col))
+                cossums = cossums + cosd(boxlats(col))
+            enddo
+            xglobmean = tglobsum / cossums
+            netradflux_globmean = xglobmean
+
+            xglobsum = 0.
+            xglobmean = 0.
+            cossums = 0.
+            do col=1,ncols
+                xglobsum = xglobsum + meridtransp(col) * cosd(boxlats(col))
+                cossums = cossums + cosd(boxlats(col))
+            enddo
+            xglobmean = tglobsum / cossums
+            meridtransp_globmean = xglobmean
+
+            xglobsum = 0.
+            xglobmean = 0.
+            cossums = 0.
+            do col=1,ncols
+                xglobsum = xglobsum + boxnettotflux(col) * cosd(boxlats(col))
+                cossums = cossums + cosd(boxlats(col))
+            enddo
+            xglobmean = tglobsum / cossums
+            nettotflux_globmean = xglobmean
+
+
             write(*,1106,advance='no') ''
 
             do col=1,ncols+1
@@ -1276,7 +1308,7 @@ subroutine wrapper
                 if (col < ncols+1) then
                     write(*,1103,advance='no') boxnetradflux(col)
                 else
-                    write(*,1103) sum(boxnetradflux)/ncols
+                    write(*,1103) sum(boxnetradflux)/ncols, netradflux_globmean
                 endif
             enddo
 
@@ -1285,7 +1317,7 @@ subroutine wrapper
                 if (col < ncols+1) then
                     write(*,1103,advance='no') meridtransp(col)
                 else
-                    write(*,1103) sum(meridtransp)/ncols
+                    write(*,1103) sum(meridtransp)/ncols, meridtransp_globmean
                 endif
             enddo
 
@@ -1294,7 +1326,7 @@ subroutine wrapper
                 if (col < ncols+1) then
                     write(*,1103,advance='no') boxnettotflux(col)
                 else
-                    write(*,1103) sum(boxnettotflux)/ncols
+                    write(*,1103) sum(boxnettotflux)/ncols, nettotflux_globmean
                 endif
             enddo
 
@@ -1402,6 +1434,97 @@ subroutine wrapper
                 enddo
 
 
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + boxnetradflux(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                netradflux_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + meridtransp(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                meridtransp_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + boxnettotflux(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                nettotflux_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + olrcols(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                olr_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + abs_sw(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                abs_sw_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + abs_h2o_cols(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                abs_h2o_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + abs_o3_cols(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                abs_o3_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + abs_surf_cols(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                abs_surf_globmean = xglobmean
+
+                xglobsum = 0.
+                xglobmean = 0.
+                cossums = 0.
+                do col=1,ncols
+                    xglobsum = xglobsum + sebcols(col) * cosd(boxlats(col))
+                    cossums = cossums + cosd(boxlats(col))
+                enddo
+                xglobmean = xglobsum / cossums
+                seb_globmean = xglobmean
+
+
                 write(*,1106,advance='no') ''
 
                 do col=1,ncols+1
@@ -1427,7 +1550,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') boxnetradflux(col)
                     else
-                        write(*,1103) sum(boxnetradflux)/ncols
+                        write(*,1103) netradflux_globmean
                     endif
                 enddo
 
@@ -1436,7 +1559,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') meridtransp(col)
                     else
-                        write(*,1103) sum(meridtransp)/ncols
+                        write(*,1103) meridtransp_globmean
                     endif
                 enddo
 
@@ -1445,7 +1568,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') boxnettotflux(col)
                     else
-                        write(*,1103) sum(boxnettotflux)/ncols
+                        write(*,1103) nettotflux_globmean
                     endif
                 enddo
 
@@ -1454,7 +1577,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') tboundmcols(col)
                     else
-                        write(*,1103) sum(tboundmcols)/ncols
+                        write(*,1103) tglobmean
                     endif
                 enddo
 
@@ -1463,7 +1586,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') olrcols(col)
                     else
-                        write(*,1103) sum(olrcols)/ncols
+                        write(*,1103) olr_globmean
                     endif
                 enddo
 
@@ -1472,7 +1595,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') abs_sw(col)
                     else
-                        write(*,1103) sum(abs_sw)/ncols
+                        write(*,1103) abs_sw_globmean
                     endif
                 enddo
 
@@ -1481,7 +1604,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') abs_h2o_cols(col)
                     else
-                        write(*,1103) sum(abs_h2o_cols)/ncols
+                        write(*,1103) abs_h2o_globmean
                     endif
                 enddo
 
@@ -1490,7 +1613,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') abs_o3_cols(col)
                     else
-                        write(*,1103) sum(abs_o3_cols)/ncols
+                        write(*,1103) abs_o3_globmean
                     endif
                 enddo
 
@@ -1499,7 +1622,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') abs_surf_cols(col)
                     else
-                        write(*,1103) sum(abs_surf_cols)/ncols
+                        write(*,1103) abs_surf_globmean
                     endif
                 enddo
                 
@@ -1508,7 +1631,7 @@ subroutine wrapper
                     if (col < ncols+1) then
                         write(*,1103,advance='no') sebcols(col)
                     else
-                        write(*,1103) sum(sebcols)/ncols
+                        write(*,1103) seb_globmean
                     endif
                 enddo
 
