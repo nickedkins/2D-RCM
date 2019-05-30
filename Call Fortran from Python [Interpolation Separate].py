@@ -525,6 +525,12 @@ for ncols in ncolss:
                         ur_seb = 1e10
                         couple_tgta = 1
                         mtranspon = 1
+                        gas_amt_fac = 1.0
+                        gas_amt_p_high = 2000.
+                        gas_amt_p_low = 0.
+                        gas_amt_pert_h2o = 0
+                        gas_amt_pert_co2 = 0
+                        gas_amt_pert_o3 = 0
                     
                         ur1 = ur
                     
@@ -534,7 +540,8 @@ for ncols in ncolss:
                     
                         params = [ncols,ncloudcols+1,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press]
+                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
+                        gas_amt_fac,gas_amt_p_high,gas_amt_p_low,gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3]
                         
                         f = open(project_dir+'/Earth RCM Parameters','w')
                         for m in params:

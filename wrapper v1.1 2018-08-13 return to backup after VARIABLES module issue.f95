@@ -175,6 +175,12 @@ subroutine wrapper
     read(73,*) couple_tgta
     read(73,*) mtranspon
     read(73,*) min_press
+    read(73,*) gas_amt_fac
+    read(73,*) gas_amt_p_high
+    read(73,*) gas_amt_p_low
+    read(73,*) gas_amt_pert_h2o
+    read(73,*) gas_amt_pert_co2
+    read(73,*) gas_amt_pert_o3
 
     close(73)
 
@@ -677,6 +683,17 @@ subroutine wrapper
                 wklm(1,i) = mperlayr(i) * 1.0e-4 * mixh2o(i) 
                 wklm(2,i) = mperlayr_co2(i) * 1.0e-4 
                 wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+                if(pzm(i) < gas_amt_p_high .and. pzm(i) > gas_amt_p_low) then 
+                    if (gas_amt_pert_h2o == 1) then
+                        wklm(1,i) = wklm(1,i) * gas_amt_fac
+                    end if
+                    if (gas_amt_pert_co2 == 1) then
+                        wklm(2,i) = wklm(2,i) * gas_amt_fac
+                    end if
+                    if (gas_amt_pert_o3 == 1) then
+                        wklm(3,i) = wklm(3,i) * gas_amt_fac
+                    end if
+                end if
             enddo
 
             do i=1,nlayersm
@@ -689,16 +706,6 @@ subroutine wrapper
                 ! cptot(i) = 1.003
 !                rsp_tot(i) = 0.287
                 rsp_tot(i) = 180.0 !NJE
-            enddo
-
-            !Need this block if mixh2o varies with temperature, otherwise it can go outside
-            do i=1,nlayersm
-                rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1-0.02) !MW67 RH to replicate Hu !NJE changed to Q = pzm(i) / 1000 instead of /pzm(0)      
-                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04))
-                mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                if (mixh2o(i) < rmin) mixh2o(i) = rmin
-                wklm(1,i)=mperlayr(i)/1e4*mixh2o(i) !NJE remember this!!
             enddo
 
             ! If pressure broadening is off, feed a pressure profile with surface pressure = 1 bar to the subroutine that picks the correlated-k distribution
