@@ -14,8 +14,9 @@ directories = [
 ]
 
 # directories = [
-# '_Useful Data/polar lapse vary sw htr on/'
+# '_Useful Data/grey model replication/nl=30 basic/'
 # ]
+
 
 linestyles = ['-','--','--']
 
@@ -87,6 +88,7 @@ def readfile(fn,counter):
     tboundmcols= np.zeros((nlayersm,ncols))
     R_gcols = np.zeros((nlayersm,ncols))
     boxlatcols = np.zeros((nlayersm,ncols))
+    convcols = np.zeros((nlayersm,ncols))
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -172,13 +174,17 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             boxlatcols[i,col] = f.readline()
 
+    for col in range(ncols):    
+        for i in range(nlayersm):
+            convcols[i,col] = f.readline()
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -212,7 +218,7 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
@@ -225,13 +231,21 @@ for directory in directories:
 
             for col in range(ncols):
 
+                conv_trop_ind = int(convcols[0,col])
+
+                p_trop = pzmcols[conv_trop_ind,col]
+                t_trop = tzmcols[conv_trop_ind,col]
+                z_trop = altzmcols[conv_trop_ind,col]
+
+                print p_trop, t_trop, z_trop/1000.
+
                 plt.figure(i2+1)
                 plt.subplot(341)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-                plt.plot(tboundmcols[0,col],pzmcols[0,col],'*',markersize=20)
+                plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 # plt.legend()
                 

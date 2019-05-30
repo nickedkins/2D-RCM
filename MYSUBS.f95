@@ -767,6 +767,12 @@ MODULE MYSUBS
             enddo
         enddo
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) conv_trop_ind(col)
+            end do
+        end do
+
 
     end subroutine writeoutputfile
     

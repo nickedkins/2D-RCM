@@ -23,14 +23,14 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [6]
+ncolss = [1]
 min_press = 10.
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 60
+    nlays = 199
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -259,6 +259,7 @@ for ncols in ncolss:
         # Calculate clear sky fraction with random overlap assumption
         c1 = 0.
         c2 = 0.
+        ctot = 0.
         for cloudcol in range(ncloudcols):
             c1 = manual_clouds[cloudcol][1]
             ctot = c1 + c2 - c1*c2
@@ -339,7 +340,11 @@ for ncols in ncolss:
     #pico2s = np.linspace(400e-6,3200e-6,num=5)
 
     #pico2s = np.logspace(-4,2,num=5,base=10.0)
-    pico2s = [400e-6]
+
+    pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
+    pico2s = np.array([420e-6]) * pico2_facs
+    # pico2s = np.array([420e-6])
+
     # pin2s = np.logspace(-1,2,num=10,base=10.0)
     pin2s = [1.0]
 
@@ -389,9 +394,9 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        manual_clouds.append([1.0,0.3,10.0])
-        manual_clouds.append([6.0,0.4,3.0])
-        manual_clouds.append([10.0,0.3,0.3])
+        #manual_clouds.append([1.0,0.3,10.0])
+        #manual_clouds.append([6.0,0.4,3.0])
+        #manual_clouds.append([10.0,0.3,0.3])
         ncloudcols = shape(manual_clouds)[0]
 
         for tboundm in tboundms:
@@ -404,6 +409,8 @@ for ncols in ncolss:
                 for pin2 in pin2s:
         
                     for pico2 in pico2s:
+                        
+                        print(pico2)
 
                         if ( cloud_source == 0 ):
 
@@ -435,10 +442,10 @@ for ncols in ncolss:
                         interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                         interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                     
-                        lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                        #lc = [-20] * ncols
-                        for i in range(len(lc)):
-                           lc[i] *= 1.5
+                        #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                        lc = [-5.8] * ncols
+                        # for i in range(len(lc)):
+                        #    lc[i] *= 1.5
 
                         lch = createlatdistbn('Cloud Top Height')
                         srh = createlatdistbn('Relative Humidity')
@@ -472,7 +479,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 2.0
+                        tp = 1.0
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
