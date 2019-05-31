@@ -496,7 +496,7 @@ for ncols in ncolss:
                         dalr = 0 #convection type
                         npb = 1
                         o3sw = 1
-                        h2osw = 1
+                        h2osw = 0
                         nl = nlays
                         maxhtr = 0.1
                         asf = 4.0
@@ -525,10 +525,10 @@ for ncols in ncolss:
                         ur_seb = 1e10
                         couple_tgta = 1
                         mtranspon = 1
-                        gas_amt_fac = 1.0
+                        gas_amt_fac = 1e-3
                         gas_amt_p_high = 2000.
                         gas_amt_p_low = 0.
-                        gas_amt_pert_h2o = 0
+                        gas_amt_pert_h2o = 1
                         gas_amt_pert_co2 = 0
                         gas_amt_pert_o3 = 0
                     
