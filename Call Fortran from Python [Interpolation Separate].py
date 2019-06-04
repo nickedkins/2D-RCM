@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
@@ -341,12 +341,14 @@ for ncols in ncolss:
 
     #pico2s = np.logspace(-4,2,num=5,base=10.0)
 
-    pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
+    # pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
+    pico2_facs = np.array([1e-2,0.5,1,2,8])
     pico2s = np.array([420e-6]) * pico2_facs
     # pico2s = np.array([420e-6])
 
     # pin2s = np.logspace(-1,2,num=10,base=10.0)
-    pin2s = [1.0]
+    # pin2s = [1.0]
+    pin2s = [1.0,2.0]
 
     #pico2s = [400e-6,3200e-6]
 
@@ -444,6 +446,7 @@ for ncols in ncolss:
                     
                         #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
                         lc = [-5.8] * ncols
+                        # lc = [-9.8] * ncols
                         # for i in range(len(lc)):
                         #    lc[i] *= 1.5
 
@@ -479,7 +482,7 @@ for ncols in ncolss:
                         #lct = 250.0
                         #lcf = 0.5
                         #lcod = 5.0
-                        tp = 1.0
+                        tp = 0.1
                         #fth = np.zeros(ncols)
                         #for i in range(ncols):
                         #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -488,7 +491,7 @@ for ncols in ncolss:
                         asp = 2.0   
                         cs = 0
                         pbo = 0 
-                        fswon = 0  
+                        fswon = 1
                         fsw = 239.4
                         fp = 0
                         ps1 = 0
@@ -517,7 +520,7 @@ for ncols in ncolss:
                         eta = 0.75
                         planet_radius = 6.37e6
                         planet_rotation = 7.29e-5
-                        t_min = 180
+                        t_min = 100.
                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                         ur_htr = 0.5
@@ -525,7 +528,7 @@ for ncols in ncolss:
                         ur_seb = 1e10
                         couple_tgta = 1
                         mtranspon = 1
-                        gas_amt_fac = 1e-3
+                        gas_amt_fac = 1e-6
                         gas_amt_p_high = 2000.
                         gas_amt_p_low = 0.
                         gas_amt_pert_h2o = 1

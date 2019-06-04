@@ -14,7 +14,7 @@ directories = [
 ]
 
 # directories = [
-# '_Useful Data/grey model replication/nl=30 basic/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/TOA res/tp=0.1/'
 # ]
 
 
@@ -320,8 +320,8 @@ for directory in directories:
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,12)
-                plt.title('wklm3 (o3)')
-                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.title('wklm2 (o3)')
+                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 i3+=1
