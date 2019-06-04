@@ -232,6 +232,8 @@ for directory in directories:
             for col in range(ncols):
 
                 conv_trop_ind = int(convcols[0,col])
+                if conv_trop_ind > nlayersm:
+                    conv_trop_ind = nlayersm
 
                 p_trop = pzmcols[conv_trop_ind,col]
                 t_trop = tzmcols[conv_trop_ind,col]
@@ -320,8 +322,8 @@ for directory in directories:
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,12)
-                plt.title('wklm2 (o3)')
-                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.title('wklm3 (o3)')
+                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 i3+=1

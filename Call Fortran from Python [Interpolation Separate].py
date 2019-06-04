@@ -343,12 +343,13 @@ for ncols in ncolss:
 
     # pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
     pico2_facs = np.array([1e-2,0.5,1,2,8])
+    # pico2_facs = np.array([1.0])
     pico2s = np.array([420e-6]) * pico2_facs
     # pico2s = np.array([420e-6])
 
     # pin2s = np.logspace(-1,2,num=10,base=10.0)
     # pin2s = [1.0]
-    pin2s = [1.0,2.0]
+    pin2s = [1.0]
 
     #pico2s = [400e-6,3200e-6]
 
@@ -396,7 +397,7 @@ for ncols in ncolss:
     for cld_height in cld_heights:
 
         manual_clouds = []
-        #manual_clouds.append([1.0,0.3,10.0])
+        # manual_clouds.append([5.0,0.66,10.0])
         #manual_clouds.append([6.0,0.4,3.0])
         #manual_clouds.append([10.0,0.3,0.3])
         ncloudcols = shape(manual_clouds)[0]
@@ -528,12 +529,19 @@ for ncols in ncolss:
                         ur_seb = 1e10
                         couple_tgta = 1
                         mtranspon = 1
-                        gas_amt_fac = 1e-6
-                        gas_amt_p_high = 2000.
-                        gas_amt_p_low = 0.
+                        gas_amt_fac_h2o = 1.0
+                        gas_amt_fac_co2 = 1.0
+                        gas_amt_fac_o3 = 1.0
+                        gas_amt_p_high_h2o = 2000.
+                        gas_amt_p_low_h2o = 1000.
+                        gas_amt_p_high_co2 = 2000.
+                        gas_amt_p_low_co2 = 1000.
+                        gas_amt_p_high_o3 = 2000.
+                        gas_amt_p_low_o3 = 1000.
                         gas_amt_pert_h2o = 1
-                        gas_amt_pert_co2 = 0
-                        gas_amt_pert_o3 = 0
+                        gas_amt_pert_co2 = 1
+                        gas_amt_pert_o3 = 1
+                        psurf_override = 2000. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                     
                         ur1 = ur
                     
@@ -544,7 +552,8 @@ for ncols in ncolss:
                         params = [ncols,ncloudcols+1,pa,sc,tg,lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
                         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
                         twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
-                        gas_amt_fac,gas_amt_p_high,gas_amt_p_low,gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3]
+                        gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
+                        gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override]
                         
                         f = open(project_dir+'/Earth RCM Parameters','w')
                         for m in params:

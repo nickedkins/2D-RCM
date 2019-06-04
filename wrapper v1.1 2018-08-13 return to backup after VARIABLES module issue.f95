@@ -175,12 +175,19 @@ subroutine wrapper
     read(73,*) couple_tgta
     read(73,*) mtranspon
     read(73,*) min_press
-    read(73,*) gas_amt_fac
-    read(73,*) gas_amt_p_high
-    read(73,*) gas_amt_p_low
+    read(73,*) gas_amt_fac_h2o
+    read(73,*) gas_amt_fac_co2
+    read(73,*) gas_amt_fac_o3
+    read(73,*) gas_amt_p_high_h2o
+    read(73,*) gas_amt_p_low_h2o
+    read(73,*) gas_amt_p_high_co2
+    read(73,*) gas_amt_p_low_co2
+    read(73,*) gas_amt_p_high_o3
+    read(73,*) gas_amt_p_low_o3
     read(73,*) gas_amt_pert_h2o
     read(73,*) gas_amt_pert_co2
     read(73,*) gas_amt_pert_o3
+    read(73,*) psurf_override
 
     close(73)
 
@@ -375,7 +382,13 @@ subroutine wrapper
     enddo
 
     nmolm=7 !number of molecular species, le 7 for now.
-    surfacep = air_inv+co2_inv !Pascals !NJE changed
+    
+    if (psurf_override > 0.0) then 
+        surfacep = psurf_override * 100.
+    else
+        surfacep = air_inv+co2_inv !Pascals !NJE changed
+    end if
+
     if (ipe == 0) surfacep = air_inv !If there's no inert pressure effect, set the surface pressure to 1 bar (the air inv)
 
     wklm = 0.; wbrodlm = 0.; tzm = 0.; pzm = 0.; altzm = 0.; tavelm = 0.
@@ -391,7 +404,11 @@ subroutine wrapper
     enddo
 
     ! Surface pressure is just the sum of the gas inventories
-    surfacep = air_inv+co2_inv !Pascals !NJE changed
+    if (psurf_override > 0.0) then 
+        surfacep = psurf_override * 100.
+    else
+        surfacep = air_inv+co2_inv !Pascals !NJE changed
+    end if
     if (ipe == 0) surfacep = air_inv ! If you want to neglect the effect of CO2 on the surface pressure
     pzm(0) = surfacep/100
 
@@ -683,15 +700,19 @@ subroutine wrapper
                 wklm(1,i) = mperlayr(i) * 1.0e-4 * mixh2o(i) 
                 wklm(2,i) = mperlayr_co2(i) * 1.0e-4 
                 wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
-                if(pzm(i) < gas_amt_p_high .and. pzm(i) > gas_amt_p_low) then 
+                if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then
-                        wklm(1,i) = wklm(1,i) * gas_amt_fac
+                        wklm(1,i) = wklm(1,i) * gas_amt_fac_h2o
                     end if
+                end if
+                if(pzm(i) < gas_amt_p_high_co2 .and. pzm(i) > gas_amt_p_low_co2) then 
                     if (gas_amt_pert_co2 == 1) then
-                        wklm(2,i) = wklm(2,i) * gas_amt_fac
+                        wklm(2,i) = wklm(2,i) * gas_amt_fac_co2
                     end if
+                end if
+                if(pzm(i) < gas_amt_p_high_o3 .and. pzm(i) > gas_amt_p_low_o3) then 
                     if (gas_amt_pert_o3 == 1) then
-                        wklm(3,i) = wklm(3,i) * gas_amt_fac
+                        wklm(3,i) = wklm(3,i) * gas_amt_fac_o3
                     end if
                 end if
             enddo
