@@ -188,6 +188,9 @@ subroutine wrapper
     read(73,*) gas_amt_pert_co2
     read(73,*) gas_amt_pert_o3
     read(73,*) psurf_override
+    read(73,*) mixco2_prescribed_on
+    read(73,*) mixco2_prescribed
+
 
     close(73)
 
@@ -382,7 +385,7 @@ subroutine wrapper
     enddo
 
     nmolm=7 !number of molecular species, le 7 for now.
-    
+
     if (psurf_override > 0.0) then 
         surfacep = psurf_override * 100.
     else
@@ -462,7 +465,11 @@ subroutine wrapper
     do i =1,nlayersm
         wbrodlm(i) = mperlayr_air(i) * 1.0e-4
         wklm(1,i) = mperlayr(i) * 1.0e-4 * mixh2o(i)
-        wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+        if (mixco2_prescribed_on ==1) then
+            wklm(2,i) = mperlayr(i) * 1.0e-4 * mixco2_prescribed
+        else
+            wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+        endif
         wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
     enddo
 
@@ -682,9 +689,9 @@ subroutine wrapper
                 if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
             enddo
 
-            do i=2,nlayersm
-                !        		wklm(3,i) = (2.69e19) * (u_lw(i-1) - u_lw(i)) 
-            enddo
+            ! do i=2,nlayersm
+            !     !        		wklm(3,i) = (2.69e19) * (u_lw(i-1) - u_lw(i)) 
+            ! enddo
 
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
@@ -698,7 +705,11 @@ subroutine wrapper
             do i =1,nlayersm
                 wbrodlm(i) = mperlayr_air(i) * 1.0e-4
                 wklm(1,i) = mperlayr(i) * 1.0e-4 * mixh2o(i) 
-                wklm(2,i) = mperlayr_co2(i) * 1.0e-4 
+                if (mixco2_prescribed_on ==1) then
+                    wklm(2,i) = mperlayr(i) * 1.0e-4 * mixco2_prescribed
+                else
+                    wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+                endif
                 wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
                 if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then

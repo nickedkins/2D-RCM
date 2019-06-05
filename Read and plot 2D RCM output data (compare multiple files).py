@@ -14,7 +14,7 @@ directories = [
 ]
 
 # directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/TOA res/tp=0.1/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/TOA res/tp=0.1/'
 # ]
 
 
@@ -285,11 +285,10 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
-                plt.subplot(347)
-                plt.title('tavelm')
-                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.subplot(3,4,7)
+                plt.title('wklm2 (co2)')
+                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(348)
