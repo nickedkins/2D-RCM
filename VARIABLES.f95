@@ -129,7 +129,7 @@ MODULE VARIABLES
     real :: olr_globmean,abs_sw_globmean,abs_h2o_globmean,abs_o3_globmean,abs_surf_globmean,seb_globmean
     real :: gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,&
     gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3
-    integer :: gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,mixco2_prescribed_on
+    integer :: gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,mixco2_prescribed_on,steps_before_toa_adj
     real :: psurf_override,mixco2_prescribed
 
 

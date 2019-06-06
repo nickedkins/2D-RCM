@@ -190,6 +190,8 @@ subroutine wrapper
     read(73,*) psurf_override
     read(73,*) mixco2_prescribed_on
     read(73,*) mixco2_prescribed
+    read(73,*) steps_before_toa_adj
+
 
 
     close(73)
@@ -855,6 +857,11 @@ subroutine wrapper
             ! addhtr
             ! Apply SW heating rates if applicable
             !            do i=1,nlayersm-1
+
+            if (j==24) then
+                print*, 'debug entry point'
+            end if
+
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
                 ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
@@ -1443,7 +1450,7 @@ subroutine wrapper
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
           ! if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > 50) then
+            if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
