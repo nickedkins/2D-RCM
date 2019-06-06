@@ -14,7 +14,8 @@ directories = [
 ]
 
 # directories = [
-# '_Useful Data/grey model replication/nl=30 basic/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/incr ps, gas below 1 bar on and off/nl=199/ps=1000/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/incr ps, gas below 1 bar on and off/nl=199/ps=2000/'
 # ]
 
 
@@ -35,7 +36,7 @@ def init_plotting():
     plt.rcParams['xtick.major.size'] = 3    
     plt.rcParams['xtick.minor.size'] = 3
     plt.rcParams['xtick.major.width'] = 1
-    plt.rcParams['xtick.minor.width'] = 1
+    plt.rcParams['xtick.minor.width'] = 1   
     plt.rcParams['ytick.major.size'] = 3
     plt.rcParams['ytick.minor.size'] = 3
     plt.rcParams['ytick.major.width'] = 1
@@ -232,6 +233,8 @@ for directory in directories:
             for col in range(ncols):
 
                 conv_trop_ind = int(convcols[0,col])
+                if conv_trop_ind > nlayersm:
+                    conv_trop_ind = nlayersm
 
                 p_trop = pzmcols[conv_trop_ind,col]
                 t_trop = tzmcols[conv_trop_ind,col]
@@ -261,13 +264,10 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(343)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],'-o')
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                
-                plt.figure(i2+1)
-                plt.subplot(344)
-                plt.title('totdflum')
-                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],'-o')
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],'-o',label='up')
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],'-o',label='down')
+                plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],'-o',label='net')
+                plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
@@ -283,11 +283,10 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
-                plt.subplot(347)
-                plt.title('tavelm')
-                plt.semilogy(tavelmcols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.subplot(3,4,7)
+                plt.title('wklm2 (co2)')
+                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(348)
@@ -306,7 +305,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,10)
                 plt.title('wklm1 (h2o)')
-                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(wklm1cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
