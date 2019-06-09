@@ -191,6 +191,10 @@ subroutine wrapper
     read(73,*) mixco2_prescribed_on
     read(73,*) mixco2_prescribed
     read(73,*) steps_before_toa_adj
+    read(73,*) a_green
+    read(73,*) b_green
+    read(73,*) c_green
+    read(73,*) H_green
 
 
 
@@ -472,13 +476,14 @@ subroutine wrapper
         else
             wklm(2,i) = mperlayr_co2(i) * 1.0e-4
         endif
-        wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+        ! wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+        wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
     enddo
 
 
     ! Use Green's analytic ozone formula to calculate u_lw(i), which is the amount of ozone (in cm NTP) above layer i in the atmosphere. (The subscript lw means that we use this ozone amount for the longwave radiative transfer)
     do i=1,nlayersm
-        u_lw(i) = ( a + a*exp(-b/c) ) / ( 1.0 + exp( (-H*log( pzm(i)/1000.0 ) -b ) /c ) )
+        u_lw(i) = ( a_green + a_green*exp(-b_green/c_green) ) / ( 1.0 + exp( (-H_green*log( pzm(i)/1000.0 ) -b_green ) /c_green ))
         if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
     enddo
 
@@ -687,13 +692,13 @@ subroutine wrapper
             endif 
 
             do i=1,nlayersm
-                u_lw(i) = ( a + a*exp(-b/c) ) / ( 1.0 + exp( (-H*log( pzm(i)/1000.0 ) -b ) /c ) )
+                u_lw(i) = ( a_green + a_green*exp(-b_green/c_green) ) / ( 1.0 + exp((-H_green*log(pzm(i)/1000.0)-b_green)/c_green))
                 if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
             enddo
 
-            ! do i=2,nlayersm
-            !     !        		wklm(3,i) = (2.69e19) * (u_lw(i-1) - u_lw(i)) 
-            ! enddo
+            do i=2,nlayersm
+                wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+            enddo
 
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
@@ -712,7 +717,8 @@ subroutine wrapper
                 else
                     wklm(2,i) = mperlayr_co2(i) * 1.0e-4
                 endif
-                wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+                ! wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+                wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
                 if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then
                         wklm(1,i) = wklm(1,i) * gas_amt_fac_h2o

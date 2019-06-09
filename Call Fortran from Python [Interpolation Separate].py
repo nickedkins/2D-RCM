@@ -393,7 +393,8 @@ for ncols in ncolss:
     cld_heights = [5.0]
 
     # mixco2_prescribed_facs = np.array([1e-2,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1.0])
+    mixco2_prescribed_facs = np.array([1e-2,1,8])
+    # mixco2_prescribed_facs = np.array([1.0])
 
     for mixco2_prescribed_fac in mixco2_prescribed_facs:
 
@@ -449,8 +450,8 @@ for ncols in ncolss:
                             interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                         
                             #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                            #lc = [-5.8] * ncols
-                            lc = [-9.8] * ncols
+                            lc = [-5.8] * ncols
+                            # lc = [-9.8] * ncols
                             # for i in range(len(lc)):
                             #    lc[i] *= 1.5
 
@@ -486,17 +487,17 @@ for ncols in ncolss:
                             #lct = 250.0
                             #lcf = 0.5
                             #lcod = 5.0
-                            tp = 0.1 * 1e6
+                            tp = 0.1
                             #fth = np.zeros(ncols)
                             #for i in range(ncols):
                             #    fth[i] = 15.0 - abs(collats[i])/18.0
-                            fth = [500. * 1e3] * ncols
+                            fth = [900.] * ncols
                             ol = nlays
                             asp = 2.0   
                             cs = 0
                             pbo = 0 
                             fswon = 1
-                            fsw = 239.4
+                            fsw = 276.52
                             fp = 0
                             ps1 = 0
                             af = 1.0
@@ -524,7 +525,7 @@ for ncols in ncolss:
                             eta = 0.75
                             planet_radius = 6.37e6
                             planet_rotation = 7.29e-5
-                            t_min = 100.
+                            t_min = 10.
                             sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                             playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                             ur_htr = 0.5
@@ -533,13 +534,13 @@ for ncols in ncolss:
                             couple_tgta = 1
                             mtranspon = 1
                             gas_amt_fac_h2o = 1.0 * 0.0
-                            gas_amt_fac_co2 = 1.0
+                            gas_amt_fac_co2 = 1.0 * 0.0
                             gas_amt_fac_o3 = 1.0
-                            gas_amt_p_high_h2o = 2000.
+                            gas_amt_p_high_h2o = 1e6
                             gas_amt_p_low_h2o = 0.
-                            gas_amt_p_high_co2 = 2000.
+                            gas_amt_p_high_co2 = 1e6
                             gas_amt_p_low_co2 = 1000.
-                            gas_amt_p_high_o3 = 2000.
+                            gas_amt_p_high_o3 = 1e6
                             gas_amt_p_low_o3 = 0.
                             gas_amt_pert_h2o = 1
                             gas_amt_pert_co2 = 1
@@ -547,7 +548,11 @@ for ncols in ncolss:
                             psurf_override = 2000. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                             mixco2_prescribed_on = 1
                             mixco2_prescribed = 1e-1 * mixco2_prescribed_fac
-                            steps_before_toa_adj = 200
+                            steps_before_toa_adj = 50
+                            a_green = 0.4 * 4.0
+                            b_green = 20.
+                            c_green = 5.
+                            H_green = 7.
                         
                             ur1 = ur
                         
@@ -559,7 +564,7 @@ for ncols in ncolss:
                             npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
                             twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
                             gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
-                            gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj]
+                            gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,]
                             
                             f = open(project_dir+'/Earth RCM Parameters','w')
                             for m in params:

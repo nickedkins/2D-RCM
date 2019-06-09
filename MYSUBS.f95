@@ -474,7 +474,8 @@ MODULE MYSUBS
         Rbarbar_a = 0.0
 
         do i=nlayersm-1,1,-1
-            u(i) = wklm(3,i) / (2.6e19) + u(i+1)
+            ! u(i) = wklm(3,i) / (2.6e19) + u(i+1)
+            u(i) = ( a_green + a_green*exp(-b_green/c_green) ) / ( 1.0 + exp( (-H_green*log( pzm(i)/1000.0 ) -b_green ) /c_green ))
             x_o3(i) = u(i) * mag
         enddo
 

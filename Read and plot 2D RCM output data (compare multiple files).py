@@ -13,10 +13,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/incr ps, gas below 1 bar on and off/nl=199/ps=1000/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/incr ps, gas below 1 bar on and off/nl=199/ps=2000/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/ps=2 no ghg p>1/',
+]
 
 
 linestyles = ['-','--','--']
@@ -185,7 +184,7 @@ def readfile(fn,counter):
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -219,7 +218,7 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
@@ -278,8 +277,8 @@ for directory in directories:
 
                 plt.figure(i2+1)
                 plt.subplot(346)
-                plt.title('abspn')
-                plt.semilogy(abspncols[:,col]*1362./4.,pzmcols[1:,col],'-o')
+                plt.title('wbrodlm')
+                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 
                 plt.figure(i2+1)
