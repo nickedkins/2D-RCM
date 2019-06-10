@@ -579,7 +579,7 @@ MODULE MYSUBS
         fracs = 0.
         cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)
         tau_cld(cloudindex) = cloudcoltau
-        fracs(cloudindex) = 0.8
+        fracs(cloudindex) = 0.99
 
         if (col == extra_cld_latcol .and. cloudcol == extra_cld_cldcol ) then
 

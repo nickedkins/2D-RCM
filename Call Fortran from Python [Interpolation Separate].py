@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
@@ -30,7 +30,7 @@ for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 199
+    nlays = 60
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -393,8 +393,8 @@ for ncols in ncolss:
     cld_heights = [5.0]
 
     # mixco2_prescribed_facs = np.array([1e-2,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1e-2,1,8])
-    # mixco2_prescribed_facs = np.array([1.0])
+    # mixco2_prescribed_facs = np.array([1e-2,1,8])
+    mixco2_prescribed_facs = np.array([1.0])
 
     for mixco2_prescribed_fac in mixco2_prescribed_facs:
 
@@ -402,7 +402,7 @@ for ncols in ncolss:
 
             #mnlcld
             manual_clouds = []
-            #manual_clouds.append([5.0,0.6,10.0])
+            # manual_clouds.append([5.0,0.99,9.9])
             #manual_clouds.append([6.0,0.4,3.0])
             #manual_clouds.append([10.0,0.3,0.3])
             ncloudcols = shape(manual_clouds)[0]
@@ -451,7 +451,7 @@ for ncols in ncolss:
                         
                             #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
                             lc = [-5.8] * ncols
-                            # lc = [-9.8] * ncols
+                            # lc = [-10.] * ncols
                             # for i in range(len(lc)):
                             #    lc[i] *= 1.5
 
@@ -487,11 +487,11 @@ for ncols in ncolss:
                             #lct = 250.0
                             #lcf = 0.5
                             #lcod = 5.0
-                            tp = 0.1
+                            tp = 1.0
                             #fth = np.zeros(ncols)
                             #for i in range(ncols):
                             #    fth[i] = 15.0 - abs(collats[i])/18.0
-                            fth = [900.] * ncols
+                            fth = [500.] * ncols
                             ol = nlays
                             asp = 2.0   
                             cs = 0
@@ -503,7 +503,7 @@ for ncols in ncolss:
                             af = 1.0
                             dalr = 0 #convection type
                             npb = 1
-                            o3sw = 1
+                            o3sw = 0
                             h2osw = 0
                             nl = nlays
                             maxhtr = 0.1
@@ -534,8 +534,8 @@ for ncols in ncolss:
                             couple_tgta = 1
                             mtranspon = 1
                             gas_amt_fac_h2o = 1.0 * 0.0
-                            gas_amt_fac_co2 = 1.0 * 0.0
-                            gas_amt_fac_o3 = 1.0
+                            gas_amt_fac_co2 = 1e-18
+                            gas_amt_fac_o3 = 1.0 * 0.0
                             gas_amt_p_high_h2o = 1e6
                             gas_amt_p_low_h2o = 0.
                             gas_amt_p_high_co2 = 1e6
@@ -545,11 +545,11 @@ for ncols in ncolss:
                             gas_amt_pert_h2o = 1
                             gas_amt_pert_co2 = 1
                             gas_amt_pert_o3 = 1
-                            psurf_override = 2000. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
+                            psurf_override = 1000. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                             mixco2_prescribed_on = 1
                             mixco2_prescribed = 1e-1 * mixco2_prescribed_fac
                             steps_before_toa_adj = 50
-                            a_green = 0.4 * 4.0
+                            a_green = 0.4 * 0.0
                             b_green = 20.
                             c_green = 5.
                             H_green = 7.
