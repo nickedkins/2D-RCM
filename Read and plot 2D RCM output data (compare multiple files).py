@@ -198,6 +198,7 @@ def readfile(fn,counter):
 # ncols=5
 
 plot_all_vert_profiles = 1
+legends_on = 0
 
 i1 = 0
 
@@ -259,7 +260,8 @@ for directory in directories:
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
                 
                 plt.figure(i2+1)
                 plt.subplot(342)
@@ -269,7 +271,8 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
                 
                 plt.figure(i2+1)
                 plt.subplot(343)
@@ -279,42 +282,48 @@ for directory in directories:
                 plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],'-o',label='net '+dir_label)
                 plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(345)
                 plt.title('abs_o3')
                 plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()  
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,7)
                 plt.title('wklm1 (h2o)')
                 plt.semilogy(wklm1cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,8)
                 plt.title('wklm2 (co2)')
                 plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,9)
                 plt.title('wklm3 (o3)')
                 plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,10)
                 plt.title('wbrodlm')
                 plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],'-o')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,11)
@@ -322,7 +331,8 @@ for directory in directories:
                 plt.semilogy(htro3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i2+1)
                 plt.subplot(3,4,12)
@@ -330,7 +340,8 @@ for directory in directories:
                 plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],'-o',label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 
 
@@ -342,7 +353,8 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
-                plt.legend()
+                if(legends_on==1):
+                    plt.legend()
 
                 
 

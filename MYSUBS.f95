@@ -577,7 +577,15 @@ MODULE MYSUBS
         OPEN(IRDCLD,FILE='My IN_CLD_RRTM',FORM='FORMATTED')
         tau_cld = 0.
         fracs = 0.
-        cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)
+        if (cloudloctype == 1) then
+            cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)
+        else if (cloudloctype == 2) then
+            cloudindex = minloc(abs(pzm - cloudcolalt),dim=1)
+        else if (cloudloctype == 3) then 
+            cloudindex = minloc(abs(tzm - cloudcolalt),dim=1)
+        else
+            cloudindex = 0
+        end if
         tau_cld(cloudindex) = cloudcoltau
         fracs(cloudindex) = 0.99
 

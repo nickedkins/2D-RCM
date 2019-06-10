@@ -195,6 +195,7 @@ subroutine wrapper
     read(73,*) b_green
     read(73,*) c_green
     read(73,*) H_green
+    read(73,*) cloudloctype
 
 
 
