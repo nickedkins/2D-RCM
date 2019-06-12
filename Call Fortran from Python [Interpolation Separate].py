@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
@@ -30,7 +30,7 @@ for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 60
+    nlays = 150
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -391,18 +391,20 @@ for ncols in ncolss:
 
     cld_heights = np.linspace(1,10,10)
     cld_heights = [5.0]
+    cld_height = [5.0]
+    # cld_taus = np.linspace(0.0,9.9,9)
+    cld_taus = [9.9]
 
-    mixco2_prescribed_facs = np.array([1e-2,0.125,0.25,0.5,1,2,4,8])
-    # mixco2_prescribed_facs = np.array([1e-2,1,8])
-    # mixco2_prescribed_facs = np.array([1.0])
+    # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
+    mixco2_prescribed_facs = np.array([1.0])
 
     for mixco2_prescribed_fac in mixco2_prescribed_facs:
 
-        for cld_height in cld_heights:
+        for cld_tau in cld_taus:
 
             #mnlcld
             manual_clouds = []
-            manual_clouds.append([1000.,0.99,9.9])
+            manual_clouds.append([1000.,0.99,cld_tau])
             #manual_clouds.append([6.0,0.4,3.0])
             #manual_clouds.append([10.0,0.3,0.3])
             ncloudcols = shape(manual_clouds)[0]
@@ -450,8 +452,8 @@ for ncols in ncolss:
                             interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                         
                             #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                            lc = [-5.8] * ncols
-                            # lc = [-15.] * ncols
+                            # lc = [-5.8] * ncols
+                            lc = [-15.] * ncols
                             # for i in range(len(lc)):
                             #    lc[i] *= 1.5
 
@@ -465,7 +467,8 @@ for ncols in ncolss:
                             tg = createlatdistbn('Surface Temperature')
 
                             # tg = [tboundm] * ncols
-                            tg = [288.] * ncols
+                            tg = [260.] * ncols
+
                         
                             #lc = [-5.88]*ncols
                             #lch = [4.46]*ncols
@@ -487,7 +490,7 @@ for ncols in ncolss:
                             #lct = 250.0
                             #lcf = 0.5
                             #lcod = 5.0
-                            tp = 1.0
+                            tp = 0.1
                             #fth = np.zeros(ncols)
                             #for i in range(ncols):
                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -497,13 +500,13 @@ for ncols in ncolss:
                             cs = 0
                             pbo = 0 
                             fswon = 1
-                            fsw = 350.71
+                            fsw = 200.
                             fp = 0
                             ps1 = 0
                             af = 1.0
                             dalr = 0 #convection type
                             npb = 1
-                            o3sw = 1
+                            o3sw = 0
                             h2osw = 0
                             nl = nlays
                             maxhtr = 0.1
@@ -534,7 +537,7 @@ for ncols in ncolss:
                             couple_tgta = 1
                             mtranspon = 1
                             gas_amt_fac_h2o = 1.0 * 0.0
-                            gas_amt_fac_co2 = 1e-18
+                            gas_amt_fac_co2 = 1e-17
                             gas_amt_fac_o3 = 1.0 * 0.0
                             gas_amt_p_high_h2o = 1e6
                             gas_amt_p_low_h2o = 0.
@@ -545,7 +548,7 @@ for ncols in ncolss:
                             gas_amt_pert_h2o = 1
                             gas_amt_pert_co2 = 1
                             gas_amt_pert_o3 = 1
-                            psurf_override = 2000. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
+                            psurf_override = 1500. #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                             mixco2_prescribed_on = 1
                             mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
                             steps_before_toa_adj = 50

@@ -13,17 +13,11 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/nl=30/ps=1, no cld/",
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/nl=30/ps=2, no cld/",
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/nl=30/ps=2, cld/"
-# ]
-
 
 # directories = [
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/lc=15/ps=1, no cld/",
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/lc=15/ps=2, no cld/",
-# "/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/proof of concept surface emission/lc=15/ps=2, cld/"
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=1/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, no cld/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, cld/',
 # ]
 
 linestyles = ['-','--','--']
@@ -250,12 +244,12 @@ for directory in directories:
                 t_trop = tzmcols[conv_trop_ind,col]
                 z_trop = altzmcols[conv_trop_ind,col]
 
-                print p_trop, t_trop, z_trop/1000.
+                print p_trop, t_trop, z_trop/1000., pzmcols[0,col]
 
                 plt.figure(i2+1)
                 plt.subplot(341)
                 plt.title('tzm')
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=dir_label)
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=dir_label)
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
@@ -266,20 +260,20 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(342)
                 plt.title('htrm')
-                plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o')
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1])
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.axvline(-0.03,ls='--')
-                plt.axvline(0.03,ls='--')
+                plt.axvline(-0.1,ls='--')
+                plt.axvline(0.1,ls='--')
                 if(legends_on==1):
                     plt.legend()
                 
                 plt.figure(i2+1)
                 plt.subplot(343)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],'-o',label='up '+dir_label)
-                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],'-o',label='down '+dir_label)
-                plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],'-o',label='net '+dir_label)
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
+                # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
+                # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
                 plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
@@ -288,7 +282,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(345)
                 plt.title('abs_o3')
-                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],'-o')
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
@@ -296,7 +290,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,7)
                 plt.title('wklm1 (h2o)')
-                plt.semilogy(wklm1cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
@@ -304,7 +298,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,8)
                 plt.title('wklm2 (co2)')
-                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
@@ -312,7 +306,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,9)
                 plt.title('wklm3 (o3)')
-                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
@@ -320,7 +314,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,10)
                 plt.title('wbrodlm')
-                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],'-o')
+                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
@@ -328,7 +322,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,11)
                 plt.title('htro3')
-                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
@@ -337,7 +331,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,12)
                 plt.title('htrh2o')
-                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],'-o',label=str(fn))
+                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
@@ -348,7 +342,7 @@ for directory in directories:
                 plt.figure(i2+1)
                 plt.subplot(3,4,6)
                 plt.title('htrmlw')
-                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],'-o')
+                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')

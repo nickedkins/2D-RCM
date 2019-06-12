@@ -1456,8 +1456,8 @@ subroutine wrapper
 
         ! Equilibrium check (eqbcheck)
         if (j > 5 ) then !NJE
-          ! if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
-            if (stepssinceboxadj > steps_before_toa_adj) then
+          if (maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5)then
+            ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
