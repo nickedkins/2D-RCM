@@ -15,9 +15,8 @@ directories = [
 
 
 # directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=1/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, no cld/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, cld/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
 # ]
 
 linestyles = ['-','--','--']

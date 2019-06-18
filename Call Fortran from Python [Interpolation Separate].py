@@ -24,13 +24,13 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
-min_press = 1.0
+min_press = 10.
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    nlays = 150
+    nlays = 60
     days = 5000 #model days
 
     def create_misr_cloud_inputs():
@@ -396,7 +396,7 @@ for ncols in ncolss:
     cld_taus = [9.9]
 
     # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1.0])
+    mixco2_prescribed_facs = np.array([0.03125])
 
     psurf_overrides = [1000.,2000.]
     # psurf_overrides = [2000.]
@@ -488,7 +488,7 @@ for ncols in ncolss:
                                     #lct = 250.0
                                     #lcf = 0.5
                                     #lcod = 5.0
-                                    tp = 0.1
+                                    tp = 0.1 * 1e6
                                     #fth = np.zeros(ncols)
                                     #for i in range(ncols):
                                     #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -497,7 +497,7 @@ for ncols in ncolss:
                                     asp = 2.0   
                                     cs = 0
                                     pbo = 0 
-                                    fswon = 0
+                                    fswon = 1
                                     fsw = fsw
                                     fp = 0
                                     ps1 = 0
