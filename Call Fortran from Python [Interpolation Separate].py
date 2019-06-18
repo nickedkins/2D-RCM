@@ -395,11 +395,11 @@ for ncols in ncolss:
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
 
-    mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
-    #mixco2_prescribed_facs = np.array([1.0])
+    # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
+    mixco2_prescribed_facs = np.array([1.0])
 
     psurf_overrides = [1000.,2000.]
-    #psurf_overrides = [1000.]
+    # psurf_overrides = [2000.]
     #fsws = np.linspace(200,500,num=8)
     fsws = [240.]
 
@@ -530,7 +530,7 @@ for ncols in ncolss:
                                     sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                     playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                     ur_htr = 0.5
-                                    ur_toafnet = 6.0
+                                    ur_toafnet = 3.0
                                     ur_seb = 1e10
                                     couple_tgta = 1
                                     mtranspon = 1
