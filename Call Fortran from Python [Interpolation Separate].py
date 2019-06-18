@@ -395,11 +395,13 @@ for ncols in ncolss:
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
 
-    # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1.0])
+    mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
+    #mixco2_prescribed_facs = np.array([1.0])
 
     psurf_overrides = [1000.,2000.]
-    fsws = np.linspace(200,500,num=8)
+    #psurf_overrides = [1000.]
+    #fsws = np.linspace(200,500,num=8)
+    fsws = [240.]
 
     for fsw in fsws:
         for psurf_override in psurf_overrides:
@@ -414,7 +416,7 @@ for ncols in ncolss:
                                     manual_clouds = []
                                     # if (psurf_override > 1000.):
                                     #     manual_clouds.append([1000.,0.99,cld_tau])
-                                    #manual_clouds.append([6.0,0.4,3.0])
+                                    manual_clouds.append([450.,0.66,9.9])
                                     #manual_clouds.append([10.0,0.3,0.3])
                                     ncloudcols = shape(manual_clouds)[0]
                     
@@ -448,22 +450,22 @@ for ncols in ncolss:
                                     interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                                 
                                     #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                                    # lc = [-5.8] * ncols
-                                    lc = [-15.] * ncols
+                                    lc = [-5.8] * ncols
+                                    #lc = [-15.] * ncols
                                     # for i in range(len(lc)):
                                     #    lc[i] *= 1.5
 
                                     lch = createlatdistbn('Cloud Top Height')
                                     srh = createlatdistbn('Relative Humidity')
                                     # srh = [0.8] * ncols
-                                    sa = createlatdistbn('Surface Reflectance')
-                                    # sa = [0.3] * ncols
+                                    #sa = createlatdistbn('Surface Reflectance')
+                                    sa = [0.33] * ncols
                                     lcf = createlatdistbn('Cloud Fraction')
                                     lcod = createlatdistbn('Cloud Optical Thickness')
                                     tg = createlatdistbn('Surface Temperature')
 
                                     # tg = [tboundm] * ncols
-                                    tg = [260.] * ncols
+                                    tg = [288.] * ncols
 
                                 
                                     #lc = [-5.88]*ncols
@@ -490,19 +492,19 @@ for ncols in ncolss:
                                     #fth = np.zeros(ncols)
                                     #for i in range(ncols):
                                     #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                    fth = [800.] * ncols
+                                    fth = [400.] * ncols
                                     ol = nlays
                                     asp = 2.0   
                                     cs = 0
                                     pbo = 0 
-                                    fswon = 1
+                                    fswon = 0
                                     fsw = fsw
                                     fp = 0
                                     ps1 = 0
                                     af = 1.0
                                     dalr = 0 #convection type
                                     npb = 1
-                                    o3sw = 0
+                                    o3sw = 1
                                     h2osw = 0
                                     nl = nlays
                                     maxhtr = 0.1
@@ -528,25 +530,25 @@ for ncols in ncolss:
                                     sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                     playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                     ur_htr = 0.5
-                                    ur_toafnet = 5.0
+                                    ur_toafnet = 6.0
                                     ur_seb = 1e10
                                     couple_tgta = 1
                                     mtranspon = 1
                                     gas_amt_fac_h2o = 1.0 * 0.0
-                                    gas_amt_fac_co2 = 1e-17
+                                    gas_amt_fac_co2 = 1e-12
                                     gas_amt_fac_o3 = 1.0 * 0.0
                                     gas_amt_p_high_h2o = 1e6
-                                    gas_amt_p_low_h2o = 0.
+                                    gas_amt_p_low_h2o = 1000.
                                     gas_amt_p_high_co2 = 1e6
                                     gas_amt_p_low_co2 = 1000.
                                     gas_amt_p_high_o3 = 1e6
-                                    gas_amt_p_low_o3 = 0.
+                                    gas_amt_p_low_o3 = 1000.
                                     gas_amt_pert_h2o = 1
                                     gas_amt_pert_co2 = 1
                                     gas_amt_pert_o3 = 1
                                     psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                                     mixco2_prescribed_on = 1
-                                    mixco2_prescribed = 400e-6 * 10. * mixco2_prescribed_fac
+                                    mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
                                     steps_before_toa_adj = 30
                                     a_green = 0.4
                                     b_green = 20.
