@@ -17,6 +17,8 @@ directories = [
 # directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
 # ]
 
 
