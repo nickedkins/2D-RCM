@@ -15,10 +15,10 @@ directories = [
 
 
 # directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=1/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, no cld/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/o3(p) fixed/nl=199/psurf=2, cld/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
 # ]
+
 
 linestyles = ['-','--','--']
 
@@ -33,7 +33,7 @@ def init_plotting():
     plt.rcParams['legend.fontsize'] = plt.rcParams['font.size']
     plt.rcParams['xtick.labelsize'] = plt.rcParams['font.size']
     plt.rcParams['ytick.labelsize'] = plt.rcParams['font.size']
-    plt.rcParams['savefig.dpi'] = 2*plt.rcParams['savefig.dpi']
+    # plt.rcParams['savefig.dpi'] = 2*plt.rcParams['savefig.dpi']
     plt.rcParams['xtick.major.size'] = 3    
     plt.rcParams['xtick.minor.size'] = 3
     plt.rcParams['xtick.major.width'] = 1
@@ -193,11 +193,14 @@ def readfile(fn,counter):
 
 plot_all_vert_profiles = 1
 legends_on = 0
+grids_on = 0
 
 i1 = 0
 
 tzm_store = np.zeros( ( 200, len(directories), 100 ) )
 pico2_store = np.zeros( (len(directories), 100 ) )
+
+cld_heights = np.linspace(1,10,10)
 
 tzm_master = []
 pzm_master = []
@@ -246,7 +249,8 @@ for directory in directories:
 
                 print p_trop, t_trop, z_trop/1000., pzmcols[0,col]
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(341)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=dir_label)
@@ -254,10 +258,14 @@ for directory in directories:
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
                 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(342)
                 plt.title('htrm')
                 plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1])
@@ -265,10 +273,14 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.1,ls='--')
                 plt.axvline(0.1,ls='--')
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
                 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(343)
                 plt.title('totuflum')
                 plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
@@ -276,70 +288,103 @@ for directory in directories:
                 # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
                 plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(345)
                 plt.title('abs_o3')
                 plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,7)
                 plt.title('wklm1 (h2o)')
                 plt.semilogy(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,8)
                 plt.title('wklm2 (co2)')
                 plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,9)
                 plt.title('wklm3 (o3)')
                 plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,10)
                 plt.title('wbrodlm')
                 plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,11)
                 plt.title('htro3')
                 plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,12)
                 plt.title('htrh2o')
                 plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
                 
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(3,4,6)
                 plt.title('htrmlw')
                 plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
@@ -347,14 +392,22 @@ for directory in directories:
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.03,ls='--')
                 plt.axvline(0.03,ls='--')
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
 
                 
 
+                # plt.figure(3)
+                # plt.scatter(cld_heights[i2],tzmcols[0,0],c=colors[i1])
+                # plt.xlabel('Cloud height (km)')
+                # plt.ylabel('Surface temperature (K)')
+
                 i3+=1
 
-        # i2 += 1
+        i2 += 1
 
     i1 += 1
 
