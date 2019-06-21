@@ -93,6 +93,8 @@ C     quadrature is chosen.
 
       HVRRTC = '$Revision: 11240 $'
 
+      tbound = 100.
+
       URAD(0) = 0.0
       DRAD(0) = 0.0
       TOTUFLUX(0) = 0.0
@@ -180,6 +182,7 @@ C             BBDGAS     gas-only Planck function for downward rt
 C             BBDTOT     gas and cloud Planck function for downward rt
 C             BBUTOT     gas and cloud Planck function for upward calc.
 C             GASSRC     source radiance due to gas only
+
 
          DO 2500 LEV = NLAYERS, 1, -1
 
@@ -298,6 +301,8 @@ C           Lambertian reflection.
             RADLU = RAD0 + REFLECT * RAD
          ENDIF
          URAD(0) = URAD(0) + RADLU
+C          urad(0) = 0.
+         
          DO 2600 LEV = 1, NLAYERS
             IF (ICLDLYR(LEV) .EQ. 1) THEN
                GASSRC = BBUGAS(LEV) * ATRANS(LEV)
