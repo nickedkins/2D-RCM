@@ -775,7 +775,7 @@ for ncols in ncolss:
                                     gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
                                     gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype]
                                     
-                                            counter = counter + 1
+                                    counter = counter + 1
 
 ########################################################################################################################
 
