@@ -9,33 +9,6 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
-
-obs_data = np.genfromtxt(obs_file,delimiter=',')
-
-p_obs = obs_data[:,0]
-t_obs = obs_data[:,1]
-
-# plt.semilogy(t_obs,p_obs,'--')
-# plt.ylim(max(p_obs),min(p_obs))
-
-directories = [
-'_Current Output/'
-]
-
-
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
-# ]
-
-
-linestyles = ['-','--','--']
-
-colors = ['b','r','g','orange','purple','yellow','pink']
-
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
     plt.rcParams['font.size'] = 15
@@ -73,6 +46,48 @@ def init_plotting():
     plt.gca().xaxis.set_ticks_position('bottom')
     plt.gca().yaxis.set_ticks_position('left')
 init_plotting()
+
+obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
+
+obs_data = np.genfromtxt(obs_file,delimiter=',')
+
+p_obs = obs_data[:,0]
+t_obs = obs_data[:,1]
+z_obs = 7.0 * log(p_obs / p_obs[0])
+
+plt.figure(1)
+plt.subplot(222)
+plt.title('lapse')
+dt = np.zeros(len(t_obs))
+dz = np.zeros(len(z_obs))
+
+for i in range(3,len(t_obs)):
+    dt[i] = t_obs[i] - t_obs[i-3]
+    dz[i] = z_obs[i] - z_obs[i-3]
+plt.semilogy(dt/dz,p_obs)
+plt.ylim(max(p_obs),min(p_obs))
+
+# plt.semilogy(t_obs,p_obs,'--')
+# plt.ylim(max(p_obs),min(p_obs))
+
+directories = [
+'_Current Output/'
+]
+
+
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
+# ]
+
+
+linestyles = ['-','--','--']
+
+colors = ['b','r','g','orange','purple','yellow','pink']
+
+
 
 def readfile(fn,counter):
 
@@ -233,7 +248,7 @@ for directory in directories:
 
     counter=0
 
-    i2 = 0
+    i2 = 1
 
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
@@ -263,7 +278,7 @@ for directory in directories:
 
                 # plt.figure(i1+1)
                 plt.figure(1)
-                plt.subplot(341)
+                plt.subplot(221)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=dir_label)
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
@@ -276,6 +291,16 @@ for directory in directories:
                     plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
+
+                dt_obs = np.zeros(nlayersm)
+                dz_obs = np.zeros(nlayersm)
+                plt.subplot(222)
+                for i in range(1,nlayersm):
+                    dt_obs[i] = tzmcols[i,col] - tzmcols[i-1,col]
+                    dz_obs[i] = (altzmcols[i,col] - altzmcols[i-1,col]) / 1000.
+                plt.plot(-dt_obs/dz_obs,pzmcols[1:,col])
+
+
                 
                 # plt.figure(i2+1)
                 # plt.subplot(342)
