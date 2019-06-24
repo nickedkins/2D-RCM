@@ -25,9 +25,12 @@ directories = [
 
 
 # directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
 # ]
+
 
 linestyles = ['-','--','--']
 
@@ -42,7 +45,7 @@ def init_plotting():
     plt.rcParams['legend.fontsize'] = plt.rcParams['font.size']
     plt.rcParams['xtick.labelsize'] = plt.rcParams['font.size']
     plt.rcParams['ytick.labelsize'] = plt.rcParams['font.size']
-    plt.rcParams['savefig.dpi'] = 2*plt.rcParams['savefig.dpi']
+    # plt.rcParams['savefig.dpi'] = 2*plt.rcParams['savefig.dpi']
     plt.rcParams['xtick.major.size'] = 3    
     plt.rcParams['xtick.minor.size'] = 3
     plt.rcParams['xtick.major.width'] = 1
@@ -202,11 +205,14 @@ def readfile(fn,counter):
 
 plot_all_vert_profiles = 1
 legends_on = 0
+grids_on = 0
 
 i1 = 0
 
 tzm_store = np.zeros( ( 200, len(directories), 100 ) )
 pico2_store = np.zeros( (len(directories), 100 ) )
+
+cld_heights = np.linspace(1,10,10)
 
 tzm_master = []
 pzm_master = []
@@ -255,7 +261,8 @@ for directory in directories:
 
                 print p_trop, t_trop, z_trop/1000., pzmcols[0,col]
 
-                plt.figure(i2+1)
+                # plt.figure(i1+1)
+                plt.figure(1)
                 plt.subplot(341)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=dir_label)
@@ -264,6 +271,9 @@ for directory in directories:
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.plot(t_obs,p_obs,'--',label='ERA-Interim')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==1):
+                    plt.gca().minorticks_on()
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()
                 
@@ -360,11 +370,9 @@ for directory in directories:
                 # if(legends_on==1):
                 #     plt.legend()
 
-                
-
                 i3+=1
 
-        # i2 += 1
+        i2 += 1
 
     i1 += 1
 

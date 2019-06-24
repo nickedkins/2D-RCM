@@ -387,8 +387,8 @@ subroutine wrapper
         cvtot(i) = vol_mixco2 * cvco2(i) + vol_mixn2 * cvn2 + vol_mixo2 * cvo2
 !        rsp_tot(i) = cptot(i) - cvtot(i)
         ! cptot(i) = 1.003 !default
-!        rsp_tot(i) = 0.287 !default
-        rsp_tot(i) = 180.0 !new default? NJE
+        rsp_tot(i) = 0.287*1000. !default
+        ! rsp_tot(i) = 180.0 !new default? NJE
     enddo
 
     nmolm=7 !number of molecular species, le 7 for now.
@@ -463,7 +463,8 @@ subroutine wrapper
 
     do i=1,nlayersm
         rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu
-        es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+        ! es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+        es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
         mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
         if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
     enddo
@@ -704,10 +705,10 @@ subroutine wrapper
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
+                ! es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
+                es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
                 mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
-
             enddo
 
             do i =1,nlayersm
@@ -745,8 +746,8 @@ subroutine wrapper
                 cvtot(i) = vol_mixco2 * cvco2(i) + vol_mixn2 * cvn2 + vol_mixo2 * cvo2
                 rsp_tot(i) = cptot(i) - cvtot(i)
                 ! cptot(i) = 1.003
-!                rsp_tot(i) = 0.287
-                rsp_tot(i) = 180.0 !NJE
+               rsp_tot(i) = 0.287 * 1000.
+                ! rsp_tot(i) = 180.0 !NJE
             enddo
 
             ! If pressure broadening is off, feed a pressure profile with surface pressure = 1 bar to the subroutine that picks the correlated-k distribution
@@ -1290,6 +1291,12 @@ subroutine wrapper
                 lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                 d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
+                print*, boxnetradflux(col), boxnetradflux_prev(col)
+                if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                    ur_toafnet = ur_toafnet * 2.0
+                    print*, 'ur_toafnet increased to: ', ur_toafnet
+                end if
+                boxnetradflux_prev(col) = boxnetradflux(col)
 
                 ! delta_x_lat = x_lat(col) - x_lat(col-1)
 
@@ -1477,6 +1484,12 @@ subroutine wrapper
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
                     lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
+
+                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                        ur_toafnet = ur_toafnet * 2.0
+                        print*, 'ur_toafnet increased to: ', ur_toafnet
+                    end if
+                    boxnetradflux_prev(col) = boxnetradflux(col)
 
                     if (mtranspon == 1) then
                         boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
