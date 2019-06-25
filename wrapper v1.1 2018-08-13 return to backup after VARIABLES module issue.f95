@@ -604,8 +604,10 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-!                read(82,*) mixh2o(i)
+                read(82,*) mixh2o(i)
                 read(83,*) mixo3(i)
+                mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
+                mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
                 !                read(86,*) ciwc(i)
@@ -626,8 +628,6 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-                mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
-                mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 lwp(i) = clwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
                 iwp(i) = ciwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
                 tau_cld(i) = (lwp(i) / 15.0 + iwp(i) / 75.0) * 1500.0 !nje tcwp

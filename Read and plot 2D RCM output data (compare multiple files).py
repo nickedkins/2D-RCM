@@ -48,24 +48,38 @@ def init_plotting():
 init_plotting()
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
-
 obs_data = np.genfromtxt(obs_file,delimiter=',')
 
 p_obs = obs_data[:,0]
 t_obs = obs_data[:,1]
-z_obs = 7.0 * log(p_obs / p_obs[0])
+z_obs = -7.7 * log(p_obs / p_obs[-1])
+
+grey_file = '/Users/nickedkins/Dropbox/grey model obs repl.txt'
+grey_data = np.genfromtxt(grey_file,delimiter=',')
+
+t_grey = grey_data[:,0]
+z_grey = grey_data[:,1]
 
 plt.figure(1)
-plt.subplot(222)
-plt.title('lapse')
-dt = np.zeros(len(t_obs))
-dz = np.zeros(len(z_obs))
+plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
+plt.plot(t_grey,z_grey,label='Grey')
+plt.xlabel('Temperature (K)')
+plt.ylabel('Altitude (km)')
+plt.ylim(0,20)
 
-for i in range(3,len(t_obs)):
-    dt[i] = t_obs[i] - t_obs[i-3]
-    dz[i] = z_obs[i] - z_obs[i-3]
-plt.semilogy(dt/dz,p_obs)
-plt.ylim(max(p_obs),min(p_obs))
+# plt.figure(1)
+# plt.subplot(222)
+# plt.title('lapse')
+# dt = np.zeros(len(t_obs))
+# dz = np.zeros(len(z_obs))
+
+
+
+# for i in range(3,len(t_obs)):
+#     dt[i] = t_obs[i] - t_obs[i-3]
+#     dz[i] = z_obs[i] - z_obs[i-3]
+# plt.semilogy(dt/dz,p_obs)
+# plt.ylim(max(p_obs),min(p_obs))
 
 # plt.semilogy(t_obs,p_obs,'--')
 # plt.ylim(max(p_obs),min(p_obs))
@@ -75,12 +89,9 @@ directories = [
 ]
 
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=1/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/grey model replication/r_sp fixed/ps=2/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=1/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/grey model replication h2o o3 cld on/ps=2/',
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/obs match spectral/'
+]
 
 
 linestyles = ['-','--','--']
@@ -219,8 +230,8 @@ def readfile(fn,counter):
 # ncols=5
 
 plot_all_vert_profiles = 1
-legends_on = 0
-grids_on = 0
+legends_on = 1
+grids_on = 1
 
 i1 = 0
 
@@ -234,6 +245,8 @@ pzm_master = []
 boxlatcols_master = []
 
 filenames = []
+
+
 
 for directory in directories:
 
@@ -278,27 +291,27 @@ for directory in directories:
 
                 # plt.figure(i1+1)
                 plt.figure(1)
-                plt.subplot(221)
+                # plt.subplot(221)
                 plt.title('tzm')
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=dir_label)
+                plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral')
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-                plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
-                plt.plot(t_obs,p_obs,'--',label='ERA-Interim')
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(grids_on==1):
+                plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==2):
                     plt.gca().minorticks_on()
+                if(grids_on==1):
                     plt.grid(which='both',axis='both')
                 if(legends_on==1):
-                    plt.legend()
+                    plt.legend()    
 
-                dt_obs = np.zeros(nlayersm)
-                dz_obs = np.zeros(nlayersm)
-                plt.subplot(222)
-                for i in range(1,nlayersm):
-                    dt_obs[i] = tzmcols[i,col] - tzmcols[i-1,col]
-                    dz_obs[i] = (altzmcols[i,col] - altzmcols[i-1,col]) / 1000.
-                plt.plot(-dt_obs/dz_obs,pzmcols[1:,col])
+                # dt_obs = np.zeros(nlayersm)
+                # dz_obs = np.zeros(nlayersm)
+                # plt.subplot(222)
+                # for i in range(1,nlayersm):
+                #     dt_obs[i] = tzmcols[i,col] - tzmcols[i-1,col]
+                #     dz_obs[i] = (altzmcols[i,col] - altzmcols[i-1,col]) / 1000.
+                # plt.plot(-dt_obs/dz_obs,pzmcols[1:,col])
 
 
                 
