@@ -465,8 +465,8 @@ subroutine wrapper
         rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu
         ! es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
         es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-        mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
-        if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
+        ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
+        ! if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
     enddo
 
     !Set up mixing ratio of broadening molecules (N2 and O2 mostly)
@@ -707,8 +707,8 @@ subroutine wrapper
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 ! es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
                 es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-                mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                ! if (mixh2o(i) < rmin) mixh2o(i) = rmin
             enddo
 
             do i =1,nlayersm

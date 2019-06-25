@@ -389,8 +389,8 @@ for ncols in ncolss:
 
     cloud_source = 0
 
-    cld_heights = np.linspace(0,12,5)
-    # cld_heights = [5.0]
+    # cld_heights = np.linspace(0,12,5)
+    cld_heights = [5.0]
     # cld_height = [5.0]
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
@@ -419,7 +419,7 @@ for ncols in ncolss:
                                         # if (psurf_override > 1000.):
                                         #     manual_clouds.append([1000.,0.99,cld_tau])
                                         # manual_clouds.append([450,0.66,9.9])
-                                        manual_clouds.append([cld_height,0.99,0.1])
+                                        # manual_clouds.append([cld_height,0.99,0.1])
                                         ncloudcols = shape(manual_clouds)[0]
                         
                                         sa = [sa] * ncols
@@ -490,7 +490,7 @@ for ncols in ncolss:
                                         #lct = 250.0
                                         #lcf = 0.5
                                         #lcod = 5.0
-                                        tp = 1.0
+                                        tp = 1.0 * 1e6
                                         #fth = np.zeros(ncols)
                                         #for i in range(ncols):
                                         #    fth[i] = 15.0 - abs(collats[i])/18.0

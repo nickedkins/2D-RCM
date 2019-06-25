@@ -131,7 +131,7 @@ MODULE MYSUBS
         do i=1,nlayersm
             ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot * 1000.0 !times 1000 to convert to g/kg instead of kg/kg
             ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot  !times 1000 to convert to g/kg instead of kg/kg ! but I've removed that factor -- might be wrong
-            rho_w(i) = wklm(2,i) / mperlayr(i)
+            rho_w(i) = wklm(1,i) / mperlayr(i)
         enddo
 
         ! zlh=altzm(0:nlayersm)/1000.0
@@ -158,7 +158,6 @@ MODULE MYSUBS
         enddo
 
         do i=1,nlayersm-1
-            ! wl(i) = (rho_w(i)/1000.0*delta_z(i+1)*1000.0)*( (pzm(i)/p_0)**1.0 )*((t_0/tzm(i))**0.5)     
             wl(i) = (rho_w(i)/1000.0*delta_z(i+1)*1000.0)*( (pzm(i)/p_0)**1.0 )*((t_0/tzm(i))**0.5)     
         enddo
 
