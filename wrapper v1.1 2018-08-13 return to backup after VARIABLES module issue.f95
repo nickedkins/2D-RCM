@@ -478,8 +478,8 @@ subroutine wrapper
         else
             wklm(2,i) = mperlayr_co2(i) * 1.0e-4
         endif
-        ! wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
-        wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+        wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+        ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
     enddo
 
 
@@ -698,9 +698,9 @@ subroutine wrapper
                 if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
             enddo
 
-            do i=2,nlayersm
-                wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
-            enddo
+            ! do i=2,nlayersm
+            !     wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+            ! enddo
 
             do i=1,nlayersm
                 rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
@@ -719,8 +719,8 @@ subroutine wrapper
                 else
                     wklm(2,i) = mperlayr_co2(i) * 1.0e-4
                 endif
-                ! wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
-                wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+                wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+                ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
                 if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then
                         wklm(1,i) = wklm(1,i) * gas_amt_fac_h2o

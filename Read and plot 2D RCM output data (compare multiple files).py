@@ -365,7 +365,7 @@ for directory in directories:
                 plt.figure(i1+1)
                 plt.subplot(3,4,9)
                 plt.title('wklm3 (o3)')
-                plt.semilogy(wklm3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
