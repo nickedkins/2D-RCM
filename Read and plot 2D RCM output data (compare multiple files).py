@@ -60,13 +60,13 @@ grey_data = np.genfromtxt(grey_file,delimiter=',')
 t_grey = grey_data[:,0]
 z_grey = grey_data[:,1]
 
-plt.figure(1)
-plt.subplot(341)
-plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
-plt.plot(t_grey,z_grey,label='Grey')
-plt.xlabel('Temperature (K)')
-plt.ylabel('Altitude (km)')
-plt.ylim(0,20)
+# plt.figure(1)
+# plt.subplot(341)
+# plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
+# plt.plot(t_grey,z_grey,label='Grey')
+# plt.xlabel('Temperature (K)')
+# plt.ylabel('Altitude (km)')
+# plt.ylim(0,20)
 
 # plt.figure(1)
 # plt.subplot(222)
@@ -90,9 +90,9 @@ directories = [
 ]
 
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/obs match spectral/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/cld_height vs trop t p/nl=199/'
+]
 
 
 linestyles = ['-','--','--']
@@ -231,7 +231,7 @@ def readfile(fn,counter):
 # ncols=5
 
 plot_all_vert_profiles = 1
-legends_on = 1
+legends_on = 0
 grids_on = 1
 
 i1 = 0

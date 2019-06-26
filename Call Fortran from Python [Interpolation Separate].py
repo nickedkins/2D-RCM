@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
@@ -389,8 +389,8 @@ for ncols in ncolss:
 
     cloud_source = 0
 
-    # cld_heights = np.linspace(0,12,5)
-    cld_heights = [5.0]
+    cld_heights = np.linspace(0,12,13)
+    # cld_heights = [5.0]
     # cld_height = [5.0]
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
@@ -419,7 +419,7 @@ for ncols in ncolss:
                                         # if (psurf_override > 1000.):
                                         #     manual_clouds.append([1000.,0.99,cld_tau])
                                         # manual_clouds.append([450,0.66,9.9])
-                                        # manual_clouds.append([cld_height,0.99,0.1])
+                                        manual_clouds.append([cld_height,0.99,0.1])
                                         ncloudcols = shape(manual_clouds)[0]
                         
                                         sa = [sa] * ncols
@@ -490,11 +490,11 @@ for ncols in ncolss:
                                         #lct = 250.0
                                         #lcf = 0.5
                                         #lcod = 5.0
-                                        tp = 1.0 * 1e6
+                                        tp = 1.0
                                         #fth = np.zeros(ncols)
                                         #for i in range(ncols):
                                         #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                        fth = [400.] * ncols
+                                        fth = [1100.] * ncols
                                         ol = nlays
                                         asp = 2.0   
                                         cs = 0
@@ -552,7 +552,7 @@ for ncols in ncolss:
                                         mixco2_prescribed_on = 1
                                         mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
                                         steps_before_toa_adj = 30
-                                        a_green = 0.4 / 2.0
+                                        a_green = 0.4
                                         b_green = 20.
                                         c_green = 5.
                                         H_green = 7.
