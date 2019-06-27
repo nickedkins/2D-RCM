@@ -47,6 +47,14 @@ def init_plotting():
     plt.gca().yaxis.set_ticks_position('left')
 init_plotting()
 
+directories = [
+'_Current Output/'
+]
+
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cld_height vs trop t p/fth=150/'
+# ]
+
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')
 
@@ -84,15 +92,6 @@ z_grey = grey_data[:,1]
 
 # plt.semilogy(t_obs,p_obs,'--')
 # plt.ylim(max(p_obs),min(p_obs))
-
-directories = [
-'_Current Output/'
-]
-
-
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/cld_height vs trop t p/nl=199/'
-]
 
 
 linestyles = ['-','--','--']
@@ -231,7 +230,7 @@ def readfile(fn,counter):
 # ncols=5
 
 plot_all_vert_profiles = 1
-legends_on = 0
+legends_on = 1
 grids_on = 1
 
 i1 = 0
@@ -274,6 +273,7 @@ for directory in directories:
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
 
+
         i3=0
 
         if (plot_all_vert_profiles == 1):
@@ -283,6 +283,9 @@ for directory in directories:
                 conv_trop_ind = int(convcols[0,col])
                 if conv_trop_ind > nlayersm:
                     conv_trop_ind = nlayersm
+
+                print('DW LW at tropopause: ', totdflumcols[conv_trop_ind,col])
+                print('abs SW above tropopause: ', sum(A_oz_lcols[conv_trop_ind:nlayersm,col])*1362./4.)
 
                 p_trop = pzmcols[conv_trop_ind,col]
                 t_trop = tzmcols[conv_trop_ind,col]

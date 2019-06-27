@@ -18,20 +18,21 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
+ncloudcols = 5
+nlays = 199
+days = 5000 #model days
 min_press = 1.
+cloud_source = 1 #0 for manual, 1 for MISR
 
 for ncols in ncolss:
 
     ncols = int(ncols)
-
-    nlays = 199
-    days = 5000 #model days
 
     def create_misr_cloud_inputs():
                     
@@ -46,9 +47,9 @@ for ncols in ncolss:
         for i in range(len(altbins)+1):
             altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
 
-        od_low = 3.0 * 0.0
-        od_mid = 3.0 * 0.0
-        od_high = 0.3 * 0.0
+        od_low = 3.0 * 0.
+        od_mid = 3.0 * 0.
+        od_high = 0.3 * 0.
 
         for i in range(len(altbins)):
             if (altbins[i] < 3.0):
@@ -384,13 +385,10 @@ for ncols in ncolss:
     # global_lapses = np.linspace(-2,-8,5)
     global_lapses = [-5.8]
 
-    cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)
+    cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)    
 
-
-    cloud_source = 0
-
-    cld_heights = np.linspace(0,12,13)
-    # cld_heights = [5.0]
+    # cld_heights = np.linspace(0,12,5)
+    cld_heights = [5.0]
     # cld_height = [5.0]
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
@@ -419,12 +417,13 @@ for ncols in ncolss:
                                         # if (psurf_override > 1000.):
                                         #     manual_clouds.append([1000.,0.99,cld_tau])
                                         # manual_clouds.append([450,0.66,9.9])
-                                        manual_clouds.append([cld_height,0.99,0.1])
-                                        ncloudcols = shape(manual_clouds)[0]
+                                        # manual_clouds.append([cld_height,0.99,0.1])
+                                        
                         
                                         sa = [sa] * ncols
 
                                         if ( cloud_source == 0 ):
+                                            ncloudcols = shape(manual_clouds)[0]
                                             create_manual_cloud_inputs()
                                         elif ( cloud_source == 1 ):
                                             create_misr_cloud_inputs()
@@ -490,11 +489,11 @@ for ncols in ncolss:
                                         #lct = 250.0
                                         #lcf = 0.5
                                         #lcod = 5.0
-                                        tp = 1.0
+                                        tp = 1.0 * 1e6
                                         #fth = np.zeros(ncols)
                                         #for i in range(ncols):
                                         #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                        fth = [1100.] * ncols
+                                        fth = [150.] * ncols
                                         ol = nlays
                                         asp = 2.0   
                                         cs = 0
