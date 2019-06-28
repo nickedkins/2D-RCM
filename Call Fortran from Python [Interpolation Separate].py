@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [1]
+ncolss = [3]
 ncloudcols = 5
 nlays = 199
 days = 5000 #model days
@@ -139,16 +139,23 @@ for ncols in ncolss:
         weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
         return weightedglobalavgvar
     def interpolate_createprrtminput_lev(shortname,latparray,ps,lats):
-        lats = lats
-        pressures = ps
-        xx,yy = np.meshgrid(lats[::-1],pressures)
+        lats = lats #latitudes at 5 deg spacing - resolution at which I sampled ERA-I earlier 
+        pressures = ps # ERA-I pressures
+        xx,yy = np.meshgrid(lats[::-1],pressures) # grid of lat-p in my sampled ERA-I resn
 
         if(disttypelev[shortname] == 'lat'):
 
-            z = latparray
-            f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0)
-            xnew = latgrid
-            ynew = pgrid
+            z = latparray # values of the variable on the maximum resn lat-p grid that I sampled from ERA-I earlier
+            f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0) # function that will return variable on whatever latp grid is passed to it
+            # This is where I need to integrate instead of evaluating at a point
+            xnew = latgrid # latgrid is the lats at the centre of each lat col in the 2D RCM. Need the edges
+            print latgrid
+            ynew = pgrid # pgrid is the ps in the 2D RCM
+            # Think/read about how to bin the large array into the small one. 
+            # for i_lat in range(len(lats)):
+            #     for i_p in range(len(pressures)):
+
+
             xxnew, yynew = np.meshgrid(xnew,ynew)
             (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
             znew = f((xxnewr,yynewr),method='linear')
@@ -320,9 +327,11 @@ for ncols in ncolss:
         collats[i-1] = (latbounds[i-1] + latbounds[i])/2
 
     latweights = np.cos(radians(collats))
-    latgrid = collats
+    # latgrid = collats
+    latgrid = latbounds
     # pgrid = np.linspace(1000,1,nlays)
-    pgrid = np.linspace(1000,min_press,nlays)
+    # pgrid = np.linspace(1000,min_press,nlays)
+    pgrid = np.linspace(1000,min_press,nlays+1)
 
     q_latp_max = np.load(interpdir+'q_latp.npy')
     o3_latp_max = np.load(interpdir+'o3_latp.npy')
