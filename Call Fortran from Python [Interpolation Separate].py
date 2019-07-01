@@ -153,7 +153,7 @@ for ncols in ncolss:
             ynew = pgrid # pgrid is the ps in the 2D RCM
             # Think/read about how to bin the large array into the small one.
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
-            counts = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
+            weights = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             lats_int = np.linspace(-90,90,100) # lats to integrate over (step size)
             pressures_int = np.linspace(1000,1,100) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
@@ -162,10 +162,10 @@ for ncols in ncolss:
                         for i_pg in range(len(pgrid)-1):
                             if (latgridbounds[i_latg] <= lats_int[i_lat] < latgridbounds[i_latg+1]):
                                 if (pgrid[i_pg] >= pressures_int[i_p] > pgrid[i_pg+1]):
-                                    znew[i_latg,i_pg] += f((lats_int[i_lat],pressures_int[i_p]),method="linear")
-                                    counts[i_latg,i_pg] += 1
+                                    znew[i_latg,i_pg] += f((lats_int[i_lat],pressures_int[i_p]),method="linear") * np.cos(np.deg2rad(lats_int[i_lat]))
+                                    weights[i_latg,i_pg] += np.cos(np.deg2rad(lats_int[i_lat]))
 
-            znew = znew/counts
+            znew = znew/weights
             print znew
 
 
