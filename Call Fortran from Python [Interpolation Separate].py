@@ -23,9 +23,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [3]
+ncolss = [1]
 ncloudcols = 5
-nlays = 199
+nlays = 10
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -148,19 +148,32 @@ for ncols in ncolss:
             z = latparray # values of the variable on the maximum resn lat-p grid that I sampled from ERA-I earlier
             f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0) # function that will return variable on whatever latp grid is passed to it
             # This is where I need to integrate instead of evaluating at a point
-            xnew = latgrid # latgrid is the lats at the centre of each lat col in the 2D RCM. Need the edges
+            xnew = latgridbounds # latgrid is the lats at the centre of each lat col in the 2D RCM. Need the edges
             print latgrid
             ynew = pgrid # pgrid is the ps in the 2D RCM
-            # Think/read about how to bin the large array into the small one. 
-            # for i_lat in range(len(lats)):
-            #     for i_p in range(len(pressures)):
+            # Think/read about how to bin the large array into the small one.
+            znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
+            counts = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
+            lats_int = np.linspace(-90,90,100) # lats to integrate over (step size)
+            pressures_int = np.linspace(1000,1,100) # ps to integrate over (step size)
+            for i_lat in range(len(lats_int)):
+                for i_p in range(len(pressures_int)):
+                    for i_latg in range(len(latgridbounds)-1):
+                        for i_pg in range(len(pgrid)-1):
+                            if (latgridbounds[i_latg] <= lats_int[i_lat] < latgridbounds[i_latg+1]):
+                                if (pgrid[i_pg] >= pressures_int[i_p] > pgrid[i_pg+1]):
+                                    znew[i_latg,i_pg] += f((lats_int[i_lat],pressures_int[i_p]),method="linear")
+                                    counts[i_latg,i_pg] += 1
+
+            znew = znew/counts
+            print znew
 
 
-            xxnew, yynew = np.meshgrid(xnew,ynew)
-            (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
-            znew = f((xxnewr,yynewr),method='linear')
-            znew=znew.reshape(nlays,ncols)
-            znew = znew[:,::-1]
+            # xxnew, yynew = np.meshgrid(xnew,ynew)
+            # (xxnewr,yynewr) = (xxnew.ravel(),yynew.ravel())
+            # znew = f((xxnewr,yynewr),method='linear')
+            # znew=znew.reshape(nlays,ncols)
+            # znew = znew[:,::-1]
 
             if (shortname == pertvar):
                 znew = znew * pert
@@ -209,8 +222,8 @@ for ncols in ncolss:
                 fileloc = outdir + filename
                 file = open(fileloc,'w')
 
-                for i in range(len(znew[:,col])):
-                    file.write(str(znew[i,col]))
+                for i in range(len(znew[col,:])):
+                    file.write(str(znew[col,i]))
                     file.write('\n')
 
                 file.write('&')
@@ -327,8 +340,8 @@ for ncols in ncolss:
         collats[i-1] = (latbounds[i-1] + latbounds[i])/2
 
     latweights = np.cos(radians(collats))
-    # latgrid = collats
-    latgrid = latbounds
+    latgrid = collats
+    latgridbounds = latbounds
     # pgrid = np.linspace(1000,1,nlays)
     # pgrid = np.linspace(1000,min_press,nlays)
     pgrid = np.linspace(1000,min_press,nlays+1)
