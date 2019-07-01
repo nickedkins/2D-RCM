@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [1]
+ncolss = [5]
 ncloudcols = 5
 nlays = 10
 days = 5000 #model days
@@ -149,7 +149,6 @@ for ncols in ncolss:
             f = interpolate.RegularGridInterpolator((lats[::-1],pressures),z.T,bounds_error=False,fill_value=1000.0) # function that will return variable on whatever latp grid is passed to it
             # This is where I need to integrate instead of evaluating at a point
             xnew = latgridbounds # latgrid is the lats at the centre of each lat col in the 2D RCM. Need the edges
-            print latgrid
             ynew = pgrid # pgrid is the ps in the 2D RCM
             # Think/read about how to bin the large array into the small one.
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
@@ -166,7 +165,6 @@ for ncols in ncolss:
                                     weights[i_latg,i_pg] += np.cos(np.deg2rad(lats_int[i_lat]))
 
             znew = znew/weights
-            print znew
 
 
             # xxnew, yynew = np.meshgrid(xnew,ynew)
@@ -243,11 +241,24 @@ for ncols in ncolss:
                     file.write('\n')
 
                 file.close()
+
     def interpolate_createprrtminput_sfc(shortname,latarray,lats):
         lats = lats
         z = latarray
         f = interp1d(lats,z)
-        varss_int = f(latgrid)
+
+        weights = np.zeros( len(latgridbounds)-1 )
+        lats_int = np.linspace(-90,90,100)
+        varss_int = np.zeros(len(latgridbounds)-1)
+        for i_lat in range(len(lats_int)):
+            for i_latg in range(len(latgridbounds)-1):
+                if (latgridbounds[i_latg] <= lats_int[i_lat] < latgridbounds[i_latg+1]):
+                    varss_int[i_latg] += f(lats_int[i_lat]) * np.cos(np.deg2rad(lats_int[i_lat]))
+                    weights[i_latg] += np.cos(np.deg2rad(lats_int[i_lat]))
+
+        varss_int /= weights
+        print varss_int
+        # varss_int = f(latgrid)
 
         if (shortname == pertvar):
             varss_int = varss_int * pert
@@ -275,6 +286,7 @@ for ncols in ncolss:
                 file.write('\n')
 
             file.close()
+
     def create_manual_cloud_inputs():
         
         # Calculate clear sky fraction with random overlap assumption
