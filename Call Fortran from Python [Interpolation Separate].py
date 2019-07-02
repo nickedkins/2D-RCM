@@ -23,18 +23,18 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [5]
-ncloudcols = 5
-nlays = 10
+ncolss = [1]
+ncloudcols = 2
+nlays = 199
 days = 5000 #model days
 min_press = 1.
-cloud_source = 1 #0 for manual, 1 for MISR
+cloud_source = 0 #0 for manual, 1 for MISR
 
 for ncols in ncolss:
 
     ncols = int(ncols)
 
-    def create_misr_cloud_inputs():
+    def create_misr_cloud_inputs(add_cld_alt):
                     
         cfs = misr_cf_latalt_max
         misr_alts = np.linspace(0,20,num=39) # altitudes in original MISR data
@@ -47,9 +47,11 @@ for ncols in ncolss:
         for i in range(len(altbins)+1):
             altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
 
-        od_low = 3.0 * 0.
-        od_mid = 3.0 * 0.
-        od_high = 0.3 * 0.
+        od_low = 3.0
+        od_mid = 3.0
+        od_high = 3.0
+
+        print altbins
 
         for i in range(len(altbins)):
             if (altbins[i] < 3.0):
@@ -84,9 +86,12 @@ for ncols in ncolss:
 
         for col in range(ncols):
             tempcloudfrac = 0.0
-            for cloudcol in range(ncloudcols-1):
+            for cloudcol in range(ncloudcols):
                 tempcloudfrac = tempcloudfrac + binned_cf[col,cloudcol] - tempcloudfrac * binned_cf[col,cloudcol]
-                clearfrac[col] = (1.0 - tempcloudfrac) / 2.0
+                # clearfrac[col] = (1.0 - tempcloudfrac) / 2.0
+                # clearfrac[col] = (1.0 - tempcloudfrac)
+
+            clearfrac[col] = 1.0 - np.sum(binned_cf[col,:])
 
         for col in range(ncols):
             filename = 'ccfracs col %2d' % (col)
@@ -104,7 +109,7 @@ for ncols in ncolss:
             fileloc = outdir + filename
             file = open(fileloc,'w')
             for cloudcol in range(ncloudcols):
-                file.write(str(altbins[cloudcol]))
+                file.write(str(altbins[cloudcol]+add_cld_alt)) #nje
                 file.write('\n')
             file.write('1.0') # set altitude for clear column to 1 km
             file.write('\n')
@@ -153,8 +158,8 @@ for ncols in ncolss:
             # Think/read about how to bin the large array into the small one.
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             weights = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
-            lats_int = np.linspace(-90,90,100) # lats to integrate over (step size)
-            pressures_int = np.linspace(1000,1,100) # ps to integrate over (step size)
+            lats_int = np.linspace(-90,90,30) # lats to integrate over (step size)
+            pressures_int = np.linspace(2000,1,500) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
                 for i_p in range(len(pressures_int)):
                     for i_latg in range(len(latgridbounds)-1):
@@ -356,7 +361,7 @@ for ncols in ncolss:
     latgridbounds = latbounds
     # pgrid = np.linspace(1000,1,nlays)
     # pgrid = np.linspace(1000,min_press,nlays)
-    pgrid = np.linspace(1000,min_press,nlays+1)
+    
 
     q_latp_max = np.load(interpdir+'q_latp.npy')
     o3_latp_max = np.load(interpdir+'o3_latp.npy')
@@ -421,8 +426,8 @@ for ncols in ncolss:
 
     cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)    
 
-    # cld_heights = np.linspace(0,12,5)
-    cld_heights = [5.0]
+    cld_heights = np.linspace(0,12,5)
+    # cld_heights = [5.0]
     # cld_height = [5.0]
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
@@ -435,9 +440,12 @@ for ncols in ncolss:
     psurf_overrides = [1000.]
     #fsws = np.linspace(200,500,num=8)
     fsws = [238.24] #238.24 to replicate RD
+    add_cld_alts = [0.0,5.7]
 
+    i_ch = 0
     for cld_height in cld_heights:
         for fsw in fsws:
+            i_pso = 0
             for psurf_override in psurf_overrides:
                 for mixco2_prescribed_fac in mixco2_prescribed_facs:
                     for cld_tau in cld_taus:
@@ -446,12 +454,17 @@ for ncols in ncolss:
                                 for pin2 in pin2s:
                                     for pico2 in pico2s:
 
+                                        # nlays = nlayss[i_pso]
+                                        pgrid = np.linspace(psurf_override,min_press,nlays+1)
+
+                                        add_cld_alt = add_cld_alts[i_pso]
+
                                         #mnlcld
                                         manual_clouds = []
                                         # if (psurf_override > 1000.):
                                         #     manual_clouds.append([1000.,0.99,cld_tau])
                                         # manual_clouds.append([450,0.66,9.9])
-                                        # manual_clouds.append([cld_height,0.99,0.1])
+                                        manual_clouds.append([cld_height,0.5,0.2])
                                         
                         
                                         sa = [sa] * ncols
@@ -460,7 +473,7 @@ for ncols in ncolss:
                                             ncloudcols = shape(manual_clouds)[0]
                                             create_manual_cloud_inputs()
                                         elif ( cloud_source == 1 ):
-                                            create_misr_cloud_inputs()
+                                            create_misr_cloud_inputs(add_cld_alt)
                                     
                                         #pertvars = ['q','cc','ciwc','clwc','o3']
                                         pertvars = ['q']
@@ -523,7 +536,7 @@ for ncols in ncolss:
                                         #lct = 250.0
                                         #lcf = 0.5
                                         #lcod = 5.0
-                                        tp = 1.0 * 1e6
+                                        tp = 1.0
                                         #fth = np.zeros(ncols)
                                         #for i in range(ncols):
                                         #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -571,7 +584,7 @@ for ncols in ncolss:
                                         mtranspon = 1
                                         gas_amt_fac_h2o = 1.0 * 0.0
                                         gas_amt_fac_co2 = 1e-12
-                                        gas_amt_fac_o3 = 1.0 * 0.0
+                                        gas_amt_fac_o3 = 1.0 * 0.0 
                                         gas_amt_p_high_h2o = 1e6
                                         gas_amt_p_low_h2o = 1000.
                                         gas_amt_p_high_co2 = 1e6
@@ -590,6 +603,7 @@ for ncols in ncolss:
                                         c_green = 5.
                                         H_green = 7.
                                         cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
+                                        surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
                                     
                                         ur1 = ur
                                     
@@ -601,7 +615,8 @@ for ncols in ncolss:
                                         npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
                                         twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
                                         gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
-                                        gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype]
+                                        gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
+                                        surf_emiss_on]
                                         
                                         f = open(project_dir+'/Earth RCM Parameters','w')
                                         for m in params:
@@ -642,6 +657,8 @@ for ncols in ncolss:
                                             continue
                                  
                                         counter = counter + 1
+                i_pso+=1
+        i_ch +=1
 
 ########################################################################################################################
 

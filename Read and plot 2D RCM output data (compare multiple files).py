@@ -51,9 +51,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cld_height vs trop t p/fth=150/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cld_height vs trop t p/const total tau, changing frac/tau=0.1, frac=1/'
+]
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')
@@ -69,7 +69,7 @@ t_grey = grey_data[:,0]
 z_grey = grey_data[:,1]
 
 # plt.figure(1)
-# plt.subplot(341)
+# # plt.subplot(341)
 # plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
 # plt.plot(t_grey,z_grey,label='Grey')
 # plt.xlabel('Temperature (K)')
@@ -281,11 +281,11 @@ for directory in directories:
             for col in range(ncols):
 
                 conv_trop_ind = int(convcols[0,col])
-                if conv_trop_ind > nlayersm:
+                if conv_trop_ind > nlayersm:    
                     conv_trop_ind = nlayersm
 
-                print('DW LW at tropopause: ', totdflumcols[conv_trop_ind,col])
-                print('abs SW above tropopause: ', sum(A_oz_lcols[conv_trop_ind:nlayersm,col])*1362./4.)
+                # print('DW LW at tropopause: ', totdflumcols[conv_trop_ind,col])
+                # print('abs SW above tropopause: ', sum(A_oz_lcols[conv_trop_ind:nlayersm,col])*1362./4.)
 
                 p_trop = pzmcols[conv_trop_ind,col]
                 t_trop = tzmcols[conv_trop_ind,col]
@@ -301,6 +301,7 @@ for directory in directories:
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
+                # plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(grids_on==2):
                     plt.gca().minorticks_on()

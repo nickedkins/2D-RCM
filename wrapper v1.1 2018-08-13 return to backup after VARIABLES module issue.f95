@@ -196,7 +196,7 @@ subroutine wrapper
     read(73,*) c_green
     read(73,*) H_green
     read(73,*) cloudloctype
-
+    read(73,*) surf_emiss_on
 
 
     close(73)
@@ -805,10 +805,18 @@ subroutine wrapper
                 ! Call the subroutine rrtm, which calculates the upward and downward fluxes and the heating rates
                 ! call rrtm(band_flux_up,band_flux_down)
 
+                if(surf_emiss_on == 0) then
+                    tboundm = tboundm/3.0
+                end if
 
                 call rrtm
                 ! call calcswhtr(altzm,pzm,tzm,mixh2o,mmwtot,tau_cld,wklm,htrlh,htrlh_tot,htro3_lh,htro3_lh_tot,&
                 !     abs_surf,R_g,tot_sol_abs_lh,abs_h2o,abs_o3,sol_inc,cloudcolp,cloudcoltau)
+
+                if(surf_emiss_on == 0) then
+                    tboundm = tboundm*3.0
+                end if
+
                 call calcswhtr
 
                 ! if (cloudcol==5) then
