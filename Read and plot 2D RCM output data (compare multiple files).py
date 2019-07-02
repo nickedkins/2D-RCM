@@ -52,7 +52,8 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cld_height vs trop t p/const total tau, changing frac/tau=0.1, frac=1/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld5.7/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld6.1/'
 ]
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
@@ -69,7 +70,7 @@ t_grey = grey_data[:,0]
 z_grey = grey_data[:,1]
 
 # plt.figure(1)
-# # plt.subplot(341)
+# plt.subplot(341)
 # plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
 # plt.plot(t_grey,z_grey,label='Grey')
 # plt.xlabel('Temperature (K)')
@@ -230,7 +231,7 @@ def readfile(fn,counter):
 # ncols=5
 
 plot_all_vert_profiles = 1
-legends_on = 1
+legends_on = 0
 grids_on = 1
 
 i1 = 0
@@ -291,18 +292,21 @@ for directory in directories:
                 t_trop = tzmcols[conv_trop_ind,col]
                 z_trop = altzmcols[conv_trop_ind,col]
 
-                print p_trop, t_trop, z_trop/1000., pzmcols[0,col]
+                print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
+
+                # for i in range(len(altzmcols[:,col])):
+                #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
 
                 plt.figure(i1+1)
                 # plt.figure(1)
                 plt.subplot(341)
                 plt.title('tzm')
-                plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral')
-                # plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
+                # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-                plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
-                # plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
+                plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(grids_on==2):
                     plt.gca().minorticks_on()
                 if(grids_on==1):
@@ -323,7 +327,7 @@ for directory in directories:
                 plt.figure(i1+1)
                 plt.subplot(342)
                 plt.title('htrm')
-                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1])
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.1,ls='--')

@@ -24,11 +24,11 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
-ncloudcols = 2
+ncloudcols = 20
 nlays = 199
 days = 5000 #model days
 min_press = 1.
-cloud_source = 0 #0 for manual, 1 for MISR
+cloud_source = 1 #0 for manual, 1 for MISR
 
 for ncols in ncolss:
 
@@ -40,23 +40,23 @@ for ncols in ncolss:
         misr_alts = np.linspace(0,20,num=39) # altitudes in original MISR data
         misr_lats = np.linspace(-90,90,num=360)
         latbins = np.linspace(-90,90,num=ncols)
-        altbin_edges = np.linspace(0,10,num=ncloudcols+1)
+        altbin_edges = np.linspace(0,20,num=ncloudcols+1)
         altbins = np.zeros(ncloudcols)
         cld_taus = np.zeros(ncloudcols)
 
         for i in range(len(altbins)+1):
             altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
 
-        od_low = 3.0
-        od_mid = 3.0
-        od_high = 3.0
+        od_low = 3.0 
+        od_mid = 3.0 
+        od_high = 1.0
 
         print altbins
 
         for i in range(len(altbins)):
             if (altbins[i] < 3.0):
                 cld_taus[i] = od_low
-            elif(altbins[i] < 7.0):
+            elif(altbins[i] < 10.):
                 cld_taus[i] = od_mid
             else:
                 cld_taus[i] = od_high
@@ -417,7 +417,7 @@ for ncols in ncolss:
     # sas = np.linspace(0.2,0.8,num=5)
     sas = [0.3]
     #tboundms = np.linspace(250,335,num=10)
-    tboundms = [288.4]
+    tboundms = [288.9]
 
     #for pertcol in range(ncols):
 
@@ -426,8 +426,8 @@ for ncols in ncolss:
 
     cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)    
 
-    cld_heights = np.linspace(0,12,5)
-    # cld_heights = [5.0]
+    # cld_heights = np.linspace(0,12,5)
+    cld_heights = [5.0]
     # cld_height = [5.0]
     # cld_taus = np.linspace(0.0,9.9,9)
     cld_taus = [9.9]
@@ -436,11 +436,11 @@ for ncols in ncolss:
     mixco2_prescribed_facs = np.array([1.0])
     # mixco2_prescribed_facs = np.array([0.03125])
 
-    # psurf_overrides = [1000.,2000.]
-    psurf_overrides = [1000.]
+    psurf_overrides = [1000.,2000.]
+    # psurf_overrides = [1000.]
     #fsws = np.linspace(200,500,num=8)
-    fsws = [238.24] #238.24 to replicate RD
-    add_cld_alts = [0.0,5.7]
+    fsws = [241.08] #238.24 to replicate RD
+    add_cld_alts = [0.0,6.1]
 
     i_ch = 0
     for cld_height in cld_heights:
@@ -453,6 +453,9 @@ for ncols in ncolss:
                             for sa in sas:
                                 for pin2 in pin2s:
                                     for pico2 in pico2s:
+
+                                        nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)*len(mixco2_prescribed_facs)*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)
+                                        print "Number of loops: ", nloops
 
                                         # nlays = nlayss[i_pso]
                                         pgrid = np.linspace(psurf_override,min_press,nlays+1)
@@ -540,7 +543,7 @@ for ncols in ncolss:
                                         #fth = np.zeros(ncols)
                                         #for i in range(ncols):
                                         #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                        fth = [150.] * ncols
+                                        fth = [200.] * ncols
                                         ol = nlays
                                         asp = 2.0   
                                         cs = 0
