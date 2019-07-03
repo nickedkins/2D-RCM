@@ -230,7 +230,7 @@ def readfile(fn,counter):
 # nlayersms=[31,100]
 # ncols=5
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -425,34 +425,23 @@ for directory in directories:
 
 
 # master indices: master[file][layer][column]
-# tzm_master = np.array(tzm_master)
-# pzm_master = np.array(pzm_master)
-# boxlatcols_master = np.array(boxlatcols_master)
+tzm_master = np.array(tzm_master)
+pzm_master = np.array(pzm_master)
+boxlatcols_master = np.array(boxlatcols_master)
 
-# filenames = np.array(filenames[0])
-
-# x = np.linspace(-90,90,ncols)
-
+filenames = np.array(filenames[0])
+nfiles = len(filenames) -1
 
 
-# for i in range( shape(tzm_master)[0] ):
+print tzm_master[:,0,:]
 
-#     lats = boxlatcols_master[i,0,:]
-#     pzms = pzm_master[i,:,0]
-#     tzms = tzm_master[i,:,:]
-#     tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
+for i_f in range(1,nfiles):
+    plt.semilogy(tzm_master[i_f,:,0]-tzm_master[0,:,0],pzm_master[i_f,:,0])
+    plt.axvline(0,linestyle='--')
+    plt.ylim(1000,1)
+    plt.xlabel('Change in temperature (K)')
+    plt.ylabel('Pressure (hPa)')
 
-#     plt.figure(1)
-#     plt.subplot(121+i)
-#     plt.contourf(lats,pzms,tzms,20)
-#     plt.gca().set_yscale('log')
-#     plt.ylim(1000,10)
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Altitude')
-#     plt.colorbar()
-
-#     plt.figure(2)
-#     plt.plot(lats,tzms[0,:])
     
 
 # plt.subplot(223)
