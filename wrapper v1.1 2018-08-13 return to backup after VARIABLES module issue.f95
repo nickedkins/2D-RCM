@@ -606,7 +606,7 @@ subroutine wrapper
             do i=1,nlayersm
                 read(82,*) mixh2o(i)
                 read(83,*) mixo3(i)
-                mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
+                mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) * 1.07 !NJE
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)

@@ -52,8 +52,8 @@ directories = [
 ]
 
 # directories = [
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld5.7/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld6.1/'
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/nl=199,tp=0.01/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/h2ofac=0.93/'
 # ]
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
@@ -247,7 +247,7 @@ boxlatcols_master = []
 
 filenames = []
 
-
+pertps = np.linspace(1000,0,19)
 
 for directory in directories:
 
@@ -257,7 +257,6 @@ for directory in directories:
     color = colors[i1]
 
     a = sorted(listdir(directory))
-
     filenames.append(a)
 
     counter=0
@@ -277,25 +276,34 @@ for directory in directories:
 
         i3=0
 
-        if (plot_all_vert_profiles == 1):
 
-            for col in range(ncols):
 
-                conv_trop_ind = int(convcols[0,col])
-                if conv_trop_ind > nlayersm:    
-                    conv_trop_ind = nlayersm
+        for col in range(ncols):
 
-                # print('DW LW at tropopause: ', totdflumcols[conv_trop_ind,col])
-                # print('abs SW above tropopause: ', sum(A_oz_lcols[conv_trop_ind:nlayersm,col])*1362./4.)
+            conv_trop_ind = int(convcols[0,col])
+            if conv_trop_ind > nlayersm:    
+                conv_trop_ind = nlayersm
 
-                p_trop = pzmcols[conv_trop_ind,col]
-                t_trop = tzmcols[conv_trop_ind,col]
-                z_trop = altzmcols[conv_trop_ind,col]
 
-                print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
 
-                # for i in range(len(altzmcols[:,col])):
-                #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
+            # print('DW LW at tropopause: ', totdflumcols[conv_trop_ind,col])
+            # print('abs SW above tropopause: ', sum(A_oz_lcols[conv_trop_ind:nlayersm,col])*1362./4.)
+
+            p_trop = pzmcols[conv_trop_ind,col]
+            t_trop = tzmcols[conv_trop_ind,col]
+            z_trop = altzmcols[conv_trop_ind,col]
+
+            # plt.figure(3)
+            # if(i2 < len(pertps)):
+            #     plt.plot(pertps[i2],z_trop,'o')
+
+            if(i2<len(pertps)):
+                print pertps[i2],  p_trop, t_trop, z_trop/1000., tzmcols[0,col]
+
+            # for i in range(len(altzmcols[:,col])):
+            #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
+
+            if (plot_all_vert_profiles == 1):
 
                 plt.figure(i1+1)
                 # plt.figure(1)
@@ -435,14 +443,29 @@ nfiles = len(filenames) -1
 
 print tzm_master[:,0,:]
 
+
 for i_f in range(1,nfiles):
-    plt.semilogy(tzm_master[i_f,:,0]-tzm_master[0,:,0],pzm_master[i_f,:,0])
+    plt.figure(1)
+    plt.semilogy(tzm_master[i_f,:,0]-tzm_master[-1,:,0],pzm_master[i_f,:,0])
     plt.axvline(0,linestyle='--')
     plt.ylim(1000,1)
     plt.xlabel('Change in temperature (K)')
     plt.ylabel('Pressure (hPa)')
 
-    
+plt.figure(2)
+# plt.plot(tzm_master[:-2,0,:]-tzm_master[-1,0,:],pertps[:-1],'-o')
+plt.plot(tzm_master[:-2,0,:]-289.476,pertps[:-1],'-o')
+plt.ylim(1000,0)
+plt.ylabel('Pressure at bottom of perturbation (hPa)')
+plt.xlabel('Change in surface temperature (K)')
+
+
+
+
+
+for i in range(nfiles-1):
+    print pertps[i], tzm_master[i,0,0] - tzm_master[-2,0,0]
+
 
 # plt.subplot(223)
 # plt.gca().set_yscale('log')

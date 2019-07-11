@@ -51,10 +51,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld5.7/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double ps trop const/misr20,addcld6.1/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/nl=30/'
+]
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')

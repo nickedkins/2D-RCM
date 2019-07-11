@@ -17,15 +17,15 @@ from scipy.interpolate import interp1d, interp2d, RectBivariateSpline, RegularGr
 from os import listdir
 from time import localtime, strftime
 from scipy import stats
-
+# 
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
-ncloudcols = 1
-nlays = 30
+ncloudcols = 5
+nlays = 199
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -48,8 +48,8 @@ for ncols in ncolss:
             altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
 
         od_low = 3.0 
-        od_mid = 3.0 
-        od_high = 1.0
+        od_mid = 3.0
+        od_high = 0.1
 
 
         for i in range(len(altbins)):
@@ -245,7 +245,6 @@ for ncols in ncolss:
                     file.write('\n')
 
                 file.close()
-
     def interpolate_createprrtminput_sfc(shortname,latarray,lats):
         lats = lats
         z = latarray
@@ -289,7 +288,6 @@ for ncols in ncolss:
                 file.write('\n')
 
             file.close()
-
     def create_manual_cloud_inputs():
         
         # Calculate clear sky fraction with random overlap assumption
@@ -415,7 +413,7 @@ for ncols in ncolss:
     # sas = np.linspace(0.2,0.8,num=5)
     sas = [0.3]
     #tboundms = np.linspace(250,335,num=10)
-    tboundms = [288.9]
+    tboundms = [288.4]
 
     #for pertcol in range(ncols):
 
@@ -437,12 +435,12 @@ for ncols in ncolss:
     # psurf_overrides = [1000.,2000.]
     psurf_overrides = [1000.]
     #fsws = np.linspace(200,500,num=8)
-    fsws = [200.0] #238.24 to replicate RD
+    fsws = [240.0] #238.24 to replicate RD
     # add_cld_alts = [0.0,6.1]
     add_cld_alts = [0.0]
 
     i_pp = 0
-    for ppert in np.linspace(1000,100,5):
+    for ppert in np.linspace(1000,0,1):
         i_ch = 0
         for cld_height in cld_heights:
             for fsw in fsws:
@@ -540,7 +538,7 @@ for ncols in ncolss:
                                             #lct = 250.0
                                             #lcf = 0.5
                                             #lcod = 5.0
-                                            tp = 0.1
+                                            tp = 0.02
                                             #fth = np.zeros(ncols)
                                             #for i in range(ncols):
                                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -586,15 +584,15 @@ for ncols in ncolss:
                                             ur_seb = 1e10
                                             couple_tgta = 1
                                             mtranspon = 1
-                                            gas_amt_fac_h2o = 1e-12
-                                            gas_amt_fac_co2 = 1e-12
-                                            gas_amt_fac_o3 = 1e-12
-                                            # gas_amt_p_high_h2o = ppert
-                                            # gas_amt_p_low_h2o = ppert - 100.
-                                            gas_amt_p_high_h2o = 1e6
-                                            gas_amt_p_low_h2o = 1000.
+                                            gas_amt_fac_h2o = 1.0
+                                            gas_amt_fac_co2 = 2.0
+                                            gas_amt_fac_o3 = 1.0
+                                            gas_amt_p_high_h2o = ppert
+                                            gas_amt_p_low_h2o = ppert - 50.
+                                            # gas_amt_p_high_h2o = 1e6
+                                            # gas_amt_p_low_h2o = 0.
                                             gas_amt_p_high_co2 = 1e6
-                                            gas_amt_p_low_co2 = 1000.
+                                            gas_amt_p_low_co2 = 0.
                                             gas_amt_p_high_o3 = 1e6
                                             gas_amt_p_low_o3 = 1000.
                                             gas_amt_pert_h2o = 1
@@ -669,5 +667,5 @@ for ncols in ncolss:
 
 ########################################################################################################################
 
-os.system('say "Done"')
+os.system('say "jy lee jy lee"')
 show()
