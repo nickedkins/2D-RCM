@@ -1217,6 +1217,7 @@ subroutine wrapper
         do i=1,ncols-1
             delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
             delta_x_edge(i) = x_edge(i) - x_edge(i+1)
+            delta_y_edge(i) = 2. * r_earth * tan( (latbounds(i) - latbounds(i-1))/2. )
             meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
             ! print*, delta_T_edge(i),',',delta_x_edge(i),x_edge(i),',',1.0 - (x_edge(i))**2.0
         enddo

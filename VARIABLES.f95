@@ -14,6 +14,7 @@ MODULE VARIABLES
     real,parameter					::universal=avogadro*boltzmann
     real,parameter					::solar_constant=1362.0
     real,parameter					::Liv=2836631.0,eps=0.622,cplh=1003.0,hv = 2501000.0
+    real,parameter :: r_earth = 6371e3
 
     integer	::nlayersm,ioutm,iatmm,ixsectm,iscatm,numangsm,icldm,iemissm,nmolm,ireflecm
     real	::tboundm
