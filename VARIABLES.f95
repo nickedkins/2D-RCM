@@ -36,7 +36,7 @@ MODULE VARIABLES
     real :: avl,bvl,cvl,dvl,evl,fvl,gvl
 
     real :: tcels,t1_vl=288.0,t2_vl=268.0,delta_pv_star,delta_x_lats,delta_temp
-    real, dimension(0:maxncols) :: x_edge,delta_x_edge,delta_T_edge,meridtransp_edge
+    real, dimension(0:maxncols) :: x_edge,delta_x_edge,delta_T_edge,meridtransp_edge,delta_y_edge
     real,dimension(MAXNCOLS) :: delta_meridtransp_edge
     integer :: adj1,adj2,adj3
     
@@ -132,6 +132,8 @@ MODULE VARIABLES
     gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3
     integer :: gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,mixco2_prescribed_on,steps_before_toa_adj,cloudloctype
     real :: psurf_override,mixco2_prescribed,a_green,b_green,c_green,H_green
+    real :: h_scale,f_cor,beta,gamma_d
+    real, dimension(maxncols) :: d_mid,d_trop
 
 
     !Lacis and Hansen Ozone variables

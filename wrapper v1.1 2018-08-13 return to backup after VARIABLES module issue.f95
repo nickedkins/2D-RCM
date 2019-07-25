@@ -79,7 +79,7 @@ subroutine wrapper
     refl_lay_ind=0
     Llh=0
 
-    
+
 
 
     Lv = 2.25e6 !latent heat of vaporisation water [J/kg]
@@ -385,7 +385,7 @@ subroutine wrapper
         rspecific_co2(i) = cpco2(i) - cvco2(i)
         cptot(i) = vol_mixco2 * cpco2(i) + vol_mixn2 * cpn2 + vol_mixo2 * cpo2
         cvtot(i) = vol_mixco2 * cvco2(i) + vol_mixn2 * cvn2 + vol_mixo2 * cvo2
-!        rsp_tot(i) = cptot(i) - cvtot(i)
+        !        rsp_tot(i) = cptot(i) - cvtot(i)
         ! cptot(i) = 1.003 !default
         rsp_tot(i) = 0.287*1000. !default
         ! rsp_tot(i) = 180.0 !new default? NJE
@@ -427,14 +427,14 @@ subroutine wrapper
 
     if (fp == 0) then
         do i =1,nlayersm
-!            logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
-!            pzm(i) = exp(logpzm(i))
+            !            logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
+            !            pzm(i) = exp(logpzm(i))
             select case(playtype)
-                case(0)
-                    pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                case(1)
-                    sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                    pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+            case(0)
+                pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+            case(1)
+                sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
             end select            
             if (pzm(i) < min_press) then
                 pzm(i) = min_press
@@ -450,7 +450,7 @@ subroutine wrapper
     !     do i=1,nlayersm
     !         tzm(i) = tzm(i-1) -6.50*(altzm(i)-altzm(i-1))/1000
     !         if (tzm(i) < t_min) tzm(i) = t_min
-    !         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
+!         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
     !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
     !     enddo
     ! endif
@@ -544,6 +544,14 @@ subroutine wrapper
 
         do col=1,ncols
 
+            ! delta_y_edge(col) = 2. * r_earth * tan( (latbounds(col) - latbounds(col-1))/2. )
+            ! h_scale = 7.5
+            ! f_cor = 2. * 7.29e-5 * sind( latbounds(col) )
+            ! beta = 2. * 7.29e-5 * cosd( latbounds(col) ) / r_earth
+            ! gamma_d = -9.8
+            ! d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
+            !     &( gamma_d - lapsecritcols(col) ) ) )
+
 
             tboundm = tboundmcols(col)
             sol_inc = insolcols(col)
@@ -567,7 +575,7 @@ subroutine wrapper
             !     do i=1,nlayersm
             !         tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000
             !         if (tzm(i) < t_min) tzm(i) = t_min
-            !         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
+!         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
             !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
             !     enddo
             ! endif
@@ -592,7 +600,7 @@ subroutine wrapper
             open(88,file=trim(cctausfn),form='formatted')
             open(89,file=trim(ccaltsfn),form='formatted')
 
-                open(92,file=('extra_clds'),form='formatted')
+            open(92,file=('extra_clds'),form='formatted')
 
             read(92,*) extra_cld_tau
             read(92,*) extra_cld_frac
@@ -636,7 +644,7 @@ subroutine wrapper
 
 
 
-!            fixed_sw = sol_inc * (1.0 - 0.23)
+            !            fixed_sw = sol_inc * (1.0 - 0.23)
 
 
             if (transpcalled == 1) then
@@ -678,11 +686,11 @@ subroutine wrapper
                 do i =1,nlayersm
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
                     select case(playtype)
-                        case(0)
-                            pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                        case(1)
-                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                            pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    case(0)
+                        pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    case(1)
+                        sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                        pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
                     end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
@@ -699,7 +707,7 @@ subroutine wrapper
             enddo
 
             ! do i=2,nlayersm
-            !     wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+!     wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
             ! enddo
 
             do i=1,nlayersm
@@ -746,7 +754,7 @@ subroutine wrapper
                 cvtot(i) = vol_mixco2 * cvco2(i) + vol_mixn2 * cvn2 + vol_mixo2 * cvo2
                 rsp_tot(i) = cptot(i) - cvtot(i)
                 ! cptot(i) = 1.003
-               rsp_tot(i) = 0.287 * 1000.
+                rsp_tot(i) = 0.287 * 1000.
                 ! rsp_tot(i) = 180.0 !NJE
             enddo
 
@@ -756,11 +764,11 @@ subroutine wrapper
                 sigma(0) = 1.0
                 do i =1,nlayersm
                     select case(playtype)
-                        case(0)
-                            pzm(i)=pzm(i-1)-(100000.-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                        case(1)
-                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                            pzm(i) = 1000. * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    case(0)
+                        pzm(i)=pzm(i-1)-(100000.-min_press)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    case(1)
+                        sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                        pzm(i) = 1000. * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
                     end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
@@ -783,7 +791,7 @@ subroutine wrapper
 
             tot_sol_abs_lhwghtd = 0.
 
-!            print*, 'ncloudcols = ',ncloudcols !NJE temporarily suppressing cloudcols
+            !            print*, 'ncloudcols = ',ncloudcols !NJE temporarily suppressing cloudcols
             ! ncloudcols = 1
 
             do cloudcol = 1,ncloudcols
@@ -860,14 +868,14 @@ subroutine wrapper
             abs_surf_lh = abs_surf_lhwghtd
 
 
-            
+
             ! call add_seb_to_tboundm
             if (couple_tgta == 1) then
                 tzm(0) = tboundm
                 tavelm(1) = tzm(0)
             end if
 
-          
+
             ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
 
             ! addhtr
@@ -888,7 +896,7 @@ subroutine wrapper
             ! do i=1,nlayersm
             !   htrm(i-1) = htrm(i-1)/newur(i)
             ! enddo
-            
+
             htrm(nlayersm) = 0.0
 
             ! if (j>2) then
@@ -917,16 +925,16 @@ subroutine wrapper
                 sigma(0) = 1.0
                 do i=1,nlayersm
                     select case(playtype)
-                        case(0)
-                            pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                        case(1)
-                            sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                            pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                    case(0)
+                        pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                    case(1)
+                        sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                        pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
                     end select            
                     if (pzm(i) < min_press) then
                         pzm(i) = min_press
                     endif            
-                        pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
+                    pavelm(i)=(pzm(i)+pzm(i-1))/2 !Set the average pressure for each layer
                 enddo
             endif
 
@@ -995,16 +1003,18 @@ subroutine wrapper
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
             ! applyhtr
-           do i=1,nlayersm
-               tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
-               if (tavelm(i) < t_min) tavelm(i) = t_min
-               ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
-               ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
-               ! if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
-               ! if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
-               ! htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
-               
-           enddo
+            do i=1,nlayersm
+                tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+                if (tavelm(i) < t_min) then 
+                    tavelm(i) = t_min
+                end if
+                ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
+                ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
+                ! if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
+                ! if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
+                ! htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
+
+            end do
 
             ! do i=1,nlayersm
             !   tzm(i) = tzm(i) + htrm(i-1)/(newur(i))
@@ -1014,12 +1024,12 @@ subroutine wrapper
             ! if (col==inversion_col) then
             !     tzm(0) = tboundm + inversion_strength
             ! endif
-            
+
 
             if (couple_tgta == 1) then
-                    tzm(0) = tboundm
-                    tavelm(1) = tzm(0)
-                end if
+                tzm(0) = tboundm
+                tavelm(1) = tzm(0)
+            end if
 
 
             do i=1,nlayersm-1
@@ -1055,14 +1065,14 @@ subroutine wrapper
             sigma(0) = 1.0
 
             do i =1,nlayersm
-!                logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
-!                pzm(i) = exp(logpzm(i))
-                 select case(playtype)
-                    case(0)
-                        pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
-                    case(1)
-                        sigma(i)=sigma(i-1) - 0.9 / nlayersm
-                        pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
+                !                logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
+                !                pzm(i) = exp(logpzm(i))
+                select case(playtype)
+                case(0)
+                    pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
+                case(1)
+                    sigma(i)=sigma(i-1) - 0.9 / nlayersm
+                    pzm(i) = pzm(0) * sigma(i)**4.0 * (3.0 - 2.0*sigma(i))
                 end select            
                 if (pzm(i) < min_press) then
                     pzm(i) = min_press
@@ -1144,18 +1154,18 @@ subroutine wrapper
             lhf = (Lv * c_drag * meanwind) / (461.52 * tzm(0)) * &
             & 6.1094*100. * &
             &( exp( 17.625 * ( tboundm - 273.15 ) / ( tboundm - 273.15 + 243.04 ) ) -&
-            & rel_hum(1) * exp( 17.625 * ( tzm(0) - 273.15 ) / ( tzm(0) - 273.15 + 243.04 ) ) ) 
+                & rel_hum(1) * exp( 17.625 * ( tzm(0) - 273.15 ) / ( tzm(0) - 273.15 + 243.04 ) ) ) 
             seb = totdflum(0) + abs_surf_lh - totuflum(0) - lhf - shf
             sebcols(col) = seb
             select case(sfc_heating)
-                case(0) ! SEB doesn't affect surface temperature
-                    tboundm = tboundm 
-                case(1) ! SEB warms/cools surface
-                    tboundm = tboundm + seb / ur_seb   
+            case(0) ! SEB doesn't affect surface temperature
+                tboundm = tboundm 
+            case(1) ! SEB warms/cools surface
+                tboundm = tboundm + seb / ur_seb   
             end select
             tboundmcols(col) = tboundm
 
-        enddo !columns do loop
+        end do !columns do loop
 
         tglobsum = 0.
         tglobmean = 0.
@@ -1214,12 +1224,22 @@ subroutine wrapper
         enddo
 
 
+        ! r_earth = 6371e3 !earth radius in m
+
         do i=1,ncols-1
             delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
             delta_x_edge(i) = x_edge(i) - x_edge(i+1)
-            delta_y_edge(i) = 2. * r_earth * tan( (latbounds(i) - latbounds(i-1))/2. )
+            delta_y_edge(i) = 2. * r_earth * tand( (latbounds(i) - latbounds(i-1))/2. )
+            h_scale = 7.5
+            f_cor = -1.0 * abs(2. * 7.29e-5 * sind( latbounds(i) )) !check where this abs() should go NJE task
+            beta = 2. * 7.29e-5 * cosd( latbounds(i) ) / r_earth
+            gamma_d = 9.8
+            d_mid(i) = h_scale * log( 1. - f_cor * abs(delta_T_edge(i)) / delta_y_edge(i) / ( h_scale * beta * &
+                &( gamma_d + lapsecritcols(i) ) ) )
+            d_trop(i) = wklm1cols(1,i) / wbrodlmcols(1,i) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(i) ) )
             meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
-            ! print*, delta_T_edge(i),',',delta_x_edge(i),x_edge(i),',',1.0 - (x_edge(i))**2.0
+            print*, i, latbounds(i), d_mid(i), d_trop(i), pzm(0) * exp( -1.0 * d_mid(i) / h_scale ), &
+            &pzm(0) * exp( -1.0 * d_trop(i) / h_scale )
         enddo
 
         meridtransp_edge(0) = 0.0
@@ -1452,7 +1472,7 @@ subroutine wrapper
                     write(*,1103) sum(abs_surf_cols)/ncols
                 endif
             enddo
-            
+
             write(*,1106,advance='no') 'Box SEB | '
             do col=1,ncols+1
                 if (col < ncols+1) then
@@ -1472,8 +1492,8 @@ subroutine wrapper
 
         ! Equilibrium check (eqbcheck)
         if (j > steps_before_toa_adj ) then !NJE
-          if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
-            ! if (stepssinceboxadj > steps_before_toa_adj) then
+            if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
+                ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 
                 print*, ('----------------------------------------------')
                 print*, 'Global Mean Temperature: ', tglobmean
@@ -1700,7 +1720,7 @@ subroutine wrapper
                         write(*,1103) abs_surf_globmean
                     endif
                 enddo
-                
+
                 write(*,1106,advance='no') 'Box SEB | '
                 do col=1,ncols+1
                     if (col < ncols+1) then
