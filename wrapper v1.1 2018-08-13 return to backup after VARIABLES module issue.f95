@@ -197,6 +197,8 @@ subroutine wrapper
     read(73,*) H_green
     read(73,*) cloudloctype
     read(73,*) surf_emiss_on
+    read(73,*) h2o_sb
+    read(73,*) h2o_for
 
 
     close(73)
@@ -1107,7 +1109,7 @@ subroutine wrapper
             tavelmcols(:,col) = tavelm
             tboundmcols(col) = tboundm
             tau_cldcols(:,col) = tau_cld
-            fracscols(:,col) = fracs
+            fracscols(:,col) = cld_fracs
             R_gcols(col) = R_g
 
 

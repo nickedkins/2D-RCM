@@ -18,14 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 # 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
 ncolss = [1]
-ncloudcols = 5
-nlays = 199
+ncloudcols = 1
+nlays = 30
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -538,7 +538,7 @@ for ncols in ncolss:
                                             #lct = 250.0
                                             #lcf = 0.5
                                             #lcod = 5.0
-                                            tp = 0.02
+                                            tp = 1e4
                                             #fth = np.zeros(ncols)
                                             #for i in range(ncols):
                                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -608,6 +608,8 @@ for ncols in ncolss:
                                             H_green = 7.
                                             cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
                                             surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
+                                            h2o_sb = 0 # h2o self-broadening component of continuum, 1 for on, 0 for off
+                                            h2o_for = 0 # h2o foreign-broadening component of continuum, 1 for on, 0 for off
                                         
                                             ur1 = ur
                                         
@@ -620,7 +622,7 @@ for ncols in ncolss:
                                             twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
                                             gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
                                             gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-                                            surf_emiss_on]
+                                            surf_emiss_on,h2o_sb,h2o_for]
                                             
                                             f = open(project_dir+'/Earth RCM Parameters','w')
                                             for m in params:
@@ -667,5 +669,5 @@ for ncols in ncolss:
 
 ########################################################################################################################
 
-os.system('say "jy lee jy lee"')
+os.system('say "Done"')
 show()

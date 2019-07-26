@@ -136,7 +136,7 @@ MODULE VARIABLES
     !Lacis and Hansen Ozone variables
     real :: a,b,c,tau_c,rbar_a,rbarbarstar_a,rbar,rbarbar_a
     integer :: hc
-    real,dimension(maxlaym) ::x_o3,fracs,u,A_oz_vis_x,xstar,A_oz_vis_xstar,a_oz_uv_x,a_oz_uv_xstar,a_oz_x,a_oz_xstar,a_oz_l,&
+    real,dimension(maxlaym) ::x_o3,cld_fracs,u,A_oz_vis_x,xstar,A_oz_vis_xstar,a_oz_uv_x,a_oz_uv_xstar,a_oz_x,a_oz_xstar,a_oz_l,&
     &htro3_lh
     real,dimension(maxlaym,5) :: htro3_lh_tot,htrlh_tot,abspn_tot
     real, dimension(4) :: fracweight,abs_surf_tot
@@ -148,6 +148,7 @@ MODULE VARIABLES
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
     real, dimension(maxncols) :: sebcols
     integer :: sfc_heating,playtype,mtranspon,surf_emiss_on
+    integer :: h2o_for,h2o_sb
 
     !To keep the terminal open
     character*1 KeyBuf

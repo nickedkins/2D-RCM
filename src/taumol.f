@@ -144,6 +144,8 @@ C  --------------------------------------------------------------------------
 
       SUBROUTINE TAUGB1A
 
+      use variables !NJE
+
 C     Written by Eli J. Mlawer, Atmospheric & Environmental Research.
 
 C     BAND 1:  10-120 cm-1 (key - H2O, CO2; low minor - N2)
@@ -579,8 +581,16 @@ c Complete calculation
                tauminor = ratio*absn2+(1.0-ratio)*absn2_o2
                tauminor = tauminor*scaleminor(lay)*colbrd(lay)
 
-               taug(lay,ig) = taug(lay,ig) 
-     &              + TAUSELF + TAUFOR + tauminor
+C                taug(lay,ig) = taug(lay,ig) 
+C      &              + TAUSELF + TAUFOR + tauminor !NJE
+
+               taug(lay,ig) = taug(lay,ig) + tauminor
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
                  
 
  2040       continue
@@ -591,6 +601,7 @@ c Complete calculation
 
 
       SUBROUTINE TAUGB1
+      use variables !NJE
 
 C     Written by Eli J. Mlawer, Atmospheric & Environmental Research.
 
@@ -1024,8 +1035,16 @@ c Complete calculation
                tauminor = ratio*absn2+(1.0-ratio)*absn2_o2
                tauminor = tauminor*scaleminor(lay)*colbrd(lay)
 
-               taug(lay,ig) = taug(lay,ig) 
-     &              + TAUSELF + TAUFOR + tauminor
+C                taug(lay,ig) = taug(lay,ig) 
+C      &              + TAUSELF + TAUFOR + tauminor
+
+                taug(lay,ig) = taug(lay,ig) + tauminor
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
                  
 
  2040       continue
@@ -1040,6 +1059,7 @@ C----------------------------------------------------------------------------
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB2
+      use variables !NJE
 
 C     BAND 2:  350-500 cm-1 (key - H2O, CO2)
 
@@ -1401,8 +1421,17 @@ c Complete calculation
      &              FORFRAC(LAY) * (FORREF(INDF+1,IG) - 
      &              FORREF(INDF,IG))) 
 
-                   taug(lay,ig) = taug(lay,ig) 
-     &              + TAUSELF + TAUFOR 
+C                    taug(lay,ig) = taug(lay,ig) 
+C      &              + TAUSELF + TAUFOR 
+
+
+                  taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
 
  2040    continue
@@ -1415,6 +1444,7 @@ c Complete calculation
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB3
+      use variables !NJE
 
 C     BAND 3:  500-630 cm-1 (low key - H2O,CO2; low minor - n2o)
 C                           (high key - H2O,CO2; high minor - n2o)
@@ -1793,9 +1823,17 @@ c Complete calculation and do  interpolation for high CO2 cases if needed
                ABSN2O = N2OM1 + MINORFRAC(LAY) *
      &              (N2OM2 - N2OM1)
 
-                   taug(lay,ig) = taug(lay,ig)
-     &              + TAUSELF + TAUFOR
-     &              + ADJCOLN2O*ABSN2O   
+C                    taug(lay,ig) = taug(lay,ig)
+C      &              + TAUSELF + TAUFOR
+C      &              + ADJCOLN2O*ABSN2O   
+
+                  taug(lay,ig) = taug(lay,ig) + ADJCOLN2O*ABSN2O
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
  2040     CONTINUE
  2500 CONTINUE
@@ -1809,6 +1847,7 @@ C----------------------------------------------------------------------------
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB4
+      use variables !NJE
 
 C     BAND 4:  630-700 cm-1 (low key - H2O,CO2; high - none)
 
@@ -1986,7 +2025,16 @@ C     separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2000          CONTINUE
@@ -2035,7 +2083,16 @@ C     separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -2067,7 +2124,16 @@ C     separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2020          CONTINUE
@@ -2079,6 +2145,7 @@ C     separately.
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB5
+      use variables !NJE
 
 C     BAND 5:  700-820 cm-1 (low key - H2O,CO2; low minor - O3)
 
@@ -2450,10 +2517,19 @@ c Complete calculation and do  interpolation for high CO2 cases if needed
                ABSO3 = O3M1 + MINORFRAC(LAY) *
      &              (O3M2 - O3M1)
 
-                   taug(lay,ig) = taug(lay,ig)
-     &              + TAUSELF + TAUFOR
-     &              + ABSO3 * COLO3(lay)
-     &              + WX(1,LAY) * CCL4(IG)   
+C                    taug(lay,ig) = taug(lay,ig)
+C      &              + TAUSELF + TAUFOR
+C      &              + ABSO3 * COLO3(lay)
+C      &              + WX(1,LAY) * CCL4(IG)   
+
+      taug(lay,ig)=taug(lay,ig)+ABSO3*COLO3(lay)+WX(1,LAY) * CCL4(IG)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
 
  2040     CONTINUE
  2500 CONTINUE
@@ -2465,6 +2541,7 @@ c Complete calculation and do  interpolation for high CO2 cases if needed
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB6
+      use variables !NJE
 
 C     BAND 6:  820-1000 cm-1 (low key - H2O, CO2)
 
@@ -2686,8 +2763,17 @@ C     is interpolated (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2000          CONTINUE
@@ -2742,8 +2828,17 @@ C     is interpolated (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF+ TAUFOR
+C      &              + TAUSELF+ TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                 FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &               (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -2780,8 +2875,16 @@ C     is interpolated (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
             FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -2795,6 +2898,7 @@ C     is interpolated (in temperature) separately.
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB7
+      use variables !NJE
 
 C     BAND 7:  1000-1110 cm-1 (low key - H2O,CO2; low minor - O3)
 
@@ -3004,8 +3108,17 @@ C     (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2000          CONTINUE
@@ -3060,8 +3173,17 @@ C     (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF+ TAUFOR
+C      &              + TAUSELF+ TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                 FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &               (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -3098,8 +3220,17 @@ C     (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
             FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2020    CONTINUE
@@ -3113,6 +3244,7 @@ C     (in temperature) separately.
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB7B
+      use variables !NJE
 
 C     BAND 7:  1000-1110 cm-1 (low key - CO2,O3; low minor - H2O)
 
@@ -3322,8 +3454,17 @@ C     (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSH2O*COLH2O(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2000          CONTINUE
@@ -3378,8 +3519,17 @@ C     (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF+ TAUFOR
+C      &              + TAUSELF+ TAUFOR
      &              + ABSH2O*COLH2O(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                 FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL * 
      &               (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -3417,8 +3567,16 @@ C     (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSH2O*COLH2O(LAY)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
             FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -3434,6 +3592,7 @@ C     (in temperature) separately.
 *******************************************************************************
 
       SUBROUTINE TAUGB8
+      use variables !NJE
 
 C     BAND 8:  1110-1210 cm-1 (key - H2O,CH4; minor - O3,N2O)
 
@@ -3706,12 +3865,21 @@ c  adjust CO2 column amount to reflect different P and T environment
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY) 
      &              + ABSN2O*COLN2O(LAY)
      &              + ABSCO2*adjcol2
      &           + WX(3,LAY) * CFC12(IG)
      &           + WX(4,LAY) * CFC22ADJ(IG)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -3781,12 +3949,21 @@ c  adjust CO2 column amount to reflect different P and T environment
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF+ TAUFOR
+C      &              + TAUSELF+ TAUFOR
      &              + ABSO3*COLO3(LAY)
      &              + ABSN2O*COLN2O(LAY)
      &              + ABSCO2*adjcol2
      &           + WX(3,LAY) * CFC12(IG)
      &           + WX(4,LAY) * CFC22ADJ(IG)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                 FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &               (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -3843,12 +4020,20 @@ c  adjust CO2 column amount to reflect different P and T environment
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ABSO3*COLO3(LAY)
      &              + ABSN2O*COLN2O(LAY)
      &              + ABSCO2*adjcol2
      &           + WX(3,LAY) * CFC12(IG)
      &           + WX(4,LAY) * CFC22ADJ(IG)
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
             FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &          (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -3862,6 +4047,7 @@ c  adjust CO2 column amount to reflect different P and T environment
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB9
+      use variables !NJE
 
 C     BAND 9:  1210-1430 cm-1 (key - H2O,CO2; minor - N2O,CH4)
 
@@ -4109,9 +4295,17 @@ c     to obtain the proper contribution.
      &          FAC011 * ABSA(IND1+9,IG) +
      &          FAC111 * ABSA(IND1+10,IG) +
      &          FAC211 * ABSA(IND1+11,IG)) 
-     &          + TAUSELF + TAUFOR
+C      &          + TAUSELF + TAUFOR
      &          + ADJCOLN2O*ABSN2O            
-     &          + ADJCOLCH4*ABSCH4            
+     &          + ADJCOLCH4*ABSCH4  
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif          
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -4178,9 +4372,18 @@ c     to obtain the proper contribution.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ADJCOLN2O*ABSN2O            
-     &              + ADJCOLCH4*ABSCH4            
+     &              + ADJCOLCH4*ABSCH4  
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif          
 
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
@@ -4230,9 +4433,18 @@ c     to obtain the proper contribution.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ADJCOLN2O*ABSN2O            
-     &              + ADJCOLCH4*ABSCH4            
+     &              + ADJCOLCH4*ABSCH4  
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif          
 
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
@@ -4248,6 +4460,7 @@ c     to obtain the proper contribution.
 
 
       SUBROUTINE TAUGB10
+      use variables !NJE
 
 C     BAND 10:  1390-1480 cm-1 (low key - H2O, CO2; minor - O2)
 
@@ -4470,8 +4683,17 @@ c        ENDIF
      &          FAC011 * ABSA(IND1+9,IG) +
      &          FAC111 * ABSA(IND1+10,IG) +
      &          FAC211 * ABSA(IND1+11,IG)) 
-     &          + TAUSELF + TAUFOR
-     &          + ADJCOLO2*ABSO2            
+C      &          + TAUSELF + TAUFOR
+     &          + ADJCOLO2*ABSO2    
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif        
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -4532,8 +4754,17 @@ c        ENDIF
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + ADJCOLO2*ABSO2            
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
 c
 
@@ -4579,8 +4810,16 @@ c
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
-     &              + ADJCOLO2*ABSO2            
+C      &              + TAUSELF + TAUFOR
+     &              + ADJCOLO2*ABSO2    
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif        
 
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
@@ -4595,6 +4834,7 @@ c
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB11
+      use variables !NJE
 
       return
       end
@@ -4602,6 +4842,7 @@ C----------------------------------------------------------------------------
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB12
+      use variables !NJE
 
 C     BAND 12:  1800-2080 cm-1 (low - H2O,CO2)
 
@@ -4781,7 +5022,15 @@ C     (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+
+            taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
        
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
@@ -4832,7 +5081,16 @@ C     (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+
+            taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -4864,7 +5122,16 @@ C     (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
+  
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2020          CONTINUE
@@ -4878,6 +5145,7 @@ C     (in temperature) separately.
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB13
+      use variables !NJE
 
 C     BAND 13:  2080-2250 cm-1 (low key - H2O,CO2; low minor - N2O )
 
@@ -5087,8 +5355,17 @@ C     (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + COLN2O(LAY)*ABSN2O
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -5148,8 +5425,17 @@ C     (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + COLN2O(LAY)*ABSN2O
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                 FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &               (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -5190,8 +5476,17 @@ C     (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR
+C      &              + TAUSELF + TAUFOR
      &              + COLN2O(LAY)*ABSN2O
+
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
 
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
@@ -5206,6 +5501,7 @@ C     (in temperature) separately.
 *******************************************************************************
 
       SUBROUTINE TAUGB14
+      use variables !NJE
 
 C     BAND 14:  2250-2700 cm-1 (low - CO2 - minor N2)
 
@@ -5302,8 +5598,17 @@ C     and foreign continuum is interpolated (in temperature) separately.
      &           FAC10(LAY) * ABSA(IND0+1,IG) +
      &           FAC01(LAY) * ABSA(IND1,IG) + 
      &           FAC11(LAY) * ABSA(IND1+1,IG))
-     &           + TAUSELF + TAUFOR
+C      &           + TAUSELF + TAUFOR
      &           + tauminor
+
+            taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
             FRACS(LAY,IG) = FRACREFA(IG)
  2000    CONTINUE
  2500 CONTINUE
@@ -5318,6 +5623,7 @@ C----------------------------------------------------------------------------
 
 
       SUBROUTINE TAUGB15
+      use variables !NJE
 
 C     BAND 15:  2700-3250 cm-1 (low key- H2O,CO2 - minor CH4)
 c     (used to be band 16, more or less)
@@ -5523,7 +5829,17 @@ C     (in temperature) separately.
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG) +
      &              FAC211 * ABSA(IND1+11,IG)) 
-     &              + TAUSELF + TAUFOR + TAUCH4
+C      &              + TAUSELF + TAUFOR + TAUCH4 !NJE
+     &              +TAUCH4
+
+                taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2000          CONTINUE
@@ -5581,7 +5897,17 @@ C     (in temperature) separately.
      &              FAC211 * ABSA(IND1+8,IG) +
      &              FAC111 * ABSA(IND1+9,IG) +
      &              FAC011 * ABSA(IND1+10,IG))
-     &              + TAUSELF + TAUFOR + TAUCH4 
+C      &              + TAUSELF + TAUFOR + TAUCH4 !NJE
+     &              +TAUCH4 
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
  2010           CONTINUE
@@ -5622,7 +5948,17 @@ C     (in temperature) separately.
      &              FAC101 * ABSA(IND1+1,IG) +
      &              FAC011 * ABSA(IND1+9,IG) +
      &              FAC111 * ABSA(IND1+10,IG)) 
-     &              + TAUSELF + TAUFOR + TAUCH4
+C      &              + TAUSELF + TAUFOR + TAUCH4
+     &              +TAUCH4
+
+              taug(lay,ig) = taug(lay,ig)
+               if( h2o_sb == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUSELF
+                endif
+               if( h2o_for == 1 ) then 
+                  taug(lay,ig) = taug(lay,ig) + TAUFOR
+                endif              
+
                FRACS(LAY,IG) = FRACREFA(IG,JPL) + FPL *
      &              (FRACREFA(IG,JPL+1)-FRACREFA(IG,JPL))
 
@@ -5636,6 +5972,7 @@ C     (in temperature) separately.
 C----------------------------------------------------------------------------
 
       SUBROUTINE TAUGB16
+      use variables !NJE
 
       return
       end
