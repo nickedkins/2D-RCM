@@ -1226,21 +1226,20 @@ subroutine wrapper
 
         ! r_earth = 6371e3 !earth radius in m
 
-        do i=1,ncols-1
-            delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
-            delta_x_edge(i) = x_edge(i) - x_edge(i+1)
-            delta_y_edge(i) = 2. * r_earth * tand( (latbounds(i) - latbounds(i-1))/2. )
-            h_scale = 7.5
-            f_cor = -1.0 * abs(2. * 7.29e-5 * sind( latbounds(i) )) !check where this abs() should go NJE task
-            beta = 2. * 7.29e-5 * cosd( latbounds(i) ) / r_earth
-            gamma_d = 9.8
-            d_mid(i) = h_scale * log( 1. - f_cor * abs(delta_T_edge(i)) / delta_y_edge(i) / ( h_scale * beta * &
-                &( gamma_d + lapsecritcols(i) ) ) )
-            d_trop(i) = wklm1cols(1,i) / wbrodlmcols(1,i) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(i) ) )
-            meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
-            print*, i, latbounds(i), d_mid(i), d_trop(i), pzm(0) * exp( -1.0 * d_mid(i) / h_scale ), &
-            &pzm(0) * exp( -1.0 * d_trop(i) / h_scale )
-        enddo
+        ! do i=1,ncols-1
+        !     delta_T_edge(i) = tair_lowest_edges(i) - tair_lowest_edges(i+1)
+        !     delta_x_edge(i) = x_edge(i) - x_edge(i+1)
+        !     delta_y_edge(i) = 2. * r_earth * tand( (latbounds(i) - latbounds(i-1))/2. )
+        !     h_scale = 7.5
+        !     f_cor = -1.0 * abs(2. * 7.29e-5 * sind( latbounds(i) )) !check where this abs() should go NJE task
+        !     beta = 2. * 7.29e-5 * cosd( latbounds(i) ) / r_earth
+        !     gamma_d = 9.8
+        !     d_mid(i) = h_scale * log( 1. - f_cor * abs(delta_T_edge(i)) / delta_y_edge(i) / ( h_scale * beta * &
+        !         &( gamma_d + lapsecritcols(i) ) ) )
+        !     d_trop(i) = wklm1cols(1,i) / wbrodlmcols(1,i) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(i) ) )
+        !     meridtransp_edge(i) = delta_T_edge(i) / delta_x_edge(i) * (1.0 - (x_edge(i))**2.0) * d_vl(i)
+        !     print*, i, latbounds(i), d_mid(i), d_trop(i), altzm(conv_trop_ind(i))/1000.
+        ! enddo
 
         meridtransp_edge(0) = 0.0
         meridtransp_edge(ncols) = 0.0
@@ -1513,6 +1512,20 @@ subroutine wrapper
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
                     lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
+
+                    delta_T_edge(col) = tair_lowest_edges(col-1) - tair_lowest_edges(col)
+                    delta_x_edge(col) = x_edge(col) - x_edge(col-1)
+                    delta_y_edge(col) = 2. * r_earth * tand( (boxlats(col) - boxlats(col-1))/2. )
+                    h_scale = 7.5
+                    f_cor = -1.0 * 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
+                    beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
+                    gamma_d = 9.8
+                    d_mid(col) = h_scale * log( 1. - f_cor * abs(delta_T_edge(col)) / delta_y_edge(col) / ( h_scale * beta * &
+                        &( gamma_d + lapsecritcols(col) ) ) )
+                    d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
+                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
+                    print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
+                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
                     if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                         ur_toafnet = ur_toafnet * 2.0
