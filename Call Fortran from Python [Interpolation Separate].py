@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [3]
+ncolss = [15]
 ncloudcols = 1
 nlays = 60
 days = 5000 #model days
@@ -513,6 +513,7 @@ for ncols in ncolss:
                                             lcf = createlatdistbn('Cloud Fraction')
                                             lcod = createlatdistbn('Cloud Optical Thickness')
                                             tg = createlatdistbn('Surface Temperature')
+                                            print(tg)
 
                                             # tg = [tboundm] * ncols
                                             # tg = [288.4] * ncols
@@ -538,7 +539,7 @@ for ncols in ncolss:
                                             #lct = 250.0
                                             #lcf = 0.5
                                             #lcod = 5.0
-                                            tp = 0.02
+                                            tp = 1e3
                                             #fth = np.zeros(ncols)
                                             #for i in range(ncols):
                                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -667,5 +668,5 @@ for ncols in ncolss:
 
 ########################################################################################################################
 
-os.system('say "jy lee jy lee"')
+os.system('say "Done"')
 show()
