@@ -882,9 +882,9 @@ subroutine wrapper
             ! Apply SW heating rates if applicable
             !            do i=1,nlayersm-1
 
-            if (j==24) then
-                print*, 'debug entry point'
-            end if
+            ! if (j==24) then
+            !     print*, 'debug entry point'
+            ! end if
 
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
@@ -1320,10 +1320,10 @@ subroutine wrapper
                 d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
                 print*, boxnetradflux(col), boxnetradflux_prev(col)
-                if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                    ur_toafnet = ur_toafnet * 2.0
-                    print*, 'ur_toafnet increased to: ', ur_toafnet
-                end if
+                ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                !     ur_toafnet = ur_toafnet * 2.0
+                !     print*, 'ur_toafnet increased to: ', ur_toafnet
+                ! end if
                 boxnetradflux_prev(col) = boxnetradflux(col)
 
                 ! delta_x_lat = x_lat(col) - x_lat(col-1)
@@ -1524,13 +1524,19 @@ subroutine wrapper
                         &( gamma_d + lapsecritcols(col) ) ) )
                     d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
-                    print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
-                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
+                    ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
+                    ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                        ur_toafnet = ur_toafnet * 2.0
-                        ! print*, 'ur_toafnet increased to: ', ur_toafnet
-                    end if
+                    print*, lapsecritcols(col),  max(d_mid(col), d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.,&
+                        (max(d_mid(col), d_trop(col)) - &
+                        altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
+                    lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
+
+                    ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                    !     ur_toafnet = ur_toafnet * 2.0
+                    !     print*, 'ur_toafnet increased to: ', ur_toafnet
+                    ! end if
                     boxnetradflux_prev(col) = boxnetradflux(col)
 
                     if (mtranspon == 1) then

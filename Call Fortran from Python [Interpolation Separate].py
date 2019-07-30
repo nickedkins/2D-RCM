@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [15]
+ncolss = [5]
 ncloudcols = 1
 nlays = 60
 days = 5000 #model days
@@ -469,7 +469,7 @@ for ncols in ncolss:
                                             manual_clouds.append([cld_height,0.5,0.2])
                                             
                             
-                                            sa = [sa] * ncols
+                                            # sa = [sa] * ncols
 
                                             if ( cloud_source == 0 ):
                                                 ncloudcols = shape(manual_clouds)[0]
@@ -499,8 +499,8 @@ for ncols in ncolss:
                                             interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                                             interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                                         
-                                            #lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                                            lc = [-5.8] * ncols
+                                            lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                                            # lc = [-5.8] * ncols
                                             #lc = [-15.] * ncols
                                             # for i in range(len(lc)):
                                             #    lc[i] *= 1.5
@@ -508,8 +508,8 @@ for ncols in ncolss:
                                             lch = createlatdistbn('Cloud Top Height')
                                             srh = createlatdistbn('Relative Humidity')
                                             # srh = [0.8] * ncols
-                                            #sa = createlatdistbn('Surface Reflectance')
-                                            sa = [0.3] * ncols
+                                            sa = createlatdistbn('Surface Reflectance')
+                                            # sa = [0.3] * ncols
                                             lcf = createlatdistbn('Cloud Fraction')
                                             lcod = createlatdistbn('Cloud Optical Thickness')
                                             tg = createlatdistbn('Surface Temperature')
@@ -539,7 +539,7 @@ for ncols in ncolss:
                                             #lct = 250.0
                                             #lcf = 0.5
                                             #lcod = 5.0
-                                            tp = 1e3
+                                            tp = 5.0
                                             #fth = np.zeros(ncols)
                                             #for i in range(ncols):
                                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -548,7 +548,7 @@ for ncols in ncolss:
                                             asp = 2.0   
                                             cs = 0
                                             pbo = 0 
-                                            fswon = 1
+                                            fswon = 0
                                             fsw = fsw
                                             fp = 0
                                             ps1 = 0
@@ -566,7 +566,7 @@ for ncols in ncolss:
                                             o2inv = 0.0
                                             htransp = 1.0 #reduce lapse rate to account for horizontal transport
                                             ipe = 1
-                                            dp = 1
+                                            dp = 0
                                             mtranspfac = 2.0
                                             boxnetfluxfac = 0.2
                                             twarm = 288
@@ -581,7 +581,7 @@ for ncols in ncolss:
                                             sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                             playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                             ur_htr = 0.5
-                                            ur_toafnet = 2.0
+                                            ur_toafnet = 4.0
                                             ur_seb = 1e10
                                             couple_tgta = 1
                                             mtranspon = 1
