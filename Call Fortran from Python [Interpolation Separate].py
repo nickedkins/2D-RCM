@@ -18,14 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [5]
+ncolss = [15]
 ncloudcols = 1
-nlays = 60
+nlays = 199
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -581,7 +581,7 @@ for ncols in ncolss:
                                             sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                             playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                             ur_htr = 0.5
-                                            ur_toafnet = 4.0
+                                            ur_toafnet = 8.0
                                             ur_seb = 1e10
                                             couple_tgta = 1
                                             mtranspon = 1

@@ -1529,9 +1529,9 @@ subroutine wrapper
 
                     print*, lapsecritcols(col),  max(d_mid(col), d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.,&
                         (max(d_mid(col), d_trop(col)) - &
-                        altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
+                        altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
                     lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
+                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
 
                     ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                     !     ur_toafnet = ur_toafnet * 2.0
