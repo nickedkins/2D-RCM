@@ -23,9 +23,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [1]
-ncloudcols = 5
-nlays = 199
+ncolss = [15]
+ncloudcols = 1
+nlays = 60
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -157,7 +157,9 @@ for ncols in ncolss:
             # Think/read about how to bin the large array into the small one.
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             weights = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
-            lats_int = np.linspace(-90,90,30) # lats to integrate over (step size)
+            sinlat_int = np.linspace(-1.,1.,99)
+            lats_int = np.rad2deg(np.arcsin(sinlat_int))
+            # lats_int = np.linspace(-90,90,30) # lats to integrate over (step size)
             pressures_int = np.linspace(2000,1,500) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
                 for i_p in range(len(pressures_int)):
@@ -538,7 +540,7 @@ for ncols in ncolss:
                                             #lct = 250.0
                                             #lcf = 0.5
                                             #lcod = 5.0
-                                            tp = 0.02
+                                            tp = 1e3
                                             #fth = np.zeros(ncols)
                                             #for i in range(ncols):
                                             #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -667,5 +669,5 @@ for ncols in ncolss:
 
 ########################################################################################################################
 
-os.system('say "jy lee jy lee"')
+os.system('say "Done"')
 show()
