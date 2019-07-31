@@ -18,14 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [15]
-ncloudcols = 1
-nlays = 199
+ncolss = [97]
+ncloudcols = 6
+nlays = 60
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -566,7 +566,7 @@ for ncols in ncolss:
                                             o2inv = 0.0
                                             htransp = 1.0 #reduce lapse rate to account for horizontal transport
                                             ipe = 1
-                                            dp = 0
+                                            dp = 1
                                             mtranspfac = 2.0
                                             boxnetfluxfac = 0.2
                                             twarm = 288

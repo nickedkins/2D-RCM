@@ -9,6 +9,18 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
+plot_all_vert_profiles = 0
+legends_on = 0
+grids_on = 1
+
+directories = [
+'_Current Output/'
+]
+
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/'
+]
+
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
     plt.rcParams['font.size'] = 15
@@ -47,13 +59,6 @@ def init_plotting():
     plt.gca().yaxis.set_ticks_position('left')
 init_plotting()
 
-directories = [
-'_Current Output/'
-]
-
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/nl=30/'
-]
 
 obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')
@@ -129,6 +134,7 @@ def readfile(fn,counter):
     R_gcols = np.zeros((nlayersm,ncols))
     boxlatcols = np.zeros((nlayersm,ncols))
     convcols = np.zeros((nlayersm,ncols))
+    lapsecritcols = np.zeros((nlayersm,ncols))
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -218,20 +224,21 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             convcols[i,col] = f.readline()
 
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            lapsecritcols[i,col] = f.readline()
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols
 
 # nlayersms=[31,100]
 # ncols=5
 
-plot_all_vert_profiles = 1
-legends_on = 0
-grids_on = 1
 
 i1 = 0
 
@@ -266,12 +273,72 @@ for directory in directories:
     for fn in a:
         if (fn == '.DS_Store' or fn == 'new benchmark'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
+
+        conv_trop_ind_cols = np.zeros(ncols)
+
+        for col in range(ncols):
+            conv_trop_ind = int(convcols[0,col])
+            if conv_trop_ind > nlayersm:    
+                conv_trop_ind = nlayersm
+            conv_trop_ind_cols[col] = int(conv_trop_ind)
+
+
+        conv_trop_ind_cols = conv_trop_ind_cols.astype(int)
+
+
+        plt.figure(1)
+
+        plt.subplot(221)
+        plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
+        plt.xlabel('Latitude')
+        plt.ylabel('Lapse rate (K/km)')
+        plt.legend()
+
+        plt.subplot(222)
+        plt.plot(boxlatcols[1,:],tzmcols[0,:],'-o',label=str(fn))
+        plt.xlabel('Latitude')
+        plt.ylabel('Surface temperature (K)')
+        plt.legend()
+
+        for col in range(ncols):
+            if(col==1):
+                plt.subplot(223)
+                plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
+                plt.xlabel('Latitude')
+                plt.ylabel('Tropopause temperature (K)')
+                plt.legend()
+            else:
+                plt.subplot(223)
+                plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
+                plt.xlabel('Latitude')
+                plt.ylabel('Tropopause temperature (K)')
+                plt.legend()
+
+        for col in range(ncols):
+            if(col==1):
+                plt.subplot(224)
+                plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',label=str(fn),color=colors[i2])
+                plt.xlabel('Latitude')
+                plt.ylabel('Tropopause altitude (km)')
+                plt.legend()
+            else:
+                plt.subplot(224)
+                plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',color=colors[i2])
+                plt.xlabel('Latitude')
+                plt.ylabel('Tropopause altitude (km)')
+                plt.legend()
+
+        # plt.subplot(221)
+        # plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
+        # plt.xlabel('Latitude')
+        # plt.ylabel('Lapse rate (K/km)')
+        # plt.legend()
 
 
         i3=0

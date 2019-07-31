@@ -783,6 +783,12 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) lapsecritcols(col)
+            end do
+        end do
+
 
     end subroutine writeoutputfile
     
