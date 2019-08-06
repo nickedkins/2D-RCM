@@ -1527,11 +1527,10 @@ subroutine wrapper
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    print*, lapsecritcols(col),  max(d_mid(col), d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.,&
-                        (max(d_mid(col), d_trop(col)) - &
-                        altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
+                    print*, boxlats(col),lapsecritcols(col), d_mid(col), d_trop(col), max(d_mid(col), d_trop(col)), &
+                   altzmcols(conv_trop_ind(col),col)/1000.,f_cor,delta_T_edge(col),delta_y_edge(col),beta,gamma_d+lapsecritcols(col)
                     lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
+                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
 
                     ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                     !     ur_toafnet = ur_toafnet * 2.0

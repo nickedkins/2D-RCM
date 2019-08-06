@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -18,7 +18,7 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/fig1/nl=199/'
 ]
 
 def init_plotting():
@@ -257,6 +257,8 @@ filenames = []
 
 for directory in directories:
 
+    filenames = []
+
     dir_label = directory.split('/')[-2]
 
     ls = linestyles[i1]
@@ -292,47 +294,47 @@ for directory in directories:
         conv_trop_ind_cols = conv_trop_ind_cols.astype(int)
 
 
-        plt.figure(1)
+        # plt.figure(1)
 
-        plt.subplot(221)
-        plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
-        plt.xlabel('Latitude')
-        plt.ylabel('Lapse rate (K/km)')
-        plt.legend()
+        # plt.subplot(221)
+        # plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
+        # plt.xlabel('Latitude')
+        # plt.ylabel('Lapse rate (K/km)')
+        # plt.legend()
 
-        plt.subplot(222)
-        plt.plot(boxlatcols[1,:],tzmcols[0,:],'-o',label=str(fn))
-        plt.xlabel('Latitude')
-        plt.ylabel('Surface temperature (K)')
-        plt.legend()
+        # plt.subplot(222)
+        # plt.plot(boxlatcols[1,:],tzmcols[0,:],'-o',label=str(fn))
+        # plt.xlabel('Latitude')
+        # plt.ylabel('Surface temperature (K)')
+        # plt.legend()
 
-        for col in range(ncols):
-            if(col==1):
-                plt.subplot(223)
-                plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
-                plt.xlabel('Latitude')
-                plt.ylabel('Tropopause temperature (K)')
-                plt.legend()
-            else:
-                plt.subplot(223)
-                plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
-                plt.xlabel('Latitude')
-                plt.ylabel('Tropopause temperature (K)')
-                plt.legend()
+        # for col in range(ncols):
+        #     if(col==1):
+        #         plt.subplot(223)
+        #         plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
+        #         plt.xlabel('Latitude')
+        #         plt.ylabel('Tropopause temperature (K)')
+        #         plt.legend()
+        #     else:
+        #         plt.subplot(223)
+        #         plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
+        #         plt.xlabel('Latitude')
+        #         plt.ylabel('Tropopause temperature (K)')
+        #         plt.legend()
 
-        for col in range(ncols):
-            if(col==1):
-                plt.subplot(224)
-                plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',label=str(fn),color=colors[i2])
-                plt.xlabel('Latitude')
-                plt.ylabel('Tropopause altitude (km)')
-                plt.legend()
-            else:
-                plt.subplot(224)
-                plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',color=colors[i2])
-                plt.xlabel('Latitude')
-                plt.ylabel('Tropopause altitude (km)')
-                plt.legend()
+        # for col in range(ncols):
+        #     if(col==1):
+        #         plt.subplot(224)
+        #         plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',label=str(fn),color=colors[i2])
+        #         plt.xlabel('Latitude')
+        #         plt.ylabel('Tropopause altitude (km)')
+        #         plt.legend()
+        #     else:
+        #         plt.subplot(224)
+        #         plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',color=colors[i2])
+        #         plt.xlabel('Latitude')
+        #         plt.ylabel('Tropopause altitude (km)')
+        #         plt.legend()
 
         # plt.subplot(221)
         # plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
@@ -359,6 +361,9 @@ for directory in directories:
                 z_trop = altzmcols[conv_trop_ind,col]
 
                 print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
+
+                plt.figure(2)
+                plt.plot(lapsecritcols[0],z_trop/1000.,'o')
 
                 # for i in range(len(altzmcols[:,col])):
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
