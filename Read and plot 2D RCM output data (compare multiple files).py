@@ -18,7 +18,7 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/fig1/nl=199/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/'
 ]
 
 def init_plotting():
@@ -250,6 +250,7 @@ cld_heights = np.linspace(1,10,10)
 tzm_master = []
 pzm_master = []
 boxlatcols_master = []
+lapsecritcols_master = []
 
 filenames = []
 
@@ -279,6 +280,7 @@ for directory in directories:
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         boxlatcols_master.append(boxlatcols)
+        lapsecritcols_master.append(lapsecritcols)
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
 
@@ -363,7 +365,7 @@ for directory in directories:
                 print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
 
                 plt.figure(2)
-                plt.plot(lapsecritcols[0],z_trop/1000.,'o')
+                plt.plot(lapsecritcols[0,col],z_trop/1000.,'o')
 
                 # for i in range(len(altzmcols[:,col])):
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
@@ -496,9 +498,16 @@ for directory in directories:
 
 
 # master indices: master[file][layer][column]
-# tzm_master = np.array(tzm_master)
-# pzm_master = np.array(pzm_master)
-# boxlatcols_master = np.array(boxlatcols_master)
+tzm_master = np.array(tzm_master)
+pzm_master = np.array(pzm_master)
+boxlatcols_master = np.array(boxlatcols_master)
+lapsecritcols_master = np.array(lapsecritcols_master)
+
+plt.figure()
+plt.plot(boxlatcols_master[0,0,:],-1.0*lapsecritcols_master[0,0,:])
+# plt.plot(boxlatcols_master[1,0,:],-1.0*lapsecritcols_master[1,0,:])
+plt.plot(boxlatcols_master[2,0,:],-1.0*lapsecritcols_master[2,0,:])
+
 
 # filenames = np.array(filenames[0])
 

@@ -1522,6 +1522,7 @@ subroutine wrapper
                     gamma_d = 9.8
                     d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
                         &( gamma_d + lapsecritcols(col) ) ) )
+                    d_mid(col) = d_mid(col) * 1.5
                     d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
@@ -1530,7 +1531,7 @@ subroutine wrapper
                     print*, boxlats(col),lapsecritcols(col), d_mid(col), d_trop(col), max(d_mid(col), d_trop(col)), &
                    altzmcols(conv_trop_ind(col),col)/1000.,f_cor,delta_T_edge(col),delta_y_edge(col),beta,gamma_d+lapsecritcols(col)
                     lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.0
+                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
 
                     ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                     !     ur_toafnet = ur_toafnet * 2.0

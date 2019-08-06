@@ -23,9 +23,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [1]
+ncolss = [9]
 ncloudcols = 1
-nlays = 199
+nlays = 60
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -442,7 +442,7 @@ for ncols in ncolss:
     # add_cld_alts = [0.0,6.1]
     add_cld_alts = [0.0]
 
-    lcs = np.linspace(10,3,10)
+    lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
 
     i_lc = 0
@@ -507,7 +507,7 @@ for ncols in ncolss:
                                                 interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                                                 interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                                             
-                                                # lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                                                lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
                                                 # lc = [-5.8] * ncols
                                                 #lc = [-15.] * ncols
                                                 # for i in range(len(lc)):
@@ -547,7 +547,7 @@ for ncols in ncolss:
                                                 #lct = 250.0
                                                 #lcf = 0.5
                                                 #lcod = 5.0
-                                                tp = 1.0
+                                                tp = 5.0
                                                 #fth = np.zeros(ncols)
                                                 #for i in range(ncols):
                                                 #    fth[i] = 15.0 - abs(collats[i])/18.0
