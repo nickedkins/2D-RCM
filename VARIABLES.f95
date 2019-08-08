@@ -134,6 +134,7 @@ MODULE VARIABLES
     real :: psurf_override,mixco2_prescribed,a_green,b_green,c_green,H_green
     real :: h_scale,f_cor,beta,gamma_d
     real, dimension(maxncols) :: d_mid,d_trop
+    integer :: lapse_type
 
 
     !Lacis and Hansen Ozone variables

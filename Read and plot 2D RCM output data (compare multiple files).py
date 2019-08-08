@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -18,7 +18,8 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/nl=199/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/nl=199 cld/'
 ]
 
 def init_plotting():
@@ -249,13 +250,16 @@ cld_heights = np.linspace(1,10,10)
 
 tzm_master = []
 pzm_master = []
+altzm_master = []
 boxlatcols_master = []
 lapsecritcols_master = []
+conv_trop_ind_master = []
 
 filenames = []
 
+print directories
 
-
+i_dir=0
 for directory in directories:
 
     filenames = []
@@ -274,13 +278,15 @@ for directory in directories:
     i2 = 0
 
     for fn in a:
-        if (fn == '.DS_Store' or fn == 'new benchmark'):
+        if (fn=='.DS_Store'):
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
+        altzm_master.append(altzmcols)  
         boxlatcols_master.append(boxlatcols)
         lapsecritcols_master.append(lapsecritcols)
+
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
 
@@ -294,6 +300,7 @@ for directory in directories:
 
 
         conv_trop_ind_cols = conv_trop_ind_cols.astype(int)
+        conv_trop_ind_master.append(conv_trop_ind_cols)
 
 
         # plt.figure(1)
@@ -364,8 +371,8 @@ for directory in directories:
 
                 print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
 
-                plt.figure(2)
-                plt.plot(lapsecritcols[0,col],z_trop/1000.,'o')
+                # plt.figure(2)
+                # plt.plot(lapsecritcols[0,col],z_trop/1000.,'o')
 
                 # for i in range(len(altzmcols[:,col])):
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
@@ -495,18 +502,60 @@ for directory in directories:
         i2 += 1
 
     i1 += 1
+    i_dir+=1
 
 
 # master indices: master[file][layer][column]
 tzm_master = np.array(tzm_master)
 pzm_master = np.array(pzm_master)
+altzm_master = np.array(altzm_master)
 boxlatcols_master = np.array(boxlatcols_master)
 lapsecritcols_master = np.array(lapsecritcols_master)
+# master indices for conv_trop_ind: master[file][column]
+conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-plt.figure()
-plt.plot(boxlatcols_master[0,0,:],-1.0*lapsecritcols_master[0,0,:])
-# plt.plot(boxlatcols_master[1,0,:],-1.0*lapsecritcols_master[1,0,:])
-plt.plot(boxlatcols_master[2,0,:],-1.0*lapsecritcols_master[2,0,:])
+print shape(tzm_master)
+
+i_fn = 0
+for fn in a:
+    if (fn=='.DS_Store'):
+            continue
+
+    plt.figure(1)
+    plt.subplot(221)
+    plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
+    plt.xlabel('Latitude')
+    plt.ylabel('Lapse rate (K/km)')
+    plt.legend()
+
+    plt.subplot(222)
+    plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+    plt.xlabel('Latitude')
+    plt.ylabel('Tropopause temperature (K)')
+    plt.legend()
+    
+    plt.subplot(223)
+    plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
+    plt.xlabel('Latitude')
+    plt.ylabel('Tropopause altitude (km)')
+    plt.legend()
+
+    # plt.subplot(224)
+    # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+    # plt.xlabel('Latitude')
+    # plt.ylabel('Tropopause pressure (hPa)')
+    # plt.legend()
+
+    plt.subplot(224)
+    plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
+    plt.xlabel('Latitude')
+    plt.ylabel('Surface temperature (K)')
+    plt.legend()    
+
+
+    i_fn+=1
+
+
 
 
 # filenames = np.array(filenames[0])

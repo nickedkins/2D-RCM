@@ -197,6 +197,7 @@ subroutine wrapper
     read(73,*) H_green
     read(73,*) cloudloctype
     read(73,*) surf_emiss_on
+    read(73,*) lapse_type
 
 
     close(73)
@@ -1530,8 +1531,10 @@ subroutine wrapper
 
                     print*, boxlats(col),lapsecritcols(col), d_mid(col), d_trop(col), max(d_mid(col), d_trop(col)), &
                    altzmcols(conv_trop_ind(col),col)/1000.,f_cor,delta_T_edge(col),delta_y_edge(col),beta,gamma_d+lapsecritcols(col)
-                    lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                    if (lapse_type == 1) then
+                        lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                         &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
+                    end if
 
                     ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                     !     ur_toafnet = ur_toafnet * 2.0
