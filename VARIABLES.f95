@@ -134,7 +134,7 @@ MODULE VARIABLES
     real :: psurf_override,mixco2_prescribed,a_green,b_green,c_green,H_green
     real :: h_scale,f_cor,beta,gamma_d
     real, dimension(maxncols) :: d_mid,d_trop
-    integer :: lapse_type
+    integer :: lapse_type,h2o_sb,h2o_for
 
 
     !Lacis and Hansen Ozone variables
@@ -152,7 +152,6 @@ MODULE VARIABLES
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
     real, dimension(maxncols) :: sebcols
     integer :: sfc_heating,playtype,mtranspon,surf_emiss_on
-    integer :: h2o_for,h2o_sb
 
     !To keep the terminal open
     character*1 KeyBuf
