@@ -19,7 +19,7 @@ directories = [
 
 directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/nl=199/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/nl=199 cld/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine sinha replication/nl=199/'
 ]
 
 def init_plotting():
@@ -278,6 +278,7 @@ for directory in directories:
     i2 = 0
 
     for fn in a:
+        print fn
         if (fn=='.DS_Store'):
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
@@ -505,7 +506,7 @@ for directory in directories:
     i_dir+=1
 
 
-# master indices: master[file][layer][column]
+# master indices: master[file,layer,column]
 tzm_master = np.array(tzm_master)
 pzm_master = np.array(pzm_master)
 altzm_master = np.array(altzm_master)
@@ -514,46 +515,45 @@ lapsecritcols_master = np.array(lapsecritcols_master)
 # master indices for conv_trop_ind: master[file][column]
 conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-print shape(tzm_master)
 
-i_fn = 0
-for fn in a:
-    if (fn=='.DS_Store'):
-            continue
+# i_fn = 0
+# for fn in a:
+#     if (fn=='.DS_Store'):
+#             continue
 
-    plt.figure(1)
-    plt.subplot(221)
-    plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
-    plt.xlabel('Latitude')
-    plt.ylabel('Lapse rate (K/km)')
-    plt.legend()
+#     plt.figure(1)
+#     plt.subplot(221)
+#     plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
+#     plt.xlabel('Latitude')
+#     plt.ylabel('Lapse rate (K/km)')
+#     plt.legend()
 
-    plt.subplot(222)
-    plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-    plt.xlabel('Latitude')
-    plt.ylabel('Tropopause temperature (K)')
-    plt.legend()
+#     plt.subplot(222)
+#     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+#     plt.xlabel('Latitude')
+#     plt.ylabel('Tropopause temperature (K)')
+#     plt.legend()
     
-    plt.subplot(223)
-    plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
-    plt.xlabel('Latitude')
-    plt.ylabel('Tropopause altitude (km)')
-    plt.legend()
+#     plt.subplot(223)
+#     plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
+#     plt.xlabel('Latitude')
+#     plt.ylabel('Tropopause altitude (km)')
+#     plt.legend()
 
-    # plt.subplot(224)
-    # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-    # plt.xlabel('Latitude')
-    # plt.ylabel('Tropopause pressure (hPa)')
-    # plt.legend()
+#     # plt.subplot(224)
+#     # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+#     # plt.xlabel('Latitude')
+#     # plt.ylabel('Tropopause pressure (hPa)')
+#     # plt.legend()
 
-    plt.subplot(224)
-    plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
-    plt.xlabel('Latitude')
-    plt.ylabel('Surface temperature (K)')
-    plt.legend()    
+#     plt.subplot(224)
+#     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
+#     plt.xlabel('Latitude')
+#     plt.ylabel('Surface temperature (K)')
+#     plt.legend()    
 
 
-    i_fn+=1
+#     i_fn+=1
 
 
 
@@ -562,26 +562,35 @@ for fn in a:
 
 # x = np.linspace(-90,90,ncols)
 
+pperts = np.linspace(1000,0,5)
+delta_tgs = tzm_master[:-1,0,0] - tzm_master[-1,0,0]
+
+print delta_tgs
+
+plt.plot(delta_tgs,pperts)
+plt.ylim(1000,0)
+
+for i in range( shape(tzm_master)[0] ):
+
+    lats = boxlatcols_master[i,0,:]
+    pzms = pzm_master[i,:,0]
+    tzms = tzm_master[i,:,:]
+    altzms = altzm_master[i,:,0]
+    # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
 
 
-# for i in range( shape(tzm_master)[0] ):
 
-#     lats = boxlatcols_master[i,0,:]
-#     pzms = pzm_master[i,:,0]
-#     tzms = tzm_master[i,:,:]
-#     tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
+    # plt.figure(1)
+    # plt.subplot(121+i)
+    # plt.contourf(lats,pzms,tzms,20)
+    # plt.gca().set_yscale('log')
+    # plt.ylim(1000,10)
+    # plt.xlabel('Latitude')
+    # plt.ylabel('Altitude')
+    # plt.colorbar()
 
-#     plt.figure(1)
-#     plt.subplot(121+i)
-#     plt.contourf(lats,pzms,tzms,20)
-#     plt.gca().set_yscale('log')
-#     plt.ylim(1000,10)
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Altitude')
-#     plt.colorbar()
-
-#     plt.figure(2)
-#     plt.plot(lats,tzms[0,:])
+    # plt.figure(2)
+    # plt.plot(lats,tzms[0,:])
     
 
 # plt.subplot(223)

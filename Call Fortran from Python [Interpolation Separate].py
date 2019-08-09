@@ -23,8 +23,8 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 # ncols = 31
 # ncolss = np.linspace(3,11,5)
-ncolss = [15]
-ncloudcols = 3
+ncolss = [1]
+ncloudcols = 2
 nlays = 199
 days = 5000 #model days
 min_press = 1.
@@ -157,10 +157,10 @@ for ncols in ncolss:
             # Think/read about how to bin the large array into the small one.
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             weights = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
-            sinlat_int = np.linspace(-1.,1.,99)
+            sinlat_int = np.linspace(-1.,1.,ncols*2)
             lats_int = np.rad2deg(np.arcsin(sinlat_int))
             # lats_int = np.linspace(-90,90,30) # lats to integrate over (step size)
-            pressures_int = np.linspace(2000,1,500) # ps to integrate over (step size)
+            pressures_int = np.linspace(2000,1,nlays*4) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
                 for i_p in range(len(pressures_int)):
                     for i_latg in range(len(latgridbounds)-1):
@@ -445,14 +445,14 @@ for ncols in ncolss:
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
 
-    lapse_types = [0,1]
+    lapse_types = [0]
 
     i_lt = 0
     for lapse_type in lapse_types:
         i_lc = 0
         for lc in lcs:
             i_pp = 0
-            for ppert in np.linspace(1000,0,1):
+            for ppert in np.linspace(1000,0,20):
                 i_ch = 0
                 for cld_height in cld_heights:
                     for fsw in fsws:
@@ -511,8 +511,8 @@ for ncols in ncolss:
                                                     interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
                                                     interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
                                                 
-                                                    lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                                                    # lc = [-5.8] * ncols
+                                                    # lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                                                    lc = [-6.5] * ncols
                                                     #lc = [-15.] * ncols
                                                     # for i in range(len(lc)):
                                                     #    lc[i] *= 1.5
@@ -551,11 +551,11 @@ for ncols in ncolss:
                                                     #lct = 250.0
                                                     #lcf = 0.5
                                                     #lcod = 5.0
-                                                    tp = 1.0
+                                                    tp = 0.01
                                                     #fth = np.zeros(ncols)
                                                     #for i in range(ncols):
                                                     #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                                    fth = [500.] * ncols
+                                                    fth = [350.] * ncols
                                                     ol = nlays
                                                     asp = 2.0   
                                                     cs = 0
@@ -593,12 +593,12 @@ for ncols in ncolss:
                                                     sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                                     playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                                     ur_htr = 0.5
-                                                    ur_toafnet = 8.0
+                                                    ur_toafnet = 1.0
                                                     ur_seb = 1e10
                                                     couple_tgta = 1
                                                     mtranspon = 1
-                                                    gas_amt_fac_h2o = 1.0
-                                                    gas_amt_fac_co2 = 2.0
+                                                    gas_amt_fac_h2o = 1.1
+                                                    gas_amt_fac_co2 = 1.0
                                                     gas_amt_fac_o3 = 1.0
                                                     gas_amt_p_high_h2o = ppert
                                                     gas_amt_p_low_h2o = ppert - 50.
@@ -607,10 +607,10 @@ for ncols in ncolss:
                                                     gas_amt_p_high_co2 = 1e6
                                                     gas_amt_p_low_co2 = 0.
                                                     gas_amt_p_high_o3 = 1e6
-                                                    gas_amt_p_low_o3 = 1000.
-                                                    gas_amt_pert_h2o = 1
-                                                    gas_amt_pert_co2 = 1
-                                                    gas_amt_pert_o3 = 1
+                                                    gas_amt_p_low_o3 = 0.
+                                                    gas_amt_pert_h2o = 1 #1 = on, 0=off
+                                                    gas_amt_pert_co2 = 1 #1 = on, 0=off
+                                                    gas_amt_pert_o3 = 1 #1 = on, 0=off
                                                     psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                                                     mixco2_prescribed_on = 1
                                                     mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
@@ -621,7 +621,7 @@ for ncols in ncolss:
                                                     H_green = 7.
                                                     cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
                                                     surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
-                                                    # lapse_type = 1
+                                                    lapse_type = 0
                                                 
                                                     ur1 = ur
                                                 

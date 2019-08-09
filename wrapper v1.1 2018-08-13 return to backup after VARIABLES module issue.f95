@@ -1536,10 +1536,10 @@ subroutine wrapper
                         &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
                     end if
 
-                    ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                    !     ur_toafnet = ur_toafnet * 2.0
-                    !     print*, 'ur_toafnet increased to: ', ur_toafnet
-                    ! end if
+                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                        ur_toafnet = ur_toafnet * 2.0
+                        print*, 'ur_toafnet increased to: ', ur_toafnet
+                    end if
                     boxnetradflux_prev(col) = boxnetradflux(col)
 
                     if (mtranspon == 1) then
