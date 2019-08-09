@@ -565,7 +565,7 @@ MODULE MYSUBS
     ! subroutine createcloudfile(cloudp,cloudcoltau)
     subroutine createcloudfile(cca,cct)
         use VARIABLES
-        ! real,dimension(maxlaym) :: fracs,tau_cld
+        ! real,dimension(maxlaym) :: cld_fracs,tau_cld
         ! integer :: irdcld,i
         INTEGER :: cloudindex
         real :: cloudalt
@@ -577,7 +577,7 @@ MODULE MYSUBS
         ! OPEN(IRDCLD,FILE='/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/My IN_CLD_RRTM',FORM='FORMATTED')
         OPEN(IRDCLD,FILE='My IN_CLD_RRTM',FORM='FORMATTED')
         tau_cld = 0.
-        fracs = 0.
+        cld_fracs = 0.
         if (cloudloctype == 1) then
             cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)
         else if (cloudloctype == 2) then
@@ -588,13 +588,13 @@ MODULE MYSUBS
             cloudindex = 0
         end if
         tau_cld(cloudindex) = cloudcoltau
-        fracs(cloudindex) = 0.99
+        cld_fracs(cloudindex) = 0.99
 
         if (col == extra_cld_latcol .and. cloudcol == extra_cld_cldcol ) then
 
             extra_cloudindex = int(minloc(abs(altzm/1000.0 - extra_cld_alt),dim=1))
             tau_cld(extra_cloudindex) = extra_cld_tau
-            fracs(extra_cloudindex) = extra_cld_frac
+            cld_fracs(extra_cloudindex) = extra_cld_frac
 
         endif
 
@@ -604,11 +604,11 @@ MODULE MYSUBS
 
         do i=1,nlayersm
             if (tau_cld(nlayersm+1-i) < 10.0) then
-                write(irdcld,'(A2,I3,F8.4,F8.4)') 'A  ', i, fracs(i), tau_cld(i)
+                write(irdcld,'(A2,I3,F8.4,F8.4)') 'A  ', i, cld_fracs(i), tau_cld(i)
             elseif (tau_cld(nlayersm+1-i) < 100.0) then 
-                write(irdcld,'(A2,I3,F8.4,F8.3)') 'A  ', i, fracs(i), tau_cld(i)
+                write(irdcld,'(A2,I3,F8.4,F8.3)') 'A  ', i, cld_fracs(i), tau_cld(i)
             else 
-                write(irdcld,'(A2,I3,F8.4,F8.2)') 'A  ', i, fracs(i), tau_cld(i)
+                write(irdcld,'(A2,I3,F8.4,F8.2)') 'A  ', i, cld_fracs(i), tau_cld(i)
             endif
         enddo
 
@@ -624,21 +624,21 @@ MODULE MYSUBS
         real :: cloudalt
 
         tau_cld = 0.
-        fracs = 0.
+        cld_fracs = 0.
         cloudindex = minloc(abs(altzm/1000.0 - cloudcolalt),dim=1)
         tau_cld(cloudindex) = cloudcoltau
-        fracs(cloudindex) = 0.8
+        cld_fracs(cloudindex) = 0.8
 
         if (col == extra_cld_latcol .and. cloudcol == extra_cld_cldcol ) then
 
             extra_cloudindex = int(minloc(abs(altzm/1000.0 - extra_cld_alt),dim=1))
             tau_cld(extra_cloudindex) = extra_cld_tau
-            fracs(extra_cloudindex) = extra_cld_frac
+            cld_fracs(extra_cloudindex) = extra_cld_frac
 
         endif
 
         do i=1,nlayersm
-            write(50,*) fracs(i)
+            write(50,*) cld_fracs(i)
         enddo
         
         do i=1,nlayersm
