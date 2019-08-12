@@ -18,11 +18,11 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
-# ncols = 31
-# ncolss = np.linspace(3,11,5)
-ncolss = [5]
+
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+
+ncolss = [3]
 ncloudcols = 1
 nlays = 30
 days = 5000 #model days
@@ -431,7 +431,7 @@ for ncols in ncolss:
     cld_taus = [9.9]
 
     # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1.0])
+    mixco2_prescribed_facs = np.array([1.0,2.0])
     # mixco2_prescribed_facs = np.array([0.03125])
 
     # psurf_overrides = [1000.,2000.]
@@ -507,6 +507,7 @@ for ncols in ncolss:
                                                         #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
                                                         #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
                                                         disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                                                
                                                     
                                                         shortnamessfc = ['fal']
                                                         longnamessfc = {'fal':'Surface albedo'}
