@@ -19,12 +19,12 @@ from time import localtime, strftime
 from scipy import stats
 
 
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
-
-ncolss = [7]
-ncloudcols = 2
-nlays = 60
+ncolss = [3]
+ncloudcols = 1
+nlays = 30
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -474,8 +474,8 @@ for ncols in ncolss:
                                                         *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
                                                         *ncols*nlays*ncloudcols*len(co2_facs)
                                                         print("Number of loops: ", nloops)
-                                                        # secsperloop = 0.5 #uni
-                                                        secsperloop = 1.5 #home
+                                                        secsperloop = 0.5 #uni
+                                                        # secsperloop = 1.5 #home
                                                         print("Estimated mins: ",nloops*secsperloop/60.)
 
                                                         # nlays = nlayss[i_pso]
@@ -562,7 +562,7 @@ for ncols in ncolss:
                                                         #lct = 250.0
                                                         #lcf = 0.5
                                                         #lcod = 5.0
-                                                        tp = 1.0
+                                                        tp = 5.0
                                                         #fth = np.zeros(ncols)
                                                         #for i in range(ncols):
                                                         #    fth[i] = 15.0 - abs(collats[i])/18.0
