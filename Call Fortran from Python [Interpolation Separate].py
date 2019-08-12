@@ -22,9 +22,9 @@ from scipy import stats
 
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
-ncolss = [3]
-ncloudcols = 1
-nlays = 30
+ncolss = [7]
+ncloudcols = 2
+nlays = 60
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -431,7 +431,7 @@ for ncols in ncolss:
     cld_taus = [9.9]
 
     # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
-    mixco2_prescribed_facs = np.array([1.0,2.0])
+    mixco2_prescribed_facs = np.array([1.0])
     # mixco2_prescribed_facs = np.array([0.03125])
 
     # psurf_overrides = [1000.,2000.]
@@ -474,7 +474,8 @@ for ncols in ncolss:
                                                         *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
                                                         *ncols*nlays*ncloudcols*len(co2_facs)
                                                         print("Number of loops: ", nloops)
-                                                        secsperloop = 0.5
+                                                        # secsperloop = 0.5 #uni
+                                                        secsperloop = 1.5 #home
                                                         print("Estimated mins: ",nloops*secsperloop/60.)
 
                                                         # nlays = nlayss[i_pso]
@@ -603,7 +604,7 @@ for ncols in ncolss:
                                                         sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
                                                         playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
                                                         ur_htr = 0.5
-                                                        ur_toafnet = 1.0
+                                                        ur_toafnet = [2.0] * ncols
                                                         ur_seb = 1e10
                                                         couple_tgta = 1
                                                         mtranspon = 1
@@ -631,7 +632,7 @@ for ncols in ncolss:
                                                         H_green = 7.
                                                         cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
                                                         surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
-                                                        lapse_type = 0
+                                                        # lapse_type = 0
                                                         h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
                                                         h2o_for = 1
                                                     

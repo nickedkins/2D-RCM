@@ -123,7 +123,8 @@ MODULE VARIABLES
     real,dimension(0:maxlaym) :: sigma
     real :: t_min
     real,dimension(0:maxlaym) :: htrm_over_newur
-    real :: ur_htr,ur_toafnet,ur_seb
+    real :: ur_htr,ur_seb
+    real,dimension(maxncols) :: ur_toafnet
     integer :: couple_tgta
     real,dimension(maxncols) :: abs_h2o_cols,abs_o3_cols,abs_surf_cols
     real :: xglobsum,xglobmean,netradflux_globmean,meridtransp_globmean,nettotflux_globmean

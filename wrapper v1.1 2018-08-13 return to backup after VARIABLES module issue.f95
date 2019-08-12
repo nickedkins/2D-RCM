@@ -170,7 +170,7 @@ subroutine wrapper
     read(73,*) sfc_heating
     read(73,*) playtype
     read(73,*) ur_htr
-    read(73,*) ur_toafnet
+    read(73,*) ur_toafnet(:ncols)
     read(73,*) ur_seb
     read(73,*) couple_tgta
     read(73,*) mtranspon
@@ -1337,7 +1337,7 @@ subroutine wrapper
                 else
                     boxnettotflux(col) = boxnetradflux(col)
                 end if
-                tempchanges(col) = boxnettotflux(col) / ur_toafnet
+                tempchanges(col) = boxnettotflux(col) / ur_toafnet(col)
 
             enddo
 
@@ -1537,9 +1537,9 @@ subroutine wrapper
                         &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
                     end if
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                        ur_toafnet = ur_toafnet * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet
+                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0 .and. adj1 > 0) then 
+                        ur_toafnet(col) = ur_toafnet(col) * 2.0
+                        print*, 'ur_toafnet increased to: ', ur_toafnet(col)
                     end if
                     boxnetradflux_prev(col) = boxnetradflux(col)
 
@@ -1548,7 +1548,7 @@ subroutine wrapper
                     else
                         boxnettotflux(col) = boxnetradflux(col)
                     end if
-                    tempchanges(col) = boxnettotflux(col) / ur_toafnet
+                    tempchanges(col) = boxnettotflux(col) / ur_toafnet(col)
                 enddo
 
 

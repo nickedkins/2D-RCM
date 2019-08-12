@@ -18,8 +18,7 @@ directories = [
 ]
 
 directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/h82 expts/lapse vs lat/nl=199/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine sinha replication/nl=199/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/lapse change 2xco2/'
 ]
 
 def init_plotting():
@@ -562,13 +561,15 @@ conv_trop_ind_master = np.array(conv_trop_ind_master)
 
 # x = np.linspace(-90,90,ncols)
 
-pperts = np.linspace(1000,0,5)
-delta_tgs = tzm_master[:-1,0,0] - tzm_master[-1,0,0]
+lats = boxlatcols_master[0,0,:]
 
-print delta_tgs
+delta_tg_obslapse = tzm_master[1,0,:] - tzm_master[0,0,:]
+delta_tg_h82 = tzm_master[3,0,:] - tzm_master[2,0,:]
 
-plt.plot(delta_tgs,pperts)
-plt.ylim(1000,0)
+plt.plot(lats,delta_tg_obslapse,label='Observed $\Gamma$')
+plt.plot(lats,delta_tg_h82,label='Held 82')
+plt.legend()
+
 
 for i in range( shape(tzm_master)[0] ):
 
