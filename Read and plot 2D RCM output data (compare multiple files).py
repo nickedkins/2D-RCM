@@ -17,9 +17,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/lapse change 2xco2/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double co2 lapse params/'
+]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
