@@ -143,7 +143,7 @@ for ncols in ncolss:
     def findweightedglobavg(var):
         weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
         return weightedglobalavgvar
-    def interpolate_createprrtminput_lev(shortname,latparray,ps,lats):
+    def interpolate_createprrtminput_lev(shortname,latparray,ps,lats,lat_facs):
         lats = lats #latitudes at 5 deg spacing - resolution at which I sampled ERA-I earlier 
         pressures = ps # ERA-I pressures
         xx,yy = np.meshgrid(lats[::-1],pressures) # grid of lat-p in my sampled ERA-I resn
@@ -228,7 +228,7 @@ for ncols in ncolss:
                 file = open(fileloc,'w')
 
                 for i in range(len(znew[col,:])):
-                    file.write(str(znew[col,i]))
+                    file.write(str(znew[col,i]*lat_facs[col]))
                     file.write('\n')
 
                 file.write('&')
@@ -248,7 +248,7 @@ for ncols in ncolss:
                     file.write('\n')
 
                 file.close()
-    def interpolate_createprrtminput_sfc(shortname,latarray,lats):
+    def interpolate_createprrtminput_sfc(shortname,latarray,lats,lat_facs):
         lats = lats
         z = latarray
         f = interp1d(lats,z)
@@ -287,7 +287,7 @@ for ncols in ncolss:
             file = open(fileloc,'w')
 
             for i in range(len(varss_int)):
-                file.write(str(varss_int[i]))
+                file.write(str(varss_int[i]*lat_facs[i]))
                 file.write('\n')
 
             file.close()
@@ -447,12 +447,11 @@ for ncols in ncolss:
     lapse_types = [0]
     pperts = np.linspace(1000,0,1)
     co2_facs = [1.0]
-    lf_as = [0.0,0.01]
+    lf_as = [0.0,0.2]
 
     i_lfa = 0
     for lf_a in lf_as:
         lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
-        print lat_facs
         i_cf=0
         for gas_amt_fac_co2 in co2_facs:
             i_lt = 0
@@ -521,9 +520,9 @@ for ncols in ncolss:
                                                         
                                                             print("Creating input files by interpolating ERA-Interim data")
                                                         
-                                                            interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats)
-                                                            interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats)
-                                                            interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats)
+                                                            interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,lat_facs)
+                                                            interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
+                                                            interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
                                                         
                                                             lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
                                                             # lc = [-6.5] * ncols
@@ -539,8 +538,7 @@ for ncols in ncolss:
                                                             lcf = createlatdistbn('Cloud Fraction')
                                                             lcod = createlatdistbn('Cloud Optical Thickness')
                                                             tg = createlatdistbn('Surface Temperature')
-                                                            tg = tg * lat_facs
-                                                            print(tg)
+                                                            # tg = tg * lat_facs
 
                                                             # tg = [tboundm] * ncols
                                                             # tg = [288.4] * ncols
@@ -566,7 +564,7 @@ for ncols in ncolss:
                                                             #lct = 250.0
                                                             #lcf = 0.5
                                                             #lcod = 5.0
-                                                            tp = 1e3
+                                                            tp = 5.0
                                                             #fth = np.zeros(ncols)
                                                             #for i in range(ncols):
                                                             #    fth[i] = 15.0 - abs(collats[i])/18.0

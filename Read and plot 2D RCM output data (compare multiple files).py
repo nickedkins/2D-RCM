@@ -563,8 +563,14 @@ conv_trop_ind_master = np.array(conv_trop_ind_master)
 
 lats = boxlatcols_master[0,0,:]
 
-plt.plot(lats,altzm_master[0,conv_trop_ind_master[0,:],range(ncols)]/1000.)
-plt.plot(lats,altzm_master[1,conv_trop_ind_master[1,:],range(ncols)]/1000.)
+
+plt.figure(1)
+plt.subplot(221)
+plt.plot(lats,tzm_master[0,0,range(ncols)])
+plt.plot(lats,tzm_master[1,0,range(ncols)])
+plt.subplot(222)
+plt.plot(lats,tzm_master[0,conv_trop_ind_master[0,:],range(ncols)])
+plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
 plt.legend()
 
 
