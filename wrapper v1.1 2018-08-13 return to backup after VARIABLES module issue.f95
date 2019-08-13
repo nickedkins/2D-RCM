@@ -1530,16 +1530,14 @@ subroutine wrapper
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    print*, boxlats(col),lapsecritcols(col), d_mid(col), d_trop(col), max(d_mid(col), d_trop(col)), &
-                   altzmcols(conv_trop_ind(col),col)/1000.,f_cor,delta_T_edge(col),delta_y_edge(col),beta,gamma_d+lapsecritcols(col)
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                         &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
                     end if
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0 .and. adj1 > 0) then 
+                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                         ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet(col)
+                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
                     end if
                     boxnetradflux_prev(col) = boxnetradflux(col)
 
