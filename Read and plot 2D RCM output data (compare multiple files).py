@@ -17,9 +17,9 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/lapse change 2xco2/'
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/lapse change 2xco2/'
+# ]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -563,11 +563,8 @@ conv_trop_ind_master = np.array(conv_trop_ind_master)
 
 lats = boxlatcols_master[0,0,:]
 
-delta_tg_obslapse = tzm_master[1,0,:] - tzm_master[0,0,:]
-delta_tg_h82 = tzm_master[3,0,:] - tzm_master[2,0,:]
-
-plt.plot(lats,delta_tg_obslapse,label='Observed $\Gamma$')
-plt.plot(lats,delta_tg_h82,label='Held 82')
+plt.plot(lats,altzm_master[0,conv_trop_ind_master[0,:],range(ncols)]/1000.)
+plt.plot(lats,altzm_master[1,conv_trop_ind_master[1,:],range(ncols)]/1000.)
 plt.legend()
 
 
