@@ -25,8 +25,8 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 
 ncolss = [1]
-ncloudcols = 1
-nlays = 30
+ncloudcols = 2
+nlays = 99
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -445,10 +445,11 @@ for ncols in ncolss:
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
     lapse_types = [0]
-    pperts = np.linspace(1000,0,1)
+    pperts = np.linspace(1000,0,20)
+    pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
     lf_as = [0.0] # 0.0 default
-    h2o_sources=[1,2]
+    h2o_sources=[1]
 
     i_h2osrc=0
     for h2o_source in h2o_sources:
@@ -527,15 +528,15 @@ for ncols in ncolss:
                                                                 interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
                                                                 interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
                                                             
-                                                                lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                                                                # lc = [-6.5] * ncols
+                                                                # lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                                                                lc = [-6.5] * ncols
                                                                 #lc = [-15.] * ncols
                                                                 # for i in range(len(lc)):
                                                                 #    lc[i] *= 1.5
 
                                                                 lch = createlatdistbn('Cloud Top Height')
-                                                                srh = createlatdistbn('Relative Humidity')
-                                                                # srh = [0.8] * ncols
+                                                                # srh = createlatdistbn('Relative Humidity')
+                                                                srh = [0.8] * ncols
                                                                 sa = createlatdistbn('Surface Reflectance')
                                                                 # sa = [0.3] * ncols
                                                                 lcf = createlatdistbn('Cloud Fraction')
@@ -567,7 +568,7 @@ for ncols in ncolss:
                                                                 #lct = 250.0
                                                                 #lcf = 0.5
                                                                 #lcod = 5.0
-                                                                tp = 1e3
+                                                                tp = 0.1
                                                                 #fth = np.zeros(ncols)
                                                                 #for i in range(ncols):
                                                                 #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -613,7 +614,7 @@ for ncols in ncolss:
                                                                 ur_seb = 1e10
                                                                 couple_tgta = 1
                                                                 mtranspon = 1
-                                                                gas_amt_fac_h2o = 1.0
+                                                                gas_amt_fac_h2o = 1.1
                                                                 # gas_amt_fac_co2 = 1.0
                                                                 gas_amt_fac_o3 = 1.0
                                                                 gas_amt_p_high_h2o = ppert
