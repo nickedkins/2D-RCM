@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -18,9 +18,8 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/Manabe-Wetherald RH/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/erai/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/ERA-Interim H2O/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=260/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=280/',
 ]
 
 def init_plotting():
@@ -102,7 +101,7 @@ plt.ylim(1000,0)
 # plt.ylim(max(p_obs),min(p_obs))
 
 
-linestyles = ['-','--','--']
+linestyles = ['-','--','--','o']
 
 colors = ['b','r','g','orange','purple','yellow','pink']
 
@@ -250,10 +249,6 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 
 cld_heights = np.linspace(1,10,10)
 
-
-
-print directories
-
 i_dir=0
 for directory in directories:
 
@@ -269,6 +264,7 @@ for directory in directories:
     filenames = []
 
     dir_label = directory.split('/')[-2]
+    print dir_label
 
     ls = linestyles[i1]
     color = colors[i1]
@@ -282,7 +278,6 @@ for directory in directories:
     i2 = 0
 
     for fn in a:
-        print fn
         if (fn=='.DS_Store'):
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
@@ -506,7 +501,7 @@ for directory in directories:
 
         i2 += 1
 
-    i1 += 1
+    # i1 += 1
     i_dir+=1
 
 
@@ -578,9 +573,12 @@ for directory in directories:
     # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
     # plt.legend()
 
-    pperts = np.linspace(1000,0,20)
+    pperts = np.linspace(1000,0,10)
 
-    plt.figure(1)
+    if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
+        pperts = np.linspace(1000,0,10)
+
+    # plt.figure(1)
     # for i_fn in range(len(a)-1):
     #     if(a[i_fn]=='.DS_Store'):
     #         continue
@@ -588,6 +586,8 @@ for directory in directories:
     plt.xlabel('$\Delta T_{surf}$ (K)')
     plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
     plt.ylim(1000,0)
+
+    # print tzm_master[:,0,:]
 
 
 plt.legend()

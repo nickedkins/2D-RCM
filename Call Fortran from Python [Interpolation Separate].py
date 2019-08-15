@@ -26,7 +26,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 ncolss = [1]
 ncloudcols = 2
-nlays = 99
+nlays = 199
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -439,13 +439,13 @@ for ncols in ncolss:
     # psurf_overrides = [1000.,2000.]
     psurf_overrides = [1000.]
     #fsws = np.linspace(200,500,num=8)
-    fsws = [240.0] #238.24 to replicate RD
+    fsws = [260.] #238.24 to replicate RD
     # add_cld_alts = [0.0,6.1]
     add_cld_alts = [0.0]
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
     lapse_types = [0]
-    pperts = np.linspace(1000,0,20)
+    pperts = np.linspace(1000,0,10)
     pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
     lf_as = [0.0] # 0.0 default
@@ -577,7 +577,7 @@ for ncols in ncolss:
                                                                 asp = 2.0   
                                                                 cs = 0
                                                                 pbo = 0 
-                                                                fswon = 0
+                                                                fswon = 1
                                                                 fsw = fsw
                                                                 fp = 0
                                                                 ps1 = 0
@@ -641,7 +641,7 @@ for ncols in ncolss:
                                                                 # lapse_type = 0
                                                                 h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
                                                                 h2o_for = 1
-                                                                # h2o_source = 2
+                                                                # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
                                                             
                                                                 ur1 = ur
                                                             
