@@ -201,6 +201,7 @@ subroutine wrapper
     read(73,*) h2o_sb
     read(73,*) h2o_for
     read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
+    read(73,*) ur_mt
 
     close(73)
 
@@ -1315,8 +1316,8 @@ subroutine wrapper
 
             do col=1,ncols
                 boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                ! meridtransp(col) = delta_meridtransp_edge(col)
+                ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                meridtransp(col) = delta_meridtransp_edge(col)
                 ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / gravity *&
                 & planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                 tcels = twarm - 273.15
@@ -1509,8 +1510,7 @@ subroutine wrapper
 
                 do col=1,ncols
                     boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                    meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                    ! meridtransp(col) = delta_meridtransp_edge(col)
+                    ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
                     ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
                     &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                     tcels = twarm - 273.15
@@ -1519,7 +1519,6 @@ subroutine wrapper
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
                     lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
-
                     delta_T_edge(col) = tair_lowest_edges(col-1) - tair_lowest_edges(col)
                     delta_x_edge(col) = x_edge(col) - x_edge(col-1)
                     delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
@@ -1532,6 +1531,8 @@ subroutine wrapper
                     d_mid(col) = d_mid(col) * 1.5
                     d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
+                    delta_meridtransp_edge(col) = (meridtransp_edge(col-1) - meridtransp_edge(col))
+                    meridtransp(col) = delta_meridtransp_edge(col)
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
@@ -1547,7 +1548,7 @@ subroutine wrapper
                     boxnetradflux_prev(col) = boxnetradflux(col)
 
                     if (mtranspon == 1) then
-                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col) * ur_mt
                     else
                         boxnettotflux(col) = boxnetradflux(col)
                     end if

@@ -24,9 +24,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [1]
-ncloudcols = 2
-nlays = 199
+ncolss = [20]
+ncloudcols = 1
+nlays = 30
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -445,8 +445,8 @@ for ncols in ncolss:
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
     lapse_types = [0]
-    pperts = np.linspace(1000,0,10)
-    pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+    pperts = np.linspace(1000,0,1)
+    # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
     lf_as = [0.0] # 0.0 default
     h2o_sources=[1]
@@ -568,7 +568,7 @@ for ncols in ncolss:
                                                                 #lct = 250.0
                                                                 #lcf = 0.5
                                                                 #lcod = 5.0
-                                                                tp = 0.1
+                                                                tp = 10.
                                                                 #fth = np.zeros(ncols)
                                                                 #for i in range(ncols):
                                                                 #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -577,7 +577,7 @@ for ncols in ncolss:
                                                                 asp = 2.0   
                                                                 cs = 0
                                                                 pbo = 0 
-                                                                fswon = 1
+                                                                fswon = 0
                                                                 fsw = fsw
                                                                 fp = 0
                                                                 ps1 = 0
@@ -614,7 +614,7 @@ for ncols in ncolss:
                                                                 ur_seb = 1e10
                                                                 couple_tgta = 1
                                                                 mtranspon = 1
-                                                                gas_amt_fac_h2o = 1.1
+                                                                gas_amt_fac_h2o = 1.0
                                                                 # gas_amt_fac_co2 = 1.0
                                                                 gas_amt_fac_o3 = 1.0
                                                                 gas_amt_p_high_h2o = ppert
@@ -642,6 +642,7 @@ for ncols in ncolss:
                                                                 h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
                                                                 h2o_for = 1
                                                                 # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
+                                                                ur_mt = 0.25
                                                             
                                                                 ur1 = ur
                                                             
@@ -654,7 +655,7 @@ for ncols in ncolss:
                                                                 twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
                                                                 gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
                                                                 gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-                                                                surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source]
+                                                                surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt]
                                                                 
                                                                 f = open(project_dir+'/Earth RCM Parameters','w')
                                                                 for m in params:

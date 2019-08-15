@@ -136,6 +136,7 @@ MODULE VARIABLES
     real :: h_scale,f_cor,beta,gamma_d
     real, dimension(maxncols) :: d_mid,d_trop
     integer :: lapse_type,h2o_sb,h2o_for,h2o_source
+    real :: ur_mt
 
 
     !Lacis and Hansen Ozone variables

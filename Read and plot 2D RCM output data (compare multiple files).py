@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -17,10 +17,10 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=260/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=280/',
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=260/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=280/',
+# ]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -69,9 +69,9 @@ p_obs = obs_data[:,1]
 
 p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
 
-plt.figure(1)
-plt.plot(t_obs,p_obs,'--',label='Shine and Sinha')
-plt.ylim(1000,0)
+# plt.figure(1)
+# plt.plot(t_obs,p_obs,'--',label='Shine and Sinha')
+# plt.ylim(1000,0)
 
 
 
@@ -137,6 +137,7 @@ def readfile(fn,counter):
     boxlatcols = np.zeros((nlayersm,ncols))
     convcols = np.zeros((nlayersm,ncols))
     lapsecritcols = np.zeros((nlayersm,ncols))
+    meridtransp = np.zeros((nlayersm,ncols))
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -230,13 +231,19 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             lapsecritcols[i,col] = f.readline()
 
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            meridtransp[i,col] = f.readline()
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
+    abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
+    lapsecritcols,meridtransp
 
 # nlayersms=[31,100]
 # ncols=5
@@ -258,8 +265,11 @@ for directory in directories:
     boxlatcols_master = []
     lapsecritcols_master = []
     conv_trop_ind_master = []
-
-    filenames = []
+    meridtransp_master = []
+    abspncols_master = []
+    A_oz_lcols_master = []
+    abs_surf_lhcols_master = []
+    totuflumcols_master = []
 
     filenames = []
 
@@ -280,12 +290,20 @@ for directory in directories:
     for fn in a:
         if (fn=='.DS_Store'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
+        abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
+        meridtransp = readfile(fn,counter)
+
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         altzm_master.append(altzmcols)  
         boxlatcols_master.append(boxlatcols)
         lapsecritcols_master.append(lapsecritcols)
+        meridtransp_master.append(meridtransp)
+        abspncols_master.append(abspncols)
+        A_oz_lcols_master.append(A_oz_lcols)
+        abs_surf_lhcols_master.append(abs_surf_lhcols)
+        totuflumcols_master.append(totuflumcols)        
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -511,8 +529,16 @@ for directory in directories:
     altzm_master = np.array(altzm_master)
     boxlatcols_master = np.array(boxlatcols_master)
     lapsecritcols_master = np.array(lapsecritcols_master)
+    meridtransp_master = np.array(meridtransp_master)
+    abspncols_master = np.array(abspncols_master)
+    A_oz_lcols_master=np.array(A_oz_lcols_master)
+    abs_surf_lhcols_master=np.array(abs_surf_lhcols_master)
+    totuflumcols_master=np.array(totuflumcols_master)
+
+
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
+
 
 
     # i_fn = 0
@@ -561,7 +587,16 @@ for directory in directories:
 
     # x = np.linspace(-90,90,ncols)
 
-    lats = boxlatcols_master[0,0,:]
+    lats = boxlatcols_master[:,0,:]
+
+    abs_sw_tot = abspncols_master + A_oz_lcols_master + abs_surf_lhcols_master
+
+    print shape(abs_sw_tot)
+    print abs_sw_tot[0,0,:]
+
+    plt.plot(boxlatcols_master[0,0,:],meridtransp_master[0,0,:],'-o')
+    plt.plot(boxlatcols_master[0,0,:],abs_sw_tot[0,0,:] - totuflumcols_master[0,-1,:],'-o')
+    plt.axhline(0)
 
 
     # plt.figure(1)
@@ -573,19 +608,19 @@ for directory in directories:
     # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
     # plt.legend()
 
-    pperts = np.linspace(1000,0,10)
+    # pperts = np.linspace(1000,0,10)
 
-    if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
-        pperts = np.linspace(1000,0,10)
+    # if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
+    #     pperts = np.linspace(1000,0,10)
 
-    # plt.figure(1)
-    # for i_fn in range(len(a)-1):
-    #     if(a[i_fn]=='.DS_Store'):
-    #         continue
-    plt.plot(tzm_master[1:,0,:]-tzm_master[0,0,:],pperts,label=dir_label)
-    plt.xlabel('$\Delta T_{surf}$ (K)')
-    plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
-    plt.ylim(1000,0)
+    # # plt.figure(1)
+    # # for i_fn in range(len(a)-1):
+    # #     if(a[i_fn]=='.DS_Store'):
+    # #         continue
+    # plt.plot(tzm_master[1:,0,:]-tzm_master[0,0,:],pperts,label=dir_label)
+    # plt.xlabel('$\Delta T_{surf}$ (K)')
+    # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
+    # plt.ylim(1000,0)
 
     # print tzm_master[:,0,:]
 
