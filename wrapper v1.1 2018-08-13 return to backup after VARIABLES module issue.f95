@@ -1497,7 +1497,7 @@ subroutine wrapper
 
 
         ! Equilibrium check (eqbcheck)
-        if (j > steps_before_toa_adj ) then !NJE
+        if (j > steps_before_toa_adj .and. j > 30 ) then !NJE
             if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
                 ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 

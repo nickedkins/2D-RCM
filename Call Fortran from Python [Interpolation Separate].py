@@ -25,11 +25,11 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 
 ncolss = [1]
-ncloudcols = 2
-nlays = 199
+ncloudcols = 1
+nlays = 60
 days = 5000 #model days
 min_press = 1.
-cloud_source = 1 #0 for manual, 1 for MISR
+cloud_source = 0 #0 for manual, 1 for MISR
 
 for ncols in ncolss:
 
@@ -439,13 +439,13 @@ for ncols in ncolss:
     # psurf_overrides = [1000.,2000.]
     psurf_overrides = [1000.]
     #fsws = np.linspace(200,500,num=8)
-    fsws = [260.] #238.24 to replicate RD
+    fsws = [220.] #238.24 to replicate RD
     # add_cld_alts = [0.0,6.1]
     add_cld_alts = [0.0]
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
     lapse_types = [0]
-    pperts = np.linspace(1000,0,10)
+    pperts = np.linspace(1000,100,10)
     pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
     lf_as = [0.0] # 0.0 default
@@ -493,8 +493,10 @@ for ncols in ncolss:
                                                                 manual_clouds = []
                                                                 # if (psurf_override > 1000.):
                                                                 #     manual_clouds.append([1000.,0.99,cld_tau])
-                                                                # manual_clouds.append([450,0.66,9.9])
-                                                                manual_clouds.append([cld_height,0.5,0.2])
+                                                                manual_clouds.append([2.7,0.313,3.0])
+                                                                manual_clouds.append([4.1,0.09,3.0])
+                                                                manual_clouds.append([10.0,0.228,1.0])
+                                                                # manual_clouds.append([cld_height,0.5,0.2])
                                                                 
                                                 
                                                                 # sa = [sa] * ncols
@@ -541,11 +543,11 @@ for ncols in ncolss:
                                                                 # sa = [0.3] * ncols
                                                                 lcf = createlatdistbn('Cloud Fraction')
                                                                 lcod = createlatdistbn('Cloud Optical Thickness')
-                                                                tg = createlatdistbn('Surface Temperature')
+                                                                # tg = createlatdistbn('Surface Temperature')
                                                                 # tg = tg * lat_facs
 
                                                                 # tg = [tboundm] * ncols
-                                                                # tg = [288.4] * ncols
+                                                                tg = [290.] * ncols
 
                                                             
                                                                 #lc = [-5.88]*ncols
@@ -568,16 +570,16 @@ for ncols in ncolss:
                                                                 #lct = 250.0
                                                                 #lcf = 0.5
                                                                 #lcod = 5.0
-                                                                tp = 0.1
+                                                                tp = 0.001
                                                                 #fth = np.zeros(ncols)
                                                                 #for i in range(ncols):
                                                                 #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                                                fth = [350.] * ncols
+                                                                fth = [800.] * ncols
                                                                 ol = nlays
                                                                 asp = 2.0   
                                                                 cs = 0
                                                                 pbo = 0 
-                                                                fswon = 1
+                                                                fswon = 0
                                                                 fsw = fsw
                                                                 fp = 0
                                                                 ps1 = 0
@@ -631,7 +633,7 @@ for ncols in ncolss:
                                                                 psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                                                                 mixco2_prescribed_on = 1
                                                                 mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
-                                                                steps_before_toa_adj = 30
+                                                                steps_before_toa_adj = 5
                                                                 a_green = 0.4
                                                                 b_green = 20.
                                                                 c_green = 5.
@@ -639,8 +641,8 @@ for ncols in ncolss:
                                                                 cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
                                                                 surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
                                                                 # lapse_type = 0
-                                                                h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
-                                                                h2o_for = 1
+                                                                h2o_sb = 1 #h2o self broadening 0=off, 1=on
+                                                                h2o_for = 1 #h2o foreign broadening 0=off, 1=on
                                                                 # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
                                                             
                                                                 ur1 = ur
