@@ -17,10 +17,10 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=mw/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/'
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=mw/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/'
+# ]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -59,6 +59,14 @@ def init_plotting():
     plt.gca().xaxis.set_ticks_position('bottom')
     plt.gca().yaxis.set_ticks_position('left')
 init_plotting()
+
+def latwghtavg(x,lats):
+    print "x:", x
+    print "lats:", lats
+    print "sinlats:", np.cos(np.deg2rad(lats))
+    print "sumlats:", sum(np.cos(np.deg2rad(lats)))
+    x_avg = sum(x * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
+    return x_avg
 
 
 obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
@@ -622,12 +630,31 @@ for directory in directories:
     #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
     #     plt.axhline(0)
 
-    plt.subplot(221)
-    plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:] - tzm_master[0,0,:],'-o')
+    # twarms = [288.,293.,298.,303.,308.]
+    tcolds = [268.,263.,258.,253.,248.]
 
-    plt.subplot(222)
-    plt.plot(boxlatcols_master[0,0,:],meridtransp_master[1,0,:] - meridtransp_master[0,0,:],'-o')
-    plt.axhline(0)
+    # plt.subplot(221)
+    # plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:] - tzm_master[0,0,:],'-o')
+    # plt.axhline(0)
+    # plt.xlabel('Latitude')
+    # plt.ylabel('$\Delta T_g$')
+
+    # plt.subplot(222)
+    # plt.plot(boxlatcols_master[0,0,:],meridtransp_master[1,0,:] - meridtransp_master[0,0,:],'-o')
+    # plt.axhline(0)
+    # plt.xlabel('Latitude')
+    # plt.ylabel('$\Delta mtransp$')
+
+
+
+    # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
+
+    for i_fn in range(len(a)-1):
+        dummy = latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:])
+        plt.plot(tcolds[i_fn],latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:]),'o')
+        plt.xlabel('$T_{cold}$')
+        plt.ylabel('$T_{sgm}$')
+    
 
     # plt.figure(1)
     # plt.subplot(221)

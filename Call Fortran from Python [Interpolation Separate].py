@@ -24,9 +24,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [10]
+ncolss = [6]
 ncloudcols = 1
-nlays = 30
+nlays = 10
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -447,263 +447,272 @@ for ncols in ncolss:
     lapse_types = [0]
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-    co2_facs = [1.0,2.0]
+    co2_facs = [1.0]
     lf_as = [0.0] # 0.0 default
     h2o_sources=[2]
+    # twarms = [288.,293.,298.,303.,308.]
+    twarms = [288.]
+    tcolds = [268.,263.,258.,253.,248.]
 
-    i_h2osrc=0
-    for h2o_source in h2o_sources:
-        i_lfa = 0
-        for lf_a in lf_as:
-            lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
-            i_cf=0
-            for gas_amt_fac_co2 in co2_facs:
-                i_lt = 0
-                for lapse_type in lapse_types:
-                    i_lc = 0
-                    for lc in lcs:
-                        i_pp = 0
-                        for ppert in pperts:
-                            i_ch = 0
-                            for cld_height in cld_heights:
-                                for fsw in fsws:
-                                    i_pso = 0
-                                    for psurf_override in psurf_overrides:
-                                        for mixco2_prescribed_fac in mixco2_prescribed_facs:
-                                            for cld_tau in cld_taus:
-                                                for tboundm in tboundms:
-                                                    for sa in sas:
-                                                        for pin2 in pin2s:
-                                                            for pico2 in pico2s:
+    i_tc=0
+    for tcold in tcolds:
+        i_tw=0
+        for twarm in twarms:
+            i_h2osrc=0
+            for h2o_source in h2o_sources:
+                i_lfa = 0
+                for lf_a in lf_as:
+                    lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
+                    i_cf=0
+                    for gas_amt_fac_co2 in co2_facs:
+                        i_lt = 0
+                        for lapse_type in lapse_types:
+                            i_lc = 0
+                            for lc in lcs:
+                                i_pp = 0
+                                for ppert in pperts:
+                                    i_ch = 0
+                                    for cld_height in cld_heights:
+                                        for fsw in fsws:
+                                            i_pso = 0
+                                            for psurf_override in psurf_overrides:
+                                                for mixco2_prescribed_fac in mixco2_prescribed_facs:
+                                                    for cld_tau in cld_taus:
+                                                        for tboundm in tboundms:
+                                                            for sa in sas:
+                                                                for pin2 in pin2s:
+                                                                    for pico2 in pico2s:
 
-                                                                nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)*len(mixco2_prescribed_facs)\
-                                                                *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
-                                                                *ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)
-                                                                print("Number of loops: ", nloops)
-                                                                secsperloop = 0.5 #uni
-                                                                # secsperloop = 1.5 #home
-                                                                print("Estimated mins: ",nloops*secsperloop/60.)
+                                                                        nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)*len(mixco2_prescribed_facs)\
+                                                                        *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
+                                                                        *ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)
+                                                                        print("Number of loops: ", nloops)
+                                                                        secsperloop = 0.5 #uni
+                                                                        # secsperloop = 1.5 #home
+                                                                        print("Estimated mins: ",nloops*secsperloop/60.)
 
-                                                                # nlays = nlayss[i_pso]
-                                                                pgrid = np.linspace(psurf_override,min_press,nlays+1)
+                                                                        # nlays = nlayss[i_pso]
+                                                                        pgrid = np.linspace(psurf_override,min_press,nlays+1)
 
-                                                                add_cld_alt = add_cld_alts[i_pso]
+                                                                        add_cld_alt = add_cld_alts[i_pso]
 
-                                                                #mnlcld
-                                                                manual_clouds = []
-                                                                # if (psurf_override > 1000.):
-                                                                #     manual_clouds.append([1000.,0.99,cld_tau])
-                                                                # manual_clouds.append([450,0.66,9.9])
-                                                                manual_clouds.append([cld_height,0.5,0.2])
-                                                                
-                                                
-                                                                # sa = [sa] * ncols
-
-                                                                if ( cloud_source == 0 ):
-                                                                    ncloudcols = shape(manual_clouds)[0]
-                                                                    create_manual_cloud_inputs()
-                                                                elif ( cloud_source == 1 ):
-                                                                    create_misr_cloud_inputs(add_cld_alt)
-                                                            
-                                                                #pertvars = ['q','cc','ciwc','clwc','o3']
-                                                                pertvars = ['q']
-                                                
-                                                                # shortnameslev = ['cc','clwc','o3','q','ciwc']
-                                                                shortnameslev = ['q', 'o3']
-                                                                longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
-                                                                #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-                                                                #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-                                                                disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                                                                        #mnlcld
+                                                                        manual_clouds = []
+                                                                        # if (psurf_override > 1000.):
+                                                                        #     manual_clouds.append([1000.,0.99,cld_tau])
+                                                                        # manual_clouds.append([450,0.66,9.9])
+                                                                        manual_clouds.append([cld_height,0.5,0.2])
+                                                                        
                                                         
-                                                            
-                                                                shortnamessfc = ['fal']
-                                                                longnamessfc = {'fal':'Surface albedo'}
-                                                                disttypesfc = {'fal':'lat'}
-                                                            
-                                                                loop = 1
-                                                            
-                                                                print("Creating input files by interpolating ERA-Interim data")
-                                                            
-                                                                interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,lat_facs)
-                                                                interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
-                                                                interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
-                                                            
-                                                                # lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-                                                                lc = [-6.5] * ncols
-                                                                #lc = [-15.] * ncols
-                                                                # for i in range(len(lc)):
-                                                                #    lc[i] *= 1.5
+                                                                        # sa = [sa] * ncols
 
-                                                                lch = createlatdistbn('Cloud Top Height')
-                                                                # srh = createlatdistbn('Relative Humidity')
-                                                                srh = [0.8] * ncols
-                                                                sa = createlatdistbn('Surface Reflectance')
-                                                                # sa = [0.3] * ncols
-                                                                lcf = createlatdistbn('Cloud Fraction')
-                                                                lcod = createlatdistbn('Cloud Optical Thickness')
-                                                                tg = createlatdistbn('Surface Temperature')
-                                                                # tg = tg * lat_facs
-
-                                                                # tg = [tboundm] * ncols
-                                                                # tg = [288.4] * ncols
-
-                                                            
-                                                                #lc = [-5.88]*ncols
-                                                                #lch = [4.46]*ncols
-                                                                #srh = [0.787]*ncols
-                                                                #lcf = [0.657]*ncols
-                                                                #lcod = [3.978]*ncols
-                                                            
-                                                                mc = pico2  
-                                                            
-                                                                ur = 0.5
-                                                                icldm = 1
-                                                                rmin = 3e-6
-                                                                hct = 230.0
-                                                                hcf = 0.04e-9   
-                                                                hcod = 0.7e-9
-                                                                mct = 235.0
-                                                                mcf = 0.05e-9
-                                                                mcod = 1.5e-9
-                                                                #lct = 250.0
-                                                                #lcf = 0.5
-                                                                #lcod = 5.0
-                                                                tp = 0.1
-                                                                #fth = np.zeros(ncols)
-                                                                #for i in range(ncols):
-                                                                #    fth[i] = 15.0 - abs(collats[i])/18.0
-                                                                fth = [350.] * ncols
-                                                                ol = nlays
-                                                                asp = 2.0   
-                                                                cs = 0
-                                                                pbo = 0 
-                                                                fswon = 0
-                                                                fsw = fsw
-                                                                fp = 0
-                                                                ps1 = 0
-                                                                af = 1.0
-                                                                dalr = 0 #convection type
-                                                                npb = 1
-                                                                o3sw = 1
-                                                                h2osw = 1
-                                                                nl = nlays
-                                                                maxhtr = 0.1
-                                                                asf = 4.0
-                                                                tuf = 1.0   
-                                                                n2inv = pin2
-                                                                #n2inv = 0.8
-                                                                o2inv = 0.0
-                                                                htransp = 1.0 #reduce lapse rate to account for horizontal transport
-                                                                ipe = 1
-                                                                dp = 1
-                                                                mtranspfac = 2.0
-                                                                boxnetfluxfac = 0.2
-                                                                twarm = 288
-                                                                tcold = 268
-                                                                phim = 45 * 3.14 / 180
-                                                                ks = 0.25
-                                                                kl = 0.25
-                                                                eta = 0.75
-                                                                planet_radius = 6.37e6
-                                                                planet_rotation = 7.29e-5
-                                                                t_min = 10.
-                                                                sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
-                                                                playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-                                                                ur_htr = 0.5
-                                                                ur_toafnet = [2.0] * ncols
-                                                                ur_seb = 1e10
-                                                                couple_tgta = 1
-                                                                mtranspon = 1
-                                                                gas_amt_fac_h2o = 1.0
-                                                                # gas_amt_fac_co2 = 1.0
-                                                                gas_amt_fac_o3 = 1.0
-                                                                gas_amt_p_high_h2o = ppert
-                                                                gas_amt_p_low_h2o = ppert - 50.
-                                                                # gas_amt_p_high_h2o = 1e6
-                                                                # gas_amt_p_low_h2o = 0.
-                                                                gas_amt_p_high_co2 = 1e6
-                                                                gas_amt_p_low_co2 = 0.
-                                                                gas_amt_p_high_o3 = 1e6
-                                                                gas_amt_p_low_o3 = 0.
-                                                                gas_amt_pert_h2o = 1 #1 = on, 0=off
-                                                                gas_amt_pert_co2 = 1 #1 = on, 0=off
-                                                                gas_amt_pert_o3 = 1 #1 = on, 0=off
-                                                                psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
-                                                                mixco2_prescribed_on = 1
-                                                                mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
-                                                                steps_before_toa_adj = 5
-                                                                a_green = 0.4
-                                                                b_green = 20.
-                                                                c_green = 5.
-                                                                H_green = 7.
-                                                                cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
-                                                                surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
-                                                                # lapse_type = 0
-                                                                h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
-                                                                h2o_for = 1
-                                                                # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
-                                                                ur_mt = 1.0
-                                                            
-                                                                ur1 = ur
-                                                            
-                                                                counter = 0
-                                                            
-                                                                ur = ur1
-                                                            
-                                                                params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
-                                                                npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
-                                                                twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
-                                                                gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
-                                                                gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-                                                                surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt]
+                                                                        if ( cloud_source == 0 ):
+                                                                            ncloudcols = shape(manual_clouds)[0]
+                                                                            create_manual_cloud_inputs()
+                                                                        elif ( cloud_source == 1 ):
+                                                                            create_misr_cloud_inputs(add_cld_alt)
+                                                                    
+                                                                        #pertvars = ['q','cc','ciwc','clwc','o3']
+                                                                        pertvars = ['q']
+                                                        
+                                                                        # shortnameslev = ['cc','clwc','o3','q','ciwc']
+                                                                        shortnameslev = ['q', 'o3']
+                                                                        longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
+                                                                        #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                                                                        #disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+                                                                        disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
                                                                 
-                                                                f = open(project_dir+'/Earth RCM Parameters','w')
-                                                                for m in params:
-                                                                    if type(m) is list:
-                                                                        for i in range(len(m)-1):
-                                                                            f.write(str(m[i]))
-                                                                            f.write(',')
-                                                                        f.write(str(m[len(m)-1]))
-                                                                        f.write('\n')
-                                                                    else:
-                                                                        f.write(str(m))
-                                                                        f.write('\n')
-                                                            
-                                                                f.write('$')
-                                                                f.close()
-                                                            
-                                                                print("Calling PRRTM")
-                                                            
-                                                                time.sleep(2)
-                                                            
-                                                                for i in range(1,2):
-                                                            
-                                                                    loc = project_dir+'2D RCM GitHub'
-                                                                    os.chdir(project_dir)
-                                                                    print(os.getcwd())  # Prints the current working directory
-                                                                    p = subprocess.Popen([loc])
-                                                            
-                                                                    stdoutdata, stderrdata = p.communicate()
-                                                                    # print 'return code = %4d' % (p.returncode)
-                                                                    print('return code = {}'.format(p.returncode))
-                                                                    print('------------------------------------------------------------------------------------------')
-                                                                    print
-                                                            
-                                                                    if (p.returncode == 0):
-                                                                        break
-                                                                    elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
-                                                                        ur = ur*2
-                                                                    continue
-                                                         
-                                                                counter = counter + 1
-                                        i_pso+=1
-                                i_ch +=1
-                            i_pp+=1
-                        i_lc+=1
-                    i_lt+=1
-                i_cf+=1
-            i_lfa+=1
-        i_h2osrc+=1
+                                                                    
+                                                                        shortnamessfc = ['fal']
+                                                                        longnamessfc = {'fal':'Surface albedo'}
+                                                                        disttypesfc = {'fal':'lat'}
+                                                                    
+                                                                        loop = 1
+                                                                    
+                                                                        print("Creating input files by interpolating ERA-Interim data")
+                                                                    
+                                                                        interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,lat_facs)
+                                                                        interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
+                                                                        interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
+                                                                    
+                                                                        lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+                                                                        # lc = [-6.5] * ncols
+                                                                        #lc = [-15.] * ncols
+                                                                        # for i in range(len(lc)):
+                                                                        #    lc[i] *= 1.5
+
+                                                                        lch = createlatdistbn('Cloud Top Height')
+                                                                        srh = createlatdistbn('Relative Humidity')
+                                                                        # srh = [0.8] * ncols
+                                                                        sa = createlatdistbn('Surface Reflectance')
+                                                                        # sa = [0.3] * ncols
+                                                                        lcf = createlatdistbn('Cloud Fraction')
+                                                                        lcod = createlatdistbn('Cloud Optical Thickness')
+                                                                        tg = createlatdistbn('Surface Temperature')
+                                                                        # tg = tg * lat_facs
+
+                                                                        # tg = [tboundm] * ncols
+                                                                        # tg = [288.4] * ncols
+
+                                                                    
+                                                                        #lc = [-5.88]*ncols
+                                                                        #lch = [4.46]*ncols
+                                                                        #srh = [0.787]*ncols
+                                                                        #lcf = [0.657]*ncols
+                                                                        #lcod = [3.978]*ncols
+                                                                    
+                                                                        mc = pico2  
+                                                                    
+                                                                        ur = 0.5
+                                                                        icldm = 1
+                                                                        rmin = 3e-6
+                                                                        hct = 230.0
+                                                                        hcf = 0.04e-9   
+                                                                        hcod = 0.7e-9
+                                                                        mct = 235.0
+                                                                        mcf = 0.05e-9
+                                                                        mcod = 1.5e-9
+                                                                        #lct = 250.0
+                                                                        #lcf = 0.5
+                                                                        #lcod = 5.0
+                                                                        tp = 5.0
+                                                                        #fth = np.zeros(ncols)
+                                                                        #for i in range(ncols):
+                                                                        #    fth[i] = 15.0 - abs(collats[i])/18.0
+                                                                        fth = [350.] * ncols
+                                                                        ol = nlays
+                                                                        asp = 2.0   
+                                                                        cs = 0
+                                                                        pbo = 0 
+                                                                        fswon = 0
+                                                                        fsw = fsw
+                                                                        fp = 0
+                                                                        ps1 = 0
+                                                                        af = 1.0
+                                                                        dalr = 0 #convection type
+                                                                        npb = 1
+                                                                        o3sw = 1
+                                                                        h2osw = 1
+                                                                        nl = nlays
+                                                                        maxhtr = 0.1
+                                                                        asf = 4.0
+                                                                        tuf = 1.0   
+                                                                        n2inv = pin2
+                                                                        #n2inv = 0.8
+                                                                        o2inv = 0.0
+                                                                        htransp = 1.0 #reduce lapse rate to account for horizontal transport
+                                                                        ipe = 1
+                                                                        dp = 1
+                                                                        mtranspfac = 2.0
+                                                                        boxnetfluxfac = 0.2
+                                                                        # twarm = 288
+                                                                        # tcold = 268
+                                                                        phim = 45 * 3.14 / 180
+                                                                        ks = 0.25
+                                                                        kl = 0.25
+                                                                        eta = 0.75
+                                                                        planet_radius = 6.37e6
+                                                                        planet_rotation = 7.29e-5
+                                                                        t_min = 10.
+                                                                        sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
+                                                                        playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
+                                                                        ur_htr = 0.5
+                                                                        ur_toafnet = [2.0] * ncols
+                                                                        ur_seb = 1e10
+                                                                        couple_tgta = 1
+                                                                        mtranspon = 1
+                                                                        gas_amt_fac_h2o = 1.0
+                                                                        # gas_amt_fac_co2 = 1.0
+                                                                        gas_amt_fac_o3 = 1.0
+                                                                        gas_amt_p_high_h2o = ppert
+                                                                        gas_amt_p_low_h2o = ppert - 50.
+                                                                        # gas_amt_p_high_h2o = 1e6
+                                                                        # gas_amt_p_low_h2o = 0.
+                                                                        gas_amt_p_high_co2 = 1e6
+                                                                        gas_amt_p_low_co2 = 0.
+                                                                        gas_amt_p_high_o3 = 1e6
+                                                                        gas_amt_p_low_o3 = 0.
+                                                                        gas_amt_pert_h2o = 1 #1 = on, 0=off
+                                                                        gas_amt_pert_co2 = 1 #1 = on, 0=off
+                                                                        gas_amt_pert_o3 = 1 #1 = on, 0=off
+                                                                        psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
+                                                                        mixco2_prescribed_on = 1
+                                                                        mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
+                                                                        steps_before_toa_adj = 5
+                                                                        a_green = 0.4
+                                                                        b_green = 20.
+                                                                        c_green = 5.
+                                                                        H_green = 7.
+                                                                        cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
+                                                                        surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
+                                                                        # lapse_type = 0
+                                                                        h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
+                                                                        h2o_for = 1
+                                                                        # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
+                                                                        ur_mt = 1.0
+                                                                    
+                                                                        ur1 = ur
+                                                                    
+                                                                        counter = 0
+                                                                    
+                                                                        ur = ur1
+                                                                    
+                                                                        params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
+                                                                        npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
+                                                                        twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
+                                                                        gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
+                                                                        gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
+                                                                        surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt]
+                                                                        
+                                                                        f = open(project_dir+'/Earth RCM Parameters','w')
+                                                                        for m in params:
+                                                                            if type(m) is list:
+                                                                                for i in range(len(m)-1):
+                                                                                    f.write(str(m[i]))
+                                                                                    f.write(',')
+                                                                                f.write(str(m[len(m)-1]))
+                                                                                f.write('\n')
+                                                                            else:
+                                                                                f.write(str(m))
+                                                                                f.write('\n')
+                                                                    
+                                                                        f.write('$')
+                                                                        f.close()
+                                                                    
+                                                                        print("Calling PRRTM")
+                                                                    
+                                                                        time.sleep(2)
+                                                                    
+                                                                        for i in range(1,2):
+                                                                    
+                                                                            loc = project_dir+'2D RCM GitHub'
+                                                                            os.chdir(project_dir)
+                                                                            print(os.getcwd())  # Prints the current working directory
+                                                                            p = subprocess.Popen([loc])
+                                                                    
+                                                                            stdoutdata, stderrdata = p.communicate()
+                                                                            # print 'return code = %4d' % (p.returncode)
+                                                                            print('return code = {}'.format(p.returncode))
+                                                                            print('------------------------------------------------------------------------------------------')
+                                                                            print
+                                                                    
+                                                                            if (p.returncode == 0):
+                                                                                break
+                                                                            elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
+                                                                                ur = ur*2
+                                                                            continue
+                                                                 
+                                                                        counter = counter + 1
+                                                i_pso+=1
+                                        i_ch +=1
+                                    i_pp+=1
+                                i_lc+=1
+                            i_lt+=1
+                        i_cf+=1
+                    i_lfa+=1
+                i_h2osrc+=1
+            i_tw+=1
+        i_tc+=1
 
 ########################################################################################################################
 

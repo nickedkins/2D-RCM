@@ -1518,7 +1518,7 @@ subroutine wrapper
                         ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
                         ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
                         &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))&
-                        &**(3.0/5)
+                        &**(3.0/5.0)
                         tcels = twarm - 273.15
                         t1_vl = tcels + 0.1
                         t2_vl = tcels - 0.1
