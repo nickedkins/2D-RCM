@@ -795,6 +795,24 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_h2o_cols(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_o3_cols(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_surf_cols(col)
+            end do
+        end do
+
     end subroutine writeoutputfile
     
 !     subroutine add_seb_to_tboundm

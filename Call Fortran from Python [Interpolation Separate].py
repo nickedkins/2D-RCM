@@ -24,7 +24,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [20]
+ncolss = [10]
 ncloudcols = 1
 nlays = 30
 days = 5000 #model days
@@ -447,9 +447,9 @@ for ncols in ncolss:
     lapse_types = [0]
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-    co2_facs = [1.0]
+    co2_facs = [1.0,2.0]
     lf_as = [0.0] # 0.0 default
-    h2o_sources=[1]
+    h2o_sources=[2]
 
     i_h2osrc=0
     for h2o_source in h2o_sources:
@@ -568,7 +568,7 @@ for ncols in ncolss:
                                                                 #lct = 250.0
                                                                 #lcf = 0.5
                                                                 #lcod = 5.0
-                                                                tp = 10.
+                                                                tp = 0.1
                                                                 #fth = np.zeros(ncols)
                                                                 #for i in range(ncols):
                                                                 #    fth[i] = 15.0 - abs(collats[i])/18.0
@@ -631,7 +631,7 @@ for ncols in ncolss:
                                                                 psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
                                                                 mixco2_prescribed_on = 1
                                                                 mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
-                                                                steps_before_toa_adj = 30
+                                                                steps_before_toa_adj = 5
                                                                 a_green = 0.4
                                                                 b_green = 20.
                                                                 c_green = 5.
@@ -642,7 +642,7 @@ for ncols in ncolss:
                                                                 h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
                                                                 h2o_for = 1
                                                                 # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
-                                                                ur_mt = 0.25
+                                                                ur_mt = 1.0
                                                             
                                                                 ur1 = ur
                                                             

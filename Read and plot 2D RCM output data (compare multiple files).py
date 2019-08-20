@@ -17,10 +17,10 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=260/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/fsw narrow range/fsw=280/',
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=mw/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/'
+]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -138,6 +138,10 @@ def readfile(fn,counter):
     convcols = np.zeros((nlayersm,ncols))
     lapsecritcols = np.zeros((nlayersm,ncols))
     meridtransp = np.zeros((nlayersm,ncols))
+    abs_h2o_cols = np.zeros((nlayersm,ncols))
+    abs_o3_cols = np.zeros((nlayersm,ncols))
+    abs_surf_cols = np.zeros((nlayersm,ncols))
+
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -235,6 +239,18 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             meridtransp[i,col] = f.readline()
 
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_h2o_cols[i,col] = f.readline()
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_o3_cols[i,col] = f.readline()            
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_surf_cols[i,col] = f.readline()
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
@@ -243,7 +259,7 @@ def readfile(fn,counter):
 
     return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
     abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
-    lapsecritcols,meridtransp
+    lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols
 
 # nlayersms=[31,100]
 # ncols=5
@@ -270,6 +286,9 @@ for directory in directories:
     A_oz_lcols_master = []
     abs_surf_lhcols_master = []
     totuflumcols_master = []
+    abs_h2o_cols_master = []
+    abs_o3_cols_master = []
+    abs_surf_cols_master = []
 
     filenames = []
 
@@ -292,7 +311,7 @@ for directory in directories:
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
         abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
-        meridtransp = readfile(fn,counter)
+        meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols = readfile(fn,counter)
 
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
@@ -303,7 +322,10 @@ for directory in directories:
         abspncols_master.append(abspncols)
         A_oz_lcols_master.append(A_oz_lcols)
         abs_surf_lhcols_master.append(abs_surf_lhcols)
-        totuflumcols_master.append(totuflumcols)        
+        totuflumcols_master.append(totuflumcols)
+        abs_h2o_cols_master.append(abs_h2o_cols)        
+        abs_o3_cols_master.append(abs_o3_cols)        
+        abs_surf_cols_master.append(abs_surf_cols)        
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -534,6 +556,9 @@ for directory in directories:
     A_oz_lcols_master=np.array(A_oz_lcols_master)
     abs_surf_lhcols_master=np.array(abs_surf_lhcols_master)
     totuflumcols_master=np.array(totuflumcols_master)
+    abs_h2o_cols_master=np.array(abs_h2o_cols_master)
+    abs_o3_cols_master=np.array(abs_o3_cols_master)
+    abs_surf_cols_master=np.array(abs_surf_cols_master)
 
 
     # master indices for conv_trop_ind: master[file][column]
@@ -589,15 +614,20 @@ for directory in directories:
 
     lats = boxlatcols_master[:,0,:]
 
-    abs_sw_tot = abspncols_master + A_oz_lcols_master + abs_surf_lhcols_master
+    abs_sw_tot = abs_h2o_cols_master + abs_o3_cols_master + abs_surf_cols_master
 
-    print shape(abs_sw_tot)
-    print abs_sw_tot[0,0,:]
+    # for i_fn in range(0,len(boxlatcols_master[:,0,0])):
 
-    plt.plot(boxlatcols_master[0,0,:],meridtransp_master[0,0,:],'-o')
-    plt.plot(boxlatcols_master[0,0,:],abs_sw_tot[0,0,:] - totuflumcols_master[0,-1,:],'-o')
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o')
+    #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
+    #     plt.axhline(0)
+
+    plt.subplot(221)
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:] - tzm_master[0,0,:],'-o')
+
+    plt.subplot(222)
+    plt.plot(boxlatcols_master[0,0,:],meridtransp_master[1,0,:] - meridtransp_master[0,0,:],'-o')
     plt.axhline(0)
-
 
     # plt.figure(1)
     # plt.subplot(221)
