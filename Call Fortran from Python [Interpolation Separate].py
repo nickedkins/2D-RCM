@@ -24,9 +24,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [6]
+ncolss = [10]
 ncloudcols = 1
-nlays = 10
+nlays = 60
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -448,11 +448,11 @@ for ncols in ncolss:
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [0.0] # 0.0 default
+    lf_as = [-1.0,1.0] # 0.0 default
     h2o_sources=[2]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
-    tcolds = [268.,263.,258.,253.,248.]
+    tcolds = [268.]
 
     i_tc=0
     for tcold in tcolds:
@@ -463,6 +463,8 @@ for ncols in ncolss:
                 i_lfa = 0
                 for lf_a in lf_as:
                     lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
+                    lat_facs /= np.max(lat_facs) # normalise lat_facs
+                    print lat_facs
                     i_cf=0
                     for gas_amt_fac_co2 in co2_facs:
                         i_lt = 0
@@ -575,7 +577,7 @@ for ncols in ncolss:
                                                                         #lct = 250.0
                                                                         #lcf = 0.5
                                                                         #lcod = 5.0
-                                                                        tp = 5.0
+                                                                        tp = 1.0
                                                                         #fth = np.zeros(ncols)
                                                                         #for i in range(ncols):
                                                                         #    fth[i] = 15.0 - abs(collats[i])/18.0

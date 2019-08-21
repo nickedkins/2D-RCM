@@ -621,8 +621,15 @@ for directory in directories:
     # x = np.linspace(-90,90,ncols)
 
     lats = boxlatcols_master[:,0,:]
+    tgs = tzm_master[:,0,:]
 
     abs_sw_tot = abs_h2o_cols_master + abs_o3_cols_master + abs_surf_cols_master
+
+    # print latwghtavg()
+
+    for i_fn in range(len(a)-1):
+        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:])
+        print latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:])
 
     # for i_fn in range(0,len(boxlatcols_master[:,0,0])):
 
@@ -630,8 +637,7 @@ for directory in directories:
     #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
     #     plt.axhline(0)
 
-    # twarms = [288.,293.,298.,303.,308.]
-    tcolds = [268.,263.,258.,253.,248.]
+
 
     # plt.subplot(221)
     # plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:] - tzm_master[0,0,:],'-o')
@@ -649,11 +655,6 @@ for directory in directories:
 
     # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
 
-    for i_fn in range(len(a)-1):
-        dummy = latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:])
-        plt.plot(tcolds[i_fn],latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:]),'o')
-        plt.xlabel('$T_{cold}$')
-        plt.ylabel('$T_{sgm}$')
     
 
     # plt.figure(1)
