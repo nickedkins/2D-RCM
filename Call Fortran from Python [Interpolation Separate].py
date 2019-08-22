@@ -20,13 +20,14 @@ from scipy import stats
 
 #testdevmerge
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
 ncolss = [6]
 ncloudcols = 1
-nlays = 10
+nlays = 30
+tp = 1e3
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -448,11 +449,12 @@ for ncols in ncolss:
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [0.0] # 0.0 default
+    lf_as = [-1.0,1.0] # 0.0 default
     h2o_sources=[2]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
-    tcolds = [268.,263.,258.,253.,248.]
+    # tcolds = [268.,263.,258.,253.,248.]
+    tcolds = [268.]
 
     i_tc=0
     for tcold in tcolds:
@@ -487,8 +489,8 @@ for ncols in ncolss:
                                                                         *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
                                                                         *ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)
                                                                         print("Number of loops: ", nloops)
-                                                                        secsperloop = 0.5 #uni
-                                                                        # secsperloop = 1.5 #home
+                                                                        # secsperloop = 0.5 #uni
+                                                                        secsperloop = 1.5 #home
                                                                         print("Estimated mins: ",nloops*secsperloop/60.)
 
                                                                         # nlays = nlayss[i_pso]
@@ -575,7 +577,7 @@ for ncols in ncolss:
                                                                         #lct = 250.0
                                                                         #lcf = 0.5
                                                                         #lcod = 5.0
-                                                                        tp = 5.0
+                                                                        # tp = 1.0
                                                                         #fth = np.zeros(ncols)
                                                                         #for i in range(ncols):
                                                                         #    fth[i] = 15.0 - abs(collats[i])/18.0

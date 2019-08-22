@@ -1529,7 +1529,7 @@ subroutine wrapper
                         delta_x_edge(col) = x_edge(col) - x_edge(col-1)
                         delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
                         h_scale = 7.5
-                        f_cor = -1.0 * 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
+                        f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
                         beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
                         gamma_d = 9.8
                         d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
@@ -1537,7 +1537,7 @@ subroutine wrapper
                         d_mid(col) = d_mid(col) * 1.5
                         d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     end if
-                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
+                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
                     if(col>0) then
                         delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
                         meridtransp(col) = delta_meridtransp_edge(col)

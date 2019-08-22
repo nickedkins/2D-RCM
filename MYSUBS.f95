@@ -813,6 +813,20 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) d_mid(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) d_trop(col)
+            end do
+        end do
+
+        close(50)
+
     end subroutine writeoutputfile
     
 !     subroutine add_seb_to_tboundm
