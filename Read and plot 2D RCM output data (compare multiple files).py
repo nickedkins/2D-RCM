@@ -17,10 +17,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=mw/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/latfac/'
+]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -627,15 +626,19 @@ for directory in directories:
 
     # print latwghtavg()
 
-    for i_fn in range(len(a)-1):
-        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:])
-        print latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:])
+    # for i_fn in range(len(a)-1):
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:])
+    #     print latwghtavg(tzm_master[i_fn,0,:],boxlatcols_master[i_fn,0,:])
 
-    # for i_fn in range(0,len(boxlatcols_master[:,0,0])):
+    for i_fn in range(0,len(boxlatcols_master[:,0,0])):
 
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o')
-    #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
-    #     plt.axhline(0)
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta$ box meridional transport (Wm$^{-2}$)')
+        plt.axhline(0)
+
+
+    plt.legend()
 
 
 
