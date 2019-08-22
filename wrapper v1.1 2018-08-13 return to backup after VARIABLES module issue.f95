@@ -1547,7 +1547,7 @@ subroutine wrapper
 
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                            &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
+                            &altzmcols(conv_trop_ind(col),col)/1000.) * 0.05
                     end if
 
                     if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
