@@ -632,13 +632,22 @@ for directory in directories:
 
     for i_fn in range(0,len(boxlatcols_master[:,0,0])):
 
+        plt.figure(1)
+        plt.subplot(121)
         plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=a[i_fn])
         plt.xlabel('Latitude')
         plt.ylabel('$\Delta$ box meridional transport (Wm$^{-2}$)')
         plt.axhline(0)
+        plt.legend()
+
+        plt.subplot(122)
+        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta$ T')
+        plt.legend()
 
 
-    plt.legend()
+    
 
 
 
