@@ -1534,34 +1534,36 @@ subroutine wrapper
                         gamma_d = 9.8
                         d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
                             &( gamma_d + lapsecritcols(col) ) ) )
-                        d_mid(col) = d_mid(col) * 1.5
+                        ! d_mid(col) = d_mid(col) * 1.5
                         d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     end if
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
                     if(col>0) then
                         delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
                         meridtransp(col) = delta_meridtransp_edge(col)
-                    end if
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    if (lapse_type == 1) then
-                        lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                            &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                    end if
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                        ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
-                    end if
-                    boxnetradflux_prev(col) = boxnetradflux(col)
+                        if (lapse_type == 1) then
+                            lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                                &altzmcols(conv_trop_ind(col),col)/1000.) * 0.1
+                            print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
+                        end if
 
-                    if (mtranspon == 1) then
-                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                    else
-                        boxnettotflux(col) = boxnetradflux(col)
+                        if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                            ur_toafnet(col) = ur_toafnet(col) * 2.0
+                            print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
+                        end if
+                        boxnetradflux_prev(col) = boxnetradflux(col)
+
+                        if (mtranspon == 1) then
+                            boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                        else
+                            boxnettotflux(col) = boxnetradflux(col)
+                        end if
+                        tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                     end if
-                    tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                 enddo
 
 

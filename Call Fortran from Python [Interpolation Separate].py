@@ -20,14 +20,14 @@ from scipy import stats
 
 #testdevmerge
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
 ncolss = [6]
 ncloudcols = 1
-nlays = 30
-tp = 1e3
+nlays = 199
+tp = 5.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -445,11 +445,11 @@ for ncols in ncolss:
     add_cld_alts = [0.0]
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
-    lapse_types = [0]
+    lapse_types = [1]
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [-1.0,1.0] # 0.0 default
+    lf_as = [1.0] # 0.0 default
     h2o_sources=[2]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
@@ -465,6 +465,9 @@ for ncols in ncolss:
                 i_lfa = 0
                 for lf_a in lf_as:
                     lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
+                    print lat_facs, sum(lat_facs)
+                    lat_facs = lat_facs * ncols / sum(lat_facs)
+                    print lat_facs, sum(lat_facs)
                     i_cf=0
                     for gas_amt_fac_co2 in co2_facs:
                         i_lt = 0
@@ -489,8 +492,8 @@ for ncols in ncolss:
                                                                         *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
                                                                         *ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)
                                                                         print("Number of loops: ", nloops)
-                                                                        # secsperloop = 0.5 #uni
-                                                                        secsperloop = 1.5 #home
+                                                                        secsperloop = 0.5 #uni
+                                                                        # secsperloop = 1.5 #home
                                                                         print("Estimated mins: ",nloops*secsperloop/60.)
 
                                                                         # nlays = nlayss[i_pso]
@@ -533,7 +536,11 @@ for ncols in ncolss:
                                                                     
                                                                         print("Creating input files by interpolating ERA-Interim data")
                                                                     
-                                                                        interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,lat_facs)
+                                                                        # interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,lat_facs)
+                                                                        # interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
+                                                                        # interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
+
+                                                                        interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,[1.0]*ncols)
                                                                         interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
                                                                         interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
                                                                     
@@ -547,6 +554,7 @@ for ncols in ncolss:
                                                                         srh = createlatdistbn('Relative Humidity')
                                                                         # srh = [0.8] * ncols
                                                                         sa = createlatdistbn('Surface Reflectance')
+                                                                        sa = list(sa * lat_facs)
                                                                         # sa = [0.3] * ncols
                                                                         lcf = createlatdistbn('Cloud Fraction')
                                                                         lcod = createlatdistbn('Cloud Optical Thickness')
@@ -647,7 +655,7 @@ for ncols in ncolss:
                                                                         H_green = 7.
                                                                         cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
                                                                         surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
-                                                                        # lapse_type = 0
+                                                                        # lapse_type = 1
                                                                         h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
                                                                         h2o_for = 1
                                                                         # h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
