@@ -643,7 +643,7 @@ for directory in directories:
         plt.subplot(122)
         plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=a[i_fn])
         plt.xlabel('Latitude')
-        plt.ylabel('$\Delta$ T')
+        plt.ylabel('T_{g}')
         plt.legend()
 
 
