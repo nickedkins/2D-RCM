@@ -20,13 +20,15 @@ from scipy import stats
 
 #testdevmerge
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
+# secsperloop = 0.5 #uni
+secsperloop = 1.5 #home
 
 ncolss = [6]
 ncloudcols = 1
-nlays = 199
+nlays = 30
 tp = 5.0
 days = 5000 #model days
 min_press = 1.
@@ -449,7 +451,7 @@ for ncols in ncolss:
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [1.0] # 0.0 default
+    lf_as = [0.0,1.0] # 0.0 default
     h2o_sources=[2]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
@@ -465,9 +467,9 @@ for ncols in ncolss:
                 i_lfa = 0
                 for lf_a in lf_as:
                     lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
-                    print lat_facs, sum(lat_facs)
+                    # print lat_facs, sum(lat_facs)
                     lat_facs = lat_facs * ncols / sum(lat_facs)
-                    print lat_facs, sum(lat_facs)
+                    # print lat_facs, sum(lat_facs)
                     i_cf=0
                     for gas_amt_fac_co2 in co2_facs:
                         i_lt = 0
@@ -492,8 +494,7 @@ for ncols in ncolss:
                                                                         *len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
                                                                         *ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)
                                                                         print("Number of loops: ", nloops)
-                                                                        secsperloop = 0.5 #uni
-                                                                        # secsperloop = 1.5 #home
+                                                                        
                                                                         print("Estimated mins: ",nloops*secsperloop/60.)
 
                                                                         # nlays = nlayss[i_pso]
