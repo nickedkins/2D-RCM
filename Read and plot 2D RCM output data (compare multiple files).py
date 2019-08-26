@@ -18,7 +18,7 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double co2 lapse params/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double co2 lapse params/high res/'
 ]
 
 
@@ -650,8 +650,8 @@ for directory in directories:
     tcolds = [268.,263.,258.,253.,248.]
 
     plt.figure(1)
-    plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:]-tzm_master[0,0,:])
-    plt.plot(boxlatcols_master[0,0,:],tzm_master[3,0,:]-tzm_master[2,0,:])
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:]-tzm_master[0,0,:],'-o',label='Mason')
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[3,0,:]-tzm_master[2,0,:],'-o',label='Held 82')
 
 
     # for i_fn in range(len(a)):

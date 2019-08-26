@@ -19,14 +19,14 @@ from time import localtime, strftime
 from scipy import stats
 
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [4]
+ncolss = [16]
 ncloudcols = 1
-nlays = 30
-tp = 5.0
+nlays = 99
+tp = 1.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
