@@ -24,8 +24,8 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
 ncolss = [4]
-ncloudcols = 2
-nlays = 199
+ncloudcols = 1
+nlays = 30
 tp = 5.0
 days = 5000 #model days
 min_press = 1.
@@ -446,11 +446,11 @@ for ncols in ncolss:
     add_cld_alts = [0.0]
     lcs = np.linspace(10,3,1)
     lcs = lcs * -1.
-    lapse_types = [1]
+    lapse_types = [0,1]
     pperts = np.linspace(1000,0,1)
 
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-    co2_facs = [1.0]
+    co2_facs = [1.0,2.0]
     lf_as = [0.0] # 0.0 default
     h2o_sources=[1]
     # twarms = [288.,293.,298.,303.,308.]
