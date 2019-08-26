@@ -547,8 +547,8 @@ MODULE MYSUBS
         
         abs_surf_lh = 0.
 
-        ! abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
-        abs_surf_lh = (Ag1+Ag2)*sol_inc
+        abs_surf_lh = (Ag1+Ag2)*sol_inc*1.5 !Unsure about that factor of 1.5 nje
+        ! abs_surf_lh = (Ag1+Ag2)*sol_inc
 
         ! abs_surf_lhcols(col) = abs_surf_lh
 

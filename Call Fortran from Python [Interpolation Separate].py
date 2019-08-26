@@ -24,10 +24,10 @@ from scipy import stats
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [1]
+ncolss = [4]
 ncloudcols = 2
 nlays = 30
-tp = 5.0 * 1e3
+tp = 5.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -554,9 +554,9 @@ for ncols in ncolss:
                                                                         lch = createlatdistbn('Cloud Top Height')
                                                                         srh = createlatdistbn('Relative Humidity')
                                                                         # srh = [0.8] * ncols
-                                                                        sa = createlatdistbn('Surface Reflectance')
+                                                                        # sa = createlatdistbn('Surface Reflectance')
                                                                         sa = list(sa * lat_facs)
-                                                                        # sa = [0.3] * ncols
+                                                                        # sa = [0.0] * ncols
                                                                         lcf = createlatdistbn('Cloud Fraction')
                                                                         lcod = createlatdistbn('Cloud Optical Thickness')
                                                                         tg = createlatdistbn('Surface Temperature')
