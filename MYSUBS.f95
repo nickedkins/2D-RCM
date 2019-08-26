@@ -129,9 +129,9 @@ MODULE MYSUBS
 
 
         do i=1,nlayersm
-            ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot * 1000.0 !times 1000 to convert to g/kg instead of kg/kg
+            rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot * 1000.0 !times 1000 to convert to g/kg instead of kg/kg
             ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot  !times 1000 to convert to g/kg instead of kg/kg ! but I've removed that factor -- might be wrong
-            rho_w(i) = wklm(1,i) / mperlayr(i)
+            ! rho_w(i) = wklm(1,i) / mperlayr(i)
         enddo
 
         ! zlh=altzm(0:nlayersm)/1000.0
@@ -410,6 +410,7 @@ MODULE MYSUBS
                     Al(i,n) = A_1l(i,n)-A_1l(i-1,n)
                 endif
                 if (Al(i,n) .ne. Al(i,n)) Al(i,n) = 0.0 !Check for NaNs, since NaN is .ne. anything, even itself
+                if (Al(i,n) < 0.0) Al(i,n) = 0.0
             enddo
         enddo
 
@@ -546,13 +547,15 @@ MODULE MYSUBS
         
         abs_surf_lh = 0.
 
-        ! abs_surf_lh = (Ag1+Ag2)*sol_inc*2.0 !Unsure about that factor of 2.0 nje
-        abs_surf_lh = (Ag1+Ag2)*sol_inc
+        abs_surf_lh = (Ag1+Ag2)*sol_inc*1.5 !Unsure about that factor of 1.5 nje
+        ! abs_surf_lh = (Ag1+Ag2)*sol_inc
 
         ! abs_surf_lhcols(col) = abs_surf_lh
 
+
         if (abs_surf_lh .ne. abs_surf_lh) then
             print*, "abs_surf is NaN:"
+            call writeoutputfile
             call EXIT(11)
         endif
 
@@ -789,6 +792,43 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) meridtransp(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_h2o_cols(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_o3_cols(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) abs_surf_cols(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) d_mid(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) d_trop(col)
+            end do
+        end do
+
+        close(50)
 
     end subroutine writeoutputfile
     

@@ -200,6 +200,8 @@ subroutine wrapper
     read(73,*) lapse_type
     read(73,*) h2o_sb
     read(73,*) h2o_for
+    read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
+    read(73,*) ur_mt
 
     close(73)
 
@@ -463,13 +465,13 @@ subroutine wrapper
         mperlayr_co2(i) = (molec_co2)/(nlayersm)
     enddo
 
-    do i=1,nlayersm
-        rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu
-        ! es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-        es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-        ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
-        ! if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
-    enddo
+    ! do i=1,nlayersm
+    !     rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu
+    !     ! es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+    !     es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+    !     ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
+    !     ! if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
+    ! enddo
 
     !Set up mixing ratio of broadening molecules (N2 and O2 mostly)
     do i =1,nlayersm
@@ -614,9 +616,11 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-                read(82,*) mixh2o(i)
+                if (h2o_source == 2) then
+                    read(82,*) mixh2o(i)
+                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
+                end if
                 read(83,*) mixo3(i)
-                mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) * 1.07 !NJE
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
@@ -713,12 +717,14 @@ subroutine wrapper
             ! enddo
 
             do i=1,nlayersm
-                rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
-                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                ! es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
-                es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-                ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                ! if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                if (h2o_source == 1) then
+                    rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
+                    if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
+                    es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
+                    ! es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                end if
             enddo
 
             do i =1,nlayersm
@@ -1186,8 +1192,8 @@ subroutine wrapper
                 tair_lowest_edges(i) = (tavelmcols(1,i+1) + tavelmcols(1,i)) / 2.0
             enddo
 
-            tair_lowest_edges(0) = 2.0 * tair_lowest_edges(1) - tair_lowest_edges(2)
-            tair_lowest_edges(ncols) = 2.0 * tair_lowest_edges(ncols-1) - tair_lowest_edges(ncols-2)
+            tair_lowest_edges(0) = 2.0 * tavelmcols(1,1) -  tair_lowest_edges(1)
+            tair_lowest_edges(ncols) = 2.0 * tavelmcols(1,ncols) - tair_lowest_edges(ncols-1)
         end if
 
 
@@ -1310,8 +1316,8 @@ subroutine wrapper
 
             do col=1,ncols
                 boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                ! meridtransp(col) = delta_meridtransp_edge(col)
+                ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                meridtransp(col) = delta_meridtransp_edge(col)
                 ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / gravity *&
                 & planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                 tcels = twarm - 273.15
@@ -1492,7 +1498,7 @@ subroutine wrapper
 
 
         ! Equilibrium check (eqbcheck)
-        if (j > steps_before_toa_adj ) then !NJE
+        if (j > 30 ) then !NJE
             if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
                 ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 
@@ -1502,53 +1508,62 @@ subroutine wrapper
                 transpcalled = 1
                 stepssinceboxadj = 0
 
-                do col=1,ncols
-                    boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                    meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                    ! meridtransp(col) = delta_meridtransp_edge(col)
-                    ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
-                    &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
-                    tcels = twarm - 273.15
-                    t1_vl = tcels + 0.1
-                    t2_vl = tcels - 0.1
-                    delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
-                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
-                    d_vl(col) = ddry(col) * (1.0 + lambda(col))
-
-                    delta_T_edge(col) = tair_lowest_edges(col-1) - tair_lowest_edges(col)
-                    delta_x_edge(col) = x_edge(col) - x_edge(col-1)
-                    delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
-                    h_scale = 7.5
-                    f_cor = -1.0 * 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
-                    beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
-                    gamma_d = 9.8
-                    d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
-                        &( gamma_d + lapsecritcols(col) ) ) )
-                    d_mid(col) = d_mid(col) * 1.5
-                    d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
-                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_edge(col))**2.0) * d_vl(col)
+                do col=0,ncols
+                    delta_T_edge(0) = tavelmcols(1,1) - tair_lowest_edges(0)
+                    delta_T_edge(ncols) = tavelmcols(1,ncols) - tair_lowest_edges(ncols)
+                    delta_x_edge(0) = x_lats(1) - x_edge(0)
+                    delta_x_edge(ncols) = x_lats(ncols) - x_edge(ncols)
+                    if(col>0) then
+                        boxnetradflux(col) = abs_sw(col)-olrcols(col)
+                        ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                        ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
+                        &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))&
+                        &**(3.0/5.0)
+                        tcels = twarm - 273.15
+                        t1_vl = tcels + 0.1
+                        t2_vl = tcels - 0.1
+                        delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
+                        lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
+                        d_vl(col) = ddry(col) * (1.0 + lambda(col))
+                        delta_T_edge(col) = tair_lowest_edges(col) - tair_lowest_edges(col-1)
+                        delta_x_edge(col) = x_edge(col) - x_edge(col-1)
+                        delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
+                        h_scale = 7.5
+                        f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
+                        beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
+                        gamma_d = 9.8
+                        d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
+                            &( gamma_d + lapsecritcols(col) ) ) )
+                        ! d_mid(col) = d_mid(col) * 1.5
+                        d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
+                    end if
+                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
+                    if(col>0) then
+                        delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
+                        meridtransp(col) = delta_meridtransp_edge(col)
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    print*, boxlats(col),lapsecritcols(col), d_mid(col), d_trop(col), max(d_mid(col), d_trop(col)), &
-                   altzmcols(conv_trop_ind(col),col)/1000.,f_cor,delta_T_edge(col),delta_y_edge(col),beta,gamma_d+lapsecritcols(col)
-                    if (lapse_type == 1) then
-                        lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                        &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                    end if
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0 .and. adj1 > 0) then 
-                        ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet(col)
-                    end if
-                    boxnetradflux_prev(col) = boxnetradflux(col)
+                        if (lapse_type == 1) then
+                            lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                                &altzmcols(conv_trop_ind(col),col)/1000.) * 0.1
+                            print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
+                        end if
 
-                    if (mtranspon == 1) then
-                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                    else
-                        boxnettotflux(col) = boxnetradflux(col)
+                        if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                            ur_toafnet(col) = ur_toafnet(col) * 2.0
+                            print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
+                        end if
+                        boxnetradflux_prev(col) = boxnetradflux(col)
+
+                        if (mtranspon == 1) then
+                            boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                        else
+                            boxnettotflux(col) = boxnetradflux(col)
+                        end if
+                        tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                     end if
-                    tempchanges(col) = boxnettotflux(col) / ur_toafnet(col)
                 enddo
 
 
@@ -1562,15 +1577,16 @@ subroutine wrapper
                 xglobmean = xglobsum / cossums
                 netradflux_globmean = xglobmean
 
-                xglobsum = 0.
-                xglobmean = 0.
-                cossums = 0.
-                do col=1,ncols
-                    xglobsum = xglobsum + meridtransp(col) * cosd(boxlats(col))
-                    cossums = cossums + cosd(boxlats(col))
-                enddo
-                xglobmean = xglobsum / cossums
-                meridtransp_globmean = xglobmean
+                ! xglobsum = 0.
+                ! xglobmean = 0.
+                ! cossums = 0.
+                ! do col=1,ncols
+                !     xglobsum = xglobsum + meridtransp(col) * cosd(boxlats(col))
+                !     cossums = cossums + cosd(boxlats(col))
+                ! enddo
+                ! xglobmean = xglobsum / cossums
+                ! meridtransp_globmean = xglobmean
+                meridtransp_globmean = sum(meridtransp) / ncols
 
                 xglobsum = 0.
                 xglobmean = 0.
@@ -1776,44 +1792,44 @@ subroutine wrapper
                     call writeoutputfile
 
 
-                    do i=1,ncols
+                    ! do i=1,ncols
 
-                        write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
-                        write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
-                        write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
+                    !     write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
+                    !     write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
+                    !     write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
 
-                        open(87,file=trim(ccfracsfn),form='formatted')
-                        open(88,file=trim(cctausfn),form='formatted')
-                        open(89,file=trim(ccaltsfn),form='formatted')
+                    !     open(87,file=trim(ccfracsfn),form='formatted')
+                    !     open(88,file=trim(cctausfn),form='formatted')
+                    !     open(89,file=trim(ccaltsfn),form='formatted')
 
-                        open(92,file=('extra_clds'),form='formatted')
+                    !     open(92,file=('extra_clds'),form='formatted')
 
-                        read(92,*) extra_cld_tau
-                        read(92,*) extra_cld_frac
-                        read(92,*) extra_cld_alt
-                        read(92,*) extra_cld_latcol
-                        read(92,*) extra_cld_cldcol
+                    !     read(92,*) extra_cld_tau
+                    !     read(92,*) extra_cld_frac
+                    !     read(92,*) extra_cld_alt
+                    !     read(92,*) extra_cld_latcol
+                    !     read(92,*) extra_cld_cldcol
 
-                        close(92)
+                    !     close(92)
 
-                        do cloudcol = 1,ncloudcols
-                            read(87,*) ccfracs(cloudcol)
-                            read(88,*) cctaus(cloudcol)
-                            read(89,*) ccalts(cloudcol)
-                        end do
+                    !     do cloudcol = 1,ncloudcols
+                    !         read(87,*) ccfracs(cloudcol)
+                    !         read(88,*) cctaus(cloudcol)
+                    !         read(89,*) ccalts(cloudcol)
+                    !     end do
 
-                        close(87)
-                        close(88)
-                        close(89)
+                    !     close(87)
+                    !     close(88)
+                    !     close(89)
 
-                        do cloudcol = 1,ncloudcols
-                            cloudcolfrac = ccfracs(cloudcol)
-                            cloudcoltau = cctaus(cloudcol)
-                            cloudcolalt = ccalts(cloudcol)
-                            call writecloudstofile
-                        enddo
+                    !     do cloudcol = 1,ncloudcols
+                    !         cloudcolfrac = ccfracs(cloudcol)
+                    !         cloudcoltau = cctaus(cloudcol)
+                    !         cloudcolalt = ccalts(cloudcol)
+                    !         call writecloudstofile
+                    !     enddo
 
-                    enddo
+                    ! enddo
 
                     ! do col=1,ncols
                     !     do i=0,nlayersm
@@ -1920,7 +1936,7 @@ subroutine wrapper
     1109 FORMAT (' ts ')
     1110 FORMAT (F12.4)
 
-    close(50)
+    ! close(50)
     close(51)
     close(52)
     close(53)

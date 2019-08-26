@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -20,6 +20,8 @@ directories = [
 directories = [
 '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/double co2 lapse params/'
 ]
+
+
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -59,19 +61,28 @@ def init_plotting():
     plt.gca().yaxis.set_ticks_position('left')
 init_plotting()
 
+def latwghtavg(x,lats):
+    print "x:", x
+    print "lats:", lats
+    print "sinlats:", np.cos(np.deg2rad(lats))
+    print "sumlats:", sum(np.cos(np.deg2rad(lats)))
+    x_avg = sum(x * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
+    return x_avg
 
-obs_file = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/ERA-Interim/Global Mean Observed T vs p.txt'
+
+obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')
 
-p_obs = obs_data[:,0]
-t_obs = obs_data[:,1]
-z_obs = -7.7 * log(p_obs / p_obs[-1])
+t_obs = obs_data[:,0]
+p_obs = obs_data[:,1]
 
-grey_file = '/Users/nickedkins/Dropbox/grey model obs repl.txt'
-grey_data = np.genfromtxt(grey_file,delimiter=',')
+p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
 
-t_grey = grey_data[:,0]
-z_grey = grey_data[:,1]
+# plt.figure(1)
+# plt.plot(t_obs,p_obs,'--',label='Shine and Sinha')
+# plt.ylim(1000,0)
+
+
 
 # plt.figure(1)
 # plt.subplot(341)
@@ -99,7 +110,7 @@ z_grey = grey_data[:,1]
 # plt.ylim(max(p_obs),min(p_obs))
 
 
-linestyles = ['-','--','--']
+linestyles = ['-','--','--','o']
 
 colors = ['b','r','g','orange','purple','yellow','pink']
 
@@ -135,6 +146,13 @@ def readfile(fn,counter):
     boxlatcols = np.zeros((nlayersm,ncols))
     convcols = np.zeros((nlayersm,ncols))
     lapsecritcols = np.zeros((nlayersm,ncols))
+    meridtransp = np.zeros((nlayersm,ncols))
+    abs_h2o_cols = np.zeros((nlayersm,ncols))
+    abs_o3_cols = np.zeros((nlayersm,ncols))
+    abs_surf_cols = np.zeros((nlayersm,ncols))
+    d_mid = np.zeros((nlayersm,ncols))
+    d_trop = np.zeros((nlayersm,ncols))
+
  
     for col in range(ncols):
         for i in range(nlayersm+1):
@@ -228,17 +246,40 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             lapsecritcols[i,col] = f.readline()
 
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            meridtransp[i,col] = f.readline()
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_h2o_cols[i,col] = f.readline()
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_o3_cols[i,col] = f.readline()            
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            abs_surf_cols[i,col] = f.readline()
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            d_mid[i,col] = f.readline()
+
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            d_trop[i,col] = f.readline()            
+
+
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
     # abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
     # abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
 
 
-    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols
-
-# nlayersms=[31,100]
-# ncols=5
-
+    return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
+    abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
+    lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop
 
 i1 = 0
 
@@ -247,28 +288,36 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 
 cld_heights = np.linspace(1,10,10)
 
-tzm_master = []
-pzm_master = []
-altzm_master = []
-boxlatcols_master = []
-lapsecritcols_master = []
-conv_trop_ind_master = []
-
-filenames = []
-
-print directories
-
 i_dir=0
 for directory in directories:
+
+    tzm_master = []
+    pzm_master = []
+    altzm_master = []
+    boxlatcols_master = []
+    lapsecritcols_master = []
+    conv_trop_ind_master = []
+    meridtransp_master = []
+    abspncols_master = []
+    A_oz_lcols_master = []
+    abs_surf_lhcols_master = []
+    totuflumcols_master = []
+    abs_h2o_cols_master = []
+    abs_o3_cols_master = []
+    abs_surf_cols_master = []
+    d_mid_master = []
+    d_trop_master = []
 
     filenames = []
 
     dir_label = directory.split('/')[-2]
+    print dir_label
 
     ls = linestyles[i1]
     color = colors[i1]
 
     a = sorted(listdir(directory))
+    a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -277,15 +326,27 @@ for directory in directories:
     i2 = 0
 
     for fn in a:
-        print fn
         if (fn=='.DS_Store'):
             continue
-        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols = readfile(fn,counter)
+        tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
+        abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
+        meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop = readfile(fn,counter)
+
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
         altzm_master.append(altzmcols)  
         boxlatcols_master.append(boxlatcols)
         lapsecritcols_master.append(lapsecritcols)
+        meridtransp_master.append(meridtransp)
+        abspncols_master.append(abspncols)
+        A_oz_lcols_master.append(A_oz_lcols)
+        abs_surf_lhcols_master.append(abs_surf_lhcols)
+        totuflumcols_master.append(totuflumcols)
+        abs_h2o_cols_master.append(abs_h2o_cols)        
+        abs_o3_cols_master.append(abs_o3_cols)        
+        abs_surf_cols_master.append(abs_surf_cols)
+        d_mid_master.append(d_mid)       
+        d_trop_master.append(d_trop)
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -501,83 +562,175 @@ for directory in directories:
 
         i2 += 1
 
-    i1 += 1
+    # i1 += 1
     i_dir+=1
 
 
-# master indices: master[file,layer,column]
-tzm_master = np.array(tzm_master)
-pzm_master = np.array(pzm_master)
-altzm_master = np.array(altzm_master)
-boxlatcols_master = np.array(boxlatcols_master)
-lapsecritcols_master = np.array(lapsecritcols_master)
-# master indices for conv_trop_ind: master[file][column]
-conv_trop_ind_master = np.array(conv_trop_ind_master)
+    # master indices: master[file,layer,column]
+    tzm_master = np.array(tzm_master)
+    pzm_master = np.array(pzm_master)
+    altzm_master = np.array(altzm_master)
+    boxlatcols_master = np.array(boxlatcols_master)
+    lapsecritcols_master = np.array(lapsecritcols_master)
+    meridtransp_master = np.array(meridtransp_master)
+    abspncols_master = np.array(abspncols_master)
+    A_oz_lcols_master=np.array(A_oz_lcols_master)
+    abs_surf_lhcols_master=np.array(abs_surf_lhcols_master)
+    totuflumcols_master=np.array(totuflumcols_master)
+    abs_h2o_cols_master=np.array(abs_h2o_cols_master)
+    abs_o3_cols_master=np.array(abs_o3_cols_master)
+    abs_surf_cols_master=np.array(abs_surf_cols_master)
+    d_mid_master=np.array(d_mid_master)
+    d_trop_master=np.array(d_trop_master)
 
 
-# i_fn = 0
-# for fn in a:
-#     if (fn=='.DS_Store'):
-#             continue
+    # master indices for conv_trop_ind: master[file][column]
+    conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-#     plt.figure(1)
-#     plt.subplot(221)
-#     plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Lapse rate (K/km)')
-#     plt.legend()
 
-#     plt.subplot(222)
-#     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Tropopause temperature (K)')
-#     plt.legend()
+
+    # i_fn = 0
+    # for fn in a:
+    #     if (fn=='.DS_Store'):
+    #             continue
+
+    #     plt.figure(1)
+    #     plt.subplot(221)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Lapse rate (K/km)')
+    #     plt.legend()
+
+    #     plt.subplot(222)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Tropopause temperature (K)')
+    #     plt.legend()
+        
+    #     plt.subplot(223)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Tropopause altitude (km)')
+    #     plt.legend()
+
+    #     # plt.subplot(224)
+    #     # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
+    #     # plt.xlabel('Latitude')
+    #     # plt.ylabel('Tropopause pressure (hPa)')
+    #     # plt.legend()
+
+    #     plt.subplot(224)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Surface temperature (K)')
+    #     plt.legend()    
+
+
+    #     i_fn+=1
+
+
+
+
+    # filenames = np.array(filenames[0])
+
+    # x = np.linspace(-90,90,ncols)
+
+    # lats = boxlatcols_master[:,0,:]
+
+    abs_sw_tot = abs_h2o_cols_master + abs_o3_cols_master + abs_surf_cols_master
+
+    # for i_fn in range(0,len(boxlatcols_master[:,0,0])):
+
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o')
+    #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
+    #     plt.axhline(0)
+
+    # twarms = [288.,293.,298.,303.,308.]
+    tcolds = [268.,263.,258.,253.,248.]
+
+    for i_fn in range(len(a)):
+
+        # plt.subplot(222)
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]'-o')
+        plt.axhline(0)
+        plt.xlabel('Latitude')
+        plt.ylabel('mtransp')
+
+
+
+    # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
     
-#     plt.subplot(223)
-#     plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Tropopause altitude (km)')
-#     plt.legend()
+    # for i_fn in range(len(a)):
+    #     fig=plt.figure(1)
+        
+    #     plt.subplot(231)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]-tzm_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('$\Delta T$')
+    #     plt.legend()
 
-#     # plt.subplot(224)
-#     # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-#     # plt.xlabel('Latitude')
-#     # plt.ylabel('Tropopause pressure (hPa)')
-#     # plt.legend()
+    #     plt.subplot(232)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]-meridtransp_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('$\Delta$ meridional transport')
+    #     plt.legend()
 
-#     plt.subplot(224)
-#     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
-#     plt.xlabel('Latitude')
-#     plt.ylabel('Surface temperature (K)')
-#     plt.legend()    
+    #     plt.subplot(233)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-pzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('$\Delta $Tropopause pressure (hPa)')
+    #     plt.legend()
+
+    #     plt.subplot(234)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-tzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('$\Delta $Tropopause temperature (K)')
+    #     plt.legend()
+
+    #     plt.subplot(235)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],lapsecritcols_master[i_fn,0,:]-lapsecritcols_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('$\Delta$ Lapse rate (K/km)')
+    #     plt.legend()
+
+        # fig.suptitle('Increased surface albedo in tropics, decreased at poles',y=1.0)
 
 
-#     i_fn+=1
+    # plt.figure(1)
+    # plt.subplot(221)
+    # plt.plot(lats,tzm_master[0,0,range(ncols)])
+    # plt.plot(lats,tzm_master[1,0,range(ncols)])
+    # plt.subplot(222)
+    # plt.plot(lats,tzm_master[0,conv_trop_ind_master[0,:],range(ncols)])
+    # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
+    # plt.legend()
+
+    # pperts = np.linspace(1000,0,10)
+
+    # if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
+    #     pperts = np.linspace(1000,0,10)
+
+    # # plt.figure(1)
+    # # for i_fn in range(len(a)-1):
+    # #     if(a[i_fn]=='.DS_Store'):
+    # #         continue
+    # plt.plot(tzm_master[1:,0,:]-tzm_master[0,0,:],pperts,label=dir_label)
+    # plt.xlabel('$\Delta T_{surf}$ (K)')
+    # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
+    # plt.ylim(1000,0)
+
+    # print tzm_master[:,0,:]
 
 
-
-
-# filenames = np.array(filenames[0])
-
-# x = np.linspace(-90,90,ncols)
-
-lats = boxlatcols_master[0,0,:]
-
-delta_tg_obslapse = tzm_master[1,0,:] - tzm_master[0,0,:]
-delta_tg_h82 = tzm_master[3,0,:] - tzm_master[2,0,:]
-
-plt.plot(lats,delta_tg_obslapse,label='Observed $\Gamma$')
-plt.plot(lats,delta_tg_h82,label='Held 82')
 plt.legend()
 
+# for i in range( shape(tzm_master)[0] ):
 
-for i in range( shape(tzm_master)[0] ):
-
-    lats = boxlatcols_master[i,0,:]
-    pzms = pzm_master[i,:,0]
-    tzms = tzm_master[i,:,:]
-    altzms = altzm_master[i,:,0]
-    # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
+#     lats = boxlatcols_master[i,0,:]
+#     pzms = pzm_master[i,:,0]
+#     tzms = tzm_master[i,:,:]
+#     altzms = altzm_master[i,:,0]
+#     # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
 
 
 
