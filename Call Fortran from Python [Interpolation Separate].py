@@ -20,14 +20,14 @@ from scipy import stats
 
 #testdevmerge
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [6]
-ncloudcols = 1
-nlays = 199
-tp = 5.0
+ncolss = [1]
+ncloudcols = 2
+nlays = 30
+tp = 5.0 * 1e3
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -160,9 +160,11 @@ for ncols in ncolss:
             znew = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             weights = np.zeros( (len(latgridbounds)-1, len(pgrid)-1) )
             sinlat_int = np.linspace(-1.,1.,ncols*2)
-            lats_int = np.rad2deg(np.arcsin(sinlat_int))
-            # lats_int = np.linspace(-90,90,30) # lats to integrate over (step size)
-            pressures_int = np.linspace(2000,1,nlays*4) # ps to integrate over (step size)
+            # lats_int = np.rad2deg(np.arcsin(sinlat_int))
+            lats_int = np.linspace(-90,90,ncols*8) # lats to integrate over (step size)
+            # lats_int = [0] # lats to integrate over (step size)
+            print(lats_int,'lats_int')
+            pressures_int = np.linspace(1000,1,nlays*4) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
                 for i_p in range(len(pressures_int)):
                     for i_latg in range(len(latgridbounds)-1):
@@ -449,8 +451,8 @@ for ncols in ncolss:
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [1.0] # 0.0 default
-    h2o_sources=[2]
+    lf_as = [0.0] # 0.0 default
+    h2o_sources=[1]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
     # tcolds = [268.,263.,258.,253.,248.]
@@ -465,9 +467,8 @@ for ncols in ncolss:
                 i_lfa = 0
                 for lf_a in lf_as:
                     lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
-                    print lat_facs, sum(lat_facs)
                     lat_facs = lat_facs * ncols / sum(lat_facs)
-                    print lat_facs, sum(lat_facs)
+                    print(lat_facs, sum(lat_facs))
                     i_cf=0
                     for gas_amt_fac_co2 in co2_facs:
                         i_lt = 0

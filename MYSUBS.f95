@@ -129,9 +129,9 @@ MODULE MYSUBS
 
 
         do i=1,nlayersm
-            ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot * 1000.0 !times 1000 to convert to g/kg instead of kg/kg
+            rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot * 1000.0 !times 1000 to convert to g/kg instead of kg/kg
             ! rho_w(i) = mixh2o(i) * (18.01/1000.0) / mmwtot  !times 1000 to convert to g/kg instead of kg/kg ! but I've removed that factor -- might be wrong
-            rho_w(i) = wklm(1,i) / mperlayr(i)
+            ! rho_w(i) = wklm(1,i) / mperlayr(i)
         enddo
 
         ! zlh=altzm(0:nlayersm)/1000.0
@@ -410,6 +410,7 @@ MODULE MYSUBS
                     Al(i,n) = A_1l(i,n)-A_1l(i-1,n)
                 endif
                 if (Al(i,n) .ne. Al(i,n)) Al(i,n) = 0.0 !Check for NaNs, since NaN is .ne. anything, even itself
+                if (Al(i,n) < 0.0) Al(i,n) = 0.0
             enddo
         enddo
 
@@ -551,8 +552,10 @@ MODULE MYSUBS
 
         ! abs_surf_lhcols(col) = abs_surf_lh
 
+
         if (abs_surf_lh .ne. abs_surf_lh) then
             print*, "abs_surf is NaN:"
+            call writeoutputfile
             call EXIT(11)
         endif
 

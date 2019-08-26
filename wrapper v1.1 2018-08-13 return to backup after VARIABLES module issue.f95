@@ -618,7 +618,7 @@ subroutine wrapper
             do i=1,nlayersm
                 if (h2o_source == 2) then
                     read(82,*) mixh2o(i)
-                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) * 1.07 !NJE
+                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
                 end if
                 read(83,*) mixo3(i)
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
@@ -1792,44 +1792,44 @@ subroutine wrapper
                     call writeoutputfile
 
 
-                    do i=1,ncols
+                    ! do i=1,ncols
 
-                        write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
-                        write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
-                        write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
+                    !     write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
+                    !     write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
+                    !     write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
 
-                        open(87,file=trim(ccfracsfn),form='formatted')
-                        open(88,file=trim(cctausfn),form='formatted')
-                        open(89,file=trim(ccaltsfn),form='formatted')
+                    !     open(87,file=trim(ccfracsfn),form='formatted')
+                    !     open(88,file=trim(cctausfn),form='formatted')
+                    !     open(89,file=trim(ccaltsfn),form='formatted')
 
-                        open(92,file=('extra_clds'),form='formatted')
+                    !     open(92,file=('extra_clds'),form='formatted')
 
-                        read(92,*) extra_cld_tau
-                        read(92,*) extra_cld_frac
-                        read(92,*) extra_cld_alt
-                        read(92,*) extra_cld_latcol
-                        read(92,*) extra_cld_cldcol
+                    !     read(92,*) extra_cld_tau
+                    !     read(92,*) extra_cld_frac
+                    !     read(92,*) extra_cld_alt
+                    !     read(92,*) extra_cld_latcol
+                    !     read(92,*) extra_cld_cldcol
 
-                        close(92)
+                    !     close(92)
 
-                        do cloudcol = 1,ncloudcols
-                            read(87,*) ccfracs(cloudcol)
-                            read(88,*) cctaus(cloudcol)
-                            read(89,*) ccalts(cloudcol)
-                        end do
+                    !     do cloudcol = 1,ncloudcols
+                    !         read(87,*) ccfracs(cloudcol)
+                    !         read(88,*) cctaus(cloudcol)
+                    !         read(89,*) ccalts(cloudcol)
+                    !     end do
 
-                        close(87)
-                        close(88)
-                        close(89)
+                    !     close(87)
+                    !     close(88)
+                    !     close(89)
 
-                        do cloudcol = 1,ncloudcols
-                            cloudcolfrac = ccfracs(cloudcol)
-                            cloudcoltau = cctaus(cloudcol)
-                            cloudcolalt = ccalts(cloudcol)
-                            call writecloudstofile
-                        enddo
+                    !     do cloudcol = 1,ncloudcols
+                    !         cloudcolfrac = ccfracs(cloudcol)
+                    !         cloudcoltau = cctaus(cloudcol)
+                    !         cloudcolalt = ccalts(cloudcol)
+                    !         call writecloudstofile
+                    !     enddo
 
-                    enddo
+                    ! enddo
 
                     ! do col=1,ncols
                     !     do i=0,nlayersm
@@ -1936,7 +1936,7 @@ subroutine wrapper
     1109 FORMAT (' ts ')
     1110 FORMAT (F12.4)
 
-    close(50)
+    ! close(50)
     close(51)
     close(52)
     close(53)
