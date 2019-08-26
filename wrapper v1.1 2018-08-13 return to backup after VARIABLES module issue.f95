@@ -618,7 +618,7 @@ subroutine wrapper
             do i=1,nlayersm
                 if (h2o_source == 2) then
                     read(82,*) mixh2o(i)
-                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) * 1.07 !NJE
+                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
                 end if
                 read(83,*) mixo3(i)
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
@@ -1534,34 +1534,37 @@ subroutine wrapper
                         gamma_d = 9.8
                         d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
                             &( gamma_d + lapsecritcols(col) ) ) )
-                        d_mid(col) = d_mid(col) * 1.5
+                        ! d_mid(col) = d_mid(col) * 1.5
                         d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
                     end if
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
                     if(col>0) then
                         delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
                         meridtransp(col) = delta_meridtransp_edge(col)
-                    end if
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-                    if (lapse_type == 1) then
-                        lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                            &altzmcols(conv_trop_ind(col),col)/1000.) * 0.05
-                    end if
 
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                        ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
-                    end if
-                    boxnetradflux_prev(col) = boxnetradflux(col)
 
-                    if (mtranspon == 1) then
-                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                    else
-                        boxnettotflux(col) = boxnetradflux(col)
+                        if (lapse_type == 1) then
+                            lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                                &altzmcols(conv_trop_ind(col),col)/1000.) * 0.1
+                            print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
+                        end if
+
+                        if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                            ur_toafnet(col) = ur_toafnet(col) * 2.0
+                            print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
+                        end if
+                        boxnetradflux_prev(col) = boxnetradflux(col)
+
+                        if (mtranspon == 1) then
+                            boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                        else
+                            boxnettotflux(col) = boxnetradflux(col)
+                        end if
+                        tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                     end if
-                    tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                 enddo
 
 
@@ -1790,44 +1793,44 @@ subroutine wrapper
                     call writeoutputfile
 
 
-                    do i=1,ncols
+                    ! do i=1,ncols
 
-                        write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
-                        write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
-                        write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
+                    !     write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col ', col-1      
+                    !     write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
+                    !     write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
 
-                        open(87,file=trim(ccfracsfn),form='formatted')
-                        open(88,file=trim(cctausfn),form='formatted')
-                        open(89,file=trim(ccaltsfn),form='formatted')
+                    !     open(87,file=trim(ccfracsfn),form='formatted')
+                    !     open(88,file=trim(cctausfn),form='formatted')
+                    !     open(89,file=trim(ccaltsfn),form='formatted')
 
-                        open(92,file=('extra_clds'),form='formatted')
+                    !     open(92,file=('extra_clds'),form='formatted')
 
-                        read(92,*) extra_cld_tau
-                        read(92,*) extra_cld_frac
-                        read(92,*) extra_cld_alt
-                        read(92,*) extra_cld_latcol
-                        read(92,*) extra_cld_cldcol
+                    !     read(92,*) extra_cld_tau
+                    !     read(92,*) extra_cld_frac
+                    !     read(92,*) extra_cld_alt
+                    !     read(92,*) extra_cld_latcol
+                    !     read(92,*) extra_cld_cldcol
 
-                        close(92)
+                    !     close(92)
 
-                        do cloudcol = 1,ncloudcols
-                            read(87,*) ccfracs(cloudcol)
-                            read(88,*) cctaus(cloudcol)
-                            read(89,*) ccalts(cloudcol)
-                        end do
+                    !     do cloudcol = 1,ncloudcols
+                    !         read(87,*) ccfracs(cloudcol)
+                    !         read(88,*) cctaus(cloudcol)
+                    !         read(89,*) ccalts(cloudcol)
+                    !     end do
 
-                        close(87)
-                        close(88)
-                        close(89)
+                    !     close(87)
+                    !     close(88)
+                    !     close(89)
 
-                        do cloudcol = 1,ncloudcols
-                            cloudcolfrac = ccfracs(cloudcol)
-                            cloudcoltau = cctaus(cloudcol)
-                            cloudcolalt = ccalts(cloudcol)
-                            call writecloudstofile
-                        enddo
+                    !     do cloudcol = 1,ncloudcols
+                    !         cloudcolfrac = ccfracs(cloudcol)
+                    !         cloudcoltau = cctaus(cloudcol)
+                    !         cloudcolalt = ccalts(cloudcol)
+                    !         call writecloudstofile
+                    !     enddo
 
-                    enddo
+                    ! enddo
 
                     ! do col=1,ncols
                     !     do i=0,nlayersm
@@ -1934,7 +1937,7 @@ subroutine wrapper
     1109 FORMAT (' ts ')
     1110 FORMAT (F12.4)
 
-    close(50)
+    ! close(50)
     close(51)
     close(52)
     close(53)
