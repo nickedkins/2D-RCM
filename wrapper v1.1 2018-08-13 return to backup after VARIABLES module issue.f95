@@ -1327,12 +1327,12 @@ subroutine wrapper
                 lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                 d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
-                print*, boxnetradflux(col), boxnetradflux_prev(col)
+!                print*, boxnetradflux(col), boxnetradflux_prev(col)
                 ! if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                 !     ur_toafnet = ur_toafnet * 2.0
                 !     print*, 'ur_toafnet increased to: ', ur_toafnet
                 ! end if
-                boxnetradflux_prev(col) = boxnetradflux(col)
+                boxnettotflux_prev(col) = boxnettotflux(col)
 
                 ! delta_x_lat = x_lat(col) - x_lat(col-1)
 
@@ -1552,11 +1552,11 @@ subroutine wrapper
                             print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
                         end if
 
-                        if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                        if (boxnettotflux(col) / boxnettotflux_prev(col) < 0.0) then 
                             ur_toafnet(col) = ur_toafnet(col) * 2.0
                             print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
                         end if
-                        boxnetradflux_prev(col) = boxnetradflux(col)
+                        boxnettotflux_prev(col) = boxnettotflux(col)
 
                         if (mtranspon == 1) then
                             boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
