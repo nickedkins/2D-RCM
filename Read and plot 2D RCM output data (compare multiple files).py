@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -317,7 +317,8 @@ for directory in directories:
     color = colors[i1]
 
     a = sorted(listdir(directory))
-    a.remove('.DS_Store')
+    if '.DS_Store' in a:
+        a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -648,13 +649,18 @@ for directory in directories:
     # twarms = [288.,293.,298.,303.,308.]
     tcolds = [268.,263.,258.,253.,248.]
 
-    for i_fn in range(len(a)):
+    plt.figure(1)
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[1,0,:]-tzm_master[0,0,:])
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[3,0,:]-tzm_master[2,0,:])
 
-        # plt.subplot(222)
-        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]'-o')
-        plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('mtransp')
+
+    # for i_fn in range(len(a)):
+
+    #     # plt.subplot(222)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]'-o')
+    #     plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('mtransp')
 
 
 
