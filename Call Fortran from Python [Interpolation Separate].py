@@ -25,10 +25,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 
 
-ncolss = [4]
-ncloudcols = 2
-nlays = 30
-tp = 5.0
+ncolss = [10]
+ncloudcols = 1
+nlays = 199
+tp = 5.0e3
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -164,7 +164,6 @@ for ncols in ncolss:
             # lats_int = np.rad2deg(np.arcsin(sinlat_int))
             lats_int = np.linspace(-90,90,ncols*8) # lats to integrate over (step size)
             # lats_int = [0] # lats to integrate over (step size)
-            print(lats_int,'lats_int')
             pressures_int = np.linspace(1000,1,nlays*4) # ps to integrate over (step size)
             for i_lat in range(len(lats_int)):
                 for i_p in range(len(pressures_int)):
@@ -453,8 +452,8 @@ for ncols in ncolss:
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
 
-    lf_as = [0.0] # 0.0 default
-    h2o_sources=[1]
+    lf_as = [0.0,10.0] # 0.0 default
+    h2o_sources=[2]
 
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]

@@ -9,7 +9,7 @@ from scipy import interpolate
 from os import listdir
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -19,8 +19,7 @@ directories = [
 
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/dmid dtrop boundary/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/mtransp expts/h2o=erai/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/latfac h2o/',
 ]
 
 
@@ -318,7 +317,8 @@ for directory in directories:
     color = colors[i1]
 
     a = sorted(listdir(directory))
-    a.remove('.DS_Store')
+    if '.DS_Store' in a:
+        a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -652,7 +652,7 @@ for directory in directories:
     for i_fn in range(len(a)):
 
         # plt.subplot(222)
-        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]'-o')
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=a[i_fn])
         plt.axhline(0)
         plt.xlabel('Latitude')
         plt.ylabel('mtransp')
@@ -662,9 +662,9 @@ for directory in directories:
     # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
     
 
-    for i_fn in range(len(a)):
-        plt.plot(boxlatcols_master[i_fn,0,:],d_mid_master[i_fn,1,:],'-o',label='$D_{mid}$')
-        plt.plot(boxlatcols_master[i_fn,0,:],d_trop_master[i_fn,1,:],'-o',label='$D_{trop}$')
+    # for i_fn in range(len(a)):
+    #     plt.plot(boxlatcols_master[i_fn,0,:],d_mid_master[i_fn,1,:],'-o',label='$D_{mid}$')
+    #     plt.plot(boxlatcols_master[i_fn,0,:],d_trop_master[i_fn,1,:],'-o',label='$D_{trop}$')
 
     # for i_fn in range(len(a)):
     #     fig=plt.figure(1)
