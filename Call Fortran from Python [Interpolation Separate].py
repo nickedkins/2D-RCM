@@ -27,11 +27,11 @@ secsperloop = 0.5 #uni
 # secsperloop = 1.5 #home
 
 
-ncolss = [10]
+ncolss = [30]
 ncloudcols = 2
 nlays = 199
 tp = 1.0
-days = 5000 #model days
+days = 1000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
 
@@ -454,7 +454,7 @@ for ncols in ncolss:
     pperts = np.linspace(1000,0,1)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     co2_facs = [1.0]
-    lf_as = [0.0,-0.5] # 0.0 default
+    lf_as = [-0.5] # 0.0 default
     h2o_sources=[1]
     # twarms = [288.,293.,298.,303.,308.]
     twarms = [288.]
