@@ -1508,62 +1508,59 @@ subroutine wrapper
                 transpcalled = 1
                 stepssinceboxadj = 0
 
-                do col=0,ncols
-                    delta_T_edge(0) = tavelmcols(1,1) - tair_lowest_edges(0)
-                    delta_T_edge(ncols) = tavelmcols(1,ncols) - tair_lowest_edges(ncols)
-                    delta_x_edge(0) = x_lats(1) - x_edge(0)
-                    delta_x_edge(ncols) = x_lats(ncols) - x_edge(ncols)
-                    if(col>0) then
-                        boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                        ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                        ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
-                        &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))&
-                        &**(3.0/5.0)
-                        tcels = twarm - 273.15
-                        t1_vl = tcels + 0.1
-                        t2_vl = tcels - 0.1
-                        delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
-                        lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
-                        d_vl(col) = ddry(col) * (1.0 + lambda(col))
-                        delta_T_edge(col) = tair_lowest_edges(col) - tair_lowest_edges(col-1)
-                        delta_x_edge(col) = x_edge(col) - x_edge(col-1)
-                        delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
-                        h_scale = 7.5
-                        f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
-                        beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
-                        gamma_d = 9.8
-                        d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
-                            &( gamma_d + lapsecritcols(col) ) ) )
-                        ! d_mid(col) = d_mid(col) * 1.5
-                        d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
-                    end if
+
+                delta_T_edge(0) = tavelmcols(1,1) - tair_lowest_edges(0)
+                delta_T_edge(ncols) = tavelmcols(1,ncols) - tair_lowest_edges(ncols)
+                delta_x_edge(0) = x_lats(1) - x_edge(0)
+                delta_x_edge(ncols) = x_lats(ncols) - x_edge(ncols)
+                do col=1,ncols
+                    boxnetradflux(col) = abs_sw(col)-olrcols(col)
+                    ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                    ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
+                    &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))&
+                    &**(3.0/5.0)
+                    tcels = twarm - 273.15
+                    t1_vl = tcels + 0.1
+                    t2_vl = tcels - 0.1
+                    delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
+                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
+                    d_vl(col) = ddry(col) * (1.0 + lambda(col))
+                    delta_T_edge(col) = tair_lowest_edges(col) - tair_lowest_edges(col-1)
+                    delta_x_edge(col) = x_edge(col) - x_edge(col-1)
+                    delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
+                    h_scale = 7.5
+                    f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
+                    beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
+                    gamma_d = 9.8
+                    d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
+                        &( gamma_d + lapsecritcols(col) ) ) )
+                    ! d_mid(col) = d_mid(col) * 1.5
+                    d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
+                    meridtransp_edge(0) = delta_T_edge(0) / delta_x_edge(0) * (1.0 - (x_lats(1))**2.0) * d_vl(1)
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
-                    if(col>0) then
-                        delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
-                        meridtransp(col) = delta_meridtransp_edge(col)
+                    delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
+                    meridtransp(col) = delta_meridtransp_edge(col)
                     ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
                     ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
 
-
-                        if (lapse_type == 1) then
-                            lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
-                                &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                            print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
-                        end if
-
-                        if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                            ur_toafnet(col) = ur_toafnet(col) * 2.0
-                            print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
-                        end if
-                        boxnetradflux_prev(col) = boxnetradflux(col)
-
-                        if (mtranspon == 1) then
-                            boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
-                        else
-                            boxnettotflux(col) = boxnetradflux(col)
-                        end if
-                        tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
+                    if (lapse_type == 1) then
+                        lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
+                            &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
+                        print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
                     end if
+
+                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
+                        ur_toafnet(col) = ur_toafnet(col) * 2.0
+                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
+                    end if
+                    boxnetradflux_prev(col) = boxnetradflux(col)
+
+                    if (mtranspon == 1) then
+                        boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
+                    else
+                        boxnettotflux(col) = boxnetradflux(col)
+                    end if
+                    tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                 enddo
 
 
