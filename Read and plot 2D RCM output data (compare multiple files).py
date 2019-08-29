@@ -659,7 +659,40 @@ for directory in directories:
     # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
     
     for i_fn in range(len(a)):
+
         fig=plt.figure(1)
+        
+        plt.subplot(231)
+        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta T$')
+        plt.legend()
+
+        plt.subplot(232)
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta$ meridional transport')
+        plt.legend()
+
+        plt.subplot(233)
+        plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta $Tropopause pressure (hPa)')
+        plt.legend()
+
+        plt.subplot(234)
+        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta $Tropopause temperature (K)')
+        plt.legend()
+
+        plt.subplot(235)
+        plt.plot(boxlatcols_master[i_fn,0,:],lapsecritcols_master[i_fn,0,:],'-o',label=a[i_fn])
+        plt.xlabel('Latitude')
+        plt.ylabel('$\Delta$ Lapse rate (K/km)')
+        plt.legend()
+
+        fig=plt.figure(2)
         
         plt.subplot(231)
         plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]/tzm_master[0,0,:],'-o',label=a[i_fn])
