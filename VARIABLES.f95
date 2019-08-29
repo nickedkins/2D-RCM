@@ -84,7 +84,7 @@ MODULE VARIABLES
     real,dimension(maxncols) :: abs_surf_lhcols
     integer :: col=0, transpcalled, stepssinceboxadj
     real,dimension(MAXNCOLS):: olrcols,insolcols,boxnetradflux,boxnettotflux,meridtransp,currentmaxhtrcols,tempchanges,&
-    solar_constants,zencols,boxnetradflux_prev
+    solar_constants,zencols,boxnetradflux_prev,boxnettotflux_prev
     real,dimension(0:MAXNCOLS) :: tair_lowest_edges
     real :: mtranspfac, boxnetfluxfac
     real :: tglobsum, tglobmean

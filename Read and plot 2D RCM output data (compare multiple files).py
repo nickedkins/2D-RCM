@@ -583,6 +583,11 @@ for directory in directories:
     d_trop_master=np.array(d_trop_master)
 
 
+    box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
+    boxtotnetflux_master = meridtransp_master[:,0,:] + box_abssw_tot_master[:,0,:] - totuflumcols_master[:,-1,:]
+
+    print shape(boxtotnetflux_master), 'shape'
+
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
@@ -593,14 +598,27 @@ for directory in directories:
         # if (fn=='.DS_Store'):
         #     continue
         plt.figure(1)
-        # plt.subplot(221)
-        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],label=str(fn))
-        
+        plt.subplot(221)
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
         plt.axhline(0)
         plt.xlabel('Latitude')
         plt.ylabel('mtransp')
         plt.legend()
 
+        plt.subplot(222)
+        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=str(fn))
+        # plt.axhline(0)
+        plt.xlabel('Latitude')
+        plt.ylabel('temp')
+        plt.legend()
+
+        plt.figure(1)
+        plt.subplot(223)
+        plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
+        plt.axhline(0)
+        plt.xlabel('Latitude')
+        plt.ylabel('totflux')
+        plt.legend()
 
         i_fn+=1
 

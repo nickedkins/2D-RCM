@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [30]
+ncolss = [10]
 ncloudcols = 1
 nlays = 30
-tp = 1.0e4
+tp = 1.0 * 1e3
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -447,7 +447,7 @@ for ncols in ncolss:
 	add_cld_alts = [0.0]
 	lcs = np.linspace(10,3,1)
 	lcs = lcs * -1.
-	lapse_types = [1] # 1=H82, 2=Mason
+	lapse_types = [2] # 1=H82, 2=Mason
 	pperts = np.linspace(1000,0,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.0]
@@ -458,7 +458,7 @@ for ncols in ncolss:
 	# tcolds = [268.,263.,258.,253.,248.]
 	tcolds = [268.]
 
-	mtransp_types = [1,2]
+	mtransp_types = [2]
 	i_mtt=0
 	for mtransp_type in mtransp_types:
 		i_tc=0
@@ -547,21 +547,22 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 																	
-																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-																		# lc = [-6.5] * ncols
+																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																		lc = [-6.5] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
 																		#    lc[i] *= 1.5
 
 																		lch = createlatdistbn('Cloud Top Height')
-																		srh = createlatdistbn('Relative Humidity')
-																		# srh = [0.8] * ncols
+																		# srh = createlatdistbn('Relative Humidity')
+																		srh = [0.8] * ncols
 																		# sa = createlatdistbn('Surface Reflectance')
-																		sa = list(sa * lat_facs)
-																		# sa = [0.0] * ncols
+																		# sa = list(sa * lat_facs)
+																		sa = [0.2] * ncols
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
-																		tg = createlatdistbn('Surface Temperature')
+																		# tg = createlatdistbn('Surface Temperature')
+																		tg = [290.] * ncols - abs(collats)
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols

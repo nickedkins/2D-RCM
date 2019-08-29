@@ -1529,8 +1529,10 @@ subroutine wrapper
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
                     lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
-                    delta_T_edge(col) = tair_lowest_edges(col) - tair_lowest_edges(col-1)
-                    delta_x_edge(col) = x_edge(col) - x_edge(col-1)
+                    if (col < ncols) then
+                        delta_T_edge(col) = tair_lowest_edges(col+1) - tair_lowest_edges(col)
+                        delta_x_edge(col) = x_edge(col+1) - x_edge(col)
+                    end if
                     delta_y_edge(col) = r_earth * (latbounds(col) - latbounds(col-1) ) * 3.14 / 180.
                     h_scale = 7.5
                     f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
@@ -1540,32 +1542,40 @@ subroutine wrapper
                         &( gamma_d + lapsecritcols(col) ) ) )
                     ! d_mid(col) = d_mid(col) * 1.5
                     d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
-                    meridtransp_edge(0) = delta_T_edge(0) / delta_x_edge(0) * (1.0 - (x_lats(1))**2.0) * d_vl(1)
-                    meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
+                    ! meridtransp_edge(0) = delta_T_edge(0) / delta_x_edge(0) * (1.0 - (x_lats(1))**2.0) * d_vl(1)
+                    if (col < ncols) then
+                        meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
+                    end if
+                    meridtransp_edge(0) = 0.0
+                    meridtransp_edge(ncols) = 0.0
                     delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
                     if (mtransp_type ==  2) then
                         meridtransp(col) = delta_meridtransp_edge(col)
                     end if
                     print*, col, boxlats(col),f_cor,beta,&
-                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col),x_lats(col),d_vl(col)
+                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col),x_lats(col),d_vl(col),&
+                    &meridtransp_edge(col),delta_meridtransp_edge(col),meridtransp(col)
 
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                             &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                        ! print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
+                        print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
                     end if
-
-                    if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
-                        ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        ! print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
-                    end if
-                    boxnetradflux_prev(col) = boxnetradflux(col)
 
                     if (mtranspon == 1) then
                         boxnettotflux(col) = boxnetradflux(col) + meridtransp(col)
                     else
                         boxnettotflux(col) = boxnetradflux(col)
                     end if
+
+                    if (boxnettotflux(col) / boxnettotflux_prev(col) < 0.0) then 
+                        ur_toafnet(col) = ur_toafnet(col) * 2.0
+                        ! print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col, boxnettotflux(col),&
+                        ! & boxnettotflux_prev(col)
+                    end if
+                    boxnettotflux_prev(col) = boxnettotflux(col)
+
+                    
                     tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                 enddo
 
