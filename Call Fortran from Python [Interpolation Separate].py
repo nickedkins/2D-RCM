@@ -27,11 +27,11 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 ncolss = [10]
 ncloudcols = 1
 nlays = 30
-tp = 1.0 * 1e3
+tp = 5.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 5
+steps_before_first_eqbcheck = 30
 
 for ncols in ncolss:
 
