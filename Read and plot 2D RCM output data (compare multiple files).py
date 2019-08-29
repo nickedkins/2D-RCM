@@ -586,12 +586,9 @@ for directory in directories:
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
     boxtotnetflux_master = meridtransp_master[:,0,:] + box_abssw_tot_master[:,0,:] - totuflumcols_master[:,-1,:]
 
-    print shape(boxtotnetflux_master), 'shape'
-
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-    print shape(boxlatcols_master)
 
     i_fn = 0
     for fn in a:

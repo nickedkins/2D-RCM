@@ -1346,7 +1346,7 @@ subroutine wrapper
                     boxnettotflux(col) = boxnetradflux(col)
                 end if
                 tempchanges(col) = boxnettotflux(col) / ur_toafnet(col)
-
+                print*, col, tempchanges(col), 'tempchange'
             enddo
 
 
@@ -1526,8 +1526,8 @@ subroutine wrapper
                 end do
 
                 do edge = 1,ncols-1
-                    delta_T_edge = tavelmcols(1,edge+1) - tavelmcols(1,edge)
-                    delta_x_edge = x_lats(edge+1) - x_lats(edge)
+                    delta_T_edge(edge) = tavelmcols(1,edge+1) - tavelmcols(1,edge)
+                    delta_x_edge(edge) = x_lats(edge+1) - x_lats(edge)
                     meridtransp_edge(edge) = delta_T_edge(edge) / delta_x_edge(edge) * (1.0 - (x_edge(edge))**2.0) * d_vl(edge)
                 end do
 
@@ -1597,13 +1597,14 @@ subroutine wrapper
 
                     if (boxnettotflux(col) / boxnettotflux_prev(col) < 0.0) then 
                         ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        ! print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col, boxnettotflux(col),&
-                        ! & boxnettotflux_prev(col)
+                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col, boxnettotflux(col),&
+                        & boxnettotflux_prev(col)
                     end if
                     boxnettotflux_prev(col) = boxnettotflux(col)
 
                     
                     tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
+                    print*, col, tempchanges(col), 'tempchange', boxnettotflux(col),meridtransp(col),ur_mt, ur_toafnet(col)
                 ENDDO
 
 

@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [10]
+ncolss = [30]
 ncloudcols = 1
 nlays = 30
-tp = 5.0
+tp = 10.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -554,15 +554,15 @@ for ncols in ncolss:
 																		#    lc[i] *= 1.5
 
 																		lch = createlatdistbn('Cloud Top Height')
-																		# srh = createlatdistbn('Relative Humidity')
-																		srh = [0.8] * ncols
+																		srh = createlatdistbn('Relative Humidity')
+																		# srh = [0.8] * ncols
 																		# sa = createlatdistbn('Surface Reflectance')
-																		# sa = list(sa * lat_facs)
-																		sa = [0.2] * ncols
+																		sa = list(sa * lat_facs)
+																		# sa = [0.2] * ncols
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
-																		# tg = createlatdistbn('Surface Temperature')
-																		tg = [290.] * ncols - abs(collats)
+																		tg = createlatdistbn('Surface Temperature')
+																		# tg = [290.] * ncols - abs(collats)
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols
@@ -631,7 +631,7 @@ for ncols in ncolss:
 																		sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 																		playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
 																		ur_htr = 0.5
-																		ur_toafnet = [2.0] * ncols
+																		ur_toafnet = [4.0] * ncols
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
