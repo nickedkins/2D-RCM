@@ -202,6 +202,8 @@ subroutine wrapper
     read(73,*) h2o_for
     read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
     read(73,*) ur_mt
+    read(73,*) mtransp_type
+    read(73,*) steps_before_first_eqbcheck
 
     close(73)
 
@@ -1317,7 +1319,7 @@ subroutine wrapper
             do col=1,ncols
                 boxnetradflux(col) = abs_sw(col)-olrcols(col)
                 ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
-                meridtransp(col) = delta_meridtransp_edge(col)
+                ! meridtransp(col) = delta_meridtransp_edge(col)
                 ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / gravity *&
                 & planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))**(3.0/5)
                 tcels = twarm - 273.15
@@ -1498,7 +1500,7 @@ subroutine wrapper
 
 
         ! Equilibrium check (eqbcheck)
-        if (j > 30 ) then !NJE
+        if (j > steps_before_first_eqbcheck ) then !NJE
             if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
                 ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 
@@ -1515,7 +1517,9 @@ subroutine wrapper
                 delta_x_edge(ncols) = x_lats(ncols) - x_edge(ncols)
                 do col=1,ncols
                     boxnetradflux(col) = abs_sw(col)-olrcols(col)
-                    ! meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                    if (mtransp_type == 1) then
+                        meridtransp(col) = (tglobmean - tboundmcols(col)) * mtranspfac
+                    end if
                     ddry(col) = ks * cptot(1) * eta**(3.0/5) * cos(phim)**(-4.0/5) * planet_radius**(-6.0/5) * pzm(0)*100.0 / &
                     &gravity *planet_rotation**(-4.0/5) * ( (twarm-tcold) / twarm * tot_sol_abs_lh/(pzm(0)*100.0/gravity))&
                     &**(3.0/5.0)
@@ -1539,19 +1543,21 @@ subroutine wrapper
                     meridtransp_edge(0) = delta_T_edge(0) / delta_x_edge(0) * (1.0 - (x_lats(1))**2.0) * d_vl(1)
                     meridtransp_edge(col) = delta_T_edge(col) / delta_x_edge(col) * (1.0 - (x_lats(col))**2.0) * d_vl(col)
                     delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
-                    meridtransp(col) = delta_meridtransp_edge(col)
-                    ! print*, col, boxlats(col), d_mid(col), d_trop(col),altzm(conv_trop_ind(col))/1000.,f_cor,beta,&
-                    ! &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col)
+                    if (mtransp_type ==  2) then
+                        meridtransp(col) = delta_meridtransp_edge(col)
+                    end if
+                    print*, col, boxlats(col),f_cor,beta,&
+                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col),x_lats(col),d_vl(col)
 
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                             &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                        print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
+                        ! print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
                     end if
 
                     if (boxnetradflux(col) / boxnetradflux_prev(col) < 0.0) then 
                         ur_toafnet(col) = ur_toafnet(col) * 2.0
-                        print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
+                        ! print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col
                     end if
                     boxnetradflux_prev(col) = boxnetradflux(col)
 

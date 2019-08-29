@@ -330,7 +330,6 @@ for directory in directories:
         abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
         meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop = readfile(fn,counter)
 
-        print boxlatcols
 
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
@@ -347,8 +346,6 @@ for directory in directories:
         abs_surf_cols_master.append(abs_surf_cols)
         d_mid_master.append(d_mid)       
         d_trop_master.append(d_trop)
-
-        print shape(boxlatcols_master)
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -595,37 +592,14 @@ for directory in directories:
     for fn in a:
         # if (fn=='.DS_Store'):
         #     continue
-        print shape(boxlatcols_master)
         plt.figure(1)
-        plt.subplot(221)
-        plt.plot(boxlatcols_master[i_fn,0,:],-1.0*lapsecritcols_master[i_fn,0,:],label=str(fn))
-        plt.xlabel('Latitude')
-        plt.ylabel('Lapse rate (K/km)')
-        plt.legend()
-
-        plt.subplot(222)
-        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-        plt.xlabel('Latitude')
-        plt.ylabel('Tropopause temperature (K)')
-        plt.legend()
+        # plt.subplot(221)
+        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],label=str(fn))
         
-        plt.subplot(223)
-        plt.plot(boxlatcols_master[i_fn,0,:],altzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)]/1000.,'-',label=str(fn))
+        plt.axhline(0)
         plt.xlabel('Latitude')
-        plt.ylabel('Tropopause altitude (km)')
+        plt.ylabel('mtransp')
         plt.legend()
-
-        # plt.subplot(224)
-        # plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,:],range(ncols)],'-',label=str(fn))
-        # plt.xlabel('Latitude')
-        # plt.ylabel('Tropopause pressure (hPa)')
-        # plt.legend()
-
-        plt.subplot(224)
-        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,range(ncols)],'-',label=str(fn))
-        plt.xlabel('Latitude')
-        plt.ylabel('Surface temperature (K)')
-        plt.legend()    
 
 
         i_fn+=1
