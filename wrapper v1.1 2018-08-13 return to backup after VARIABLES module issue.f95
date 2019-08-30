@@ -1567,7 +1567,8 @@ subroutine wrapper
                     f_cor = 2. * 7.29e-5 * sind( boxlats(col) ) !check where this abs() should go NJE task
                     beta = 2. * 7.29e-5 * cosd( boxlats(col) ) / r_earth
                     gamma_d = 9.8
-                    d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
+                    d_mid(col) = h_scale * log( 1. - f_cor * (delta_T_edge(col-1)+delta_T_edge(col))/2.0 / delta_y_edge(col) / &
+                        &( h_scale * beta * &
                         &( gamma_d + lapsecritcols(col) ) ) )
                     ! d_mid(col) = d_mid(col) * 1.5
                     d_trop(col) = wklm1cols(1,col) / wbrodlmcols(1,col) * Lv / ( cptot(1) * ( gamma_d + lapsecritcols(col) ) )
@@ -1578,10 +1579,7 @@ subroutine wrapper
                     ! meridtransp_edge(0) = 0.0
                     ! meridtransp_edge(ncols) = 0.0
                     ! delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
-                    
-                    print*, col, boxlats(col),f_cor,beta,&
-                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col),x_lats(col),d_vl(col),&
-                    &meridtransp_edge(col),delta_meridtransp_edge(col),meridtransp(col)
+                
 
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
@@ -1604,7 +1602,6 @@ subroutine wrapper
 
                     
                     tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
-                    print*, col, tempchanges(col), 'tempchange', boxnettotflux(col),meridtransp(col),ur_mt, ur_toafnet(col)
                 ENDDO
 
 

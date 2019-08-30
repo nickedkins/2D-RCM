@@ -18,11 +18,11 @@ directories = [
 ]
 
 # directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/latfac fal/latfac norm/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/latfac fal/v2/'
 # ]
 
 def init_plotting():
-    plt.rcParams['figure.figsize'] = (10,10)
+    # plt.rcParams['figure.figsize'] = (10,10)
     plt.rcParams['font.size'] = 15
     plt.rcParams['font.family'] = 'Times New Roman'
     plt.rcParams['axes.labelsize'] = plt.rcParams['font.size']
@@ -315,7 +315,8 @@ for directory in directories:
     color = colors[i1]
 
     a = sorted(listdir(directory))
-    a.remove('.DS_Store')
+    if ('.DS_Store' in a):
+        a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -335,7 +336,7 @@ for directory in directories:
         pzm_master.append(pzmcols)
         altzm_master.append(altzmcols)  
         boxlatcols_master.append(boxlatcols)
-        lapsecritcols_master.append(lapsecritcols)
+        lapsecritcols_master.append(-1.0*lapsecritcols)
         meridtransp_master.append(meridtransp)
         abspncols_master.append(abspncols)
         A_oz_lcols_master.append(A_oz_lcols)
@@ -590,37 +591,51 @@ for directory in directories:
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
 
-    i_fn = 0
-    for fn in a:
-        # if (fn=='.DS_Store'):
-        #     continue
-        plt.figure(1)
-        plt.subplot(221)
-        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
-        plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('mtransp')
-        plt.legend()
+    # i_fn = 0
+    # for fn in a:
+    #     # if (fn=='.DS_Store'):
+    #     #     continue
+    #     plt.figure(1)
+    #     plt.subplot(121)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
+    #     plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Meridional transport')
+    #     plt.legend()
 
-        plt.subplot(222)
-        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=str(fn))
-        # plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('temp')
-        plt.legend()
+    #     plt.subplot(122)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]+12.0,'-o',label=str(fn))
+    #     # plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('Temperature')
+    #     plt.legend()
 
-        plt.figure(1)
-        plt.subplot(223)
-        plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
-        plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('totflux')
-        plt.legend()
+    #     # plt.figure(1)
+    #     # plt.subplot(223)
+    #     # plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
+    #     # plt.axhline(0)
+    #     # plt.xlabel('Latitude')
+    #     # plt.ylabel('totflux')
+    #     # plt.legend()
 
-        i_fn+=1
+    #     i_fn+=1
 
+    plt.figure(1)
 
+    # plt.subplot(121)
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[0,0,:]-tzm_master[1,0,:],'-o',label='Held')
+    plt.plot(boxlatcols_master[0,0,:],tzm_master[2,0,:]-tzm_master[3,0,:],'-o',label='Mason')
+    plt.xlabel('Latitude')
+    plt.ylabel('$\Delta T$')
+    plt.legend()
 
+    # plt.subplot(122)
+    # plt.plot(boxlatcols_master[0,0,:],meridtransp_master[1,0,:]-meridtransp_master[0,0,:],'-o',label='Manabe-Wetherald')
+    # plt.plot(boxlatcols_master[0,0,:],meridtransp_master[3,0,:]-meridtransp_master[2,0,:],'-o',label='ERA-Interim')
+    # plt.axhline(0,linestyle='--')
+    # plt.xlabel('Latitude')
+    # plt.ylabel('$\Delta$ meridional transport')
+    # plt.legend()
 
     # filenames = np.array(filenames[0])
 
@@ -655,31 +670,31 @@ for directory in directories:
     #     fig=plt.figure(1)
         
     #     plt.subplot(231)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]-tzm_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]-tzm_master[1,0,:],'-o',label=a[i_fn])
     #     plt.xlabel('Latitude')
     #     plt.ylabel('$\Delta T$')
     #     plt.legend()
 
     #     plt.subplot(232)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]-meridtransp_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]-meridtransp_master[1,0,:],'-o',label=a[i_fn])
     #     plt.xlabel('Latitude')
     #     plt.ylabel('$\Delta$ meridional transport')
     #     plt.legend()
 
     #     plt.subplot(233)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-pzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+    #     plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-pzm_master[1,conv_trop_ind_master[1,range(ncols)],range(ncols)],'-o',label=a[i_fn])
     #     plt.xlabel('Latitude')
     #     plt.ylabel('$\Delta $Tropopause pressure (hPa)')
     #     plt.legend()
 
     #     plt.subplot(234)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-tzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-tzm_master[1,conv_trop_ind_master[1,range(ncols)],range(ncols)],'-o',label=a[i_fn])
     #     plt.xlabel('Latitude')
     #     plt.ylabel('$\Delta $Tropopause temperature (K)')
     #     plt.legend()
 
     #     plt.subplot(235)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],lapsecritcols_master[i_fn,0,:]-lapsecritcols_master[0,0,:],'-o',label=a[i_fn])
+    #     plt.plot(boxlatcols_master[i_fn,0,:],lapsecritcols_master[i_fn,0,:]-lapsecritcols_master[1,0,:],'-o',label=a[i_fn])
     #     plt.xlabel('Latitude')
     #     plt.ylabel('$\Delta$ Lapse rate (K/km)')
     #     plt.legend()

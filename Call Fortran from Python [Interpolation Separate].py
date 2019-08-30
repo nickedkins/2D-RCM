@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [30]
+ncolss = [10]
 ncloudcols = 1
 nlays = 30
-tp = 10.0
+tp = 1.0
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -447,10 +447,10 @@ for ncols in ncolss:
 	add_cld_alts = [0.0]
 	lcs = np.linspace(10,3,1)
 	lcs = lcs * -1.
-	lapse_types = [2] # 1=H82, 2=Mason
+	lapse_types = [1,2] # 1=H82, 2=Mason
 	pperts = np.linspace(1000,0,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	co2_facs = [1.0]
+	co2_facs = [1.0,2.0]
 	lf_as = [0.0] # 0.0 default
 	h2o_sources=[1]
 	# twarms = [288.,293.,298.,303.,308.]
@@ -545,10 +545,10 @@ for ncols in ncolss:
 
 																		interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
-																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
+																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,lat_facs)
 																	
-																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-																		lc = [-6.5] * ncols
+																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																		# lc = [-6.5] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
 																		#    lc[i] *= 1.5
@@ -631,7 +631,7 @@ for ncols in ncolss:
 																		sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 																		playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
 																		ur_htr = 0.5
-																		ur_toafnet = [4.0] * ncols
+																		ur_toafnet = [2.0] * ncols
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
