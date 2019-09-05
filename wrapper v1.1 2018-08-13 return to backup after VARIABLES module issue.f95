@@ -4,29 +4,20 @@
 subroutine wrapper
     use VARIABLES
     use MYSUBS
-
     implicit none
 
-    !    call printtime('START')
     call printtime
 
-    !Green's analytic ozone variables
-    a = 0.4
-    b = 20.0
-    c = 5.0
-    H = 7.0 !scale height
-
+    ! Initialise some variables to zero (unsure why but this is sometimes needed to avoid errors)
     adj1 = 0
     adj2 = 0
     adj3 = 0
-
     mixh2o = 0.
     rel_hum = 0.
     rho_w = 0.
     wl = 0.
     abs_h2o = 0.
     abs_surf = 0.
-
     R_g = 0.
     mu_0 = 0.
     mag = 0.
@@ -79,9 +70,6 @@ subroutine wrapper
     refl_lay_ind=0
     Llh=0
 
-
-
-
     Lv = 2.25e6 !latent heat of vaporisation water [J/kg]
 
     !Set the output file name to the current date and time at the start of the run
@@ -101,9 +89,8 @@ subroutine wrapper
     ! Read input parameters from the file 'Earth RCM Parameters' with is created by the Python script 'Call Fortran from Python.py'
     open(73,file=trim('Earth RCM Parameters'),form='formatted')
 
-
-    read(73,*) ncols
-    read(73,*) ncloudcols
+    read(73,*) ncols !number of latitude columns
+    read(73,*) ncloudcols !number of independent cloud columns within one latitude column
     read(73,*) !tot_albedo !NJE delete this
     read(73,*) !solar_constant    
     read(73,*) tboundmcols(:ncols) !temperature of lower boundary (surface)
@@ -149,61 +136,61 @@ subroutine wrapper
     read(73,*) htransp !factor reducing lapse rate to account for horizontal transport
     read(73,*) ipe !inert pressure effect (1 means psurf = piair + pico2, 0 mean s psurf = piair)
     read(73,*) detailprint !1: print heating rates, 0: print only start and end times
-    read(73,*) mtranspfac
-    read(73,*) boxnetfluxfac
-    read(73,*) pertlay
-    read(73,*) pertcol
-    read(73,*) boxlats(:ncols)
-    read(73,*) inversion_strength
-    read(73,*) inversion_col
-    read(73,*) twarm
-    read(73,*) tcold
-    read(73,*) phim
-    read(73,*) ks
-    read(73,*) kl
-    read(73,*) eta
-    read(73,*) planet_radius
-    read(73,*) planet_rotation
-    read(73,*) latbounds(0:ncols)
-    read(73,*) t_min
-    read(73,*) sebfac
-    read(73,*) sfc_heating
-    read(73,*) playtype
-    read(73,*) ur_htr
-    read(73,*) ur_toafnet(:ncols)
-    read(73,*) ur_seb
-    read(73,*) couple_tgta
-    read(73,*) mtranspon
-    read(73,*) min_press
-    read(73,*) gas_amt_fac_h2o
+    read(73,*) mtranspfac !for simple diffusion meridional heat transport, multiply difference between box T and global mean T by this factor
+    read(73,*) boxnetfluxfac !obsolete
+    read(73,*) pertlay !obsolete
+    read(73,*) pertcol !obsolete
+    read(73,*) boxlats(:ncols) !latitude at centre of each latitudinal box
+    read(73,*) inversion_strength !for manual inversion
+    read(73,*) inversion_col !lat column of manual inversion
+    read(73,*) twarm !temperature of warm edge of heat engine in Vladilo's heat transport parameterisation
+    read(73,*) tcold !temperature of warm edge of heat engine in Vladilo's heat transport parameterisation
+    read(73,*) phim !latitude of maximum kinetic energy in Vladilo's heat transport parameterisation
+    read(73,*) ks !correlation coefficient in Vladilo's heat transport parameterisation
+    read(73,*) kl !correlation coefficient in Vladilo's heat transport parameterisation
+    read(73,*) eta !fraction of generated kinetic energy used by heat transporting eddies
+    read(73,*) planet_radius !planetary radius (km)
+    read(73,*) planet_rotation !planetary rotation rate (rad/s)
+    read(73,*) latbounds(0:ncols) !latitudes at the edges of the latitude boxes
+    read(73,*) t_min !minimum atmospheric temperature allowed (K)
+    read(73,*) sebfac !obsolete
+    read(73,*) sfc_heating !apply heating rate from surface energy budget to surface temperature? 0=no, 1=yes
+    read(73,*) playtype !pressure layering type. 0=equally spaced in p, 1=sigma formulation
+    read(73,*) ur_htr !under-relaxation constant applied to atmospheric heating rates
+    read(73,*) ur_toafnet(:ncols) !under-relaxation constant applied to TOA net flux (when changing surface temperature to balance TOA net flux)
+    read(73,*) ur_seb !under-relaxation constant applied to surface energy budget if sfc_heating=1
+    read(73,*) couple_tgta !0:lowest atmospheric temperature decoupled from surface temperature, 1:lowest atmospheric temperature equals surface temperature
+    read(73,*) mtranspon !1:meridional heat transport on
+    read(73,*) min_press !lowest pressure in model, at the top of the highest layer (hPa)
+    read(73,*) gas_amt_fac_h2o !factor applied to h2o amount within a specified pressure range, for perturbation experiments (ditto below)
     read(73,*) gas_amt_fac_co2
     read(73,*) gas_amt_fac_o3
-    read(73,*) gas_amt_p_high_h2o
-    read(73,*) gas_amt_p_low_h2o
+    read(73,*) gas_amt_p_high_h2o !high end of pressure range over which factor is applied for h2o
+    read(73,*) gas_amt_p_low_h2o !low end of pressure range over which factor is applied for h2o
     read(73,*) gas_amt_p_high_co2
     read(73,*) gas_amt_p_low_co2
     read(73,*) gas_amt_p_high_o3
     read(73,*) gas_amt_p_low_o3
-    read(73,*) gas_amt_pert_h2o
-    read(73,*) gas_amt_pert_co2
-    read(73,*) gas_amt_pert_o3
-    read(73,*) psurf_override
-    read(73,*) mixco2_prescribed_on
-    read(73,*) mixco2_prescribed
-    read(73,*) steps_before_toa_adj
-    read(73,*) a_green
-    read(73,*) b_green
-    read(73,*) c_green
-    read(73,*) H_green
-    read(73,*) cloudloctype
-    read(73,*) surf_emiss_on
-    read(73,*) lapse_type
-    read(73,*) h2o_sb
-    read(73,*) h2o_for
+    read(73,*) gas_amt_pert_h2o !obsolete
+    read(73,*) gas_amt_pert_co2 !obsolete
+    read(73,*) gas_amt_pert_o3 !obsolete
+    read(73,*) psurf_override !manual override of surface pressure calculated from sum of gas inventories (set to 0 for no override)
+    read(73,*) mixco2_prescribed_on !1:specify CO2 mixing ratio instead of inventory
+    read(73,*) mixco2_prescribed !prescribed CO2 mixing ratio
+    read(73,*) steps_before_toa_adj !number of timesteps before the whole temperature profile is adjusted to approach TOA equilibrium
+    read(73,*) a_green !Green's analytic ozone expression: total ozone amount
+    read(73,*) b_green !Green's analytic ozone expression: altitude of peak ozone
+    read(73,*) c_green !Green's analytic ozone expression: ozone scale height
+    read(73,*) H_green !Green's analytic ozone expression: atmosphere scale height
+    read(73,*) cloudloctype !vertical location of cloud is in 1:altitude (km) 2:pressure (hPa) 3:temperature (K) 
+    read(73,*) surf_emiss_on !emission from the surface 0:no emission
+    read(73,*) lapse_type !type of lapse rate 0: critical lapse rate input 1: Held's parameterisation
+    read(73,*) h2o_sb !H2O self-broadening 0:off 1:on
+    read(73,*) h2o_for !H2O foreign broadening 0:off 1:on
     read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
-    read(73,*) ur_mt
-    read(73,*) mtransp_type
-    read(73,*) steps_before_first_eqbcheck
+    read(73,*) ur_mt !under-relaxation constant for meridional transport
+    read(73,*) mtransp_type !source of meridional transport 1:simple diffusion 2:Vladilo
+    read(73,*) steps_before_first_eqbcheck !number of steps before first adjustment to approach TOA equilibrium
 
     close(73)
 
