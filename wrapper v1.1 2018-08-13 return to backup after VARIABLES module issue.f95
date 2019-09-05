@@ -194,7 +194,6 @@ subroutine wrapper
 
     close(73)
 
-    ! min_press = min_press * 100.0 !minimum pressure in Pa
 
     ! open(81,file=('Input Distributions/fal lats'),form='formatted')
 
@@ -206,82 +205,19 @@ subroutine wrapper
 
     ! close(81)
 
-    ! Write input parameters to output file to keep a record of them for each run
-    ! write(50,*) tot_albedo !NJE delete this
-    ! write(50,*) solar_constant
-    ! write(50,*) tboundm !temperature of lower boundary (surface)
-    ! write(50,*) lapsecrit !critical lapse rate (may be overridden by convecttype)
-    ! write(50,*) days !number of model days
-    ! write(50,*) mixco2_in !CO2 mixing ratio (volumetric)
-    ! write(50,*) undrelax !under-relaxation constant
-    ! write(50,*) cld !clouds on/off
-    ! write(50,*) rmin !minimum water vapour mixing ratio
-    ! write(50,*) height_hc !temperature of the highest cloud
-    ! write(50,*) frac_hc !fraction of the highest cloud
-    ! write(50,*) od_hc !optical depth of the highest cloud
-    ! write(50,*) height_mc !temperature of the middle cloud
-    ! write(50,*) frac_mc !fraction of the middle cloud
-    ! write(50,*) od_mc !optical depth of the middle cloud
-    ! write(50,*) height_lc !temperature of the lowest cloud
-    ! write(50,*) frac_lc !fraction of the lowest cloud
-    ! write(50,*) od_lc !optical depth of the lowest cloud
-    ! write(50,*) toa_precision !eqb is reached when |OLR - abs SW| < toa_precision
-    ! write(50,*) R_g !surface albedo
-    ! write(50,*) fixed_trop !height to which convection is forced to go
-    ! write(50,*) OLR_layer !layer regarded as top (NJE remove this)
-    ! write(50,*) adj_speed !NJE improve this (make this the initial guess, then use Newtonian)
-    ! write(50,*) !cs !cloudsurface on/off
-    ! write(50,*) pb !NJE remove this
-    ! write(50,*) fixed_sw_on !use a fixed value for total abs SW instead of that calculated by Lacis and Hansen
-    ! write(50,*) fixed_sw !the value of the total abs SW when fixed
-    ! write(50,*) fp !use a fixed temperature profile
-    ! write(50,*) surf_rh !surface relative humidity for Manabe and Wetherald
-    ! write(50,*) !ps1 !set the surface pressure to 1 bar
-    ! write(50,*) adj_freq !NJE remove this
-    ! write(50,*) convecttype !dry adiabatic lapse rate on/off
-    ! write(50,*) pb_new !new method of turning pressure broadening off
-    ! write(50,*) swo3 !include O3 SW heating rates
-    ! write(50,*) swh2o !include H2O SW heating rates
-    ! write(50,*) nlayersm !number of model layers
-    ! write(50,*) maxhtr !maximum acceptable heating rate in stratosphere for RCE
-    ! write(50,*) adjspeedfactor !factor applied to adj_speed to decrease time to eqb
-    ! write(50,*) !tuf !factor applied to undrelax to speed things up when near eqb
-    ! write(50,*) pico2 !co2 inventory in bar
-    ! write(50,*) pin2 !n2 inventory in bar
-    ! write(50,*) pio2 !o2 inventory in bar
-    ! write(50,*) htransp
-    ! write(50,*) ipe
-    ! write(50,*) detailprint !1: print heating rates, 0: print only start and end times
-    ! write(50,*) mtranspfac
-    ! write(50,*) boxnetfluxfac
-    ! write(50,*) pertlay
-    ! write(50,*) pertcol
-
     write(50,*) ncols,nlayersm,tot_albedo,solar_constant,tboundm,lapsecrit,days,mixco2_in,undrelax,cld,rmin,height_hc,&
     frac_hc,od_hc,height_mc,&
     frac_mc,od_mc,height_lc,frac_lc,od_lc,toa_precision,R_g,fixed_trop,OLR_layer,adj_speed,pb,fixed_sw_on,fixed_sw,fp,surf_rh,&
     adj_freq,convecttype,pb_new,swo3,swh2o,maxhtr,adjspeedfactor,pico2,pin2,pio2,htransp,ipe,detailprint,mtranspfac,&
     boxnetfluxfac,pertlay,pertcol,ncloudcols
 
-    startlat = -90.0
-    endlat = 90.0
-
-    ! latbounds(0) = startlat
-
-    !    do i=1,ncols
-    !        latbounds(i) = latbounds(i-1) + (endlat - startlat) / ncols 
-    !        boxlats(i) = (latbounds(i-1) + latbounds(i)) / 2.0
-    !    enddo
-
+    ! Calculate the average insolation in each latitude box
     do col = 1,ncols
         do day = 1,365
             do hour=1,24
                 hourang = 15.0 * (float(hour)-12.0)
                 declin = -23.5 * cosd(360.0/365.0 + (float(day) + 10.0))
-                !                Xrad = boxlats(col) * 2.0*pi/360.0
                 Xrad = boxlats(col) * 2.0*3.14/360.0
-                !                Yrad = declin * 2.0*pi/360.0
-                !                Hrad = hourang * 2.0*pi/360.0
                 Yrad = declin * 2.0*3.14/360.0
                 Hrad = hourang * 2.0*3.14/360.0
                 if (sin(Xrad)*sin(Yrad) + cos(Xrad)*cos(Yrad)*cos(Hrad) > 0) then
@@ -308,7 +244,6 @@ subroutine wrapper
     enddo
 
     timesteps = int(days*ur_htr) ! number of time steps that the model runs for 
-
     tboundm = tboundmcols(1)
 
     ! undrelax is a single float, but now we have newur, which is an under-relaxation constant for each model layer
@@ -349,7 +284,6 @@ subroutine wrapper
     massatmo_n2 = n2_inv / gravity ! [kg]
     massatmo_o2 = o2_inv / gravity ! [kg]
 
-
     massatmo = massatmo_co2 + massatmo_n2 + massatmo_o2
 
     ! Gas mass mixing ratios 
@@ -381,7 +315,6 @@ subroutine wrapper
         !        rsp_tot(i) = cptot(i) - cvtot(i)
         ! cptot(i) = 1.003 !default
         rsp_tot(i) = 0.287*1000. !default
-        ! rsp_tot(i) = 180.0 !new default? NJE
     enddo
 
     nmolm=7 !number of molecular species, le 7 for now.
@@ -389,16 +322,15 @@ subroutine wrapper
     if (psurf_override > 0.0) then 
         surfacep = psurf_override * 100.
     else
-        surfacep = air_inv+co2_inv !Pascals !NJE changed
+        surfacep = air_inv+co2_inv !Pascals
     end if
 
-    if (ipe == 0) surfacep = air_inv !If there's no inert pressure effect, set the surface pressure to 1 bar (the air inv)
+    if (ipe == 0) surfacep = air_inv !If you want to neglect the effect of CO2 on the surface pressure
 
     wklm = 0.; wbrodlm = 0.; tzm = 0.; pzm = 0.; altzm = 0.; tavelm = 0.
 
     pzm(0)=surfacep/100.
     tzm(0)=tboundm
-    ! tavelm(1) = tzm(0) !NJE strong coupling between surface and bottom layer of atmosphere.
 
     ! Initialise with an isothermal profile
     do i=1,nlayersm
@@ -412,7 +344,7 @@ subroutine wrapper
     else
         surfacep = air_inv+co2_inv !Pascals !NJE changed
     end if
-    if (ipe == 0) surfacep = air_inv ! If you want to neglect the effect of CO2 on the surface pressure
+    if (ipe == 0) surfacep = air_inv !If you want to neglect the effect of CO2 on the surface pressure
     pzm(0) = surfacep/100
 
     logpzm(0) = log(surfacep/100.0)
@@ -420,8 +352,6 @@ subroutine wrapper
 
     if (fp == 0) then
         do i =1,nlayersm
-            !            logpzm(i) = logpzm(i-1) - (logpzm(0)-log(min_press/100.0))/nlayersm
-            !            pzm(i) = exp(logpzm(i))
             select case(playtype)
             case(0)
                 pzm(i)=pzm(i-1)-(surfacep-min_press*100.)/nlayersm/100. !in mb !Split the atmosphere into layers of equal pressure-thickness
@@ -438,29 +368,11 @@ subroutine wrapper
         enddo
     endif
 
-    !  Set up an initial temperature profile with convection up to the layer where T = t_min
-    ! if (fp == 0) then
-    !     do i=1,nlayersm
-    !         tzm(i) = tzm(i-1) -6.50*(altzm(i)-altzm(i-1))/1000
-    !         if (tzm(i) < t_min) tzm(i) = t_min
-!         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
-    !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-    !     enddo
-    ! endif
-
     do i=1,nlayersm
         mperlayr(i) = totmolec/nlayersm !Divide the molecules equally between layers
         mperlayr_air(i) = (molec_n2 + molec_o2)/(nlayersm)
         mperlayr_co2(i) = (molec_co2)/(nlayersm)
     enddo
-
-    ! do i=1,nlayersm
-    !     rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu
-    !     ! es(i) = 6.1094*exp(17.625*(tavelm(i)-273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-    !     es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
-    !     ! mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i)) ! H2O volume mixing ratio
-    !     ! if (mixh2o(i) < rmin) mixh2o(i) = rmin ! Don't allow H2O mixing ratio to drop below a given amount
-    ! enddo
 
     !Set up mixing ratio of broadening molecules (N2 and O2 mostly)
     do i =1,nlayersm
@@ -475,17 +387,11 @@ subroutine wrapper
         ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
     enddo
 
-
     ! Use Green's analytic ozone formula to calculate u_lw(i), which is the amount of ozone (in cm NTP) above layer i in the atmosphere. (The subscript lw means that we use this ozone amount for the longwave radiative transfer)
     do i=1,nlayersm
         u_lw(i) = ( a_green + a_green*exp(-b_green/c_green) ) / ( 1.0 + exp( (-H_green*log( pzm(i)/1000.0 ) -b_green ) /c_green ))
         if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
     enddo
-
-    write(ttsfile,1108) pertcol,pertlay, pertvar, my_output_file
-
-    ! Write the temperature profile to an output file every timestep to allow troubleshooting while the program is still running
-    open(74,file=trim(ttsfile),form='formatted')
 
     do col=1,ncols
         totuflum = 0.
@@ -528,23 +434,7 @@ subroutine wrapper
 
     do j=1,timesteps
 
-        ! if(j==2) then
-
-        ! endif
-
-        ! close(90)
-
-
         do col=1,ncols
-
-            ! delta_y_edge(col) = 2. * r_earth * tan( (latbounds(col) - latbounds(col-1))/2. )
-            ! h_scale = 7.5
-            ! f_cor = 2. * 7.29e-5 * sind( latbounds(col) )
-            ! beta = 2. * 7.29e-5 * cosd( latbounds(col) ) / r_earth
-            ! gamma_d = -9.8
-            ! d_mid(col) = h_scale * log( 1. - f_cor * delta_T_edge(col) / delta_y_edge(col) / ( h_scale * beta * &
-            !     &( gamma_d - lapsecritcols(col) ) ) )
-
 
             tboundm = tboundmcols(col)
             sol_inc = insolcols(col)
@@ -563,25 +453,13 @@ subroutine wrapper
                 tzm(i) = tboundm
             enddo
 
-
-            ! if (fp == 0 .and. j == 1) then
-            !     do i=1,nlayersm
-            !         tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000
-            !         if (tzm(i) < t_min) tzm(i) = t_min
-!         ! tavelm(i) = tzm(i-1) +lapsecrit*(altlaym(i)-altzm(i-1))/1000
-            !         tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-            !     enddo
-            ! endif
-
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
-
 
             write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col '&
             &, col-1      
             write(cctausfn,"(A84,I2)") 'Input Distributions/cctaus col ', col-1   
             write(ccaltsfn,"(A84,I2)") 'Input Distributions/ccalts col ', col-1   
-
 
             open(82,file=(trim(qfn)),form='formatted')
             open(83,file=(trim(o3fn)),form='formatted')
@@ -629,18 +507,13 @@ subroutine wrapper
             close(88)
             close(89)
 
-
-            do i=1,nlayersm
-                lwp(i) = clwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
-                iwp(i) = ciwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
-                tau_cld(i) = (lwp(i) / 15.0 + iwp(i) / 75.0) * 1500.0 !nje tcwp
-                tau_cld_sw(i) = (lwp(i) / 15.0 + iwp(i) / 75.0) * 0.0
-            enddo
-
-
-
-            !            fixed_sw = sol_inc * (1.0 - 0.23)
-
+            !Calculate liquid and ice water paths and cloud optical thicknesses from these following Claire Radley's thesis figs
+            ! do i=1,nlayersm
+            !     lwp(i) = clwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
+            !     iwp(i) = ciwc(i) * (pzm(i-1) - pzm(i)) / gravity * 1000.0 !liquid water path in gram metre^-2
+            !     tau_cld(i) = (lwp(i) / 15.0 + iwp(i) / 75.0) * 1500.0 !nje tcwp
+            !     tau_cld_sw(i) = (lwp(i) / 15.0 + iwp(i) / 75.0) * 0.0
+            ! enddo
 
             if (transpcalled == 1) then
 
@@ -701,10 +574,6 @@ subroutine wrapper
                 if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
             enddo
 
-            ! do i=2,nlayersm
-!     wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
-            ! enddo
-
             do i=1,nlayersm
                 if (h2o_source == 1) then
                     rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
@@ -725,7 +594,6 @@ subroutine wrapper
                     wklm(2,i) = mperlayr_co2(i) * 1.0e-4
                 endif
                 wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
-                ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
                 if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then
                         wklm(1,i) = wklm(1,i) * gas_amt_fac_h2o
@@ -752,7 +620,6 @@ subroutine wrapper
                 rsp_tot(i) = cptot(i) - cvtot(i)
                 ! cptot(i) = 1.003
                 rsp_tot(i) = 0.287 * 1000.
-                ! rsp_tot(i) = 180.0 !NJE
             enddo
 
             ! If pressure broadening is off, feed a pressure profile with surface pressure = 1 bar to the subroutine that picks the correlated-k distribution
@@ -788,47 +655,27 @@ subroutine wrapper
 
             tot_sol_abs_lhwghtd = 0.
 
-            !            print*, 'ncloudcols = ',ncloudcols !NJE temporarily suppressing cloudcols
-            ! ncloudcols = 1
-
             do cloudcol = 1,ncloudcols
 
                 cloudcolfrac = ccfracs(cloudcol)
                 cloudcoltau = cctaus(cloudcol)
                 cloudcolalt = ccalts(cloudcol)
 
-                ! if (cloudcol==5) then
-                !     wklm(1,:) = wklm(1,:) / 10.0
-                ! else 
-                !     wklm(1,:) = wklm(1,:) * 10.0
-                ! endif
-
-
-                ! call createcloudfile(cloudcolp,cloudcoltau)
                 call createcloudfile(cloudcolalt,cloudcoltau)
 
-                ! Call the subroutine rrtm, which calculates the upward and downward fluxes and the heating rates
-                ! call rrtm(band_flux_up,band_flux_down)
-
+                ! Turn surface emission off
                 if(surf_emiss_on == 0) then
                     tboundm = tboundm/3.0
                 end if
 
+                ! Call the subroutine rrtm, which calculates the upward and downward fluxes and the heating rates
                 call rrtm
-                ! call calcswhtr(altzm,pzm,tzm,mixh2o,mmwtot,tau_cld,wklm,htrlh,htrlh_tot,htro3_lh,htro3_lh_tot,&
-                !     abs_surf,R_g,tot_sol_abs_lh,abs_h2o,abs_o3,sol_inc,cloudcolp,cloudcoltau)
 
                 if(surf_emiss_on == 0) then
                     tboundm = tboundm*3.0
                 end if
 
                 call calcswhtr
-
-                ! if (cloudcol==5) then
-                !     wklm(1,:) = wklm(1,:) * 10.0
-                ! else 
-                !     wklm(1,:) = wklm(1,:) / 10.0
-                ! endif
 
                 htrmwghtd = htrmwghtd + htrm * cloudcolfrac
                 totuflumwghtd = totuflumwghtd + totuflum * cloudcolfrac
@@ -838,16 +685,12 @@ subroutine wrapper
 
                 abspnwghtd = abspnwghtd + abspn * cloudcolfrac
                 A_oz_lwghtd  = A_oz_lwghtd + A_oz_l * cloudcolfrac
-                ! abs_surf_lhwghtd  = abs_surf_lhwghtd + abs_surf_lh * cloudcolfrac
 
                 abs_h2owghtd = abs_h2owghtd + abs_h2o * cloudcolfrac
                 abs_o3wghtd = abs_o3wghtd + abs_o3 * cloudcolfrac
                 abs_surf_lhwghtd = abs_surf_lhwghtd + abs_surf_lh * cloudcolfrac
 
                 tot_sol_abs_lhwghtd = tot_sol_abs_lhwghtd + tot_sol_abs_lh * cloudcolfrac
-
-
-                latcol_cloudcol_olrs(cloudcol,col) = totuflum(nlayersm)
 
             enddo !cloudcol
 
@@ -864,57 +707,19 @@ subroutine wrapper
             abs_o3 = abs_o3wghtd
             abs_surf_lh = abs_surf_lhwghtd
 
-
-
             ! call add_seb_to_tboundm
             if (couple_tgta == 1) then
                 tzm(0) = tboundm
                 tavelm(1) = tzm(0)
             end if
 
-
-            ! htrm(nlayersm) = -1.0 * htrm(nlayersm)
-
-            ! addhtr
-            ! Apply SW heating rates if applicable
-            !            do i=1,nlayersm-1
-
-            ! if (j==24) then
-            !     print*, 'debug entry point'
-            ! end if
-
+            !Indexing to match indexing scheme of Lacis and Hansen (which is different, not sure why)
             do i=1,nlayersm
                 if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i)
-                ! if(swh2o == 1) htrm(i-1) = htrm(i-1) + htrlh(i) / 10.
-                ! if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
-            ! do i=1,nlayersm
-            !   htrm(i-1) = htrm(i-1)/newur(i)
-            ! enddo
-
             htrm(nlayersm) = 0.0
-
-            ! if (j>2) then
-            !     htrm_store(:,1) = htrm_store(:,2)
-            !     undrelax_store(:,1) = undrelax_store(:,2)
-            !     tavelm_store(:,1) = tavelm_store(:,2)
-            ! endif
-
-            ! htrm_store(:nlayersm,2) = htrm
-            ! ! undrelax_store(:nlayersm,2) = newur
-            ! tavelm_store(:nlayersm,2) = tavelm
-
-            ! if (j>3) then
-            !     do i=1,nlayersm
-            !         newur(i) = undrelax_store(i,2) * ( htrm_store(i,1) / ( htrm_store(i,2) - htrm_store(i,1) ) ) * 0.1
-            !     enddo
-            ! endif
-
-            ! do i=1,nlayersm
-            !     temp_tendency(i) = (tavelm_store(i,1) - tavelm_store(i,2)) / newur(i)
-            ! enddo
 
             ! Undo the if block from before the call to rrtm (i.e., set the surface pressure back to whatever it was before it was set to 1 bar)
             if (pb_new == 0) then
@@ -959,18 +764,7 @@ subroutine wrapper
             !            endif
 
 
-
             stepssinceadj = stepssinceadj + 1 
-
-            ! Write temperature profile to the file 'Temperature time series' at each timestep.
-            if( mod(j,1) == 0) then
-                do i=1,nlayersm
-                    write(74,*) j,altzm(i),tzm(i), totuflum(i),htrm(i),tavelm(i),htro3_lh(i),htrlh(i),&
-                    pzm(i),conv_trop_ind(col)
-                enddo
-            endif
-
-
 
             ! Progressively decrease the under-relaxation constant as currentmaxhtr increases (which means equilibrium is approaching)
             do i=1,nlayersm
@@ -1960,7 +1754,6 @@ subroutine wrapper
     1105 FORMAT (A13) 
     1106 FORMAT (A27)
     1107 FORMAT (I3,' ')
-    1108 FORMAT ('/Users/nickedkins/Dropbox/2D RCM Archive/2018-08-13/TTS ','pertcol=',I2,' pertlay=',I2,' pertvar=',A4,A20)
     1109 FORMAT (' ts ')
     1110 FORMAT (F12.4)
 
