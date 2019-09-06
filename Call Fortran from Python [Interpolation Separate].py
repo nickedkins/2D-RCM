@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [30]
+ncolss = [1]
 ncloudcols = 1
-nlays = 30
-tp = 10.0
+nlays = 60
+tp = 0.1
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -448,11 +448,11 @@ for ncols in ncolss:
 	lcs = np.linspace(10,3,1)
 	lcs = lcs * -1.
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,0,1)
+	pperts = np.linspace(1000,50,10)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[1]
+	h2o_sources=[2]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -593,7 +593,7 @@ for ncols in ncolss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [350.] * ncols
+																		fth = [250.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -665,6 +665,9 @@ for ncols in ncolss:
 																		# h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
+																		gas_addmolec_h2o = 1e21
+																		gas_addmolec_co2 = 0.0
+																		gas_addmolec_o3 = 0.0
 																	
 																		ur1 = ur
 																	
@@ -677,7 +680,7 @@ for ncols in ncolss:
 																		twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck]
+																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:

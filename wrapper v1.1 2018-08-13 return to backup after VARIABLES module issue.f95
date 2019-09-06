@@ -191,6 +191,9 @@ subroutine wrapper
     read(73,*) ur_mt !under-relaxation constant for meridional transport
     read(73,*) mtransp_type !source of meridional transport 1:simple diffusion 2:Vladilo
     read(73,*) steps_before_first_eqbcheck !number of steps before first adjustment to approach TOA equilibrium
+    read(73,*) gas_addmolec_h2o
+    read(73,*) gas_addmolec_co2
+    read(73,*) gas_addmolec_o3
 
     close(73)
 
@@ -597,16 +600,19 @@ subroutine wrapper
                 if(pzm(i) < gas_amt_p_high_h2o .and. pzm(i) > gas_amt_p_low_h2o) then 
                     if (gas_amt_pert_h2o == 1) then
                         wklm(1,i) = wklm(1,i) * gas_amt_fac_h2o
+                        wklm(1,i) = wklm(1,i) + gas_addmolec_h2o
                     end if
                 end if
                 if(pzm(i) < gas_amt_p_high_co2 .and. pzm(i) > gas_amt_p_low_co2) then 
                     if (gas_amt_pert_co2 == 1) then
                         wklm(2,i) = wklm(2,i) * gas_amt_fac_co2
+                        wklm(2,i) = wklm(2,i) + gas_addmolec_co2
                     end if
                 end if
                 if(pzm(i) < gas_amt_p_high_o3 .and. pzm(i) > gas_amt_p_low_o3) then 
                     if (gas_amt_pert_o3 == 1) then
                         wklm(3,i) = wklm(3,i) * gas_amt_fac_o3
+                        wklm(3,i) = wklm(3,i) + gas_addmolec_o3
                     end if
                 end if
             enddo

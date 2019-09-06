@@ -589,35 +589,43 @@ for directory in directories:
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
+    pperts = np.linspace(1000,0,10)
 
-    i_fn = 0
-    for fn in a:
-        # if (fn=='.DS_Store'):
-        #     continue
-        plt.figure(1)
-        plt.subplot(221)
-        plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
-        plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('mtransp')
-        plt.legend()
+    plt.figure(1)
+    plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
+    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
+    plt.xlabel('$\Delta T$ (K)')
+    plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    plt.ylim(1000,0)
 
-        plt.subplot(222)
-        plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=str(fn))
-        # plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('temp')
-        plt.legend()
+    # i_fn = 0
+    # for fn in a:
+    #     # if (fn=='.DS_Store'):
+    #     #     continue
+    #     plt.figure(1)
+    #     plt.subplot(221)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
+    #     plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('mtransp')
+    #     plt.legend()
 
-        plt.figure(1)
-        plt.subplot(223)
-        plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
-        plt.axhline(0)
-        plt.xlabel('Latitude')
-        plt.ylabel('totflux')
-        plt.legend()
+    #     plt.subplot(222)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=str(fn))
+    #     # plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('temp')
+    #     plt.legend()
 
-        i_fn+=1
+    #     plt.figure(1)
+    #     plt.subplot(223)
+    #     plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
+    #     plt.axhline(0)
+    #     plt.xlabel('Latitude')
+    #     plt.ylabel('totflux')
+    #     plt.legend()
+
+    #     i_fn+=1
 
 
 
@@ -750,5 +758,5 @@ plt.legend()
 
 ############################################################
 print 'Done'
-plt.tight_layout()
+# plt.tight_layout()
 show()
