@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [1]
+ncolss = [10]
 ncloudcols = 1
 nlays = 60
-tp = 0.1
+tp = 0.1 * 1e6
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -448,7 +448,7 @@ for ncols in ncolss:
 	lcs = np.linspace(10,3,1)
 	lcs = lcs * -1.
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,10)
+	pperts = np.linspace(1000,50,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
@@ -665,7 +665,7 @@ for ncols in ncolss:
 																		# h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
-																		gas_addmolec_h2o = 1e21
+																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																	

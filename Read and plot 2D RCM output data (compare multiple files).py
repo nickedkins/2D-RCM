@@ -150,6 +150,7 @@ def readfile(fn,counter):
     abs_surf_cols = np.zeros((nlayersm,ncols))
     d_mid = np.zeros((nlayersm,ncols))
     d_trop = np.zeros((nlayersm,ncols))
+    rel_hum_cols = np.zeros((nlayersm,ncols))
 
  
     for col in range(ncols):
@@ -268,6 +269,10 @@ def readfile(fn,counter):
         for i in range(nlayersm):
             d_trop[i,col] = f.readline()            
 
+    for col in range(ncols):        
+        for i in range(nlayersm):
+            rel_hum_cols[i,col] = f.readline()            
+
 
     sol_inc = 1362.0/4.0
     # abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
@@ -277,7 +282,7 @@ def readfile(fn,counter):
 
     return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
     abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
-    lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop
+    lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols
 
 i1 = 0
 
@@ -305,6 +310,7 @@ for directory in directories:
     abs_surf_cols_master = []
     d_mid_master = []
     d_trop_master = []
+    rel_hum_cols_master = []
 
     filenames = []
 
@@ -328,7 +334,7 @@ for directory in directories:
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
         abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
-        meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop = readfile(fn,counter)
+        meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols = readfile(fn,counter)
 
 
         tzm_master.append(tzmcols)  
@@ -346,6 +352,7 @@ for directory in directories:
         abs_surf_cols_master.append(abs_surf_cols)
         d_mid_master.append(d_mid)       
         d_trop_master.append(d_trop)
+        rel_hum_cols_master.append(rel_hum_cols)
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -581,6 +588,7 @@ for directory in directories:
     abs_surf_cols_master=np.array(abs_surf_cols_master)
     d_mid_master=np.array(d_mid_master)
     d_trop_master=np.array(d_trop_master)
+    rel_hum_cols_master=np.array(rel_hum_cols_master)
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
@@ -591,12 +599,19 @@ for directory in directories:
 
     pperts = np.linspace(1000,0,10)
 
-    plt.figure(1)
-    plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
-    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
-    plt.xlabel('$\Delta T$ (K)')
-    plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    plt.ylim(1000,0)
+    # plt.figure(1)
+    # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
+    # plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
+    # plt.xlabel('$\Delta T$ (K)')
+    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    # plt.ylim(1000,0)
+
+    for col in range(ncols):
+        plt.plot(rel_hum_cols_master[0,:,col],pzm_master[0,1:,0],'-o',label=boxlatcols_master[0,0,col])
+        plt.ylim(1000,0)
+        plt.axvline(1,linestyle='--')
+
+    plt.legend()
 
     # i_fn = 0
     # for fn in a:

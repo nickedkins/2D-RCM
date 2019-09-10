@@ -828,6 +828,13 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) rel_hum_cols(i,col)
+            end do
+        end do
+
+
         close(50)
 
     end subroutine writeoutputfile
