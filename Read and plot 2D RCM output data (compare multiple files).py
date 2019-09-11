@@ -607,11 +607,28 @@ for directory in directories:
     # plt.ylim(1000,0)
 
     for col in range(ncols):
-        plt.plot(rel_hum_cols_master[0,:,col],pzm_master[0,1:,0],'-o',label=boxlatcols_master[0,0,col])
+        plt.figure(1)
+        plt.subplot(121)
+        plt.plot(rel_hum_cols_master[0,:,col]*100.,pzm_master[0,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[0,0,col])))
+        plt.xlabel('Relative Humidity (%)')
+        plt.ylabel('Pressure (hPa)')
         plt.ylim(1000,0)
-        plt.axvline(1,linestyle='--')
+        plt.axvline(100,linestyle='--')
+        plt.legend()
 
-    plt.legend()
+        plt.subplot(122)
+        plt.plot(tzm_master[0,:,col],pzm_master[0,:,0],'-o',label='lat: '+str(int(boxlatcols_master[0,0,col])))
+        plt.ylim(1000,0)
+        plt.xlabel('Temperature (K)')
+        plt.ylabel('Pressure (hPa)')
+        plt.legend()
+
+    # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
+
+    # plt.figure(1)
+    # # plt.contourf(tzm_master[0,:,:])
+    # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
+    # plt.colorbar()
 
     # i_fn = 0
     # for fn in a:

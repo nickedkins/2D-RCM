@@ -26,8 +26,8 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 ncolss = [10]
 ncloudcols = 1
-nlays = 60
-tp = 0.1 * 1e6
+nlays = 30
+tp = 5.0e6
 days = 5000 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
@@ -351,7 +351,8 @@ for ncols in ncolss:
 	misr_cf_latalt_max = np.load(interpdir+'misr_cf_latalt.npy') # maximum-sized array of cloud data, to interpolate onto new smaller grid here
 	misr_cf_latalt_max = np.nan_to_num(misr_cf_latalt_max)
 	xbounds = np.linspace(-1,1,ncols+1)
-	latbounds = np.rad2deg(np.arcsin(xbounds))
+	# latbounds = np.rad2deg(np.arcsin(xbounds))
+	latbounds = np.linspace(-90,90,ncols+1)
 	collats = np.zeros(ncols)
 	colwidth = 180.0 / (ncols+1)
 
@@ -387,7 +388,7 @@ for ncols in ncolss:
 	# pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
 	# pico2_facs = np.array([1e-2,0.5,1,2,8])
 	pico2_facs = np.array([1.0])
-	pico2s = np.array([840e-6]) * pico2_facs
+	pico2s = np.array([420e-6]) * pico2_facs
 	# pico2s = np.array([420e-6])
 
 	# pin2s = np.logspace(-1,2,num=10,base=10.0)
@@ -547,8 +548,8 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 																	
-																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-																		lc = [-6.5] * ncols
+																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																		# lc = [-6.5] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
 																		#    lc[i] *= 1.5
@@ -556,12 +557,16 @@ for ncols in ncolss:
 																		lch = createlatdistbn('Cloud Top Height')
 																		srh = createlatdistbn('Relative Humidity')
 																		# srh = [0.8] * ncols
-																		# sa = createlatdistbn('Surface Reflectance')
-																		sa = list(sa * lat_facs)
+																		sa = createlatdistbn('Surface Reflectance')
+																		# sa = list(sa * lat_facs)
 																		# sa = [0.2] * ncols
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
-																		tg = createlatdistbn('Surface Temperature')
+																		# tg = createlatdistbn('Surface Temperature')
+																		tg = createlatdistbn('Doug Mason Temperature vs Latitude')
+																		# for i in range(len(tg)):
+																		# 	tg[i] += 20.
+																		# print(tg)
 																		# tg = [290.] * ncols - abs(collats)
 																		# tg = tg * lat_facs
 
@@ -668,6 +673,7 @@ for ncols in ncolss:
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
+																		max_rh = 2.0e6
 																	
 																		ur1 = ur
 																	
@@ -680,7 +686,7 @@ for ncols in ncolss:
 																		twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3]
+																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:

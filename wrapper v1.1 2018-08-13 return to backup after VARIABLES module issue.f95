@@ -194,6 +194,7 @@ subroutine wrapper
     read(73,*) gas_addmolec_h2o
     read(73,*) gas_addmolec_co2
     read(73,*) gas_addmolec_o3
+    read(73,*) max_rh
 
     close(73)
 
@@ -586,6 +587,7 @@ subroutine wrapper
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                     if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 end if
+                if (mixh2o(i)*pzm(i)/es(i) > max_rh ) mixh2o(i) = es(i)/pzm(i) * max_rh
                 rel_hum_cols(i,col) = mixh2o(i) * pzm(i) / es(i)
             enddo
 
@@ -1367,14 +1369,9 @@ subroutine wrapper
                     ! meridtransp_edge(ncols) = 0.0
                     ! delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
                     
-                    print*, col, boxlats(col),f_cor,beta,&
-                    &lapsecritcols(col), delta_x_edge(col),delta_y_edge(col),delta_T_edge(col),x_lats(col),d_vl(col),&
-                    &meridtransp_edge(col),delta_meridtransp_edge(col),meridtransp(col)
-
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                             &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
-                        print*, lapsecritcols(col), max(d_mid(col),d_trop(col)), altzmcols(conv_trop_ind(col),col)/1000.
                     end if
 
                     if (mtranspon == 1) then
@@ -1392,7 +1389,6 @@ subroutine wrapper
 
                     
                     tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
-                    print*, col, tempchanges(col), 'tempchange', boxnettotflux(col),meridtransp(col),ur_mt, ur_toafnet(col)
                 ENDDO
 
 
