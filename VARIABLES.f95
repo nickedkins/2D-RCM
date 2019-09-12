@@ -95,7 +95,7 @@ MODULE VARIABLES
     integer :: day,hour
     real :: Hrad,Xrad,Yrad,hourang,declin,cossums
     real,dimension(MAXNCOLS,365,24) :: insol,zen
-    character(len=1024) :: qfn,o3fn,ccfn,clwcfn,ciwcfn,ccfracsfn,cctausfn,ccaltsfn !filenames for input distbns
+    character(len=1024) :: qfn,o3fn,ccfn,clwcfn,ciwcfn,ccfracsfn,cctausfn,ccaltsfn,t_fn !filenames for input distbns
     real,dimension(maxlaym) :: clwc,lwp,ciwc,iwp
     integer :: pertlay, pertcol
     character(len=100) :: ttsfile

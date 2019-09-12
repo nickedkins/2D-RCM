@@ -28,7 +28,9 @@ ncolss = [6]
 ncloudcols = 1
 nlays = 30
 tp = 5.0
-days = 2 #model days
+timesteps = 1
+ur_htr = 0.5
+days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
@@ -372,6 +374,10 @@ for ncols in ncolss:
 	fal_lat_max = np.load(interpdir+'fal_lat.npy')
 	t_latp_max = np.load(interpdir+'t_latp.npy')
 
+	plt.contourf(t_latp_max,20)
+	plt.colorbar()
+	show()
+
 	q_ps = np.load(interpdir+'q_ps.npy')
 	o3_ps = np.load(interpdir+'o3_ps.npy')
 	t_ps = np.load(interpdir+'t_ps.npy')
@@ -456,7 +462,7 @@ for ncols in ncolss:
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0,1,2]
+	h2o_sources=[0]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -602,7 +608,7 @@ for ncols in ncolss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [250.] * ncols
+																		fth = [1100.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -639,7 +645,7 @@ for ncols in ncolss:
 																		t_min = 10.
 																		sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 																		playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-																		ur_htr = 0.5
+																		
 																		ur_toafnet = [4.0] * ncols
 																		ur_seb = 1e10
 																		couple_tgta = 1

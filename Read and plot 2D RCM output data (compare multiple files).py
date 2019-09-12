@@ -632,11 +632,11 @@ for directory in directories:
         plt.figure(i_fn)
 
         plt.subplot(211)
-        plt.contourf(tzm_master[i_fn,:,:],vmin=200,vmax=310)
+        plt.contourf(tzm_master[i_fn,:,:],20)
         plt.colorbar()
 
         plt.subplot(212)
-        plt.contourf(rel_hum_cols_master[i_fn,:,:])
+        plt.contourf(rel_hum_cols_master[i_fn,:,:],20)
         plt.colorbar()
         
         # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)

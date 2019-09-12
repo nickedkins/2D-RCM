@@ -459,6 +459,7 @@ subroutine wrapper
 
             write(qfn,"(A83,I2)") 'Input Distributions/q vert col ', col-1
             write(o3fn,"(A84,I2)") 'Input Distributions/o3 vert col ', col-1
+            write(t_fn,"(A83,I2)") 'Input Distributions/t vert col ', col-1
 
             write(ccfracsfn,"(A84,I2)") 'Input Distributions/ccfracs col '&
             &, col-1      
@@ -467,6 +468,7 @@ subroutine wrapper
 
             open(82,file=(trim(qfn)),form='formatted')
             open(83,file=(trim(o3fn)),form='formatted')
+            open(90,file=(trim(t_fn)),form='formatted')
             !            open(84,file=(trim(ccfn)),form='formatted')
             !            open(85,file=(trim(clwcfn)),form='formatted')
             !            open(86,file=(trim(ciwcfn)),form='formatted')
@@ -489,10 +491,15 @@ subroutine wrapper
             do i=1,nlayersm
                 read(83,*) mixo3(i)
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
+                read(90,*) tzm(i)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
                 !                read(86,*) ciwc(i)
             enddo
+
+            tzm(0) = tzm(1)
+            tboundm = tzm(0)
+
 
             close(83)
 
@@ -1610,14 +1617,6 @@ subroutine wrapper
                         print*,
                         print*, 'Tsgm: ',tglobmean
                     endif
-
-                    !write temps to file here
-                    ! open(90,file='tzm_latalt')
-                    ! do col=1,ncols
-                    !     do i=0,nlayersm
-                    !         write(90,1110) tzmcols(i,col)
-                    !     end do
-                    ! end do
 
                     call writeoutputfile
 
