@@ -606,29 +606,41 @@ for directory in directories:
     # plt.ylabel('Pressure at bottom of perturbation (hPa)')
     # plt.ylim(1000,0)
 
-    for col in range(ncols):
-        plt.figure(1)
-        plt.subplot(121)
-        plt.plot(rel_hum_cols_master[0,:,col]*100.,pzm_master[0,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[0,0,col])))
-        plt.xlabel('Relative Humidity (%)')
-        plt.ylabel('Pressure (hPa)')
-        plt.ylim(1000,0)
-        plt.axvline(100,linestyle='--')
-        plt.legend()
+    # for i_fn in range(len(a)):
 
-        plt.subplot(122)
-        plt.plot(tzm_master[0,:,col],pzm_master[0,:,0],'-o',label='lat: '+str(int(boxlatcols_master[0,0,col])))
-        plt.ylim(1000,0)
-        plt.xlabel('Temperature (K)')
-        plt.ylabel('Pressure (hPa)')
-        plt.legend()
+    #     for col in range(ncols):
+    #         plt.figure(1)
+    #         plt.subplot(121)
+    #         plt.plot(rel_hum_cols_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
+    #         plt.xlabel('Relative Humidity (%)')
+    #         plt.ylabel('Pressure (hPa)')
+    #         plt.ylim(1000,0)
+    #         plt.axvline(100,linestyle='--')
+    #         plt.legend()
 
-    # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
+    #         plt.subplot(122)
+    #         plt.plot(tzm_master[i_fn,:,col],pzm_master[i_fn,:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
+    #         plt.ylim(1000,0)
+    #         plt.xlabel('Temperature (K)')
+    #         plt.ylabel('Pressure (hPa)')
+    #         plt.legend()
 
-    # plt.figure(1)
-    # # plt.contourf(tzm_master[0,:,:])
-    # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
-    # plt.colorbar()
+    for i_fn in range(len(a)):
+
+        # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
+
+        plt.figure(i_fn)
+
+        plt.subplot(211)
+        plt.contourf(tzm_master[i_fn,:,:],vmin=200,vmax=310)
+        plt.colorbar()
+
+        plt.subplot(212)
+        plt.contourf(rel_hum_cols_master[i_fn,:,:])
+        plt.colorbar()
+        
+        # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
+        
 
     # i_fn = 0
     # for fn in a:

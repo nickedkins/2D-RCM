@@ -24,11 +24,11 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [10]
+ncolss = [6]
 ncloudcols = 1
 nlays = 30
-tp = 5.0e6
-days = 5000 #model days
+tp = 5.0
+days = 2 #model days
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
@@ -370,13 +370,16 @@ for ncols in ncolss:
 	q_latp_max = np.load(interpdir+'q_latp.npy')
 	o3_latp_max = np.load(interpdir+'o3_latp.npy')
 	fal_lat_max = np.load(interpdir+'fal_lat.npy')
+	t_latp_max = np.load(interpdir+'t_latp.npy')
 
 	q_ps = np.load(interpdir+'q_ps.npy')
 	o3_ps = np.load(interpdir+'o3_ps.npy')
+	t_ps = np.load(interpdir+'t_ps.npy')
 
 	q_lats = np.load(interpdir+'q_lats.npy')
 	o3_lats = np.load(interpdir+'o3_lats.npy')
 	fal_lats = np.load(interpdir+'fal_lats.npy')
+	t_lats = np.load(interpdir+'t_lats.npy')
 
 	pa = 0.3    
 	sc = [1362.0]
@@ -453,7 +456,7 @@ for ncols in ncolss:
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[2]
+	h2o_sources=[0,1,2]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -525,11 +528,11 @@ for ncols in ncolss:
 																		pertvars = ['q']
 														
 																		# shortnameslev = ['cc','clwc','o3','q','ciwc']
-																		shortnameslev = ['q', 'o3']
-																		longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)'}
+																		shortnameslev = ['q', 'o3','t']
+																		longnameslev = {'cc':'Cloud fraction','clwc':'Cloud liquid water content (kg/kg)','o3':'Ozone mixing ratio','q':'Specific humidity (kg/kg)','ciwc':'Cloud ice water content (kg/kg)','t':'Temperature'}
 																		#disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
 																		#disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
-																		disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat'}
+																		disttypelev = {'cc':'lat','clwc':'lat','o3':'lat','q':'lat','ciwc':'lat','t':'lat'}
 																
 																	
 																		shortnamessfc = ['fal']
@@ -547,6 +550,7 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
+																		interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																	
 																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		# lc = [-6.5] * ncols
@@ -584,7 +588,7 @@ for ncols in ncolss:
 																	
 																		ur = 0.5
 																		icldm = 1
-																		rmin = 3e-6
+																		rmin = 3e-6 * 1e-10
 																		hct = 230.0
 																		hcf = 0.04e-9   
 																		hcod = 0.7e-9
@@ -667,13 +671,13 @@ for ncols in ncolss:
 																		# lapse_type = 1
 																		h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
 																		h2o_for = 1
-																		# h2o_source = 2 # 1=MW67 RH, 2=ERA-I mixh2o
+																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
-																		max_rh = 2.0e6
+																		max_rh = 1.1
 																	
 																		ur1 = ur
 																	

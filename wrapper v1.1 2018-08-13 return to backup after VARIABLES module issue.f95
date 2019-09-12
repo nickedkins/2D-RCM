@@ -487,10 +487,6 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-                if (h2o_source == 2) then
-                    read(82,*) mixh2o(i)
-                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
-                end if
                 read(83,*) mixo3(i)
                 mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 !                read(84,*) fracs(i)
@@ -498,7 +494,6 @@ subroutine wrapper
                 !                read(86,*) ciwc(i)
             enddo
 
-            close(82)
             close(83)
 
             do cloudcol = 1,ncloudcols
@@ -580,15 +575,25 @@ subroutine wrapper
 
             do i=1,nlayersm
                 es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
-                if (h2o_source == 1) then
-                    rel_hum(i) = (pzm(i)/1000.0 - 0.02)/(1.0-0.02)*surf_rh !MW67 RH to replicate Hu       
-                    if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                    ! es(i) = 6.1094*exp(17.625*( 288.4 * (pzm(i)/1000.)**(rsp_tot(i) / cptot(i) ) -273.15)/(tavelm(i)-273.15+243.04)) ! Saturation vapour pressure for H2O
+                select case(h2o_source)
+                case(0)
+                    read(82,*) mixh2o(i)
+                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
+                case(1)
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02) !MW67 RH
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                    if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                case(2)
+                    omega_rh = 1. - 0.03*(tzm(0)-288.)
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh !Cess RH
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                end select
+                if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
+                rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
+                if (rel_hum_cols(i,col) > max_rh) then
+                    rel_hum_cols(i,col) = max_rh
+                    mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
                 end if
-                if (mixh2o(i)*pzm(i)/es(i) > max_rh ) mixh2o(i) = es(i)/pzm(i) * max_rh
-                rel_hum_cols(i,col) = mixh2o(i) * pzm(i) / es(i)
             enddo
 
             do i =1,nlayersm
@@ -1368,7 +1373,7 @@ subroutine wrapper
                     ! meridtransp_edge(0) = 0.0
                     ! meridtransp_edge(ncols) = 0.0
                     ! delta_meridtransp_edge(col) = (meridtransp_edge(col) - meridtransp_edge(col-1))
-                    
+
                     if (lapse_type == 1) then
                         lapsecritcols(col) = lapsecritcols(col) + (max(d_mid(col),d_trop(col))-&
                             &altzmcols(conv_trop_ind(col),col)/1000.) * 0.2
@@ -1387,7 +1392,7 @@ subroutine wrapper
                     end if
                     boxnettotflux_prev(col) = boxnettotflux(col)
 
-                    
+
                     tempchanges(col) = (boxnetradflux(col) + meridtransp(col)*ur_mt) / ur_toafnet(col)
                 ENDDO
 
