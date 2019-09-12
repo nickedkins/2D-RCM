@@ -195,6 +195,7 @@ subroutine wrapper
     read(73,*) gas_addmolec_co2
     read(73,*) gas_addmolec_o3
     read(73,*) max_rh
+    read(73,*) snapshot
 
     close(73)
 
@@ -435,6 +436,8 @@ subroutine wrapper
     ! Main do loop - calculate the heating rates, adjust the temperature profile, and iterate until radiative (convective) equilibrium
     ! MAIN LOOP
     ! MAIN LOOP
+
+    if(snapshot==1) timesteps=1
 
     do j=1,timesteps
 
@@ -815,18 +818,14 @@ subroutine wrapper
 
             ! htrm(i-1) is used because rtr.f assigns htr(L) to layer L, when it should actually heat layer L+1 (which rtr.f calls LEV)
             ! applyhtr
-            do i=1,nlayersm
-                tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
-                if (tavelm(i) < t_min) then 
-                    tavelm(i) = t_min
-                end if
-                ! if (adj1 == 0) tavelm(i) = tavelm(i) + htrm(i-1)
-                ! if (adj1 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 2.0
-                ! if (adj2 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 4.0
-                ! if (adj3 == 1) tavelm(i) = tavelm(i) + htrm(i-1) * 8.0
-                ! htrm_over_newur(i-1) = htrm(i-1)/(newur(i))
-
-            end do
+            if(snapshot /= 1) then
+                do i=1,nlayersm
+                    tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+                    if (tavelm(i) < t_min) then 
+                        tavelm(i) = t_min
+                    end if
+                end do
+            end if
 
             ! do i=1,nlayersm
             !   tzm(i) = tzm(i) + htrm(i-1)/(newur(i))
@@ -844,35 +843,34 @@ subroutine wrapper
             end if
 
 
-            do i=1,nlayersm-1
-                tzm(i)=(tavelm(i)+tavelm(i+1))/2
-                if (tzm(i) < t_min) tzm(i) = t_min
-            enddo
+            if(snapshot/=1) then
+                do i=1,nlayersm-1
+                    tzm(i)=(tavelm(i)+tavelm(i+1))/2
+                    if (tzm(i) < t_min) tzm(i) = t_min
+                enddo
 
-            ! tzm(0) = 2.0 * tzm(1) - tzm(2)
+                !Set temperature of very top level
+                tzm(nlayersm) = 2.0*tavelm(nlayersm)-tzm(nlayersm-1)
 
-            !            
-            !
-            !Set temperature of very top level
-            tzm(nlayersm) = 2.0*tavelm(nlayersm)-tzm(nlayersm-1)
+                conv(:,col) = 0
 
-            conv(:,col) = 0
+                ! NJE Level Convection:
+                conv_trop_ind(col) = 0
+                do i=1,nlayersm
+                    malr(i) = gravity * ( 1.0 + ( hv * mixh2o(i) / ( rsp_tot(i) * tavelm(i) ) ) )&
+                    /( cptot(i) + ( (hv**2) * mixh2o(i) / (461.5 * (tavelm(i)**2.0) ) ) ) * (-1.0) * htransp ! Calculate the moist adiabatic lapse rate  
+                end do
 
-            ! NJE Level Convection:
-            conv_trop_ind(col) = 0
-            do i=1,nlayersm
-                malr(i) = gravity * ( 1.0 + ( hv * mixh2o(i) / ( rsp_tot(i) * tavelm(i) ) ) )&
-                /( cptot(i) + ( (hv**2) * mixh2o(i) / (461.5 * (tavelm(i)**2.0) ) ) ) * (-1.0) * htransp ! Calculate the moist adiabatic lapse rate  
-            end do
+                !            call levconvect(col,tzm,altzm,altlaym,lapsecrit,fixed_trop,conv,int(convecttype),malr)
+                call levconvect !nje t0
 
-            !            call levconvect(col,tzm,altzm,altlaym,lapsecrit,fixed_trop,conv,int(convecttype),malr)
-            call levconvect !nje t0
+                conv_trop_ind(col) = minloc(conv(:,col),dim=1)
 
-            conv_trop_ind(col) = minloc(conv(:,col),dim=1)
+                do i=1,nlayersm
+                    tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
+                end do
 
-            do i=1,nlayersm
-                tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
-            end do
+            end if
 
             sigma(0) = 1.0
 
@@ -1148,7 +1146,6 @@ subroutine wrapper
                     boxnettotflux(col) = boxnetradflux(col)
                 end if
                 tempchanges(col) = boxnettotflux(col) / ur_toafnet(col)
-                print*, col, tempchanges(col), 'tempchange'
             enddo
 
 

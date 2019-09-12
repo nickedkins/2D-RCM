@@ -310,7 +310,8 @@ for directory in directories:
     abs_surf_cols_master = []
     d_mid_master = []
     d_trop_master = []
-    rel_hum_cols_master = []
+    rel_hum_master = []
+    wklm1_master = []
 
     filenames = []
 
@@ -352,7 +353,8 @@ for directory in directories:
         abs_surf_cols_master.append(abs_surf_cols)
         d_mid_master.append(d_mid)       
         d_trop_master.append(d_trop)
-        rel_hum_cols_master.append(rel_hum_cols)
+        rel_hum_master.append(rel_hum_cols)
+        wklm1_master.append(wklm1cols)
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -588,7 +590,8 @@ for directory in directories:
     abs_surf_cols_master=np.array(abs_surf_cols_master)
     d_mid_master=np.array(d_mid_master)
     d_trop_master=np.array(d_trop_master)
-    rel_hum_cols_master=np.array(rel_hum_cols_master)
+    rel_hum_master=np.array(rel_hum_master)
+    wklm1_master=np.array(wklm1_master)
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
@@ -611,7 +614,7 @@ for directory in directories:
     #     for col in range(ncols):
     #         plt.figure(1)
     #         plt.subplot(121)
-    #         plt.plot(rel_hum_cols_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
+    #         plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
     #         plt.xlabel('Relative Humidity (%)')
     #         plt.ylabel('Pressure (hPa)')
     #         plt.ylim(1000,0)
@@ -629,14 +632,15 @@ for directory in directories:
 
         # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
 
-        plt.figure(i_fn)
+        # plt.figure(1)
 
-        plt.subplot(211)
-        plt.contourf(tzm_master[i_fn,:,:],20)
-        plt.colorbar()
+        # plt.subplot(211)
+        # plt.contourf(wklm1_master[i_fn,:,:],20,vmax=6e21)
+        # plt.colorbar()
 
-        plt.subplot(212)
-        plt.contourf(rel_hum_cols_master[i_fn,:,:],20)
+        plt.subplot(221+i_fn)
+        plt.contourf(wklm1_master[i_fn,:,:]-wklm1_master[0,:,:],10)
+        # plt.clim(0,2)
         plt.colorbar()
         
         # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
