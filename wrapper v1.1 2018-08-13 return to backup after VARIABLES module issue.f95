@@ -596,6 +596,12 @@ subroutine wrapper
                     omega_rh = 1. - 0.03*(tzm(0)-288.)
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh !Cess RH
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                case(3)
+                    omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
+                    if (omega_rh > 1.) omega_rh=1
+                    if (omega_rh > 0.) omega_rh=0
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh !Kasting and Ackerman RH
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 end select
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
