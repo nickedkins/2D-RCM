@@ -26,15 +26,15 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 ncolss = [20]
 ncloudcols = 1
-nlays = 99
+nlays = 60
 tp = 5.0
-timesteps = 1
+timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 1 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
-snapshot=1
+snapshot=0
 
 for ncols in ncolss:
 
@@ -457,9 +457,9 @@ for ncols in ncolss:
 	lapse_types = [2] # 1=H82, 2=Mason
 	pperts = np.linspace(1000,50,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	co2_facs = [1.0]
+	co2_facs = [1.,2.]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0,1,2]
+	h2o_sources=[0,1,2,3,4]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]

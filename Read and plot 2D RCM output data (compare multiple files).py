@@ -628,23 +628,51 @@ for directory in directories:
     #         plt.ylabel('Pressure (hPa)')
     #         plt.legend()
 
-    for i_fn in range(len(a)):
+    # for i_fn in range(len(a)):
 
-        # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
+    #     # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
 
-        # plt.figure(1)
+    #     # plt.figure(1)
 
-        # plt.subplot(211)
-        # plt.contourf(wklm1_master[i_fn,:,:],20,vmax=6e21)
-        # plt.colorbar()
+    #     # plt.subplot(211)
+    #     # plt.contourf(wklm1_master[i_fn,:,:],20,vmax=6e21)
+    #     # plt.colorbar()
 
-        plt.subplot(221+i_fn)
-        plt.contourf(wklm1_master[i_fn,:,:]-wklm1_master[0,:,:],10)
-        # plt.clim(0,2)
-        plt.colorbar()
+    #     plt.figure(i_fn)
+    #     plt.subplot(121)
+    #     plt.contourf(wklm1_master[i_fn,:,:],10)
+    #     plt.colorbar()
+    #     plt.subplot(122)
+    #     plt.contourf(rel_hum_master[i_fn,:,:],10,vmax=1)
+    #     plt.colorbar()
         
         # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
         
+
+    plt.figure(1)
+    plt.title('ERA-Interim')
+    plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.colorbar()
+
+    plt.figure(2)
+    plt.title('Manabe-Wetherald')
+    plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.colorbar()
+
+    plt.figure(3)
+    plt.title('Cess')
+    plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.colorbar()
+
+    plt.figure(4)
+    plt.title('Kasting-Ackerman')
+    plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.colorbar()
+
+    plt.figure(5)
+    plt.title('Ramirez')
+    plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.colorbar()
 
     # i_fn = 0
     # for fn in a:

@@ -586,21 +586,37 @@ subroutine wrapper
             do i=1,nlayersm
                 es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
                 select case(h2o_source)
-                case(0)
+                case(0) !ERA-Interim
                     read(82,*) mixh2o(i)
-                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3) !NJE
-                case(1)
-                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02) !MW67 RH
+                    mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
+                case(1) !MW67
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                case(2)
+                case(2) !Cess
                     omega_rh = 1. - 0.03*(tzm(0)-288.)
-                    rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh !Cess RH
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
-                case(3)
+                case(3) !Kasting and Ackerman
                     omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
                     if (omega_rh > 1.) omega_rh=1
-                    if (omega_rh > 0.) omega_rh=0
-                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh !Kasting and Ackerman RH
+                    if (omega_rh < 0.) omega_rh=0
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                case(4) !Ramirez 2013
+                    omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
+                    if (omega_rh > 1.) omega_rh=1
+                    if (omega_rh < 0.) omega_rh=0
+                    density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
+                    tcels = tzm(0) - 273.15
+                    t1_vl = tcels + 0.5
+                    t2_vl = tcels - 0.5
+                    s_r13 = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
+                    gamma_r13 = s_r13 / (s_r13+(cptot(1)/2.26e6))
+                    bowen_r13 = (1.0 - gamma_r13*1.26) / (gamma_r13*1.26)
+                    if (bowen_r13 < 0.1) bowen_r13 = 0.1
+                    surf_rh = 1. - (1. - 0.8) * ( ( abs_surf_lh - fnetm(0) ) / ( 97. )) * ( 1.225 / density ) *&
+                    & ( 0.0166 / (es(1)/pzm(0)) ) * ( ( 1. + 0.59 )/( 1. + bowen_r13 ) )
+                    rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 end select
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -1013,7 +1029,7 @@ subroutine wrapper
             t1_vl = tcels + 0.1
             t2_vl = tcels - 0.1
             delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
-            lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
+            lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.2
             d_vl(col) = ddry(col) * (1.0 + lambda(col))
 
 
@@ -1326,7 +1342,7 @@ subroutine wrapper
                     t1_vl = tcels + 0.1
                     t2_vl = tcels - 0.1
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
-                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
+                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.2
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
                 end do
 
@@ -1361,7 +1377,7 @@ subroutine wrapper
                     t1_vl = tcels + 0.1
                     t2_vl = tcels - 0.1
                     delta_pv_star = (6.1094 * exp(17.625*t1_vl/(t1_vl+243.04)) - 6.1094 * exp(17.625*t2_vl/(t2_vl+243.04)))
-                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.1
+                    lambda(col) = (kl * Lv * mmwh2o * rel_hum(1)) / (ks * cptot(1) * mmwtot * pzm(0)*100.0) * delta_pv_star/0.2
                     d_vl(col) = ddry(col) * (1.0 + lambda(col))
                     ! if (col < ncols) then
                     !     delta_T_edge(col) = tair_lowest_edges(col+1) - tair_lowest_edges(col)
