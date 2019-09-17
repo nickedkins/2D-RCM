@@ -2,19 +2,40 @@
 
 # Just plot the ouput for the current run of PRRTM
 import numpy as np
-import matplotlib as matplotlib
+# import matplotlib as matplotlib
 import matplotlib.pyplot as plt
 from pylab import *
 from scipy import interpolate
 from os import listdir
+import matplotlib.colors as colors
 # import pandas as pd
+
+
+# set the colormap and centre the colorbar
+class MidpointNormalize(colors.Normalize):
+    """
+    Normalise the colorbar so that diverging bars work there way either side from a prescribed midpoint value)
+
+    e.g. im=ax1.imshow(array, norm=MidpointNormalize(midpoint=0.,vmin=-100, vmax=100))
+    """
+    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+        self.midpoint = midpoint
+        colors.Normalize.__init__(self, vmin, vmax, clip)
+
+    def __call__(self, value, clip=None):
+        # I'm ignoring masked values and all kinds of edge cases to make a
+        # simple example...
+        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+        return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
+
 
 plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
 directories = [
-'_Current Output/'
+# '_Current Output/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
 # directories = [
@@ -60,10 +81,10 @@ def init_plotting():
 init_plotting()
 
 def latwghtavg(x,lats):
-    print "x:", x
-    print "lats:", lats
-    print "sinlats:", np.cos(np.deg2rad(lats))
-    print "sumlats:", sum(np.cos(np.deg2rad(lats)))
+    # print "x:", x
+    # print "lats:", lats
+    # print "sinlats:", np.cos(np.deg2rad(lats))
+    # print "sumlats:", sum(np.cos(np.deg2rad(lats)))
     x_avg = sum(x * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
     return x_avg
 
@@ -110,7 +131,7 @@ p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
 
 linestyles = ['-','--','--','o']
 
-colors = ['b','r','g','orange','purple','yellow','pink']
+# colors = ['b','r','g','orange','purple','yellow','pink']
 
 
 
@@ -316,10 +337,10 @@ for directory in directories:
     filenames = []
 
     dir_label = directory.split('/')[-2]
-    print dir_label
+    print(dir_label)
 
     ls = linestyles[i1]
-    color = colors[i1]
+    # color = colors[i1]
 
     a = sorted(listdir(directory))
     a.remove('.DS_Store')
@@ -438,7 +459,7 @@ for directory in directories:
                 t_trop = tzmcols[conv_trop_ind,col]
                 z_trop = altzmcols[conv_trop_ind,col]
 
-                print p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col]
+                print(p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col])
 
                 # plt.figure(2)
                 # plt.plot(lapsecritcols[0,col],z_trop/1000.,'o')
@@ -649,29 +670,31 @@ for directory in directories:
         # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
         
 
-    plt.figure(1)
-    plt.title('ERA-Interim')
-    plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',vmin=-6,vmax=6)
-    plt.colorbar()
+    # plt.figure(1)
+    # plt.title('ERA-Interim')
+    # plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    # plt.colorbar()
+
+    # divnorm = colors.DivergingNorm(vmin=-500, vcenter=0, vmax=4000)
 
     plt.figure(2)
     plt.title('Manabe-Wetherald')
-    plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8, vmax=9.6))
     plt.colorbar()
 
-    plt.figure(3)
-    plt.title('Cess')
-    plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:],20,cmap='bwr',vmin=-6,vmax=6)
-    plt.colorbar()
+    # plt.figure(3)
+    # plt.title('Cess')
+    # plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',vmin=-3,vmax=3)
+    # plt.colorbar()
 
-    plt.figure(4)
-    plt.title('Kasting-Ackerman')
-    plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:],20,cmap='bwr',vmin=-6,vmax=6)
-    plt.colorbar()
+    # plt.figure(4)
+    # plt.title('Kasting-Ackerman')
+    # plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',vmin=-3,vmax=3)
+    # plt.colorbar()
 
     plt.figure(5)
     plt.title('Ramirez')
-    plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8,vmax=9.6))
     plt.colorbar()
 
     # i_fn = 0
@@ -833,6 +856,6 @@ plt.legend()
 
 
 ############################################################
-print 'Done'
+print('Done')
 # plt.tight_layout()
 show()
