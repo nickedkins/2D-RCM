@@ -20,14 +20,14 @@ from scipy import stats
 
 #testdevmerge
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [20]
+ncolss = [6]
 ncloudcols = 1
-nlays = 60
-tp = 5.0
+nlays = 30
+tp = 0.01
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -459,7 +459,7 @@ for ncols in ncolss:
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.,2.]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0,1,2,3,4]
+	h2o_sources=[0]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -605,7 +605,7 @@ for ncols in ncolss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [1100.] * ncols
+																		fth = [500.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -647,13 +647,13 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		gas_amt_fac_h2o = 1.0
+																		gas_amt_fac_h2o = 1.1
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_p_high_h2o = ppert
-																		gas_amt_p_low_h2o = ppert - 50.
-																		# gas_amt_p_high_h2o = 1e6
-																		# gas_amt_p_low_h2o = 0.
+																		# gas_amt_p_high_h2o = ppert
+																		# gas_amt_p_low_h2o = ppert - 50.
+																		gas_amt_p_high_h2o = 1e6
+																		gas_amt_p_low_h2o = 0.
 																		gas_amt_p_high_co2 = 1e6
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6

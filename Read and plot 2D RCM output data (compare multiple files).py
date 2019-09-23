@@ -34,13 +34,12 @@ legends_on = 0
 grids_on = 1
 
 directories = [
-# '_Current Output/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
+'_Current Output/',
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/latfac fal/latfac norm/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/rh comparisons/snapshots/'
+]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -343,7 +342,8 @@ for directory in directories:
     # color = colors[i1]
 
     a = sorted(listdir(directory))
-    a.remove('.DS_Store')
+    if('.DS_Store' in a):
+        a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -670,32 +670,54 @@ for directory in directories:
         # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
         
 
+    myvmin=0
+    myvmax=10
+    mymp=1
+
+
+    titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
+
+    for i_fn in [0,1,2,3,4]:
+        print i_fn
+
+        XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
+
+        plt.figure(i_fn)
+        plt.title(titles[i_fn])
+        plt.contourf(XX,YY,wklm1_master[i_fn,:,:]/wklm1_master[0,:,:],100,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
+        plt.gca().set_yscale('log')
+        plt.ylim(1000,1000/60.)
+        plt.xlabel('Latitude')
+        plt.ylabel('Pressure')
+        cb = plt.colorbar()
+        cb.set_label(r'Number of H$_2$O molecules',rotation=270,labelpad=20)
+
     # plt.figure(1)
     # plt.title('ERA-Interim')
-    # plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',vmin=-6,vmax=6)
+    # plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
     # plt.colorbar()
 
-    # divnorm = colors.DivergingNorm(vmin=-500, vcenter=0, vmax=4000)
+    # # divnorm = colors.DivergingNorm(vmin=-500, vcenter=0, vmax=4000)
 
-    plt.figure(2)
-    plt.title('Manabe-Wetherald')
-    plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8, vmax=9.6))
-    plt.colorbar()
+    # plt.figure(2)
+    # plt.title('Manabe-Wetherald')
+    # plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
+    # plt.colorbar()
 
     # plt.figure(3)
     # plt.title('Cess')
-    # plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',vmin=-3,vmax=3)
+    # plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
     # plt.colorbar()
 
     # plt.figure(4)
     # plt.title('Kasting-Ackerman')
-    # plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',vmin=-3,vmax=3)
+    # plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
     # plt.colorbar()
 
-    plt.figure(5)
-    plt.title('Ramirez')
-    plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8,vmax=9.6))
-    plt.colorbar()
+    # plt.figure(5)
+    # plt.title('Ramirez')
+    # plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
+    # plt.colorbar()
 
     # i_fn = 0
     # for fn in a:
