@@ -34,13 +34,14 @@ legends_on = 0
 grids_on = 1
 
 directories = [
-# '_Current Output/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
+'_Current Output/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/latfac fal/latfac norm/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/ERA-Interim H2O/1K total/nl=199/Absolute/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/ERA-Interim H2O/1K total/nl=199/Relative/'
+]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -343,7 +344,8 @@ for directory in directories:
     # color = colors[i1]
 
     a = sorted(listdir(directory))
-    a.remove('.DS_Store')
+    if ('.DS_Store' in a):
+        a.remove('.DS_Store')
 
     filenames.append(a)
 
@@ -621,7 +623,11 @@ for directory in directories:
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-    pperts = np.linspace(1000,0,10)
+    # pperts = np.linspace(1000,0,10)
+
+
+
+    print 'Delta T: {:.2f}'.format( latwghtavg(tzm_master[1,0,:],boxlatcols_master[1,0,:]) - latwghtavg(tzm_master[0,0,:],boxlatcols_master[0,0,:]) )
 
     # plt.figure(1)
     # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
@@ -677,10 +683,10 @@ for directory in directories:
 
     # divnorm = colors.DivergingNorm(vmin=-500, vcenter=0, vmax=4000)
 
-    plt.figure(2)
-    plt.title('Manabe-Wetherald')
-    plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8, vmax=9.6))
-    plt.colorbar()
+    # plt.figure(2)
+    # plt.title('Manabe-Wetherald')
+    # plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8, vmax=9.6))
+    # plt.colorbar()
 
     # plt.figure(3)
     # plt.title('Cess')
@@ -692,10 +698,10 @@ for directory in directories:
     # plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',vmin=-3,vmax=3)
     # plt.colorbar()
 
-    plt.figure(5)
-    plt.title('Ramirez')
-    plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8,vmax=9.6))
-    plt.colorbar()
+    # plt.figure(5)
+    # plt.title('Ramirez')
+    # plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=0,vmin=-4.8,vmax=9.6))
+    # plt.colorbar()
 
     # i_fn = 0
     # for fn in a:
@@ -803,21 +809,24 @@ for directory in directories:
     # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
     # plt.legend()
 
-    # pperts = np.linspace(1000,0,10)
+    pperts = np.linspace(1000,50,10)
 
     # if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
     #     pperts = np.linspace(1000,0,10)
 
-    # # plt.figure(1)
-    # # for i_fn in range(len(a)-1):
-    # #     if(a[i_fn]=='.DS_Store'):
-    # #         continue
-    # plt.plot(tzm_master[1:,0,:]-tzm_master[0,0,:],pperts,label=dir_label)
-    # plt.xlabel('$\Delta T_{surf}$ (K)')
-    # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
-    # plt.ylim(1000,0)
+    # plt.figure(1)
+    # for i_fn in range(len(a)-1):
+    #     if(a[i_fn]=='.DS_Store'):
+    #         continue
 
-    # print tzm_master[:,0,:]
+    plt.figure(1)
+    plt.title('Change in surface temperature with a perturbation \n in H$_2$O mixing ratio in each 50 hPa range')
+    plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:])/sum(tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
+    plt.xlabel('$\Delta T_{surf}$ (K)')
+    plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
+    plt.ylim(1000,0)
+
+    print 'Total delta T: {:4.2f}'.format(sum(tzm_master[1:,0,:]-tzm_master[0,0,:]))
 
 
 plt.legend()
@@ -828,7 +837,7 @@ plt.legend()
 #     pzms = pzm_master[i,:,0]
 #     tzms = tzm_master[i,:,:]
 #     altzms = altzm_master[i,:,0]
-#     # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
+    # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
 
 
 

@@ -20,14 +20,14 @@ from scipy import stats
 
 #testdevmerge
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [20]
+ncolss = [1]
 ncloudcols = 1
-nlays = 60
-tp = 5.0
+nlays = 199
+tp = 0.1
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -455,11 +455,14 @@ for ncols in ncolss:
 	lcs = np.linspace(10,3,1)
 	lcs = lcs * -1.
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,1)
-	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	co2_facs = [1.,2.]
+	pperts = np.linspace(1000,50,20)
+	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	print pperts
+	co2_facs = [1.]
+	gas_amt_fac_co2 = co2_facs[0]
+	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0,1,2,3,4]
+	h2o_sources=[0]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -480,7 +483,7 @@ for ncols in ncolss:
 						lat_facs = lat_facs * ncols / sum(lat_facs)
 						print(lat_facs, sum(lat_facs))
 						i_cf=0
-						for gas_amt_fac_co2 in co2_facs:
+						for gas_amt_fac_h2o in h2o_facs:
 							i_lt = 0
 							for lapse_type in lapse_types:
 								i_lc = 0
@@ -605,7 +608,7 @@ for ncols in ncolss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [1100.] * ncols
+																		fth = [500.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -647,7 +650,7 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		gas_amt_fac_h2o = 1.0
+																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
 																		gas_amt_p_high_h2o = ppert
@@ -677,7 +680,7 @@ for ncols in ncolss:
 																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
-																		gas_addmolec_h2o = 0.0
+																		gas_addmolec_h2o = 1e19/6.
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																		max_rh = 1.1e6
