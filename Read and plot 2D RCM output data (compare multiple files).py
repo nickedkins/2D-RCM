@@ -38,7 +38,8 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/rh comparisons/snapshots/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/rh comparisons/snapshots/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/rh comparisons/2xco2/'
 ]
 
 def init_plotting():
@@ -86,6 +87,14 @@ def latwghtavg(x,lats):
     # print "sumlats:", sum(np.cos(np.deg2rad(lats)))
     x_avg = sum(x * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
     return x_avg
+
+def latwghtavg_2d(x,lats):
+    nlays = len(x[:,0])
+    x_avg = np.zeros(nlays)
+    for i in range(nlays):
+        x_avg[i] = sum(x[i,:] * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
+    return x_avg
+
 
 
 obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
@@ -332,6 +341,7 @@ for directory in directories:
     d_trop_master = []
     rel_hum_master = []
     wklm1_master = []
+    wbrodlm_master = []
 
     filenames = []
 
@@ -376,6 +386,7 @@ for directory in directories:
         d_trop_master.append(d_trop)
         rel_hum_master.append(rel_hum_cols)
         wklm1_master.append(wklm1cols)
+        wbrodlm_master.append(wbrodlmcols)
 
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
@@ -613,6 +624,7 @@ for directory in directories:
     d_trop_master=np.array(d_trop_master)
     rel_hum_master=np.array(rel_hum_master)
     wklm1_master=np.array(wklm1_master)
+    wbrodlm_master=np.array(wbrodlm_master)
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
@@ -677,20 +689,81 @@ for directory in directories:
 
     titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
 
-    for i_fn in [0,1,2,3,4]:
+    for i_fn in [0,2,4,6,8]:
+
         print i_fn
 
-        XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
+        # XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
 
-        plt.figure(i_fn)
-        plt.title(titles[i_fn])
-        plt.contourf(XX,YY,wklm1_master[i_fn,:,:]/wklm1_master[0,:,:],100,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-        plt.gca().set_yscale('log')
-        plt.ylim(1000,1000/60.)
-        plt.xlabel('Latitude')
-        plt.ylabel('Pressure')
-        cb = plt.colorbar()
-        cb.set_label(r'Number of H$_2$O molecules',rotation=270,labelpad=20)
+        # plt.figure(i_fn)
+        # plt.title(titles[i_fn])
+        # plt.contourf(XX,YY,wklm1_master[i_fn,:,:]/wklm1_master[0,:,:],100,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
+        # plt.gca().set_yscale('log')
+        # plt.ylim(1000,1000/60.)
+        # plt.xlabel('Latitude')
+        # plt.ylabel('Pressure')
+        # cb = plt.colorbar()
+        # cb.set_label(r'Number of H$_2$O molecules',rotation=270,labelpad=20)
+
+        # plt.figure(1)
+        # # print latwghtavg_2d(wklm1_master[i_fn,:,:],boxlatcols_master[i_fn,0,:])
+        # plt.loglog(latwghtavg_2d(wklm1_master[i_fn,:,:]/wbrodlm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn])
+        # plt.ylim(1000,50)
+        # plt.xlabel('H$_2$O mixing ratio')
+        # plt.ylabel('Pressure (hPa)')
+        # plt.xlim(3e-6)
+        # # plt.gca().minorticks_on()
+        # plt.grid(which='both',axis='both')
+
+
+        # plt.figure(1)
+        # plt.semilogy(latwghtavg_2d(wklm1_master[i_fn+1,:,:]/wbrodlm_master[i_fn+1,:,:]-wklm1_master[i_fn,:,:]/wbrodlm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn/2])
+        # plt.ylim(1000,50)
+        # plt.xlabel('Change in H$_2$O mixing ratio for double CO$_2$')
+        # plt.ylabel('Pressure (hPa)')
+        # # plt.xlim(3e-6)
+        # plt.grid(which='both',axis='both')
+
+        # plt.figure(1)
+        # plt.minorticks_on()
+        # plt.grid(which='both',axis='both')
+        # plt.semilogy(latwghtavg_2d(rel_hum_master[i_fn+1,:,:]-rel_hum_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn/2])
+        # plt.ylim(1000,50)
+        # plt.xlabel('Change in relative humidity for double CO$_2$')
+        # plt.ylabel('Pressure (hPa)')
+
+        # plt.figure(1)
+        # # plt.minorticks_on()
+        # plt.grid(which='both',axis='both')
+        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn+1,:,:]-tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
+        # plt.ylim(1000,50)
+        # plt.xlim(-3,3)
+        # plt.axvline(0,linestyle='--')
+        # plt.xlabel('Change in temperature for double CO$_2$ (K)')
+        # plt.ylabel('Pressure (hPa)')
+
+        plt.figure(1)
+        # plt.minorticks_on()
+        plt.grid(which='both',axis='both')
+        plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
+        plt.ylim(1000,50)
+        # plt.xlim(-3,3)
+        plt.axvline(0,linestyle='--')
+        plt.xlabel('Temperature (K)')
+        plt.ylabel('Pressure (hPa)')
+
+        # plt.figure(1)
+        # # print latwghtavg_2d(wklm1_master[i_fn,:,:],boxlatcols_master[i_fn,0,:])
+        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn])
+        # plt.ylim(1000,50)
+        # plt.xlabel('Temperature (K)')
+        # plt.ylabel('Pressure (hPa)')
+        # # plt.xlim(3e-6)
+        # # plt.gca().minorticks_on()
+        # plt.grid(which='both',axis='both')
+
+
+
 
     # plt.figure(1)
     # plt.title('ERA-Interim')

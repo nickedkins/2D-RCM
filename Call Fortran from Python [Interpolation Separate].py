@@ -26,8 +26,8 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 ncolss = [6]
 ncloudcols = 1
-nlays = 30
-tp = 0.01
+nlays = 60
+tp = 1.0
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -459,7 +459,7 @@ for ncols in ncolss:
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	co2_facs = [1.,2.]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0]
+	h2o_sources=[0,1,2,3,4]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
