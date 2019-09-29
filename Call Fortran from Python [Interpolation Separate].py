@@ -24,10 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [1]
+ncolss = [6]
 ncloudcols = 1
-nlays = 199
-tp = 0.1
+nlays = 60
+tp = 1.0
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -650,13 +650,13 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		# gas_amt_fac_h2o = 1.0
+																		gas_amt_fac_h2o = 1.1
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_p_high_h2o = ppert
-																		gas_amt_p_low_h2o = ppert - 50.
-																		# gas_amt_p_high_h2o = 1e6
-																		# gas_amt_p_low_h2o = 0.
+																		# gas_amt_p_high_h2o = ppert
+																		# gas_amt_p_low_h2o = ppert - 50.
+																		gas_amt_p_high_h2o = 1e6
+																		gas_amt_p_low_h2o = 0.
 																		gas_amt_p_high_co2 = 1e6
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6
