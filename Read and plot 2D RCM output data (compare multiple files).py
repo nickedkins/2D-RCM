@@ -11,6 +11,22 @@ import matplotlib.colors as colors
 # import pandas as pd
 
 
+
+plot_all_vert_profiles = 0
+legends_on = 0
+grids_on = 1
+
+directories = [
+'_Current Output/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
+]
+
+directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
+]
+
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
     """
@@ -27,21 +43,6 @@ class MidpointNormalize(colors.Normalize):
         # simple example...
         x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
         return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
-
-
-plot_all_vert_profiles = 0
-legends_on = 0
-grids_on = 1
-
-directories = [
-'_Current Output/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
-]
-
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/ERA-Interim H2O/1K total/nl=199/Absolute/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/ERA-Interim H2O/1K total/nl=199/Relative/'
-]
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
@@ -636,9 +637,39 @@ for directory in directories:
 
     # pperts = np.linspace(1000,0,10)
 
+    # tzm_master = tzm_master - 20.\
+    # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
+    # x_endpoints = [lapsecritcols_master[0,0,0],lapsecritcols_master[-1,0,0]]
+    # plt.figure(1)
+    # plt.plot(lapsecritcols_master[:,0,0],tzm_master[:,0,0],'-o')
+    # plt.plot(x_endpoints,y_endpoints,'--')
+    # plt.xlabel('Critical lapse rate (K/km)')
+    # plt.ylabel('Surface temperature (K)')
 
 
-    print 'Delta T: {:.2f}'.format( latwghtavg(tzm_master[1,0,:],boxlatcols_master[1,0,:]) - latwghtavg(tzm_master[0,0,:],boxlatcols_master[0,0,:]) )
+    # tzm_master = tzm_master - 20.
+    # h2o_facs = np.linspace(1.,10.,10)
+    # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
+    # x_endpoints = [h2o_facs[0],h2o_facs[-1]]
+    # plt.figure(1)
+    # plt.plot(h2o_facs,tzm_master[:,0,0],'-o')
+    # plt.plot(x_endpoints,y_endpoints,'--')
+    # plt.xlabel('H$_2$O factor')
+    # plt.ylabel('Surface temperature (K)')
+
+    tzm_master = tzm_master - 20.
+    cld_taus = np.linspace(0,9.9,10)
+    y_endpoints=[tzm_master[1,0,0],tzm_master[-1,0,0]]
+    x_endpoints = [cld_taus[1],cld_taus[-1]]
+    plt.figure(1)
+    plt.plot(cld_taus[1:],tzm_master[1:,0,0],'-o')
+    plt.plot(x_endpoints,y_endpoints,'--')
+    plt.xlabel('Cloud $\tau$')
+    plt.ylabel('Surface temperature (K)')
+    plt.figure(2)
+    plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
+    plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
+
 
     # plt.figure(1)
     # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
@@ -692,11 +723,11 @@ for directory in directories:
     mymp=1
 
 
-    titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
+    # titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
 
-    for i_fn in [0,2,4,6,8]:
+    # for i_fn in [0,2,4,6,8]:
 
-        print i_fn
+    #     print i_fn
 
         # XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
 
@@ -747,15 +778,15 @@ for directory in directories:
         # plt.xlabel('Change in temperature for double CO$_2$ (K)')
         # plt.ylabel('Pressure (hPa)')
 
-        plt.figure(1)
-        # plt.minorticks_on()
-        plt.grid(which='both',axis='both')
-        plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
-        plt.ylim(1000,50)
-        # plt.xlim(-3,3)
-        plt.axvline(0,linestyle='--')
-        plt.xlabel('Temperature (K)')
-        plt.ylabel('Pressure (hPa)')
+        # plt.figure(1)
+        # # plt.minorticks_on()
+        # plt.grid(which='both',axis='both')
+        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
+        # plt.ylim(1000,50)
+        # # plt.xlim(-3,3)
+        # plt.axvline(0,linestyle='--')
+        # plt.xlabel('Temperature (K)')
+        # plt.ylabel('Pressure (hPa)')
 
         # plt.figure(1)
         # # print latwghtavg_2d(wklm1_master[i_fn,:,:],boxlatcols_master[i_fn,0,:])
@@ -913,14 +944,14 @@ for directory in directories:
     #     if(a[i_fn]=='.DS_Store'):
     #         continue
 
-    plt.figure(1)
-    plt.title('Change in surface temperature with a perturbation \n in H$_2$O mixing ratio in each 50 hPa range')
-    plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:])/sum(tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
-    plt.xlabel('$\Delta T_{surf}$ (K)')
-    plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
-    plt.ylim(1000,0)
+    # plt.figure(1)
+    # plt.title('Change in surface temperature with a perturbation \n in H$_2$O mixing ratio in each 50 hPa range')
+    # plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:])/sum(tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
+    # plt.xlabel('$\Delta T_{surf}$ (K)')
+    # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
+    # plt.ylim(1000,0)
 
-    print 'Total delta T: {:4.2f}'.format(sum(tzm_master[1:,0,:]-tzm_master[0,0,:]))
+    # print 'Total delta T: {:4.2f}'.format(sum(tzm_master[1:,0,:]-tzm_master[0,0,:]))
 
 
 plt.legend()

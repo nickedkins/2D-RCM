@@ -24,15 +24,15 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 
-ncolss = [6]
+ncolss = [1]
 ncloudcols = 1
-nlays = 60
-tp = 1.0
+nlays = 99
+tp = 0.5
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
-cloud_source = 1 #0 for manual, 1 for MISR
+cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
 
@@ -439,8 +439,8 @@ for ncols in ncolss:
 	# cld_heights = np.linspace(0,12,5)
 	cld_heights = [5.0]
 	# cld_height = [5.0]
-	# cld_taus = np.linspace(0.0,9.9,9)
-	cld_taus = [9.9]
+	cld_taus = np.linspace(0.1,9.9,10)
+	# cld_taus = [9.9]
 
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0
@@ -452,14 +452,16 @@ for ncols in ncolss:
 	fsws = [260.] #238.24 to replicate RD
 	# add_cld_alts = [0.0,6.1]
 	add_cld_alts = [0.0]
-	lcs = np.linspace(10,3,1)
-	lcs = lcs * -1.
+	# lcs = np.linspace(10,2,10)
+	# lcs = lcs * -1.
+	lcs = [-5.7] * ncols
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,20)
-	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	print pperts
+	pperts = np.linspace(1000,50,1)
+	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	# print pperts
 	co2_facs = [1.]
 	gas_amt_fac_co2 = co2_facs[0]
+	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
 	h2o_sources=[0]
@@ -481,7 +483,6 @@ for ncols in ncolss:
 					for lf_a in lf_as:
 						lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
 						lat_facs = lat_facs * ncols / sum(lat_facs)
-						print(lat_facs, sum(lat_facs))
 						i_cf=0
 						for gas_amt_fac_h2o in h2o_facs:
 							i_lt = 0
@@ -503,7 +504,8 @@ for ncols in ncolss:
 
 																		nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)\
 																		*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
-																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)
+																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)*len(lcs)\
+																		*len(h2o_facs)
 																		print("Number of loops: ", nloops)
 																		secsperloop = 0.5 #uni
 																		# secsperloop = 1.5 #home
@@ -519,7 +521,7 @@ for ncols in ncolss:
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
 																		# manual_clouds.append([450,0.66,9.9])
-																		manual_clouds.append([cld_height,0.5,0.2])
+																		manual_clouds.append([5.0,0.5,cld_tau])
 																		
 														
 																		# sa = [sa] * ncols
@@ -558,7 +560,7 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																	
-																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		# lc = [-6.5] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
@@ -650,7 +652,7 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		gas_amt_fac_h2o = 1.1
+																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
 																		# gas_amt_p_high_h2o = ppert
@@ -680,7 +682,7 @@ for ncols in ncolss:
 																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
-																		gas_addmolec_h2o = 1e19/6.
+																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																		max_rh = 1.1e6
