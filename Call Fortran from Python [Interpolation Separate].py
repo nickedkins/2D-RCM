@@ -21,13 +21,11 @@ from scipy import stats
 #testdevmerge
 
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
-
 
 ncolss = [1]
 ncloudcols = 1
-nlays = 99
-tp = 0.5
+nlays = 30
+tp = 0.5e6
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -132,7 +130,7 @@ for ncols in ncolss:
 			file.write('\n')
 			file.close()
 	def createlatdistbn(filename):
-		fileloc = '/Users/nickedkins/Dropbox/Latitudinal Distributions/'+filename+'.txt'
+		fileloc = 'Latitudinal Distributions/'+filename+'.txt'
 		file = open(fileloc,'r')
 		lat = []
 		var = []
@@ -348,7 +346,7 @@ for ncols in ncolss:
 			file.close()
 
 
-	interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
+	interpdir = 'Input Data for RCM Interpolation/'
 	outdir = project_dir+'Input Distributions/' #output file directory
 
 	misr_cf_latalt_max = np.load(interpdir+'misr_cf_latalt.npy') # maximum-sized array of cloud data, to interpolate onto new smaller grid here
@@ -439,8 +437,8 @@ for ncols in ncolss:
 	# cld_heights = np.linspace(0,12,5)
 	cld_heights = [5.0]
 	# cld_height = [5.0]
-	cld_taus = np.linspace(0.1,9.9,10)
-	# cld_taus = [9.9]
+	# cld_taus = np.linspace(0.1,9.9,10)
+	cld_taus = [9.9]
 
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0

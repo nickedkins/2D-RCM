@@ -10,21 +10,12 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-
-
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
 directories = [
 '_Current Output/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
-]
-
-directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
 ]
 
 # set the colormap and centre the colorbar
@@ -98,52 +89,7 @@ def latwghtavg_2d(x,lats):
     return x_avg
 
 
-
-obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
-obs_data = np.genfromtxt(obs_file,delimiter=',')
-
-t_obs = obs_data[:,0]
-p_obs = obs_data[:,1]
-
-p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
-
-# plt.figure(1)
-# plt.plot(t_obs,p_obs,'--',label='Shine and Sinha')
-# plt.ylim(1000,0)
-
-
-
-# plt.figure(1)
-# plt.subplot(341)
-# plt.plot(t_obs,z_obs,'--',label='ERA-Interim')
-# plt.plot(t_grey,z_grey,label='Grey')
-# plt.xlabel('Temperature (K)')
-# plt.ylabel('Altitude (km)')
-# plt.ylim(0,20)
-
-# plt.figure(1)
-# plt.subplot(222)
-# plt.title('lapse')
-# dt = np.zeros(len(t_obs))
-# dz = np.zeros(len(z_obs))
-
-
-
-# for i in range(3,len(t_obs)):
-#     dt[i] = t_obs[i] - t_obs[i-3]
-#     dz[i] = z_obs[i] - z_obs[i-3]
-# plt.semilogy(dt/dz,p_obs)
-# plt.ylim(max(p_obs),min(p_obs))
-
-# plt.semilogy(t_obs,p_obs,'--')
-# plt.ylim(max(p_obs),min(p_obs))
-
-
 linestyles = ['-','--','--','o']
-
-# colors = ['b','r','g','orange','purple','yellow','pink']
-
-
 
 def readfile(fn,counter):
 
@@ -317,11 +263,6 @@ def readfile(fn,counter):
 
 i1 = 0
 
-tzm_store = np.zeros( ( 200, len(directories), 100 ) )
-pico2_store = np.zeros( (len(directories), 100 ) )
-
-cld_heights = np.linspace(1,10,10)
-
 i_dir=0
 for directory in directories:
 
@@ -481,13 +422,9 @@ for directory in directories:
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
 
                 plt.figure(i1+1)
-                # plt.figure(1)
-                plt.subplot(341)
+                plt.subplot(231)
                 plt.title('tzm')
-                # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
-                # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
-                # plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(grids_on==2):
@@ -496,19 +433,9 @@ for directory in directories:
                     plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()    
-
-                # dt_obs = np.zeros(nlayersm)
-                # dz_obs = np.zeros(nlayersm)
-                # plt.subplot(222)
-                # for i in range(1,nlayersm):
-                #     dt_obs[i] = tzmcols[i,col] - tzmcols[i-1,col]
-                #     dz_obs[i] = (altzmcols[i,col] - altzmcols[i-1,col]) / 1000.
-                # plt.plot(-dt_obs/dz_obs,pzmcols[1:,col])
-
-
                 
                 plt.figure(i1+1)
-                plt.subplot(342)
+                plt.subplot(232)
                 plt.title('htrm')
                 plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
                 plt.xlim(-5,5)
@@ -519,26 +446,18 @@ for directory in directories:
                     plt.legend()
                 
                 plt.figure(i1+1)
-                plt.subplot(343)
+                plt.subplot(233)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
-                # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
-                # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up')
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down')
+                plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net')
                 plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
 
                 plt.figure(i1+1)
-                plt.subplot(345)
-                plt.title('abs_o3')
-                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,7)
+                plt.subplot(234)
                 plt.title('wklm1 (h2o)')
                 plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
@@ -546,7 +465,7 @@ for directory in directories:
                     plt.legend()
 
                 plt.figure(i1+1)
-                plt.subplot(3,4,8)
+                plt.subplot(235)
                 plt.title('wklm2 (co2)')
                 plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
@@ -554,51 +473,14 @@ for directory in directories:
                     plt.legend()
 
                 plt.figure(i1+1)
-                plt.subplot(3,4,9)
+                plt.subplot(236)
                 plt.title('wklm3 (o3)')
                 plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(legends_on==1):
                     plt.legend()
 
-                plt.figure(i1+1)
-                plt.subplot(3,4,10)
-                plt.title('wbrodlm')
-                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,11)
-                plt.title('htro3')
-                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,12)
-                plt.title('htrh2o')
-                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
                 
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,6)
-                plt.title('htrmlw')
-                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.axvline(-0.03,ls='--')
-                plt.axvline(0.03,ls='--')
-                if(legends_on==1):
-                    plt.legend()
 
                 i3+=1
 
@@ -634,359 +516,6 @@ for directory in directories:
 
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
-
-    # pperts = np.linspace(1000,0,10)
-
-    # tzm_master = tzm_master - 20.\
-    # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
-    # x_endpoints = [lapsecritcols_master[0,0,0],lapsecritcols_master[-1,0,0]]
-    # plt.figure(1)
-    # plt.plot(lapsecritcols_master[:,0,0],tzm_master[:,0,0],'-o')
-    # plt.plot(x_endpoints,y_endpoints,'--')
-    # plt.xlabel('Critical lapse rate (K/km)')
-    # plt.ylabel('Surface temperature (K)')
-
-
-    # tzm_master = tzm_master - 20.
-    # h2o_facs = np.linspace(1.,10.,10)
-    # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
-    # x_endpoints = [h2o_facs[0],h2o_facs[-1]]
-    # plt.figure(1)
-    # plt.plot(h2o_facs,tzm_master[:,0,0],'-o')
-    # plt.plot(x_endpoints,y_endpoints,'--')
-    # plt.xlabel('H$_2$O factor')
-    # plt.ylabel('Surface temperature (K)')
-
-    tzm_master = tzm_master - 20.
-    cld_taus = np.linspace(0,9.9,10)
-    y_endpoints=[tzm_master[1,0,0],tzm_master[-1,0,0]]
-    x_endpoints = [cld_taus[1],cld_taus[-1]]
-    plt.figure(1)
-    plt.plot(cld_taus[1:],tzm_master[1:,0,0],'-o')
-    plt.plot(x_endpoints,y_endpoints,'--')
-    plt.xlabel('Cloud $\tau$')
-    plt.ylabel('Surface temperature (K)')
-    plt.figure(2)
-    plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
-    plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
-
-
-    # plt.figure(1)
-    # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
-    # plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
-    # plt.xlabel('$\Delta T$ (K)')
-    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    # plt.ylim(1000,0)
-
-    # for i_fn in range(len(a)):
-
-    #     for col in range(ncols):
-    #         plt.figure(1)
-    #         plt.subplot(121)
-    #         plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
-    #         plt.xlabel('Relative Humidity (%)')
-    #         plt.ylabel('Pressure (hPa)')
-    #         plt.ylim(1000,0)
-    #         plt.axvline(100,linestyle='--')
-    #         plt.legend()
-
-    #         plt.subplot(122)
-    #         plt.plot(tzm_master[i_fn,:,col],pzm_master[i_fn,:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
-    #         plt.ylim(1000,0)
-    #         plt.xlabel('Temperature (K)')
-    #         plt.ylabel('Pressure (hPa)')
-    #         plt.legend()
-
-    # for i_fn in range(len(a)):
-
-    #     # vabsmax = np.max(abs(tzm_master[0,:,:]-tzm_master[1,:,:]))
-
-    #     # plt.figure(1)
-
-    #     # plt.subplot(211)
-    #     # plt.contourf(wklm1_master[i_fn,:,:],20,vmax=6e21)
-    #     # plt.colorbar()
-
-    #     plt.figure(i_fn)
-    #     plt.subplot(121)
-    #     plt.contourf(wklm1_master[i_fn,:,:],10)
-    #     plt.colorbar()
-    #     plt.subplot(122)
-    #     plt.contourf(rel_hum_master[i_fn,:,:],10,vmax=1)
-    #     plt.colorbar()
-        
-        # plt.contourf(tzm_master[0,:,:]-tzm_master[1,:,:],cmap='bwr',vmax=vabsmax,vmin=-vabsmax)
-        
-
-    myvmin=0
-    myvmax=10
-    mymp=1
-
-
-    # titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
-
-    # for i_fn in [0,2,4,6,8]:
-
-    #     print i_fn
-
-        # XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
-
-        # plt.figure(i_fn)
-        # plt.title(titles[i_fn])
-        # plt.contourf(XX,YY,wklm1_master[i_fn,:,:]/wklm1_master[0,:,:],100,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-        # plt.gca().set_yscale('log')
-        # plt.ylim(1000,1000/60.)
-        # plt.xlabel('Latitude')
-        # plt.ylabel('Pressure')
-        # cb = plt.colorbar()
-        # cb.set_label(r'Number of H$_2$O molecules',rotation=270,labelpad=20)
-
-        # plt.figure(1)
-        # # print latwghtavg_2d(wklm1_master[i_fn,:,:],boxlatcols_master[i_fn,0,:])
-        # plt.loglog(latwghtavg_2d(wklm1_master[i_fn,:,:]/wbrodlm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn])
-        # plt.ylim(1000,50)
-        # plt.xlabel('H$_2$O mixing ratio')
-        # plt.ylabel('Pressure (hPa)')
-        # plt.xlim(3e-6)
-        # # plt.gca().minorticks_on()
-        # plt.grid(which='both',axis='both')
-
-
-        # plt.figure(1)
-        # plt.semilogy(latwghtavg_2d(wklm1_master[i_fn+1,:,:]/wbrodlm_master[i_fn+1,:,:]-wklm1_master[i_fn,:,:]/wbrodlm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn/2])
-        # plt.ylim(1000,50)
-        # plt.xlabel('Change in H$_2$O mixing ratio for double CO$_2$')
-        # plt.ylabel('Pressure (hPa)')
-        # # plt.xlim(3e-6)
-        # plt.grid(which='both',axis='both')
-
-        # plt.figure(1)
-        # plt.minorticks_on()
-        # plt.grid(which='both',axis='both')
-        # plt.semilogy(latwghtavg_2d(rel_hum_master[i_fn+1,:,:]-rel_hum_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,1:,0],'-o',label=titles[i_fn/2])
-        # plt.ylim(1000,50)
-        # plt.xlabel('Change in relative humidity for double CO$_2$')
-        # plt.ylabel('Pressure (hPa)')
-
-        # plt.figure(1)
-        # # plt.minorticks_on()
-        # plt.grid(which='both',axis='both')
-        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn+1,:,:]-tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
-        # plt.ylim(1000,50)
-        # plt.xlim(-3,3)
-        # plt.axvline(0,linestyle='--')
-        # plt.xlabel('Change in temperature for double CO$_2$ (K)')
-        # plt.ylabel('Pressure (hPa)')
-
-        # plt.figure(1)
-        # # plt.minorticks_on()
-        # plt.grid(which='both',axis='both')
-        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn/2])
-        # plt.ylim(1000,50)
-        # # plt.xlim(-3,3)
-        # plt.axvline(0,linestyle='--')
-        # plt.xlabel('Temperature (K)')
-        # plt.ylabel('Pressure (hPa)')
-
-        # plt.figure(1)
-        # # print latwghtavg_2d(wklm1_master[i_fn,:,:],boxlatcols_master[i_fn,0,:])
-        # plt.semilogy(latwghtavg_2d(tzm_master[i_fn,:,:],boxlatcols_master[i_fn,0,:]),pzm_master[i_fn,:,0],'-o',label=titles[i_fn])
-        # plt.ylim(1000,50)
-        # plt.xlabel('Temperature (K)')
-        # plt.ylabel('Pressure (hPa)')
-        # # plt.xlim(3e-6)
-        # # plt.gca().minorticks_on()
-        # plt.grid(which='both',axis='both')
-
-
-
-
-    # plt.figure(1)
-    # plt.title('ERA-Interim')
-    # plt.contourf(tzm_master[1,:,:]-tzm_master[0,:,:],20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-    # plt.colorbar()
-
-    # # divnorm = colors.DivergingNorm(vmin=-500, vcenter=0, vmax=4000)
-
-    # plt.figure(2)
-    # plt.title('Manabe-Wetherald')
-    # plt.contourf(tzm_master[3,:,:]-tzm_master[2,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-    # plt.colorbar()
-
-    # plt.figure(3)
-    # plt.title('Cess')
-    # plt.contourf(tzm_master[5,:,:]-tzm_master[4,:,:] - (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-    # plt.colorbar()
-
-    # plt.figure(4)
-    # plt.title('Kasting-Ackerman')
-    # plt.contourf(tzm_master[7,:,:]-tzm_master[6,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-    # plt.colorbar()
-
-    # plt.figure(5)
-    # plt.title('Ramirez')
-    # plt.contourf(tzm_master[9,:,:]-tzm_master[8,:,:]- (tzm_master[1,:,:]-tzm_master[0,:,:]),20,cmap='bwr',norm=MidpointNormalize(midpoint=mymp,vmin=myvmin, vmax=myvmax))
-    # plt.colorbar()
-
-    # i_fn = 0
-    # for fn in a:
-    #     # if (fn=='.DS_Store'):
-    #     #     continue
-    #     plt.figure(1)
-    #     plt.subplot(221)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o',label=str(fn))
-    #     plt.axhline(0)
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('mtransp')
-    #     plt.legend()
-
-    #     plt.subplot(222)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:],'-o',label=str(fn))
-    #     # plt.axhline(0)
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('temp')
-    #     plt.legend()
-
-    #     plt.figure(1)
-    #     plt.subplot(223)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],boxtotnetflux_master[i_fn,:],'-o',label=str(fn))
-    #     plt.axhline(0)
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('totflux')
-    #     plt.legend()
-
-    #     i_fn+=1
-
-
-
-
-    # filenames = np.array(filenames[0])
-
-    # x = np.linspace(-90,90,ncols)
-
-    # lats = boxlatcols_master[:,0,:]
-
-    abs_sw_tot = abs_h2o_cols_master + abs_o3_cols_master + abs_surf_cols_master
-
-    # for i_fn in range(0,len(boxlatcols_master[:,0,0])):
-
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o')
-    #     # plt.plot(boxlatcols_master[i_fn,0,:],abs_sw_tot[i_fn,0,:] - totuflumcols_master[i_fn,-1,:],'-o')
-    #     plt.axhline(0)
-
-    # twarms = [288.,293.,298.,303.,308.]
-    tcolds = [268.,263.,258.,253.,248.]
-
-    # for i_fn in range(len(a)):
-
-    #     # plt.subplot(222)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:],'-o')
-    #     plt.axhline(0)
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('mtransp')
-
-
-
-    # print tzm_master[:,0,:], boxlatcols_master[0,0,:], latwghtavg(tzm_master[:,0,:],boxlatcols_master[0,0,:])
-    
-    # for i_fn in range(len(a)):
-    #     fig=plt.figure(1)
-        
-    #     plt.subplot(231)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,0,:]-tzm_master[0,0,:],'-o',label=a[i_fn])
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('$\Delta T$')
-    #     plt.legend()
-
-    #     plt.subplot(232)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],meridtransp_master[i_fn,0,:]-meridtransp_master[0,0,:],'-o',label=a[i_fn])
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('$\Delta$ meridional transport')
-    #     plt.legend()
-
-    #     plt.subplot(233)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-pzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('$\Delta $Tropopause pressure (hPa)')
-    #     plt.legend()
-
-    #     plt.subplot(234)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],tzm_master[i_fn,conv_trop_ind_master[i_fn,range(ncols)],range(ncols)]-tzm_master[0,conv_trop_ind_master[0,range(ncols)],range(ncols)],'-o',label=a[i_fn])
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('$\Delta $Tropopause temperature (K)')
-    #     plt.legend()
-
-    #     plt.subplot(235)
-    #     plt.plot(boxlatcols_master[i_fn,0,:],lapsecritcols_master[i_fn,0,:]-lapsecritcols_master[0,0,:],'-o',label=a[i_fn])
-    #     plt.xlabel('Latitude')
-    #     plt.ylabel('$\Delta$ Lapse rate (K/km)')
-    #     plt.legend()
-
-        # fig.suptitle('Increased surface albedo in tropics, decreased at poles',y=1.0)
-
-
-    # plt.figure(1)
-    # plt.subplot(221)
-    # plt.plot(lats,tzm_master[0,0,range(ncols)])
-    # plt.plot(lats,tzm_master[1,0,range(ncols)])
-    # plt.subplot(222)
-    # plt.plot(lats,tzm_master[0,conv_trop_ind_master[0,:],range(ncols)])
-    # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
-    # plt.legend()
-
-    pperts = np.linspace(1000,50,10)
-
-    # if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
-    #     pperts = np.linspace(1000,0,10)
-
-    # plt.figure(1)
-    # for i_fn in range(len(a)-1):
-    #     if(a[i_fn]=='.DS_Store'):
-    #         continue
-
-    # plt.figure(1)
-    # plt.title('Change in surface temperature with a perturbation \n in H$_2$O mixing ratio in each 50 hPa range')
-    # plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:])/sum(tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
-    # plt.xlabel('$\Delta T_{surf}$ (K)')
-    # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
-    # plt.ylim(1000,0)
-
-    # print 'Total delta T: {:4.2f}'.format(sum(tzm_master[1:,0,:]-tzm_master[0,0,:]))
-
-
-plt.legend()
-
-# for i in range( shape(tzm_master)[0] ):
-
-#     lats = boxlatcols_master[i,0,:]
-#     pzms = pzm_master[i,:,0]
-#     tzms = tzm_master[i,:,:]
-#     altzms = altzm_master[i,:,0]
-    # tsgm_weighted = sum(tzms[0,:] * np.cos(np.deg2rad(lats)) / sum(np.cos(np.deg2rad(lats)) ))
-
-
-
-    # plt.figure(1)
-    # plt.subplot(121+i)
-    # plt.contourf(lats,pzms,tzms,20)
-    # plt.gca().set_yscale('log')
-    # plt.ylim(1000,10)
-    # plt.xlabel('Latitude')
-    # plt.ylabel('Altitude')
-    # plt.colorbar()
-
-    # plt.figure(2)
-    # plt.plot(lats,tzms[0,:])
-    
-
-# plt.subplot(223)
-# plt.gca().set_yscale('log')
-# plt.ylim(1000,10)
-# plt.contourf(x,y,tzm_master[1,:,:]-tzm_master[0,:,:],20)
-# plt.xlabel('Latitude')
-# plt.ylabel('Altitude')
-# plt.colorbar()
-
 
 
 ############################################################
