@@ -1303,14 +1303,14 @@ subroutine wrapper
                 endif
             enddo
 
-            write(*,1106,advance='no') 'Box SEB | '
-            do col=1,ncols+1
-                if (col < ncols+1) then
-                    write(*,1103,advance='no') sebcols(col)
-                else
-                    write(*,1103) sum(sebcols)/ncols
-                endif
-            enddo
+            ! write(*,1106,advance='no') 'Box SEB | '
+            ! do col=1,ncols+1
+            !     if (col < ncols+1) then
+            !         write(*,1103,advance='no') sebcols(col)
+            !     else
+            !         write(*,1103) sum(sebcols)/ncols
+            !     endif
+            ! enddo
 
             print*, ('----------------------------------------------')
             print*,
@@ -1616,14 +1616,14 @@ subroutine wrapper
                     endif
                 enddo
 
-                write(*,1106,advance='no') 'Box SEB | '
-                do col=1,ncols+1
-                    if (col < ncols+1) then
-                        write(*,1103,advance='no') sebcols(col)
-                    else
-                        write(*,1103) seb_globmean
-                    endif
-                enddo
+                ! write(*,1106,advance='no') 'Box SEB | '
+                ! do col=1,ncols+1
+                !     if (col < ncols+1) then
+                !         write(*,1103,advance='no') sebcols(col)
+                !     else
+                !         write(*,1103) seb_globmean
+                !     endif
+                ! enddo
 
                 print*, ('----------------------------------------------')
                 print*,
@@ -1699,9 +1699,9 @@ subroutine wrapper
 
     tot_albedo = 1.0 - tot_sol_abs_lh / sol_inc
 
-    if (detailprint==1) then
-        write(*,'(A,F6.2)') "total LH albedo: ", tot_albedo
-    endif
+    ! if (detailprint==1) then
+    !     write(*,'(A,F6.2)') "total LH albedo: ", tot_albedo
+    ! endif
 
     write(62,1002) vol_mixco2,totuflum(OLR_layer)
     write(63,'(E8.2)') vol_mixco2
