@@ -348,7 +348,7 @@ for ncols in ncolss:
 			file.close()
 
 
-	interpdir = '/Users/nickedkins/Dropbox/Input Data for RCM Interpolation/'
+	interpdir = 'Input Data for RCM Interpolation/'
 	outdir = project_dir+'Input Distributions/' #output file directory
 
 	misr_cf_latalt_max = np.load(interpdir+'misr_cf_latalt.npy') # maximum-sized array of cloud data, to interpolate onto new smaller grid here
