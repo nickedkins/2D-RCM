@@ -884,7 +884,7 @@ subroutine wrapper
                 end do
 
                 !            call levconvect(col,tzm,altzm,altlaym,lapsecrit,fixed_trop,conv,int(convecttype),malr)
-                call levconvect !nje t0
+                ! call levconvect !nje t0
 
                 conv_trop_ind(col) = minloc(conv(:,col),dim=1)
 
