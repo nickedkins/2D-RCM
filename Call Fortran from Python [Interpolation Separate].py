@@ -23,15 +23,31 @@ os.chdir(project_dir)
 
 # Parameters to play with
 ncols = 1 #number of latitude columns
-ncloudcols = 4 #number of independent cloud columns
-nlays = 60 #number of vertical layers
+ncloudcols = 4 #number of independent cloud columns (ONLY FOR MISR; manual clouds automatically adjusts to number of sets of params specified)
+nlays = 30 #number of vertical layers
 tp = 10. #TOA precision: TOA total net flux (absorbed SW - OLR + meridional transport) < tp in every box for equilibrium (Wm^-2)
 timesteps = 5000 #number of timesteps before model exits (exits earlier if eqb reached)
 min_press = 1. #pressure of highest model layer (hPa)
 cloud_source = 0 #0 for manual clouds, 1 for MISR fractions
 pico2 = 608e-6 #CO2 inventory (bar) (400 ppmV means pico2 = 608e-6 bar, with 1 bar air with molecular mass 28.97g/mol)
+mixco2_prescribed_on = 1 #usually, mixco2 calculated from pico2 and pin2. set mixco2_prescribed_on = 1 to override and use your own mixco2
+mixco2_prescribed = 400e-6 #CO2 volume mixing ratio
 pin2 = 1.0 #N2 inventory (bar)
+cloudloctype = 1 #1 for altitude (km), 2 for pressure (hPa), 3 for temperature (K)
+rmin = 3e-6 * 1e-10 #minimum h2o mixing ratio
+max_rh = 1.1e6 #maximum relative humidity allowed
+fth = [2000.] * ncols #fixed tropopause pressure (hPa). convection forced up to this pressure. If fth > surface p, no forced convection.
+convecttype = 0 #convection type. 0: critical lapse rate (defined here, or from a parameterisation), 2: moist adiabatic lapse rate
+lapse_type = 2 # 1: Held 1982 param, 2: Mason (from ERA-Interim)
+lc = [-5.7]*ncols # critical lapse rate. 
+gas_amt_fac_h2o = 1.0 #multiply the number of h2o molecs in each layer by this factor
+gas_amt_fac_co2 = 1.0
+gas_amt_fac_o3 = 1.0
 
+
+#mnlcld (manual clouds)
+manual_clouds = [] #just leave this if you want clear sky
+# manual_clouds.append([5.0,0.5,9.9]) #[location (p, z, or T), fraction, optical thickness] - add as many sets of cloud params as desired; ncloudcols automatically adjusts
 
 # Parameters to leave alone, ideally
 ur_htr = 0.5 #under-relaxation constant for heating rates
@@ -358,7 +374,6 @@ def interpolate_createprrtminput_sfc(shortname,latarray,lats,lat_facs):
 		file.close()
 
 
-
 interpdir = 'Input Data for RCM Interpolation/'
 outdir = project_dir+'Input Distributions/' #output file directory
 
@@ -379,6 +394,9 @@ latgrid = collats
 latgridbounds = latbounds
 # pgrid = np.linspace(1000,1,nlays)
 # pgrid = np.linspace(1000,min_press,nlays)
+
+tg = createlatdistbn('Doug Mason Temperature vs Latitude') #initial input surface temperatures (to start near equilibrium)
+sa = createlatdistbn('Surface Reflectance') #surface albedo latitude distribution
 
 
 q_latp_max = np.load(interpdir+'q_latp.npy')
@@ -414,17 +432,6 @@ sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc
 
 tboundms = [288.4]
 
-# global_lapses = np.linspace(-2,-8,5)
-global_lapses = [-5.8]
-
-cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)    
-
-# cld_heights = np.linspace(0,12,5)
-cld_heights = [5.0]
-# cld_height = [5.0]
-# cld_taus = np.linspace(0.1,9.9,10)
-cld_tau = 9.9
-
 # mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 mixco2_prescribed_fac = 1.0
 # mixco2_prescribed_facs = np.array([0.03125])
@@ -437,8 +444,8 @@ fsw = 240. #238.24 to replicate RD
 add_cld_alts = 0.0 #change MISR cloud height by this amount
 # lcs = np.linspace(10,2,10)
 # lcs = lcs * -1.
-lc = [-5.7]*ncols
-lapse_type = 2 # 1=H82, 2=Mason
+
+
 # pperts = np.linspace(1000,50,1)
 pperts = []
 # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
@@ -456,12 +463,6 @@ mtransp_type = 2
 
 
 pgrid = np.linspace(psurf_override,min_press,nlays+1)
-
-
-#mnlcld
-manual_clouds = []
-# manual_clouds.append([5.0,0.5,cld_tau])
-
 
 if ( cloud_source == 0 ):
 	ncloudcols = shape(manual_clouds)[0]
@@ -506,13 +507,13 @@ interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 lch = createlatdistbn('Cloud Top Height')
 srh = createlatdistbn('Relative Humidity')
 # srh = [0.8] * ncols
-sa = createlatdistbn('Surface Reflectance')
+
 # sa = list(sa * lat_facs)
 # sa = [0.2] * ncols
 lcf = createlatdistbn('Cloud Fraction')
 lcod = createlatdistbn('Cloud Optical Thickness')
 # tg = createlatdistbn('Surface Temperature')
-tg = createlatdistbn('Doug Mason Temperature vs Latitude')
+
 # for i in range(len(tg)):
 # 	tg[i] += 20.
 # print(tg)
@@ -533,7 +534,7 @@ mc = pico2
 
 ur = 0.5
 icldm = 1
-rmin = 3e-6 * 1e-10
+
 hct = 230.0
 hcf = 0.04e-9   
 hcod = 0.7e-9
@@ -547,7 +548,7 @@ mcod = 1.5e-9
 #fth = np.zeros(ncols)
 #for i in range(ncols):
 #    fth[i] = 15.0 - abs(collats[i])/18.0
-fth = [2000.] * ncols
+
 ol = nlays
 asp = 2.0   
 cs = 0
@@ -557,7 +558,7 @@ fsw = fsw
 fp = 0
 ps1 = 0
 af = 1.0
-dalr = 0 #convection type
+
 npb = 1
 o3sw = 1
 h2osw = 1
@@ -584,14 +585,11 @@ planet_rotation = 7.29e-5
 t_min = 10.
 sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
-
 ur_toafnet = [4.0] * ncols
 ur_seb = 1e10
 couple_tgta = 1
 mtranspon = 1
-gas_amt_fac_h2o = 1.0
-gas_amt_fac_co2 = 1.0
-gas_amt_fac_o3 = 1.0
+
 # gas_amt_p_high_h2o = ppert
 # gas_amt_p_low_h2o = ppert - 50.
 gas_amt_p_high_h2o = 1e6
@@ -604,14 +602,12 @@ gas_amt_pert_h2o = 1 #1 = on, 0=off
 gas_amt_pert_co2 = 1 #1 = on, 0=off
 gas_amt_pert_o3 = 1 #1 = on, 0=off
 psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
-mixco2_prescribed_on = 1
-mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
 steps_before_toa_adj = 5
 a_green = 0.4
 b_green = 20.
 c_green = 5.
 H_green = 7.
-cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
+
 surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
 # lapse_type = 1
 h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
@@ -622,7 +618,7 @@ ur_mt = 1.0
 gas_addmolec_h2o = 0.0
 gas_addmolec_co2 = 0.0
 gas_addmolec_o3 = 0.0
-max_rh = 1.1e6
+
 
 ur1 = ur
 
@@ -630,13 +626,14 @@ counter = 0
 
 ur = ur1
 
-params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
+params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,convecttype,
 npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
 twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
 gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
 surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot]
 
+#writes parameter list to a file that can be read by main fortran program
 f = open(project_dir+'/Earth RCM Parameters','w')
 for m in params:
 	if type(m) is list:
@@ -661,8 +658,9 @@ for i in range(1,4):
 	loc = project_dir+'2D RCM GitHub'
 	os.chdir(project_dir)
 	print(os.getcwd())  # Prints the current working directory
-	p = subprocess.Popen([loc])
+	p = subprocess.Popen([loc]) # opens the app (the compiled main fortran program)
 
+	# error checking
 	stdoutdata, stderrdata = p.communicate()
 	# print 'return code = %4d' % (p.returncode)
 	print('return code = {}'.format(p.returncode))
@@ -672,7 +670,7 @@ for i in range(1,4):
 	if (p.returncode == 0):
 		break
 	elif (p.returncode == -11 or p.returncode == -8 or p.returncode == 11 or p.returncode == 12):
-		ur = ur*2
+		ur = ur*2 #these error codes usually mean the under-relaxation constant was too low; double it and try again
 	continue
 
 counter = counter + 1
