@@ -18,7 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/' #change this to the directory you put the files in
+os.chdir(project_dir)
 
 # Parameters to play with
 ncols = 1 #number of latitude columns
@@ -38,7 +39,8 @@ days = timesteps/ur_htr #number of actual days model runs for (max)
 steps_before_first_eqbcheck = 30 #
 snapshot=0 #
 
-
+# for each lat column, creates files, containing cloud altitude, fraction, and optical thickness, to be read in by main fortran program
+# creates one set of {altitude, fraction, tau} for each cloud column
 def create_misr_cloud_inputs(add_cld_alt):
 				
 	cfs = misr_cf_latalt_max
@@ -130,6 +132,58 @@ def create_misr_cloud_inputs(add_cld_alt):
 		file.write('0.0') # set tau of clear column to 0
 		file.write('\n')
 		file.close()
+
+# creates cloud input files from manual cloud inputs specified in this script
+def create_manual_cloud_inputs():	
+	# Calculate clear sky fraction with random overlap assumption
+	c1 = 0.
+	c2 = 0.
+	ctot = 0.
+	for cloudcol in range(ncloudcols):
+		c1 = manual_clouds[cloudcol][1]
+		ctot = c1 + c2 - c1*c2
+		c2 = ctot
+	clearfrac = np.ones(ncols) * ( 1.0 - ctot )
+	manual_clouds_wghtd_frac = np.zeros(ncloudcols)
+
+	for cloudcol in range(ncloudcols):
+		manual_clouds_wghtd_frac[cloudcol] = manual_clouds[cloudcol][1] * ctot / sum(np.array(manual_clouds)[:,1])
+
+	for col in range(ncols):
+		filename = 'ccfracs col %2d' % (col)
+		fileloc = outdir + filename
+		file = open(fileloc,'w')
+		for cloudcol in range(ncloudcols):
+			file.write( str( manual_clouds_wghtd_frac[cloudcol] ) )
+			file.write('\n')
+		file.write(str(clearfrac[col])) # add the clear fraction on at the end
+		file.write('\n')
+		file.close()
+
+	for col in range(ncols):
+		filename = 'ccalts col %2d' % (col)
+		fileloc = outdir + filename
+		file = open(fileloc,'w')
+		for cloudcol in range(ncloudcols):
+			file.write( str( manual_clouds[cloudcol][0] ) )
+			file.write('\n')
+		file.write('1.0') # set altitude for clear column to 1 km
+		file.write('\n')
+		file.close()
+
+
+	for col in range(ncols):
+		filename = 'cctaus col %2d' % (col)
+		fileloc = outdir + filename
+		file = open(fileloc,'w')
+		for cloudcol in range(ncloudcols):
+			file.write( str( manual_clouds[cloudcol][2] ) )
+			file.write('\n')
+		file.write('0.0') # set tau of clear column to 0
+		file.write('\n')
+		file.close()
+
+# interpolates to find values of variable at each model lat, given an observed lat distribution
 def createlatdistbn(filename):
 	fileloc = 'Latitudinal Distributions/'+filename+'.txt'
 	file = open(fileloc,'r')
@@ -144,9 +198,13 @@ def createlatdistbn(filename):
 	f = interpolate.interp1d(lat,var)    
 	varinterp = list(f(latgrid))
 	return varinterp
+
+# calculates area-weighted average of variable
 def findweightedglobavg(var):
 	weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
 	return weightedglobalavgvar
+
+# creates input files of variables for main fortran program using input from ERA-Interim (10 year average)
 def interpolate_createprrtminput_lev(shortname,latparray,ps,lats,lat_facs):
 	lats = lats #latitudes at 5 deg spacing - resolution at which I sampled ERA-I earlier 
 	pressures = ps # ERA-I pressures
@@ -253,6 +311,8 @@ def interpolate_createprrtminput_lev(shortname,latparray,ps,lats,lat_facs):
 				file.write('\n')
 
 			file.close()
+
+# same as above but for non-layer variables			
 def interpolate_createprrtminput_sfc(shortname,latarray,lats,lat_facs):
 	lats = lats
 	z = latarray
@@ -296,55 +356,7 @@ def interpolate_createprrtminput_sfc(shortname,latarray,lats,lat_facs):
 			file.write('\n')
 
 		file.close()
-def create_manual_cloud_inputs():
-	
-	# Calculate clear sky fraction with random overlap assumption
-	c1 = 0.
-	c2 = 0.
-	ctot = 0.
-	for cloudcol in range(ncloudcols):
-		c1 = manual_clouds[cloudcol][1]
-		ctot = c1 + c2 - c1*c2
-		c2 = ctot
-	clearfrac = np.ones(ncols) * ( 1.0 - ctot )
-	manual_clouds_wghtd_frac = np.zeros(ncloudcols)
 
-	for cloudcol in range(ncloudcols):
-		manual_clouds_wghtd_frac[cloudcol] = manual_clouds[cloudcol][1] * ctot / sum(np.array(manual_clouds)[:,1])
-
-	for col in range(ncols):
-		filename = 'ccfracs col %2d' % (col)
-		fileloc = outdir + filename
-		file = open(fileloc,'w')
-		for cloudcol in range(ncloudcols):
-			file.write( str( manual_clouds_wghtd_frac[cloudcol] ) )
-			file.write('\n')
-		file.write(str(clearfrac[col])) # add the clear fraction on at the end
-		file.write('\n')
-		file.close()
-
-	for col in range(ncols):
-		filename = 'ccalts col %2d' % (col)
-		fileloc = outdir + filename
-		file = open(fileloc,'w')
-		for cloudcol in range(ncloudcols):
-			file.write( str( manual_clouds[cloudcol][0] ) )
-			file.write('\n')
-		file.write('1.0') # set altitude for clear column to 1 km
-		file.write('\n')
-		file.close()
-
-
-	for col in range(ncols):
-		filename = 'cctaus col %2d' % (col)
-		fileloc = outdir + filename
-		file = open(fileloc,'w')
-		for cloudcol in range(ncloudcols):
-			file.write( str( manual_clouds[cloudcol][2] ) )
-			file.write('\n')
-		file.write('0.0') # set tau of clear column to 0
-		file.write('\n')
-		file.close()
 
 
 interpdir = 'Input Data for RCM Interpolation/'
@@ -401,8 +413,6 @@ surf_layer_shc = 3.e3
 sebfac = (60.*60.*24.) / (surf_layer_depth * surf_layer_density * surf_layer_shc)
 
 tboundms = [288.4]
-
-#for pertcol in range(ncols):
 
 # global_lapses = np.linspace(-2,-8,5)
 global_lapses = [-5.8]
