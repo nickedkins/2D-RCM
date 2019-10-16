@@ -18,15 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-#testdevmerge
-
 project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 # project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
+os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcols = 1
-nlays = 99
+nlays = 30
 tp = 0.5
 timesteps = 5000
 ur_htr = 0.5
@@ -132,7 +131,7 @@ for ncols in ncolss:
 			file.write('\n')
 			file.close()
 	def createlatdistbn(filename):
-		fileloc = '/Users/nickedkins/Dropbox/Latitudinal Distributions/'+filename+'.txt'
+		fileloc = 'Latitudinal Distributions/'+filename+'.txt'
 		file = open(fileloc,'r')
 		lat = []
 		var = []
