@@ -21,11 +21,11 @@ directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
-directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
-]
+# directories = [
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -66,7 +66,7 @@ def init_plotting():
     plt.rcParams['legend.loc'] = 'best'
     plt.rcParams['axes.linewidth'] = 1
 
-    plt.rcParams['lines.linewidth'] = 1.0   
+    plt.rcParams['lines.linewidth'] = 1.0  *2.0 
     plt.rcParams['lines.markersize'] = 8 
     plt.rcParams['figure.facecolor'] = 'white'
     plt.rcParams['axes.facecolor'] = 'white'
@@ -647,6 +647,7 @@ for directory in directories:
     # plt.ylabel('Surface temperature (K)')
 
 
+
     # tzm_master = tzm_master - 20.
     # h2o_facs = np.linspace(1.,10.,10)
     # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
@@ -657,19 +658,6 @@ for directory in directories:
     # plt.xlabel('H$_2$O factor')
     # plt.ylabel('Surface temperature (K)')
 
-    tzm_master = tzm_master - 20.
-    cld_taus = np.linspace(0,9.9,10)
-    y_endpoints=[tzm_master[1,0,0],tzm_master[-1,0,0]]
-    x_endpoints = [cld_taus[1],cld_taus[-1]]
-    plt.figure(1)
-    plt.plot(cld_taus[1:],tzm_master[1:,0,0],'-o')
-    plt.plot(x_endpoints,y_endpoints,'--')
-    plt.xlabel('Cloud $\tau$')
-    plt.ylabel('Surface temperature (K)')
-    plt.figure(2)
-    plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
-    plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
-
 
     # plt.figure(1)
     # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
@@ -678,24 +666,29 @@ for directory in directories:
     # plt.ylabel('Pressure at bottom of perturbation (hPa)')
     # plt.ylim(1000,0)
 
-    # for i_fn in range(len(a)):
 
-    #     for col in range(ncols):
-    #         plt.figure(1)
-    #         plt.subplot(121)
-    #         plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
-    #         plt.xlabel('Relative Humidity (%)')
-    #         plt.ylabel('Pressure (hPa)')
-    #         plt.ylim(1000,0)
-    #         plt.axvline(100,linestyle='--')
-    #         plt.legend()
+    # titles = ['ERA-Interim','Manabe-Wetherald','Cess','Kasting-Ackerman','Ramirez']
+    titles = ['ERA-Interim','Ramirez']
+    linestyles = ['-', '--']
 
-    #         plt.subplot(122)
-    #         plt.plot(tzm_master[i_fn,:,col],pzm_master[i_fn,:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
-    #         plt.ylim(1000,0)
-    #         plt.xlabel('Temperature (K)')
-    #         plt.ylabel('Pressure (hPa)')
-    #         plt.legend()
+    for i_fn in range(len(a)):
+
+        for col in range(ncols):
+            plt.figure(1)
+            # plt.subplot(121)
+            plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],linestyle = linestyles[i_fn],label=titles[i_fn]+str(int(boxlatcols_master[i_fn,0,col])))
+            plt.xlabel('Relative Humidity (%)')
+            plt.ylabel('Pressure (hPa)')
+            plt.ylim(1000,0)
+            plt.axvline(100,linestyle='--')
+            plt.legend()
+
+            # plt.subplot(122)
+            # plt.plot(tzm_master[i_fn,:,col],pzm_master[i_fn,:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))
+            # plt.ylim(1000,0)
+            # plt.xlabel('Temperature (K)')
+            # plt.ylabel('Pressure (hPa)')
+            # plt.legend()
 
     # for i_fn in range(len(a)):
 

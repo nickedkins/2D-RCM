@@ -589,19 +589,23 @@ subroutine wrapper
                 case(0) !ERA-Interim
                     read(82,*) mixh2o(i)
                     mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
+                    rel_hum_cols(i,col) = mixh2o(i) / (es(i)/pavelm(i))
                 case(1) !MW67
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    rel_hum_cols(i,col) = rel_hum(i)
                 case(2) !Cess
                     omega_rh = 1. - 0.03*(tzm(0)-288.)
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    rel_hum_cols(i,col) = rel_hum(i)
                 case(3) !Kasting and Ackerman
                     omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
                     if (omega_rh > 1.) omega_rh=1
                     if (omega_rh < 0.) omega_rh=0
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    rel_hum_cols(i,col) = rel_hum(i)
                 case(4) !Ramirez 2013
                     omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
                     if (omega_rh > 1.) omega_rh=1
@@ -618,10 +622,13 @@ subroutine wrapper
                     & ( 0.0166 / (es(1)/pzm(0)) ) * ( ( 1. + 0.59 )/( 1. + bowen_r13 ) )
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    rel_hum_cols(i,col) = rel_hum(i)
                 end select
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
+                ! rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
+                ! rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) )
+                ! rel_hum_cols(i,col) = mixh2o(i) / (0.622*es(i)/pavelm(i))
                 if (rel_hum_cols(i,col) > max_rh) then
                     rel_hum_cols(i,col) = max_rh
                     mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))

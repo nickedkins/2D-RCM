@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1]
+ncolss = [6]
 ncloudcols = 1
 nlays = 30
 tp = 0.5
@@ -33,7 +33,7 @@ days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
-snapshot=0
+snapshot=1
 
 for ncols in ncolss:
 
@@ -366,7 +366,7 @@ for ncols in ncolss:
 	latgrid = collats
 	latgridbounds = latbounds
 	# pgrid = np.linspace(1000,1,nlays)
-	# pgrid = np.linspace(1000,min_press,nlays)
+	pgrid = np.linspace(1000,min_press,nlays)
 	
 
 	q_latp_max = np.load(interpdir+'q_latp.npy')
@@ -376,12 +376,26 @@ for ncols in ncolss:
 
 	q_ps = np.load(interpdir+'q_ps.npy')
 	o3_ps = np.load(interpdir+'o3_ps.npy')
-	t_ps = np.load(interpdir+'t_ps.npy')
+	t_ps = np.load(interpdir+'t_ps.npy')	
 
 	q_lats = np.load(interpdir+'q_lats.npy')
 	o3_lats = np.load(interpdir+'o3_lats.npy')
 	fal_lats = np.load(interpdir+'fal_lats.npy')
 	t_lats = np.load(interpdir+'t_lats.npy')
+
+	# XX,YY = np.meshgrid(q_lats,q_ps)
+
+	# Tcels = t_latp_max - 273.15
+	# es2 = 6.1094*exp((17.625*Tcels)/(Tcels+243.04))
+	# rh2 = np.zeros((37,37))
+	# for i in range(37):
+	# 	for j in range(37):
+	# 		rh2[i,j] = q_latp_max[i,j]*q_ps[i]/es2[i,j] * 100.
+
+
+	# plt.contourf(XX,YY,rh2,10)
+	# plt.ylim(1000,0)
+	# plt.colorbar()
 
 	pa = 0.3    
 	sc = [1362.0]
@@ -438,8 +452,8 @@ for ncols in ncolss:
 	# cld_heights = np.linspace(0,12,5)
 	cld_heights = [5.0]
 	# cld_height = [5.0]
-	cld_taus = np.linspace(0.1,9.9,10)
-	# cld_taus = [9.9]
+	# cld_taus = np.linspace(0.1,9.9,10)
+	cld_taus = [9.9]
 
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0
@@ -453,7 +467,7 @@ for ncols in ncolss:
 	add_cld_alts = [0.0]
 	# lcs = np.linspace(10,2,10)
 	# lcs = lcs * -1.
-	lcs = [-5.7] * ncols
+	lcs = [-5.7]
 	lapse_types = [2] # 1=H82, 2=Mason
 	pperts = np.linspace(1000,50,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
@@ -463,7 +477,7 @@ for ncols in ncolss:
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0]
+	h2o_sources=[0,4]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -560,7 +574,7 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																	
 																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-																		# lc = [-6.5] * ncols
+																		lc = [lc] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
 																		#    lc[i] *= 1.5
