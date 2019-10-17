@@ -21,11 +21,10 @@ directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
-# directories = [
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/rh comparisons/snapshots/era vs ramirez/'
+]
+
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -673,15 +672,43 @@ for directory in directories:
 
     for i_fn in range(len(a)):
 
-        for col in range(ncols):
-            plt.figure(1)
-            # plt.subplot(121)
-            plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],linestyle = linestyles[i_fn],label=titles[i_fn]+str(int(boxlatcols_master[i_fn,0,col])))
-            plt.xlabel('Relative Humidity (%)')
-            plt.ylabel('Pressure (hPa)')
-            plt.ylim(1000,0)
-            plt.axvline(100,linestyle='--')
-            plt.legend()
+        plt.figure(1)
+        plt.subplot(131+i_fn)
+        plt.gca().set_title(titles[i_fn])
+        XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
+        plt.contourf(XX,YY,rel_hum_master[i_fn,:,:]*100.,20)
+        plt.xlabel('Latitude')
+        plt.ylabel('Pressure (hPa)')
+        cbar = plt.colorbar()
+        cbar.ax.set_xlabel('RH %')
+        plt.ylim(1000,0)
+
+        # for col in range(ncols):
+        #     print conv_trop_ind_master[i_fn,col]
+        #     plt.plot(boxlatcols_master[i_fn,0,col],pzm_master[i_fn,conv_trop_ind_master[i_fn,col],col],'o')
+
+    plt.figure(1)
+    plt.subplot(133)
+    plt.gca().set_title('Ramirez - ERA-Interim')
+    XX,YY = np.meshgrid(boxlatcols_master[i_fn,0,:],pzm_master[i_fn,1:,0])
+    # plt.contourf(XX,YY,rel_hum_master[1,:,:]/rel_hum_master[0,:,:],20,cmap='bwr',norm=MidpointNormalize(midpoint=1,vmin=0, vmax=10))
+    plt.contourf(XX,YY,rel_hum_master[1,:,:]-rel_hum_master[0,:,:],20,cmap='bwr',norm=MidpointNormalize(midpoint=0))
+    plt.xlabel('Latitude')
+    plt.ylabel('Pressure (hPa)')
+    cbar = plt.colorbar()
+    cbar.ax.set_xlabel(r'$\Delta$ RH %')
+    plt.ylim(1000,0)
+
+
+        # for col in range(ncols):
+        #     plt.figure(1)
+        #     # plt.subplot(121)
+        #     plt.plot(rel_hum_master[i_fn,:,col]*100.,pzm_master[i_fn,1:,0],linestyle = linestyles[i_fn],label=titles[i_fn]+str(int(boxlatcols_master[i_fn,0,col])))
+        #     plt.xlabel('Relative Humidity (%)')
+        #     plt.ylabel('Pressure (hPa)')
+        #     plt.ylim(1000,0)
+        #     plt.axvline(100,linestyle='--')
+        #     plt.legend()
 
             # plt.subplot(122)
             # plt.plot(tzm_master[i_fn,:,col],pzm_master[i_fn,:,0],'-o',label='lat: '+str(int(boxlatcols_master[i_fn,0,col])))

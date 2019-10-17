@@ -23,9 +23,9 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [6]
+ncolss = [20]
 ncloudcols = 1
-nlays = 30
+nlays = 100
 tp = 0.5
 timesteps = 5000
 ur_htr = 0.5
@@ -609,7 +609,7 @@ for ncols in ncolss:
 																	
 																		ur = 0.5
 																		icldm = 1
-																		rmin = 3e-6 * 1e-10
+																		rmin = 3e-6
 																		hct = 230.0
 																		hcf = 0.04e-9   
 																		hcod = 0.7e-9
@@ -698,7 +698,7 @@ for ncols in ncolss:
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
-																		max_rh = 1.1e6
+																		max_rh = 1.0
 																	
 																		ur1 = ur
 																	
