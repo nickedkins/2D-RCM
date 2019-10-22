@@ -15,7 +15,7 @@ legends_on = 0
 grids_on = 1
 
 directories = [
-'_Current Output/',
+'_Current Output/'
 ]
 
 # set the colormap and centre the colorbar
@@ -425,6 +425,8 @@ for directory in directories:
                 plt.subplot(231)
                 plt.title('tzm')
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
+                plt.xlabel('Temperature (K)')
+                plt.ylabel('Pressure (hPa)')
                 plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(grids_on==2):
@@ -438,45 +440,85 @@ for directory in directories:
                 plt.subplot(232)
                 plt.title('htrm')
                 plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlabel('Heating rate (K/day)')
+                plt.ylabel('Pressure (hPa)')
                 plt.xlim(-5,5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 plt.axvline(-0.1,ls='--')
                 plt.axvline(0.1,ls='--')
+                if(grids_on==2):
+                    plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.grid(which='both',axis='both')
+                if(legends_on==1):
+                    plt.legend()  
                 if(legends_on==1):
                     plt.legend()
                 
                 plt.figure(i1+1)
                 plt.subplot(233)
                 plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up')
-                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down')
-                plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net')
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='Up')
+                plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='Down')
+                plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='Net')
+                plt.xlabel('Flux (Wm$^{-2}$)')
+                plt.ylabel('Pressure (hPa)')
                 plt.axvline(0,ls='--')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==2):
+                    plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.grid(which='both',axis='both')
                 if(legends_on==1):
-                    plt.legend()
+                    plt.legend()  
+                # if(legends_on==1):
+                plt.legend()
 
                 plt.figure(i1+1)
                 plt.subplot(234)
                 plt.title('wklm1 (h2o)')
-                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.loglog(wklm1cols[:,col]/wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlabel('H$_2$O volume mixing ratio')
+                plt.ylabel('Pressure (hPa)')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==2):
+                    plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.grid(which='both',axis='both')
+                if(legends_on==1):
+                    plt.legend()  
                 if(legends_on==1):
                     plt.legend()
 
                 plt.figure(i1+1)
                 plt.subplot(235)
                 plt.title('wklm2 (co2)')
-                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.semilogy(wklm2cols[:,col]/wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlabel('Temperature (K)')
+                plt.ylabel('Pressure (hPa)')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==2):
+                    plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.grid(which='both',axis='both')
+                if(legends_on==1):
+                    plt.legend()  
                 if(legends_on==1):
                     plt.legend()
 
                 plt.figure(i1+1)
                 plt.subplot(236)
                 plt.title('wklm3 (o3)')
-                plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
+                plt.semilogy(wklm3cols[1:,col]/wbrodlmcols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlabel('Temperature (K)')
+                plt.ylabel('Pressure (hPa)')
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(grids_on==2):
+                    plt.gca().minorticks_on()
+                if(grids_on==1):
+                    plt.grid(which='both',axis='both')
+                if(legends_on==1):
+                    plt.legend()  
                 if(legends_on==1):
                     plt.legend()
 

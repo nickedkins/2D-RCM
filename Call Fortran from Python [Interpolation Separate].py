@@ -18,17 +18,17 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/' #change this to the directory you put the files in
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/' #change this to the directory you put the files in
 os.chdir(project_dir)
 
 # Parameters to play with
 ncols = 1 #number of latitude columns
 ncloudcols = 4 #number of independent cloud columns (ONLY FOR MISR; manual clouds automatically adjusts to number of sets of params specified)
-nlays = 30 #number of vertical layers
+nlays = 100 #number of vertical layers
 tp = 10. #TOA precision: TOA total net flux (absorbed SW - OLR + meridional transport) < tp in every box for equilibrium (Wm^-2)
 timesteps = 5000 #number of timesteps before model exits (exits earlier if eqb reached)
 min_press = 1. #pressure of highest model layer (hPa)
-cloud_source = 0 #0 for manual clouds, 1 for MISR fractions
+cloud_source = 1 #0 for manual clouds, 1 for MISR fractions
 pico2 = 608e-6 #CO2 inventory (bar) (400 ppmV means pico2 = 608e-6 bar, with 1 bar air with molecular mass 28.97g/mol)
 mixco2_prescribed_on = 1 #usually, mixco2 calculated from pico2 and pin2. set mixco2_prescribed_on = 1 to override and use your own mixco2
 mixco2_prescribed = 400e-6 #CO2 volume mixing ratio
@@ -36,7 +36,7 @@ pin2 = 1.0 #N2 inventory (bar)
 cloudloctype = 1 #1 for altitude (km), 2 for pressure (hPa), 3 for temperature (K)
 rmin = 3e-6 * 1e-10 #minimum h2o mixing ratio
 max_rh = 1.1e6 #maximum relative humidity allowed
-fth = [2000.] * ncols #fixed tropopause pressure (hPa). convection forced up to this pressure. If fth > surface p, no forced convection.
+fth = [600.] * ncols #fixed tropopause pressure (hPa). convection forced up to this pressure. If fth > surface p, no forced convection.
 convecttype = 0 #convection type. 0: critical lapse rate (defined here, or from a parameterisation), 2: moist adiabatic lapse rate
 lapse_type = 2 # 1: Held 1982 param, 2: Mason (from ERA-Interim)
 lc = [-5.7]*ncols # critical lapse rate. 
@@ -441,7 +441,7 @@ psurf_override = 1000.
 #fsws = np.linspace(200,500,num=8)
 fsw = 240. #238.24 to replicate RD
 # add_cld_alts = [0.0,6.1]
-add_cld_alts = 0.0 #change MISR cloud height by this amount
+add_cld_alt = 0.0 #change MISR cloud height by this amount
 # lcs = np.linspace(10,2,10)
 # lcs = lcs * -1.
 
