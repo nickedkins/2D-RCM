@@ -133,6 +133,7 @@ MODULE VARIABLES
     real :: gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,&
     gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3
     integer :: gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,mixco2_prescribed_on,steps_before_toa_adj,cloudloctype
+    real :: gas_amt_p_high_ch4, gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4
     real :: psurf_override,mixco2_prescribed,a_green,b_green,c_green,H_green
     real :: h_scale,f_cor,beta,gamma_d
     real, dimension(maxncols) :: d_mid,d_trop

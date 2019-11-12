@@ -12,7 +12,7 @@ import matplotlib.colors as colors
 
 
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -635,9 +635,9 @@ for directory in directories:
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-    # pperts = np.linspace(1000,0,10)
+    pperts = np.linspace(1000,50,10)
 
-    # tzm_master = tzm_master - 20.\
+    # tzm_master = tzm_master - 20.
     # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
     # x_endpoints = [lapsecritcols_master[0,0,0],lapsecritcols_master[-1,0,0]]
     # plt.figure(1)
@@ -671,12 +671,12 @@ for directory in directories:
     # plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
 
 
-    # plt.figure(1)
-    # plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of H$_2$O molecules in each 50 hPa range')
-    # plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
-    # plt.xlabel('$\Delta T$ (K)')
-    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    # plt.ylim(1000,0)
+    plt.figure(1)
+    plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of CH$_4$ molecules in each 50 hPa range')
+    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
+    plt.xlabel('$\Delta T$ (K)')
+    plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    plt.ylim(1000,0)
 
     # for i_fn in range(len(a)):
 

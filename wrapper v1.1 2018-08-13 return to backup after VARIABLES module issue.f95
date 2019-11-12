@@ -198,6 +198,11 @@ subroutine wrapper
     read(73,*) snapshot
     read(73,*) piar
     read(73,*) pich4
+    read(73,*) gas_amt_p_high_ch4
+    read(73,*) gas_amt_p_low_ch4
+    read(73,*) gas_amt_pert_ch4
+    read(73,*) gas_amt_fac_ch4
+    read(73,*) gas_addmolec_ch4
 
     close(73)
 
@@ -670,6 +675,12 @@ subroutine wrapper
                     if (gas_amt_pert_o3 == 1) then
                         wklm(3,i) = wklm(3,i) * gas_amt_fac_o3
                         wklm(3,i) = wklm(3,i) + gas_addmolec_o3
+                    end if
+                end if
+                if(pzm(i) < gas_amt_p_high_ch4 .and. pzm(i) > gas_amt_p_low_ch4) then 
+                    if (gas_amt_pert_ch4 == 1) then
+                        wklm(6,i) = wklm(6,i) * gas_amt_fac_ch4
+                        wklm(6,i) = wklm(6,i) + gas_addmolec_ch4
                     end if
                 end if
             enddo

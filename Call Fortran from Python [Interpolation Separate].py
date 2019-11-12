@@ -24,7 +24,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 os.chdir(project_dir)
 
 ncolss = [1]
-ncloudcols = 2
+ncloudcols = 1
 nlays = 100
 tp = 0.1
 timesteps = 5000
@@ -398,7 +398,9 @@ for ncols in ncolss:
 	pin2 = 0.78084 #%
 	pio2 = 0.20946 #%
 	piar = 0.009340 #%
-	pich4 = 1650e-9 #rcemip
+	pich4 = 1650e-9*2. #rcemip
+
+	inv_sum = (pico2+pin2+pio2+piar+pich4) * 1e3
 	# pico2s = np.array([420e-6])
 
 	# pin2s = np.logspace(-1,2,num=10,base=10.0)
@@ -449,9 +451,8 @@ for ncols in ncolss:
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0
 	# mixco2_prescribed_facs = np.array([0.03125])
-
-	# psurf_overrides = [1000.,2000.]
 	psurf_overrides = [1000.]
+	# psurf_overrides = [1.]
 	#fsws = np.linspace(200,500,num=8)
 	fsws = [260.] #238.24 to replicate RD
 	# add_cld_alts = [0.0,6.1]
@@ -460,11 +461,11 @@ for ncols in ncolss:
 	# lcs = lcs * -1.
 	lcs = [-5.7] * ncols
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,1)
+	pperts = np.linspace(1000,50,10)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [1.,2.]
+	gas_amt_fac_co2s = [1.]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
@@ -517,6 +518,7 @@ for ncols in ncolss:
 
 																		# nlays = nlayss[i_pso]
 																		pgrid = np.linspace(psurf_override,min_press,nlays+1)
+																		# pgrid = np.linspace(inv_sum,min_press,nlays+1)
 
 																		add_cld_alt = add_cld_alts[i_pso]
 
@@ -657,7 +659,7 @@ for ncols in ncolss:
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_fac_ch4 = 1.0
+																		gas_amt_fac_ch4 = 1.1
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - 50.
 																		gas_amt_p_high_h2o = 1e6
@@ -666,8 +668,8 @@ for ncols in ncolss:
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
-																		gas_amt_p_high_ch4 = 1e6
-																		gas_amt_p_low_ch4 = 0.
+																		gas_amt_p_high_ch4 = ppert
+																		gas_amt_p_low_ch4 = ppert-50.
 																		gas_amt_pert_h2o = 1 #1 = on, 0=off
 																		gas_amt_pert_co2 = 1 #1 = on, 0=off
 																		gas_amt_pert_o3 = 1 #1 = on, 0=off
@@ -691,6 +693,7 @@ for ncols in ncolss:
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
+																		gas_addmolec_ch4 = 0.0
 																		max_rh = 1.1e6
 																	
 																		ur1 = ur
@@ -705,7 +708,7 @@ for ncols in ncolss:
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
 																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot,
-																		piar,pich4]
+																		piar,pich4,gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:
