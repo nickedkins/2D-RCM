@@ -284,6 +284,7 @@ subroutine wrapper
     ! Gas inventories
     pin2 = pin2 * 1e5 !convert the input in bar to Pa
     pico2 = pico2 * 1e5 !convert the input in bar to Pa
+    pio2 = pio2 * 1e5
     piar = piar * 1e5 !convert the input in bar to Pa
     pich4 = pich4 * 1e5 !convert the input in bar to Pa
 
@@ -389,6 +390,7 @@ subroutine wrapper
         mperlayr(i) = totmolec/nlayersm !Divide the molecules equally between layers
         mperlayr_air(i) = (molec_n2 + molec_o2)/(nlayersm)
         mperlayr_co2(i) = (molec_co2)/(nlayersm)
+        mperlayr_co2(i) = (molec_co2)/(nlayersm)
     enddo
 
     !Set up mixing ratio of broadening molecules (N2 and O2 mostly)
@@ -398,9 +400,12 @@ subroutine wrapper
         if (mixco2_prescribed_on ==1) then
             wklm(2,i) = mperlayr(i) * 1.0e-4 * mixco2_prescribed
         else
-            wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+            ! wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+            wklm(2,i) = mperlayr(i) * vol_mixco2
         endif
         wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
+        wklm(6,i) = mperlayr(i) * 1.0e-4 * vol_mixch4
+        wklm(7,i) = mperlayr(i) * 1.0e-4 * vol_mixo2
         ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
     enddo
 
