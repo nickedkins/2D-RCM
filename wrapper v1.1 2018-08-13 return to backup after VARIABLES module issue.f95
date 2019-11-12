@@ -282,36 +282,46 @@ subroutine wrapper
     mixo2 = 0.21
 
     ! Gas inventories
-    n2_inv = pin2 * 1.0e5
-    o2_inv = pio2 * 1.0e5
-    air_inv = n2_inv + o2_inv
-    co2_inv = pico2 * 1.0e5 ! convert the input in bar to Pa
+    pin2 = pin2 * 1e5 !convert the input in bar to Pa
+    pico2 = pico2 * 1e5 !convert the input in bar to Pa
+    piar = piar * 1e5 !convert the input in bar to Pa
+    pich4 = pich4 * 1e5 !convert the input in bar to Pa
 
-    massatmo_co2 = co2_inv / gravity ! [kg]
-    massatmo_n2 = n2_inv / gravity ! [kg]
-    massatmo_o2 = o2_inv / gravity ! [kg]
+    piair = pin2 + pio2 + piar
 
-    massatmo = massatmo_co2 + massatmo_n2 + massatmo_o2
+    massatmo_co2 = pico2 / gravity ! [kg]
+    massatmo_n2 = pin2 / gravity ! [kg]
+    massatmo_o2 = pio2 / gravity ! [kg]
+    massatmo_ar = piar / gravity ! [kg]
+    massatmo_ch4 = pich4 / gravity ! [kg]
+
+    massatmo = massatmo_co2 + massatmo_n2 + massatmo_o2 + massatmo_ar + massatmo_ch4
 
     ! Gas mass mixing ratios 
     mass_mixco2 = massatmo_co2 / massatmo
     mass_mixn2 = massatmo_n2 / massatmo
     mass_mixo2 = massatmo_o2 / massatmo
+    mass_mixar = massatmo_ar / massatmo
+    mass_mixch4 = massatmo_ch4 / massatmo
 
     ! Number of molecules of each gas
     molec_co2 = massatmo_co2 / mmwco2 * avogadro
     molec_n2 = massatmo_n2 / mmwn2 * avogadro
     molec_o2 = massatmo_o2 / mmwo2 * avogadro
+    molec_ar = massatmo_ar / mmwar * avogadro
+    molec_ch4 = massatmo_ch4 / mmwch4 * avogadro
 
-    totmolec = molec_co2 + molec_n2 + molec_o2
+    totmolec = molec_co2 + molec_n2 + molec_o2 + molec_ar + molec_ch4
 
     ! Gas volume mixing ratios
     vol_mixco2 = molec_co2 / totmolec
     vol_mixn2 = molec_n2 / totmolec
     vol_mixo2 = molec_o2 / totmolec
+    vol_mixar = molec_ar / totmolec
+    vol_mixch4 = molec_ch4 / totmolec
 
     ! Mean molecular weight of the atmosphere
-    mmwtot = mmwco2 * vol_mixco2 + mmwn2 * vol_mixn2 + mmwo2 * vol_mixo2
+    mmwtot = mmwco2 * vol_mixco2 + mmwn2 * vol_mixn2 + mmwo2 * vol_mixo2 + mmwar*vol_mixar + mmwch4*vol_mixch4
 
     do i=1,nlayersm
         cpco2(i) = 0.000879 * tavelm(i) + 0.589073
