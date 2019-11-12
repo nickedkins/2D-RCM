@@ -71,8 +71,9 @@ MODULE VARIABLES
     ! real, parameter :: PI = 3.14159265359
     real :: startsecs, startmins, endsecs, endmins, starthours, endhours, totsecs, secsperloop
     integer :: fixed_trop_ind
-    real :: pico2, pin2, pio2, massatmo_n2, massatmo_co2, massatmo_o2
-    real :: molec_co2, molec_n2, molec_o2, vol_mixn2, vol_mixo2, mass_mixn2, mass_mixo2, mmwtot, mass_mixco2, vol_mixco2
+    real :: pico2, pin2, pio2,piar,pich4,piair,massatmo_n2, massatmo_co2, massatmo_o2,massatmo_ar,massatmo_ch4
+    real :: molec_co2, molec_n2, molec_o2,molec_ar,molec_ch4, vol_mixn2, vol_mixo2,vol_mixar,vol_mixch4, mass_mixn2,&
+    mass_mixo2,mass_mixar,mass_mixch4, mmwtot, mass_mixco2, vol_mixco2
     real, dimension(maxlaym) :: rspecific_co2, cvco2, cvtot, rsp_tot, malr
     real :: htransp, currentmaxhtr
     real, dimension(maxlaym) :: newur
