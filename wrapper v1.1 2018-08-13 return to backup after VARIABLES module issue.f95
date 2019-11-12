@@ -196,6 +196,8 @@ subroutine wrapper
     read(73,*) gas_addmolec_o3
     read(73,*) max_rh
     read(73,*) snapshot
+    read(73,*) piar
+    read(73,*) pich4
 
     close(73)
 

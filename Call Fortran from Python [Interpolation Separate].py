@@ -394,7 +394,11 @@ for ncols in ncolss:
 	# pico2_facs = np.array([1e-2,0.5,1,2,8])
 	pico2_facs = np.array([1.0])
 	pico2s = np.array([420e-6]) * pico2_facs
-	pico2 = 400e-6
+	pico2 = 348e-6 #rcemip
+	pin2 = 0.78084 #%
+	pio2 = 0.20946 #%
+	piar = 0.009340 #%
+	pich4 = 1650e-9 #rcemip
 	# pico2s = np.array([420e-6])
 
 	# pin2s = np.logspace(-1,2,num=10,base=10.0)
@@ -629,9 +633,6 @@ for ncols in ncolss:
 																		maxhtr = 0.1
 																		asf = 4.0
 																		tuf = 1.0   
-																		n2inv = pin2
-																		#n2inv = 0.8
-																		o2inv = 0.0
 																		htransp = 1.0 #reduce lapse rate to account for horizontal transport
 																		ipe = 1
 																		dp = 1
@@ -656,6 +657,7 @@ for ncols in ncolss:
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
+																		gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - 50.
 																		gas_amt_p_high_h2o = 1e6
@@ -664,11 +666,14 @@ for ncols in ncolss:
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
+																		gas_amt_p_high_ch4 = 1e6
+																		gas_amt_p_low_ch4 = 0.
 																		gas_amt_pert_h2o = 1 #1 = on, 0=off
 																		gas_amt_pert_co2 = 1 #1 = on, 0=off
 																		gas_amt_pert_o3 = 1 #1 = on, 0=off
+																		gas_amt_pert_ch4 = 1 #1 = on, 0=off
 																		psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
-																		mixco2_prescribed_on = 1
+																		mixco2_prescribed_on = 0
 																		mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
 																		steps_before_toa_adj = 5
 																		a_green = 0.4
@@ -695,11 +700,12 @@ for ncols in ncolss:
 																		ur = ur1
 																	
 																		params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
-																		npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
+																		npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, pin2, pio2, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
 																		twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot]
+																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot,
+																		piar,pich4]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:
