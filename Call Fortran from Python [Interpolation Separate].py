@@ -18,20 +18,20 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [1]
-ncloudcols = 1
-nlays = 30
-tp = 0.5
+ncloudcols = 2
+nlays = 100
+tp = 0.1
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
-cloud_source = 0 #0 for manual, 1 for MISR
+cloud_source = 1 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
 
@@ -394,6 +394,7 @@ for ncols in ncolss:
 	# pico2_facs = np.array([1e-2,0.5,1,2,8])
 	pico2_facs = np.array([1.0])
 	pico2s = np.array([420e-6]) * pico2_facs
+	pico2 = 400e-6
 	# pico2s = np.array([420e-6])
 
 	# pin2s = np.logspace(-1,2,num=10,base=10.0)
@@ -431,15 +432,15 @@ for ncols in ncolss:
 	#for pertcol in range(ncols):
 
 	# global_lapses = np.linspace(-2,-8,5)
-	global_lapses = [-5.8]
+	global_lapses = [-5.7]
 
 	cloud_loc_type = 0 # 0: pressure (hPa), 1: altitude (km), 2: temperature (K)    
 
 	# cld_heights = np.linspace(0,12,5)
 	cld_heights = [5.0]
 	# cld_height = [5.0]
-	cld_taus = np.linspace(0.1,9.9,10)
-	# cld_taus = [9.9]
+	# cld_taus = np.linspace(0.1,9.9,10)
+	cld_taus = [9.9]
 
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0
@@ -459,11 +460,11 @@ for ncols in ncolss:
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2 = co2_facs[0]
+	gas_amt_fac_co2s = [1.,2.]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0]
+	h2o_sources=[1]
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -499,15 +500,15 @@ for ncols in ncolss:
 														for tboundm in tboundms:
 															for sa in sas:
 																for pin2 in pin2s:
-																	for pico2 in pico2s:
+																	for gas_amt_fac_co2 in gas_amt_fac_co2s:
 
 																		nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)\
 																		*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
 																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)*len(lcs)\
 																		*len(h2o_facs)
 																		print("Number of loops: ", nloops)
-																		secsperloop = 0.5 #uni
-																		# secsperloop = 1.5 #home
+																		# secsperloop = 0.5 #uni
+																		secsperloop = 1.5 #home
 																		print("Estimated mins: ",nloops*secsperloop/60.)
 
 																		# nlays = nlayss[i_pso]
@@ -559,7 +560,8 @@ for ncols in ncolss:
 																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 																		interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																	
-																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																		if (lapse_type == 2):
+																			lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		# lc = [-6.5] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
@@ -593,7 +595,7 @@ for ncols in ncolss:
 																	
 																		mc = pico2  
 																	
-																		ur = 0.5
+																		ur = ur_htr
 																		icldm = 1
 																		rmin = 3e-6 * 1e-10
 																		hct = 230.0

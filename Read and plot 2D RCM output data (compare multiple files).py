@@ -12,7 +12,7 @@ import matplotlib.colors as colors
 
 
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -21,11 +21,11 @@ directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
-directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
-]
+# directories = [
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -657,18 +657,18 @@ for directory in directories:
     # plt.xlabel('H$_2$O factor')
     # plt.ylabel('Surface temperature (K)')
 
-    tzm_master = tzm_master - 20.
-    cld_taus = np.linspace(0,9.9,10)
-    y_endpoints=[tzm_master[1,0,0],tzm_master[-1,0,0]]
-    x_endpoints = [cld_taus[1],cld_taus[-1]]
-    plt.figure(1)
-    plt.plot(cld_taus[1:],tzm_master[1:,0,0],'-o')
-    plt.plot(x_endpoints,y_endpoints,'--')
-    plt.xlabel('Cloud $\tau$')
-    plt.ylabel('Surface temperature (K)')
-    plt.figure(2)
-    plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
-    plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
+    # tzm_master = tzm_master - 20.
+    # cld_taus = np.linspace(0,9.9,10)
+    # y_endpoints=[tzm_master[1,0,0],tzm_master[-1,0,0]]
+    # x_endpoints = [cld_taus[1],cld_taus[-1]]
+    # plt.figure(1)
+    # plt.plot(cld_taus[1:],tzm_master[1:,0,0],'-o')
+    # plt.plot(x_endpoints,y_endpoints,'--')
+    # plt.xlabel('Cloud $\tau$')
+    # plt.ylabel('Surface temperature (K)')
+    # plt.figure(2)
+    # plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
+    # plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
 
 
     # plt.figure(1)
