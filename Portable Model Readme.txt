@@ -8,7 +8,7 @@ For the first time user, the important file is 'Call Fortran from Python [Interp
 
 This Python script uses these parameters to write input files to the local directory, which can then be read by 'wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95'. This is the main Fortran program. It provides a wrapper in which layer and level p, T, z, etc. are calculated and the necessary information is prepared in the correct form to be used by 'rrtm.f', which performs the radiative transfer calculations.
 
-At the end of the run, the model writes an output file stamped with the date and time into a folder called '_Raw Output Data'. The output file contains the final temepratures, fluxes, heating rates, and several other variables.
+At the end of the run, the model writes an output file stamped with the date and time into a folder called '_Raw Output Data'. The output file contains the final temperatures, fluxes, heating rates, and several other variables.
 
 While the model runs, you'll see printed the tropopause layer and the maximum heating rate above the tropopause. This should approach 0 as equilibrium is reached. Currently it's a bit buggy and often mis-identifies the maximum heating rate, but it still provides an idea of how the run is progressing. Don't worry about this too much - you can see the actual heating rates when you plot the output file.
 
