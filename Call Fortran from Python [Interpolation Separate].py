@@ -23,15 +23,15 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1]
+ncolss = [1,2,4,8,16]
 ncloudcols = 1
-nlays = 100
-tp = 0.1
+nlays = 30
+tp = 0.2
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
-cloud_source = 1 #0 for manual, 1 for MISR
+cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
 
@@ -407,7 +407,7 @@ for ncols in ncolss:
 	pin2s = [1.0]
 	# pin2s = [2.0]
 
-	#pico2s = [400e-6,3200e-6]
+	# pico2s = [400e-6]
 
 
 	pertlay=0
@@ -454,22 +454,22 @@ for ncols in ncolss:
 	psurf_overrides = [1000.]
 	# psurf_overrides = [1.]
 	#fsws = np.linspace(200,500,num=8)
-	fsws = [260.] #238.24 to replicate RD
+	fsws = [240.] #238.24 to replicate RD
 	# add_cld_alts = [0.0,6.1]
 	add_cld_alts = [0.0]
 	# lcs = np.linspace(10,2,10)
 	# lcs = lcs * -1.
-	lcs = [-5.7] * ncols
-	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,10)
+	lcs = [-5.7]
+	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
+	pperts = np.linspace(1000,50,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [1.]
+	gas_amt_fac_co2s = [1.,2.]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[1]
+	h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -527,7 +527,7 @@ for ncols in ncolss:
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
 																		# manual_clouds.append([450,0.66,9.9])
-																		manual_clouds.append([5.0,0.5,cld_tau])
+																		# manual_clouds.append([5.0,0.5,cld_tau])
 																		
 														
 																		# sa = [sa] * ncols
@@ -656,10 +656,10 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		# gas_amt_fac_h2o = 1.0
+																		gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_fac_ch4 = 1.1
+																		gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - 50.
 																		gas_amt_p_high_h2o = 1e6
@@ -687,7 +687,7 @@ for ncols in ncolss:
 																		# lapse_type = 1
 																		h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
 																		h2o_for = 1
-																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
+																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
 																		gas_addmolec_h2o = 0.0
