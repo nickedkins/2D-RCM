@@ -187,7 +187,7 @@ subroutine wrapper
     read(73,*) lapse_type !type of lapse rate 0: critical lapse rate input 1: Held's parameterisation
     read(73,*) h2o_sb !H2O self-broadening 0:off 1:on
     read(73,*) h2o_for !H2O foreign broadening 0:off 1:on
-    read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
+    read(73,*) h2o_source ! 0=ERA-Interim mixh2o, 1=MW67 RH, 2=Cess, 3=Kasting, 4=Ramirez
     read(73,*) ur_mt !under-relaxation constant for meridional transport
     read(73,*) mtransp_type !source of meridional transport 1:simple diffusion 2:Vladilo
     read(73,*) steps_before_first_eqbcheck !number of steps before first adjustment to approach TOA equilibrium
@@ -641,12 +641,12 @@ subroutine wrapper
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 end select
-                if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                ! if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
                 if (rel_hum_cols(i,col) > max_rh) then
                     rel_hum_cols(i,col) = max_rh
-                    mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
+                    ! mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
                 end if
             enddo
 

@@ -18,20 +18,20 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcols = 1
 nlays = 100
-tp = 0.1
+tp = 0.01
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
-cloud_source = 1 #0 for manual, 1 for MISR
+cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
 
@@ -454,22 +454,25 @@ for ncols in ncolss:
 	psurf_overrides = [1000.]
 	# psurf_overrides = [1.]
 	#fsws = np.linspace(200,500,num=8)
-	fsws = [260.] #238.24 to replicate RD
+	fsws = [240.] #238.24 to replicate RD
 	# add_cld_alts = [0.0,6.1]
 	add_cld_alts = [0.0]
 	# lcs = np.linspace(10,2,10)
 	# lcs = lcs * -1.
 	lcs = [-5.7] * ncols
 	lapse_types = [2] # 1=H82, 2=Mason
-	pperts = np.linspace(1000,50,10)
-	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	# print pperts
+	nperts = 50
+	pert_thickness = 1000./nperts
+	pperts = np.linspace(1000,pert_thickness,nperts)
+	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	print pperts
+	# pperts = [2000.,1000.]
 	co2_facs = [1.]
 	gas_amt_fac_co2s = [1.]
-	# h2o_facs = [1.0]
+	# h2o_facs = [1.0]c
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[1]
+	h2o_sources=[0] #0=ERA-Interim mixh2o, 1=MW67 RH, 2=Cess, 3=Kasting, 4=Ramirez
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -512,8 +515,8 @@ for ncols in ncolss:
 																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(twarms)*len(lcs)\
 																		*len(h2o_facs)
 																		print("Number of loops: ", nloops)
-																		# secsperloop = 0.5 #uni
-																		secsperloop = 1.5 #home
+																		secsperloop = 0.5 #uni
+																		# secsperloop = 1.5 #home
 																		print("Estimated mins: ",nloops*secsperloop/60.)
 
 																		# nlays = nlayss[i_pso]
@@ -527,7 +530,7 @@ for ncols in ncolss:
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
 																		# manual_clouds.append([450,0.66,9.9])
-																		manual_clouds.append([5.0,0.5,cld_tau])
+																		# manual_clouds.append([5.0,0.5,cld_tau])
 																		
 														
 																		# sa = [sa] * ncols
@@ -622,7 +625,7 @@ for ncols in ncolss:
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 0
+																		fswon = 1
 																		fsw = fsw
 																		fp = 0
 																		ps1 = 0
@@ -656,20 +659,22 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		# gas_amt_fac_h2o = 1.0
+																		gas_amt_fac_h2o = 1.5
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_fac_ch4 = 1.1
-																		# gas_amt_p_high_h2o = ppert
-																		# gas_amt_p_low_h2o = ppert - 50.
-																		gas_amt_p_high_h2o = 1e6
-																		gas_amt_p_low_h2o = 0.
+																		gas_amt_fac_ch4 = 1.0
+																		gas_amt_p_high_h2o = ppert
+																		gas_amt_p_low_h2o = ppert - pert_thickness
+																		# gas_amt_p_high_h2o = 1e6
+																		# gas_amt_p_low_h2o = 0.
 																		gas_amt_p_high_co2 = 1e6
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
-																		gas_amt_p_high_ch4 = ppert
-																		gas_amt_p_low_ch4 = ppert-50.
+																		gas_amt_p_high_ch4 = 1e6
+																		gas_amt_p_low_ch4 = 0
+																		# gas_amt_p_high_ch4 = ppert
+																		# gas_amt_p_low_ch4 = ppert-50.
 																		gas_amt_pert_h2o = 1 #1 = on, 0=off
 																		gas_amt_pert_co2 = 1 #1 = on, 0=off
 																		gas_amt_pert_o3 = 1 #1 = on, 0=off
@@ -690,11 +695,12 @@ for ncols in ncolss:
 																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
+																		# gas_addmolec_h2o = 1.0e18
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																		gas_addmolec_ch4 = 0.0
-																		max_rh = 1.1e6
+																		max_rh = 1.0
 																	
 																		ur1 = ur
 																	
@@ -741,6 +747,7 @@ for ncols in ncolss:
 																			print('return code = {}'.format(p.returncode))
 																			print('------------------------------------------------------------------------------------------')
 																			print
+																			#print('Loop # {}, {:4.1f}% complete'.format(counter,np.float(counter)/np.float(nloops)))
 																	
 																			if (p.returncode == 0):
 																				break

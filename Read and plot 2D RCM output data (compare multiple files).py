@@ -18,14 +18,11 @@ grids_on = 1
 
 directories = [
 '_Current Output/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Current Output/'
 ]
 
-# directories = [
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/lapse/'
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/q/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/nonlinearity tests/cld_tau/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/self replication/nl=100/Relative/pert 100/',
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -635,7 +632,17 @@ for directory in directories:
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-    pperts = np.linspace(1000,50,10)
+    # pperts = np.linspace(1000,50,20)
+    # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+
+    nperts = 10
+    pert_thickness = 1000./nperts
+    pperts = np.linspace(1000,pert_thickness,nperts)
+    pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+
+    # pperts = [2000.,1000.]
+
+    # pperts = [2000.,1000.,800.,600.,400.,350.,300.,250.,200.,150.,100.]
 
     # tzm_master = tzm_master - 20.
     # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
@@ -670,13 +677,21 @@ for directory in directories:
     # plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
     # plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
 
+    init_h2o_molec = sum(wklm1_master[0,:,0])
+
+    print('Integrated temperature change: {:4.2f} K'.format(sum(tzm_master[:,0,0]-tzm_master[0,0,0])))
+    print('Initial total H2O molecules: {:4.2e}'.format(init_h2o_molec))
+    print('Integrated water vapor change (total molecules): {:4.2e}'.format(sum(wklm1_master[:,:,0]-wklm1_master[0,:,0])))
+    print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
+    print
 
     plt.figure(1)
-    plt.title('Change in equilibrium surface temperature with an \n absolute increase in number of CH$_4$ molecules in each 50 hPa range')
-    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o')
+    plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in each 50 hPa range')
+    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o',label=dir_label)
     plt.xlabel('$\Delta T$ (K)')
     plt.ylabel('Pressure at bottom of perturbation (hPa)')
     plt.ylim(1000,0)
+    # plt.xlim(0,0.2)
 
     # for i_fn in range(len(a)):
 
@@ -934,7 +949,6 @@ for directory in directories:
     # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
     # plt.legend()
 
-    pperts = np.linspace(1000,50,10)
 
     # if (dir_label == 'Manabe-Wetherald 3 Clouds' or dir_label == 'Manabe-Wetherald Warmer'):
     #     pperts = np.linspace(1000,0,10)
