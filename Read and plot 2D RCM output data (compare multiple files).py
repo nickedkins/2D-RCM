@@ -21,7 +21,11 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/shine and sinha v2/self replication/nl=100/Relative/pert 100/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=1/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=2/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=4/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=8/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=16/',
 ]
 
 # set the colormap and centre the colorbar
@@ -319,6 +323,8 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 
 cld_heights = np.linspace(1,10,10)
 
+ncolss = [1,2,4,8,16]
+
 i_dir=0
 for directory in directories:
 
@@ -366,7 +372,6 @@ for directory in directories:
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
         abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
         meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols = readfile(fn,counter)
-
 
         tzm_master.append(tzmcols)  
         pzm_master.append(pzmcols)
@@ -627,7 +632,7 @@ for directory in directories:
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
-    boxtotnetflux_master = meridtransp_master[:,0,:] + box_abssw_tot_master[:,0,:] - totuflumcols_master[:,-1,:]
+    # boxtotnetflux_master = meridtransp_master[:,0,:] + box_abssw_tot_master[:,0,:] - totuflumcols_master[:,-1,:]
 
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
@@ -643,6 +648,20 @@ for directory in directories:
     # pperts = [2000.,1000.]
 
     # pperts = [2000.,1000.,800.,600.,400.,350.,300.,250.,200.,150.,100.]
+
+    # print 'dT = ', latwghtavg(tzm_master[1,0,:] - tzm_master[0,0,:],boxlatcols_master[0,0,:])
+    # print 'T1 = ',latwghtavg(tzm_master[0,0,:],boxlatcols_master[0,0,:])
+    # print 'T2 = ',latwghtavg(tzm_master[1,0,:],boxlatcols_master[0,0,:])
+
+    plt.figure(1)
+    # dT = latwghtavg(tzm_master[1,0,:] - tzm_master[0,0,:],boxlatcols_master[0,0,:])
+    # plt.plot(ncolss[i_dir-1],dT,'o')
+    plt.plot(boxlatcols_master[0,0,:], tzm_master[1,0,:]-tzm_master[0,0,:],'-o',label='Columns: '+str(ncolss[i_dir-1]))
+    plt.xlabel('Latitude')
+    plt.ylabel('$\Delta T_g$')
+    plt.legend()
+    # plt.ylim(0)
+
 
     # tzm_master = tzm_master - 20.
     # y_endpoints=[tzm_master[0,0,0],tzm_master[-1,0,0]]
@@ -685,6 +704,7 @@ for directory in directories:
     print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
     print
 
+
     plt.figure(1)
     plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in each 50 hPa range')
     plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o',label=dir_label)
@@ -692,6 +712,7 @@ for directory in directories:
     plt.ylabel('Pressure at bottom of perturbation (hPa)')
     plt.ylim(1000,0)
     # plt.xlim(0,0.2)
+
 
     # for i_fn in range(len(a)):
 

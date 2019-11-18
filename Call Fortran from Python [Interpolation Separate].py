@@ -23,7 +23,7 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1]
+ncolss = [1,2,4,8,16]
 ncloudcols = 1
 nlays = 100
 tp = 0.01
@@ -407,7 +407,7 @@ for ncols in ncolss:
 	pin2s = [1.0]
 	# pin2s = [2.0]
 
-	#pico2s = [400e-6,3200e-6]
+	# pico2s = [400e-6]
 
 
 	pertlay=0
@@ -459,20 +459,17 @@ for ncols in ncolss:
 	add_cld_alts = [0.0]
 	# lcs = np.linspace(10,2,10)
 	# lcs = lcs * -1.
-	lcs = [-5.7] * ncols
-	lapse_types = [2] # 1=H82, 2=Mason
-	nperts = 50
-	pert_thickness = 1000./nperts
-	pperts = np.linspace(1000,pert_thickness,nperts)
-	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-	print pperts
-	# pperts = [2000.,1000.]
+	lcs = [-5.7]
+	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
+	pperts = np.linspace(1000,50,1)
+	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [1.]
-	# h2o_facs = [1.0]c
+	gas_amt_fac_co2s = [1.,2.]
+	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0] #0=ERA-Interim mixh2o, 1=MW67 RH, 2=Cess, 3=Kasting, 4=Ramirez
+	h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -659,7 +656,7 @@ for ncols in ncolss:
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
-																		gas_amt_fac_h2o = 1.5
+																		gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
 																		gas_amt_fac_ch4 = 1.0
@@ -692,7 +689,7 @@ for ncols in ncolss:
 																		# lapse_type = 1
 																		h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
 																		h2o_for = 1
-																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH
+																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
 																		# gas_addmolec_h2o = 1.0e18
