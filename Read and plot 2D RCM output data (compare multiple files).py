@@ -21,11 +21,8 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=1/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=2/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=4/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=8/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/low res met soc expts/2xco2/ncols varied/fsw off/ncols=16/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/low res met soc expts/2xco2/1d vs 2d/ncols=1/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/low res met soc expts/2xco2/1d vs 2d/ncols=5/',
 ]
 
 # set the colormap and centre the colorbar
@@ -698,19 +695,19 @@ for directory in directories:
 
     init_h2o_molec = sum(wklm1_master[0,:,0])
 
-    print('Integrated temperature change: {:4.2f} K'.format(sum(tzm_master[:,0,0]-tzm_master[0,0,0])))
-    print('Initial total H2O molecules: {:4.2e}'.format(init_h2o_molec))
-    print('Integrated water vapor change (total molecules): {:4.2e}'.format(sum(wklm1_master[:,:,0]-wklm1_master[0,:,0])))
-    print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
-    print
+    # print('Integrated temperature change: {:4.2f} K'.format(sum(tzm_master[:,0,0]-tzm_master[0,0,0])))
+    # print('Initial total H2O molecules: {:4.2e}'.format(init_h2o_molec))
+    # print('Integrated water vapor change (total molecules): {:4.2e}'.format(sum(wklm1_master[:,:,0]-wklm1_master[0,:,0])))
+    # print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
+    # print
 
 
-    plt.figure(1)
-    plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in each 50 hPa range')
-    plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o',label=dir_label)
-    plt.xlabel('$\Delta T$ (K)')
-    plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    plt.ylim(1000,0)
+    # plt.figure(1)
+    # plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in each 50 hPa range')
+    # plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o',label=dir_label)
+    # plt.xlabel('$\Delta T$ (K)')
+    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    # plt.ylim(1000,0)
     # plt.xlim(0,0.2)
 
 

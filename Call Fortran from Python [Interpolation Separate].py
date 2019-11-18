@@ -23,11 +23,11 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1,2,4,8,16]
+ncolss = [1,5]
 # ncolss = [1]
 ncloudcols = 1
 nlays = 30
-tp = 0.1
+tp = 0.5
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -470,7 +470,7 @@ for ncols in ncolss:
 	# lcs = lcs * -1.
 	lcs = [-5.7]
 	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
-	nperts = 10
+	nperts = 1
 	pert_thickness = 1000./nperts
 	pperts = np.linspace(1000,pert_thickness,nperts)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
@@ -633,7 +633,7 @@ for ncols in ncolss:
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 1
+																		fswon = 0
 																		fsw = fsw
 																		fp = 0
 																		ps1 = 0
@@ -663,7 +663,7 @@ for ncols in ncolss:
 																		sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 																		playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
 																		
-																		ur_toafnet = [4.0] * ncols
+																		ur_toafnet = [8.0] * ncols
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
