@@ -24,9 +24,10 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 os.chdir(project_dir)
 
 ncolss = [1,2,4,8,16]
+# ncolss = [1]
 ncloudcols = 1
-nlays = 100
-tp = 0.01
+nlays = 30
+tp = 0.1
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -141,8 +142,16 @@ for ncols in ncolss:
 				var.append(float(l.split(',')[1]))
 		# lat = data[:,0]
 		# var = data[:,1]    
-		f = interpolate.interp1d(lat,var)    
-		varinterp = list(f(latgrid))
+		f = interpolate.interp1d(lat,var)
+		templats = np.linspace(-90,90,30)
+		varinterp = np.zeros(len(latgrid))
+		cossums=np.zeros(len(latgrid))
+		for j in range(len(latgridbounds)-1):
+			for i in range(len(templats)):
+				if (templats[i] > latgridbounds[j] and templats[i] < latgridbounds[j+1]):
+					varinterp[j] += f(templats[i]) * np.cos(np.deg2rad(templats[i]) )
+					cossums[j] += np.cos(np.deg2rad(templats[i]))
+		varinterp = list(varinterp / cossums)
 		return varinterp
 	def findweightedglobavg(var):
 		weightedglobalavgvar = sum(var*np.cos(radians(latgrid))) / sum(np.cos(radians(latgrid)))
@@ -461,7 +470,9 @@ for ncols in ncolss:
 	# lcs = lcs * -1.
 	lcs = [-5.7]
 	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
-	pperts = np.linspace(1000,50,1)
+	nperts = 10
+	pert_thickness = 1000./nperts
+	pperts = np.linspace(1000,pert_thickness,nperts)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
