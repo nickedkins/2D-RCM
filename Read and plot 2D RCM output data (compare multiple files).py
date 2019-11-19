@@ -12,7 +12,7 @@ import matplotlib.colors as colors
 
 
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -20,11 +20,13 @@ directories = [
 '_Current Output/',
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/erai/bottom up/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/erai/top down/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/ch4 perts/',
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/individual/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/cumulative/bottom up/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/cumulative/top down/',
+]
+
+directions = [1,1,2]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -322,7 +324,7 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 cld_heights = np.linspace(1,10,10)
 
 ncolss = [1,2,4,8,16]
-pertfacs = [1.,-1.]
+# pertfacs = [1.,-1.]
 
 i_dir=0
 for directory in directories:
@@ -641,9 +643,28 @@ for directory in directories:
 
     nperts = 10
     pert_thickness = 1000./nperts
-    pperts = np.linspace(1000,pert_thickness,nperts)
-    pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+    # pperts = np.linspace(1000,pert_thickness,nperts)
+    # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+    
+    # bottom up:
+    if(directions[i_dir-1]==1):
+        pperts = np.linspace(1000,pert_thickness,nperts)
+        # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+    # top down:
+    if(directions[i_dir-1]==2):
+        pperts = np.linspace(pert_thickness,1000,nperts)
+        # pperts = np.insert(pperts,0,np.array([0.]),axis=0)
 
+
+    print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
+
+    plt.figure(1)
+    plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
+    plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
+    plt.xlabel('$\Delta T$ (K)')
+    plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    plt.ylim(1000,0)
+    # plt.xlim(0,0.2)
 
     # pperts = [2000.,1000.]
 
@@ -704,16 +725,7 @@ for directory in directories:
     # print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
     # print
 
-    print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
-
-    # print 'i_dir', i_dir
-    # plt.figure(1)
-    # plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
-    # plt.plot((tzm_master[:,0,0]-tzm_master[0,0,0])*pertfacs[i_dir-1],pperts,'-o',label=dir_label)
-    # plt.xlabel('$\Delta T$ (K)')
-    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    # plt.ylim(1000,0)
-    # # plt.xlim(0,0.2)
+    
 
 
     # for i_fn in range(len(a)):

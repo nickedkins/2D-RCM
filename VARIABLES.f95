@@ -1,6 +1,6 @@
 MODULE VARIABLES
 
-    integer,parameter				::MAXLAYM=203,MXMOLM=38,NBANDSM=16,MAXNCOLS=99,MAXNCLOUDCOLS=10,maxextraclds=2
+    integer,parameter				::MAXLAYM=603,MXMOLM=39,NBANDSM=16,MAXNCOLS=99,MAXNCLOUDCOLS=10,maxextraclds=2
     real,dimension(MAXLAYM)			::pavelm,tavelm,wbrodlm
     real,dimension(0:MAXLAYM)		::altzm,tzm,pzm,totuflum,totdflum,fnetm,htrm=0.,logpzm
     real,dimension(MXMOLM,MAXLAYM)	::wklm
@@ -15,7 +15,7 @@ MODULE VARIABLES
     real,parameter					::universal=avogadro*boltzmann
     real,parameter					::solar_constant=1362.0
     real,parameter					::Liv=2836631.0,eps=0.622,cplh=1003.0,hv = 2501000.0
-    real,parameter :: r_earth = 6371e3
+    real,parameter :: r_earth = 6371e3  
 
     integer	::nlayersm,ioutm,iatmm,ixsectm,iscatm,numangsm,icldm,iemissm,nmolm,ireflecm
     real	::tboundm

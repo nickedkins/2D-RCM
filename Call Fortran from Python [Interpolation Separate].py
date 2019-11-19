@@ -26,8 +26,8 @@ os.chdir(project_dir)
 ncolss = [1]
 # ncolss = [1]
 ncloudcols = 1
-nlays = 30
-nperts = 1
+nlays = 100
+nperts = 10
 tp = 0.01
 timesteps = 5000
 ur_htr = 0.5
@@ -36,7 +36,7 @@ min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
-h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
+h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 
 for ncols in ncolss:
 
@@ -409,7 +409,7 @@ for ncols in ncolss:
 	pin2 = 0.78084 #%
 	pio2 = 0.20946 #%
 	piar = 0.009340 #%
-	pich4 = 1650e-9 #rcemip
+	pich4 = 1650e-9  #rcemip
 
 	inv_sum = (pico2+pin2+pio2+piar+pich4) * 1e3
 	# pico2s = np.array([420e-6])
@@ -474,12 +474,16 @@ for ncols in ncolss:
 	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
 	# nperts = 5
 	pert_thickness = 1000./nperts
-	pperts = np.linspace(1000,pert_thickness,nperts)
+	# bottom up:
+	pperts = np.linspace(1000-pert_thickness,0,nperts)
 	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	# top down:
+	# pperts = np.linspace(pert_thickness,1000,nperts)
+	# pperts = np.insert(pperts,0,np.array([-1000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [1.0]
-	gas_amt_fac_ch4s = [100.]
+	gas_amt_fac_co2s = [2.0]
+	gas_amt_fac_ch4s = [1.0]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
@@ -677,12 +681,13 @@ for ncols in ncolss:
 																		# gas_amt_p_low_h2o = ppert - pert_thickness
 																		gas_amt_p_high_h2o = 1e6
 																		gas_amt_p_low_h2o = 0.
-																		gas_amt_p_high_co2 = 1e6
-																		gas_amt_p_low_co2 = 0.
+																		# gas_amt_p_high_co2 = 1e6
+																		# gas_amt_p_low_co2 = 0.
 																		# gas_amt_p_high_co2 = ppert
 																		# gas_amt_p_low_co2 = ppert - pert_thickness
-																		# gas_amt_p_high_co2 = 1000.
-																		# gas_amt_p_low_co2 = ppert
+																		gas_amt_p_high_co2 = 1000.
+																		gas_amt_p_low_co2 = ppert
+																		print gas_amt_p_high_co2,'to ', gas_amt_p_low_co2
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
 																		gas_amt_p_high_ch4 = 1e6
@@ -714,7 +719,7 @@ for ncols in ncolss:
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																		gas_addmolec_ch4 = 0.0
-																		max_rh = 1.0
+																		max_rh = 1.0 * 1e6
 																	
 																		ur1 = ur
 																	

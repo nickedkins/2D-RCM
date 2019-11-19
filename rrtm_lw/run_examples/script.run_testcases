@@ -1,0 +1,90 @@
+#!/bin/tcsh
+# Must set the location of the rrtm executable in the
+# rrtm_prog variable directory below.
+
+set rrtm_prog = rrtm
+
+echo Run ICRCCM example
+\cp input_rrtm_ICRCCM_sonde INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_ICRCCM_sonde
+
+echo RUN input_rrtm_MLS
+\cp input_rrtm_MLS INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS
+
+echo RUN input_rrtm_MLW
+\cp input_rrtm_MLW INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLW
+
+echo RUN input_rrtm_SAW
+\cp input_rrtm_SAW INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_SAW
+
+echo RUN input_rrtm_TROP
+\cp input_rrtm_TROP INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_TROP
+
+echo RUN input_rrtm_MLS-xsec
+\cp input_rrtm_MLS-xsec INPUT_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS-xsec
+
+echo RUN input_rrtm_MLS-cld, cloud case 1
+\cp input_rrtm_MLS-cld INPUT_RRTM
+\cp in_cld_rrtm_MLS-cld1 IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS-cld1
+\mv OUT_CLD_RRTM out_cld_rrtm_MLS-cld1
+
+
+echo RUN input_rrtm_MLS-cld, cloud case 2
+\cp input_rrtm_MLS-cld INPUT_RRTM
+\cp in_cld_rrtm_MLS-cld2 IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS-cld2
+\mv OUT_CLD_RRTM out_cld_rrtm_MLS-cld2
+
+echo RUN input_rrtm_MLS-cld, cloud case 3
+\cp input_rrtm_MLS-cld INPUT_RRTM
+\cp in_cld_rrtm_MLS-cld3 IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS-cld3
+\mv OUT_CLD_RRTM out_cld_rrtm_MLS-cld3
+
+echo RUN input_rrtm_sgp_20000313.172900
+\cp input_rrtm_sgp_20000313.172900 INPUT_RRTM
+\cp in_cld_rrtm-sgp_20000313.172900 IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_sgp_20000313.172900
+\mv OUT_CLD_RRTM out_cld_rrtm_20000313.172900
+
+echo RUN input_rrtm_sgp_20000313.203000
+\cp input_rrtm_sgp_20000313.203000 INPUT_RRTM
+\cp in_cld_rrtm-sgp_20000313.203000 IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_sgp_20000313.203000
+\mv OUT_CLD_RRTM out_cld_rrtm_20000313.203000
+
+echo RUN MLS1 atmosphere with scattering
+\cp input_rrtm_MLS1-cld_disort INPUT_RRTM
+
+echo Running STREAMER param
+\cp in_cld_rrtm_MLS1-streamer_param IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS1-streamer_param
+\mv OUT_CLD_RRTM out_cld_rrtm_MLS1-streamer_param
+
+echo Running Fu et al. param
+\cp in_cld_rrtm_MLS1-fu_param IN_CLD_RRTM
+$rrtm_prog
+\mv OUTPUT_RRTM output_rrtm_MLS1-fu_param
+\mv OUT_CLD_RRTM out_cld_rrtm_MLS1-fu_param
+
+\rm INPUT_RRTM IN_CLD_RRTM TAPE6 TAPE7
+
+echo Finishing Script
