@@ -641,12 +641,12 @@ subroutine wrapper
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 end select
-                ! if (mixh2o(i) < rmin) mixh2o(i) = rmin
+                if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
                 rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
                 if (rel_hum_cols(i,col) > max_rh) then
                     rel_hum_cols(i,col) = max_rh
-                    ! mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
+                    mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
                 end if
             enddo
 

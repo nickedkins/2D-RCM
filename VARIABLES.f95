@@ -7,7 +7,8 @@ MODULE VARIABLES
     real,dimension(NBANDSM)			::semism
     real,parameter					::gravity=9.81 !m s-2 on Earth !NJE
     real,parameter					::mco2=44.01,mo2=32.0,mn2=28.0,mar=40.0 !molecular weight of co2
-    real,parameter					::mmwn2 = 28.0134e-3,mmwo2 = 31.9988e-3,mmwco2 = 44.01e-3,mmwh2o=18.01528e-3,mmwar=39.948e-3,mmwch4=16.04e-3
+    real,parameter					::mmwn2 = 28.0134e-3,mmwo2 = 31.9988e-3,mmwco2 = 44.01e-3,mmwh2o=18.01528e-3,mmwar=39.948e-3,&
+    mmwch4=16.04e-3
     real,parameter					::cpn2 = 1040.0,cpo2 = 919.0,cvn2 = 743.0,cvo2 = 659.0
     real,parameter					::avogadro=6.02214e23
     real,parameter					::boltzmann=1.3806488e-23 !J/K

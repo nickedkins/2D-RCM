@@ -23,11 +23,12 @@ project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1,5]
+ncolss = [1]
 # ncolss = [1]
 ncloudcols = 1
 nlays = 30
-tp = 0.5
+nperts = 1
+tp = 0.01
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -35,6 +36,7 @@ min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
+h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 
 for ncols in ncolss:
 
@@ -407,7 +409,7 @@ for ncols in ncolss:
 	pin2 = 0.78084 #%
 	pio2 = 0.20946 #%
 	piar = 0.009340 #%
-	pich4 = 1650e-9*2. #rcemip
+	pich4 = 1650e-9 #rcemip
 
 	inv_sum = (pico2+pin2+pio2+piar+pich4) * 1e3
 	# pico2s = np.array([420e-6])
@@ -470,17 +472,17 @@ for ncols in ncolss:
 	# lcs = lcs * -1.
 	lcs = [-5.7]
 	lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
-	nperts = 1
+	# nperts = 5
 	pert_thickness = 1000./nperts
 	pperts = np.linspace(1000,pert_thickness,nperts)
-	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [1.,2.]
+	gas_amt_fac_co2s = [1.0]
+	gas_amt_fac_ch4s = [100.]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -513,10 +515,10 @@ for ncols in ncolss:
 												i_pso = 0
 												for psurf_override in psurf_overrides:
 													for cld_tau in cld_taus:
-														for tboundm in tboundms:
-															for sa in sas:
-																for pin2 in pin2s:
-																	for gas_amt_fac_co2 in gas_amt_fac_co2s:
+														for sa in sas:
+															for pin2 in pin2s:
+																for gas_amt_fac_co2 in gas_amt_fac_co2s:
+																	for gas_amt_fac_ch4 in gas_amt_fac_ch4s:
 
 																		nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)\
 																		*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
@@ -633,8 +635,8 @@ for ncols in ncolss:
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 0
-																		fsw = fsw
+																		fswon = 1
+																		# fsw = 240.
 																		fp = 0
 																		ps1 = 0
 																		af = 1.0
@@ -663,26 +665,30 @@ for ncols in ncolss:
 																		sfc_heating = 0 #surface energy budget warms/cools surface? 1=yes, 0=no
 																		playtype = 0 #pressure layer type. 0=equal p thickness, 1=sigma
 																		
-																		ur_toafnet = [8.0] * ncols
+																		ur_toafnet = [4.0] * ncols
 																		ur_seb = 1e10
 																		couple_tgta = 1
 																		mtranspon = 1
 																		gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
 																		gas_amt_fac_o3 = 1.0
-																		gas_amt_fac_ch4 = 1.0
-																		gas_amt_p_high_h2o = ppert
-																		gas_amt_p_low_h2o = ppert - pert_thickness
-																		# gas_amt_p_high_h2o = 1e6
-																		# gas_amt_p_low_h2o = 0.
+																		# gas_amt_fac_ch4 = 1.0
+																		# gas_amt_p_high_h2o = ppert
+																		# gas_amt_p_low_h2o = ppert - pert_thickness
+																		gas_amt_p_high_h2o = 1e6
+																		gas_amt_p_low_h2o = 0.
 																		gas_amt_p_high_co2 = 1e6
 																		gas_amt_p_low_co2 = 0.
+																		# gas_amt_p_high_co2 = ppert
+																		# gas_amt_p_low_co2 = ppert - pert_thickness
+																		# gas_amt_p_high_co2 = 1000.
+																		# gas_amt_p_low_co2 = ppert
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
 																		gas_amt_p_high_ch4 = 1e6
 																		gas_amt_p_low_ch4 = 0
 																		# gas_amt_p_high_ch4 = ppert
-																		# gas_amt_p_low_ch4 = ppert-50.
+																		# gas_amt_p_low_ch4 = ppert-pert_thickness
 																		gas_amt_pert_h2o = 1 #1 = on, 0=off
 																		gas_amt_pert_co2 = 1 #1 = on, 0=off
 																		gas_amt_pert_o3 = 1 #1 = on, 0=off

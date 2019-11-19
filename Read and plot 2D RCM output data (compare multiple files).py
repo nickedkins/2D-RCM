@@ -12,7 +12,7 @@ import matplotlib.colors as colors
 
 
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -20,10 +20,11 @@ directories = [
 '_Current Output/',
 ]
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/low res met soc expts/2xco2/1d vs 2d/ncols=1/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/low res met soc expts/2xco2/1d vs 2d/ncols=5/',
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/erai/bottom up/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/erai/top down/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/ch4 perts/',
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -321,6 +322,7 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 cld_heights = np.linspace(1,10,10)
 
 ncolss = [1,2,4,8,16]
+pertfacs = [1.,-1.]
 
 i_dir=0
 for directory in directories:
@@ -642,6 +644,7 @@ for directory in directories:
     pperts = np.linspace(1000,pert_thickness,nperts)
     pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 
+
     # pperts = [2000.,1000.]
 
     # pperts = [2000.,1000.,800.,600.,400.,350.,300.,250.,200.,150.,100.]
@@ -650,13 +653,13 @@ for directory in directories:
     # print 'T1 = ',latwghtavg(tzm_master[0,0,:],boxlatcols_master[0,0,:])
     # print 'T2 = ',latwghtavg(tzm_master[1,0,:],boxlatcols_master[0,0,:])
 
-    plt.figure(1)
-    # dT = latwghtavg(tzm_master[1,0,:] - tzm_master[0,0,:],boxlatcols_master[0,0,:])
-    # plt.plot(ncolss[i_dir-1],dT,'o')
-    plt.plot(boxlatcols_master[0,0,:], tzm_master[1,0,:]-tzm_master[0,0,:],'-o',label='Columns: '+str(ncolss[i_dir-1]))
-    plt.xlabel('Latitude')
-    plt.ylabel('$\Delta T_g$')
-    plt.legend()
+    # plt.figure(1)
+    # # dT = latwghtavg(tzm_master[1,0,:] - tzm_master[0,0,:],boxlatcols_master[0,0,:])
+    # # plt.plot(ncolss[i_dir-1],dT,'o')
+    # plt.plot(boxlatcols_master[0,0,:], tzm_master[1,0,:]-tzm_master[0,0,:],'-o',label='Columns: '+str(ncolss[i_dir-1]))
+    # plt.xlabel('Latitude')
+    # plt.ylabel('$\Delta T_g$')
+    # plt.legend()
     # plt.ylim(0)
 
 
@@ -701,14 +704,16 @@ for directory in directories:
     # print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
     # print
 
+    print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
 
+    # print 'i_dir', i_dir
     # plt.figure(1)
-    # plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in each 50 hPa range')
-    # plt.plot(tzm_master[:,0,0]-tzm_master[0,0,0],pperts,'-o',label=dir_label)
+    # plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
+    # plt.plot((tzm_master[:,0,0]-tzm_master[0,0,0])*pertfacs[i_dir-1],pperts,'-o',label=dir_label)
     # plt.xlabel('$\Delta T$ (K)')
     # plt.ylabel('Pressure at bottom of perturbation (hPa)')
     # plt.ylim(1000,0)
-    # plt.xlim(0,0.2)
+    # # plt.xlim(0,0.2)
 
 
     # for i_fn in range(len(a)):
@@ -978,7 +983,7 @@ for directory in directories:
 
     # plt.figure(1)
     # plt.title('Change in surface temperature with a perturbation \n in H$_2$O mixing ratio in each 50 hPa range')
-    # plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:])/sum(tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
+    # plt.plot((tzm_master[1:,0,:]-tzm_master[0,0,:]),pperts,'-o',label=dir_label)
     # plt.xlabel('$\Delta T_{surf}$ (K)')
     # plt.ylabel('Pressure at bottom of 50 hPa H$_2$O perturbation region (hPa)')
     # plt.ylim(1000,0)
