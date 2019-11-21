@@ -18,22 +18,22 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [1]
 # ncolss = [1]
 ncloudcols = 1
-nlays = 100
-nperts = 10
-tp = 0.01
+nlays = 30
+nperts = 1
+tp = 1.0e6
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
-cloud_source = 0 #0 for manual, 1 for MISR
+cloud_source = 1 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 30
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
@@ -55,9 +55,9 @@ for ncols in ncolss:
 		for i in range(len(altbins)+1):
 			altbins[i-1] = (altbin_edges[i-1] + altbin_edges[i])/2.0
 
-		od_low = 3.0
-		od_mid = 3.0
-		od_high = 0.1
+		od_low = 10.
+		od_mid = 10.
+		od_high = 10.
 
 
 		for i in range(len(altbins)):
@@ -67,6 +67,8 @@ for ncols in ncolss:
 				cld_taus[i] = od_mid
 			else:
 				cld_taus[i] = od_high
+
+		print(altbins, cld_taus)
 
 		binned_cf_lat = np.zeros((ncols,len(misr_alts)))
 		cf_lat_bincounts = np.zeros((ncols,len(misr_alts)))
@@ -476,13 +478,13 @@ for ncols in ncolss:
 	pert_thickness = 1000./nperts
 	# bottom up:
 	pperts = np.linspace(1000-pert_thickness,0,nperts)
-	pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# top down:
 	# pperts = np.linspace(pert_thickness,1000,nperts)
 	# pperts = np.insert(pperts,0,np.array([-1000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
-	gas_amt_fac_co2s = [2.0]
+	gas_amt_fac_co2s = [1.0]
 	gas_amt_fac_ch4s = [1.0]
 	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
@@ -639,7 +641,7 @@ for ncols in ncolss:
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 1
+																		fswon = 0
 																		# fsw = 240.
 																		fp = 0
 																		ps1 = 0
@@ -681,13 +683,13 @@ for ncols in ncolss:
 																		# gas_amt_p_low_h2o = ppert - pert_thickness
 																		gas_amt_p_high_h2o = 1e6
 																		gas_amt_p_low_h2o = 0.
-																		# gas_amt_p_high_co2 = 1e6
-																		# gas_amt_p_low_co2 = 0.
+																		gas_amt_p_high_co2 = 1e6
+																		gas_amt_p_low_co2 = 0.
 																		# gas_amt_p_high_co2 = ppert
 																		# gas_amt_p_low_co2 = ppert - pert_thickness
-																		gas_amt_p_high_co2 = 1000.
-																		gas_amt_p_low_co2 = ppert
-																		print gas_amt_p_high_co2,'to ', gas_amt_p_low_co2
+																		# gas_amt_p_high_co2 = 1000.
+																		# gas_amt_p_low_co2 = ppert
+																		# print(gas_amt_p_high_co2,'to ', gas_amt_p_low_co2)
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
 																		gas_amt_p_high_ch4 = 1e6

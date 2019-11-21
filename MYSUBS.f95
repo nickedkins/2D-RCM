@@ -158,7 +158,9 @@ MODULE MYSUBS
         enddo
 
         do i=1,nlayersm-1
-            wl(i) = (rho_w(i)/1000.0*delta_z(i+1)*1000.0)*( (pzm(i)/p_0)**1.0 )*((t_0/tzm(i))**0.5)     
+            wl(i) = wklm(1,i) * 1.66e-27 * 18.02 * 1000. !simplest route to get wl in g/cm^2
+            wl(i) = wl(i) * ( (pzm(i)/p_0)**1.0 )*((t_0/tzm(i))**0.5) !to change wl to wl_eff (effective water vapor amount)
+            ! wl(i) = (rho_w(i)/1000.0*delta_z(i+1)*1000.0)*( (pzm(i)/p_0)**1.0 )*((t_0/tzm(i))**0.5)     
         enddo
 
         ! cloudindex = int(minloc(abs(pzm - cloudcolp),dim=1))
@@ -173,30 +175,9 @@ MODULE MYSUBS
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         ! NJE normal method of including tau_cld in total tau calc
-        ! do i=1,nlayersm
-        !     do n=2,8
-        !         tau(i,n) = tau_cld(i) + k_n(n) * wl(i)
-        !     enddo
-        ! enddo
-
-        ! plh = temp_plh
-
-        ! ssa = 0.
-
-        ! temp = tau
-
-        ! do i=1,nlayersm
-        !     do n=2,8
-        !         ssa(i,n) = tau_cld(i)/tau(i,n)
-        !         if (ssa(i,n) .ge. 1.0-sw_eps) ssa(i,n) = 1.0-sw_eps
-        !     enddo
-        ! enddo
-
-        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        ! NJE remove the cloud optical thickness from the total tau calc, but leave it in for the SSA calc
         do i=1,nlayersm
             do n=2,8
-                tau(i,n) = k_n(n) * wl(i)
+                tau(i,n) = tau_cld(i) + k_n(n) * wl(i)
             enddo
         enddo
 
@@ -208,10 +189,31 @@ MODULE MYSUBS
 
         do i=1,nlayersm
             do n=2,8
-                if (tau_cld(i) + tau(i,n) .ne. 0) ssa(i,n) = tau_cld(i) / ( tau_cld(i) + tau(i,n) )
+                ssa(i,n) = tau_cld(i)/tau(i,n)
                 if (ssa(i,n) .ge. 1.0-sw_eps) ssa(i,n) = 1.0-sw_eps
             enddo
         enddo
+
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ! NJE remove the cloud optical thickness from the total tau calc, but leave it in for the SSA calc
+        ! do i=1,nlayersm
+        !     do n=2,8
+        !         tau(i,n) = k_n(n) * wl(i)
+        !     enddo
+        ! enddo
+
+        ! plh = temp_plh
+
+        ! ssa = 0.
+
+        ! temp = tau
+
+        ! do i=1,nlayersm
+        !     do n=2,8
+        !         if (tau_cld(i) + tau(i,n) .ne. 0) ssa(i,n) = tau_cld(i) / ( tau_cld(i) + tau(i,n) )
+        !         if (ssa(i,n) .ge. 1.0-sw_eps) ssa(i,n) = 1.0-sw_eps
+        !     enddo
+        ! enddo
 
         !!!!!!!!!!!!!!!!!!!!!!!!!!!        
 
@@ -231,7 +233,8 @@ MODULE MYSUBS
 
         do i=1,nlayersm-2
             ! if (tau_cld(i) .ge. 1e-4 .and. tau_cld(i) < 100.0 .and. altzm(i)/1000.0 < 10.0) then
-            if (tau_cld(i) .ge. 1e-4) then
+            ! if (tau_cld(i) .ge. 1e-4) then
+            if (tau_cld(i) .ge. 5.0) then
                 refl_lay_ind = i
                 exit
             endif
@@ -246,7 +249,7 @@ MODULE MYSUBS
 
         do i=1,nlayersm
             do n=2,8
-                if (tau_cld(i) .ge. 1e-4 ) then
+                if (tau_cld(i) .ge. 1.0 ) then
                     Translh(i,n) = 4.0*ulh(i,n) / ( (ulh(i,n)+1.0)**2.0*exp(trlh(i,n)) - ((ulh(i,n)-1.0)**2.0*&
                         exp(-trlh(i,n) )))
                 elseif (i < refl_lay_ind) then
@@ -547,7 +550,7 @@ MODULE MYSUBS
         
         abs_surf_lh = 0.
 
-        abs_surf_lh = (Ag1+Ag2)*sol_inc*1.5 !Unsure about that factor of 1.5 nje
+        abs_surf_lh = (Ag1+Ag2)*sol_inc !Unsure about that factor of 1.5 nje
         ! abs_surf_lh = (Ag1+Ag2)*sol_inc
 
         ! abs_surf_lhcols(col) = abs_surf_lh

@@ -123,7 +123,7 @@ subroutine wrapper
     read(73,*) !ps1 !set the surface pressure to 1 bar
     read(73,*) adj_freq !NJE remove this
     read(73,*) convecttype !dry adiabatic lapse rate on/off
-    read(73,*) pb_new !new method of turning pressure broadening off
+    read(73,*) pb_new !new method of turning pressure broadening off    
     read(73,*) swo3 !include O3 SW heating rates
     read(73,*) swh2o !include H2O SW heating rates
     read(73,*) nlayersm !number of model layers
