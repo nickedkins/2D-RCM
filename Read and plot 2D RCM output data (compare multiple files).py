@@ -17,13 +17,15 @@ legends_on = 0
 grids_on = 1
 
 directories = [
-'_Current Output/',
+'_Current Output/'
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/individual/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/cumulative/bottom up/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/co2 perts/rrtm v3.6/erai bug fixed/cumulative/top down/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/erai/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/cloudy/misr/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/cloudy/manual/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/clear/',
 ]
 
 directions = [1,1,2]
@@ -323,7 +325,7 @@ pico2_store = np.zeros( (len(directories), 100 ) )
 
 cld_heights = np.linspace(1,10,10)
 
-ncolss = [1,2,4,8,16]
+
 # pertfacs = [1.,-1.]
 
 i_dir=0
@@ -367,6 +369,16 @@ for directory in directories:
 
     i2 = 0
 
+    # nlayss = [25,50,100,200,400,600]
+
+    # ncolss = [1,2,3,4,5,6,7,8,9,10]
+    ncolss = [1,3,5,7,9]
+    # ncolss = [1,2,4,6,8,10]
+
+    T1s = np.zeros(5)
+    T2s = np.zeros(5)
+
+    i_fn = 0
     for fn in a:
         if (fn=='.DS_Store'):
             continue
@@ -393,6 +405,19 @@ for directory in directories:
         wklm1_master.append(wklm1cols)
         wbrodlm_master.append(wbrodlmcols)
 
+        # print int(i_fn/2.)
+        print mod(i_fn,2)
+        if(mod(i_fn,2)==0):
+            T1s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
+        if(mod(i_fn,2)==1):
+            T2s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
+
+
+
+
+        # plt.plot(ncolss[int(i_fn/2)],latwghtavg(tzmcols[0,:],boxlatcols[0,:]),'o',c='b')
+        # plt.xlabel('Number of latitude columns')
+        # plt.ylabel('Equilibrium $T_{surf}$ (K)')
 
         htrmlwcols = htrmcols[1:,:] - htro3cols - htrh2ocols
 
@@ -605,10 +630,19 @@ for directory in directories:
 
                 i3+=1
 
-        i2 += 1
+        i_fn += 1
+
+    plt.plot(ncolss,T2s-T1s,'-o',label=dir_label)
+    plt.xlabel('Number of latitude columns')
+    plt.ylabel('Change in temperature from double CO$_2$')
 
     # i1 += 1
     i_dir+=1
+
+    plt.legend()
+
+    # plt.plot(ncolss,T1s)
+    
 
 
     # master indices: master[file,layer,column]
@@ -656,14 +690,28 @@ for directory in directories:
         # pperts = np.insert(pperts,0,np.array([0.]),axis=0)
 
 
-    print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
+    # print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
 
-    plt.figure(1)
-    plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
-    plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
-    plt.xlabel('$\Delta T$ (K)')
-    plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    plt.ylim(1000,0)
+    ncloudcolss = [1,2,3,4,5,6,7]
+    lcs = [-10,-8,-6,-4,-2,0]
+    qs = [0.25,0.5,1.,2.,4.,8.]
+    sas = [0.,0.1,0.2,0.3,0.4]
+
+    # plt.plot(sas,tzm_master[:,0,:],'-o')
+    # plt.xlabel('sa')
+    # plt.ylabel('Equilibrium $T_{surf}$ (K)')
+    
+
+    # plt.plot(ncloudcolss,tzm_master[:,0,:],'-o')
+    # plt.xlabel('Number of independent cloud columns')
+    # plt.ylabel('Equilibrium $T_{surf}$ (K)')
+
+    # plt.figure(1)
+    # plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
+    # plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
+    # plt.xlabel('$\Delta T$ (K)')
+    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    # plt.ylim(1000,0)
     # plt.xlim(0,0.2)
 
     # pperts = [2000.,1000.]
@@ -717,7 +765,7 @@ for directory in directories:
     # plt.plot(cld_taus[1:],totuflumcols_master[1:,-1,0])
     # plt.plot(cld_taus[1:],box_abssw_tot_master[1:,-1,0])
 
-    init_h2o_molec = sum(wklm1_master[0,:,0])
+    # init_h2o_molec = sum(wklm1_master[0,:,0])
 
     # print('Integrated temperature change: {:4.2f} K'.format(sum(tzm_master[:,0,0]-tzm_master[0,0,0])))
     # print('Initial total H2O molecules: {:4.2e}'.format(init_h2o_molec))
@@ -1002,8 +1050,6 @@ for directory in directories:
 
     # print 'Total delta T: {:4.2f}'.format(sum(tzm_master[1:,0,:]-tzm_master[0,0,:]))
 
-
-plt.legend()
 
 # for i in range( shape(tzm_master)[0] ):
 
