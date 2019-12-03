@@ -21,14 +21,42 @@ directories = [
 ]
 
 directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/erai/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/cloudy/misr/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/cloudy/manual/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/2xco2 transport expts/Meridional transport on/mw67/clear/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/tg vs ncols/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/nonlinear expts/lapse/new/'
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything equal/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/lapse rate varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/h2o varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/abs sw varies/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything varies/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything equal/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/lapse rate varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/h2o varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/abs SW varies/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything varies/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/no transport/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/diffusion/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=1/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=2/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=240/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/mw67/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.01/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=200/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/individual/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative bottom up/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative top down/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/individual/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative bottom up/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative top down/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/constant/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear scaled/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/individual/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/cumulative/',
 ]
 
 directions = [1,1,2]
+# directions = [2]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -49,7 +77,7 @@ class MidpointNormalize(colors.Normalize):
 
 def init_plotting():
     plt.rcParams['figure.figsize'] = (10,10)
-    plt.rcParams['font.size'] = 15
+    plt.rcParams['font.size'] = 20
     plt.rcParams['font.family'] = 'Times New Roman'
     plt.rcParams['axes.labelsize'] = plt.rcParams['font.size']
     plt.rcParams['axes.titlesize'] = 1.2*plt.rcParams['font.size']
@@ -69,8 +97,9 @@ def init_plotting():
     plt.rcParams['legend.loc'] = 'best'
     plt.rcParams['axes.linewidth'] = 1
 
-    plt.rcParams['lines.linewidth'] = 1.0   
-    plt.rcParams['lines.markersize'] = 8 
+    plt.rcParams['lines.linewidth'] = 2.0 
+    plt.rcParams['lines.markersize'] = 12
+
     plt.rcParams['figure.facecolor'] = 'white'
     plt.rcParams['axes.facecolor'] = 'white'
     #plt.rcParams['axes.color_cycle'] = ['b', 'r', 'g','pink','orange','darkgreen','purple']
@@ -375,11 +404,14 @@ for directory in directories:
     ncolss = [1,3,5,7,9]
     # ncolss = [1,2,4,6,8,10]
 
+    fsws = [100,150,200,250,300,350]
+
     T1s = np.zeros(5)
     T2s = np.zeros(5)
 
     i_fn = 0
     for fn in a:
+        print fn
         if (fn=='.DS_Store'):
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
@@ -405,12 +437,13 @@ for directory in directories:
         wklm1_master.append(wklm1cols)
         wbrodlm_master.append(wbrodlmcols)
 
-        # print int(i_fn/2.)
-        print mod(i_fn,2)
-        if(mod(i_fn,2)==0):
-            T1s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
-        if(mod(i_fn,2)==1):
-            T2s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
+        # T1s[int(i_fn)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
+
+
+        # if(mod(i_fn,2)==0):
+        #     T1s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
+        # if(mod(i_fn,2)==1):
+        #     T2s[int(i_fn/2.)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
 
 
 
@@ -632,14 +665,22 @@ for directory in directories:
 
         i_fn += 1
 
-    plt.plot(ncolss,T2s-T1s,'-o',label=dir_label)
-    plt.xlabel('Number of latitude columns')
-    plt.ylabel('Change in temperature from double CO$_2$')
+
+    # plt.plot(ncolss,T2s-T1s,'-o',mec='none')
+    # # plt.axhline(1.2,linestyle='--')
+    # plt.xlabel('Number of latitude columns')
+    # plt.ylabel('Change in temperature from double CO$_2$')
+
+    # plt.plot(ncolss,T1s+14.,'-o')
+    # # plt.plot(ncolss,T2s,'-o')
+    # plt.xlabel('Number of latitude columns')
+    # plt.ylabel('Temperature (K)')
+
 
     # i1 += 1
     i_dir+=1
 
-    plt.legend()
+    # plt.legend()
 
     # plt.plot(ncolss,T1s)
     
@@ -675,19 +716,34 @@ for directory in directories:
     # pperts = np.linspace(1000,50,20)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 
+    # qfacs = [0.33,0.5,1.0,2.0,3.0]
+    # qfacs = np.linspace(0.25,4.0,10)
+    # lapses = np.linspace(10,2,10)
+    # xlims = [lapses[0],lapses[-1]]
+    # # ylims = [tzm_master[0,0,0]-tzm_master[3,0,0],tzm_master[-1,0,0]-tzm_master[3,0,0]]
+    # ylims = np.array([tzm_master[0,0,0],tzm_master[-1,0,0]])
+    # # plt.plot(qfacs,tzm_master[:,0,0]-tzm_master[3,0,0],'-o')
+    # plt.plot(lapses,tzm_master[:,0,0]+6.,'-o')
+    # plt.plot(xlims,ylims+6.,'--')
+    # plt.xlabel('Lapse rate (K/km)',labelpad=20)
+    # plt.ylabel('Temperature (K)',labelpad=20)
+
     nperts = 10
     pert_thickness = 1000./nperts
-    # pperts = np.linspace(1000,pert_thickness,nperts)
+    pperts = np.linspace(1000,pert_thickness,nperts)
+
+    # pperts = np.linspace(1000-pert_thickness,0,nperts)
+
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
     
     # bottom up:
-    if(directions[i_dir-1]==1):
-        pperts = np.linspace(1000,pert_thickness,nperts)
-        # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
-    # top down:
-    if(directions[i_dir-1]==2):
-        pperts = np.linspace(pert_thickness,1000,nperts)
-        # pperts = np.insert(pperts,0,np.array([0.]),axis=0)
+    # if(directions[i_dir-1]==1):
+    #     pperts = np.linspace(1000,pert_thickness,nperts)
+    #     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
+    # # top down:
+    # if(directions[i_dir-1]==2):
+    #     pperts = np.linspace(pert_thickness,1000,nperts)
+    #     # pperts = np.insert(pperts,0,np.array([0.]),axis=0)
 
 
     # print 'Total change: ', sum(tzm_master[:,0,0]-tzm_master[0,0,0]), 'K'
@@ -706,13 +762,21 @@ for directory in directories:
     # plt.xlabel('Number of independent cloud columns')
     # plt.ylabel('Equilibrium $T_{surf}$ (K)')
 
-    # plt.figure(1)
-    # plt.title('Change in equilibrium surface temperature with an \n increase in number of CO$_2$ molecules above a given pressure')
-    # plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
-    # plt.xlabel('$\Delta T$ (K)')
-    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    # plt.ylim(1000,0)
+    # print len(tzm_master[1:,0,0]-tzm_master[0,0,0]),len(pperts)
+
+    # print tzm_master[:,0,0]
+
+    plt.figure(1)
+    plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in the 100 hPa above a given pressure')
+    plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
+    plt.xlabel('$\Delta T$ (K)')
+    plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    plt.ylim(1000,0)
+    plt.legend()
     # plt.xlim(0,0.2)
+
+    # for i in range(1,len(a)):
+    #     print pperts[i-1],',', tzm_master[i,0,0]-tzm_master[0,0,0]
 
     # pperts = [2000.,1000.]
 
@@ -769,8 +833,10 @@ for directory in directories:
 
     # print('Integrated temperature change: {:4.2f} K'.format(sum(tzm_master[:,0,0]-tzm_master[0,0,0])))
     # print('Initial total H2O molecules: {:4.2e}'.format(init_h2o_molec))
-    # print('Integrated water vapor change (total molecules): {:4.2e}'.format(sum(wklm1_master[:,:,0]-wklm1_master[0,:,0])))
+    # print('Integrated water vapor change (total molecules): {:4.2e}'.format(sum(wklm1_master[1:,:,0]-wklm1_master[0,:,0])))
     # print('Integrated water vapor change (additional molecs as % of original): {:0.0f}%'.format( sum( wklm1_master[:,:,0]-wklm1_master[0,:,0] )/init_h2o_molec*100. ))
+    # for i in range(len(a)):
+    #     print i, sum(wklm1_master[i,:,0])/init_h2o_molec
     # print
 
     

@@ -607,6 +607,7 @@ subroutine wrapper
 
             do i=1,nlayersm
                 es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
+                
                 select case(h2o_source)
                 case(0) !ERA-Interim
                     read(82,*) mixh2o(i)
@@ -639,6 +640,12 @@ subroutine wrapper
                     surf_rh = 1. - (1. - 0.8) * ( ( abs_surf_lh - fnetm(0) ) / ( 97. )) * ( 1.225 / density ) *&
                     & ( 0.0166 / (es(1)/pzm(0)) ) * ( ( 1. + 0.59 )/( 1. + bowen_r13 ) )
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                case(5) !option to keep h2o constant in all columns
+                    h2o_dummy_temp(i) = max(280.+altzm(i)/1000.*lapsecritcols(col), 200.)
+                    es(i) = 6.1094*exp(17.625*(h2o_dummy_temp(i)-273.15)/&
+                        &(h2o_dummy_temp(i)-273.15+243.04)) 
+                    rel_hum(i) = 0.8*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
                     mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
                 end select
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
@@ -1383,7 +1390,7 @@ subroutine wrapper
                 do col=1,ncols
                     delta_meridtransp_edge(col) = meridtransp_edge(col) - meridtransp_edge(col-1)
                     if (mtransp_type ==  2) then
-                        meridtransp(col) = delta_meridtransp_edge(col)
+                        meridtransp(col) = delta_meridtransp_edge(col) * 1.0
                     end if
                 end do
 
