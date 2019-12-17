@@ -7,7 +7,8 @@ MODULE VARIABLES
     real,dimension(NBANDSM)			::semism
     real,parameter					::gravity=9.81 !m s-2 on Earth !NJE
     real,parameter					::mco2=44.01,mo2=32.0,mn2=28.0,mar=40.0 !molecular weight of co2
-    real,parameter					::mmwn2 = 28.0134*1e-3,mmwo2 = 31.9988*1e-3,mmwco2 = 44.01*1e-3,mmwh2o=18.01528*1e-3
+    real,parameter         ::mmwn2 = 28.0134e-3,mmwo2 = 31.9988e-3,mmwco2 = 44.01e-3,mmwh2o=18.01528e-3,mmwar=39.948e-3,&
+                             mmwch4=16.04e-3
     real,parameter					::cpn2 = 1040.0,cpo2 = 919.0,cvn2 = 743.0,cvo2 = 659.0
     real,parameter					::avogadro=6.02214e23
     real,parameter					::boltzmann=1.3806488e-23 !J/K
@@ -71,8 +72,9 @@ MODULE VARIABLES
     ! real, parameter :: PI = 3.14159265359
     real :: startsecs, startmins, endsecs, endmins, starthours, endhours, totsecs, secsperloop
     integer :: fixed_trop_ind
-    real :: pico2, pin2, pio2, massatmo_n2, massatmo_co2, massatmo_o2
-    real :: molec_co2, molec_n2, molec_o2, vol_mixn2, vol_mixo2, mass_mixn2, mass_mixo2, mmwtot, mass_mixco2, vol_mixco2
+    real :: pico2, pin2, pio2,piar,pich4,piair,massatmo_n2, massatmo_co2, massatmo_o2,massatmo_ar,massatmo_ch4
+    real :: molec_co2, molec_n2, molec_o2,molec_ar,molec_ch4, vol_mixn2, vol_mixo2,vol_mixar,vol_mixch4, mass_mixn2,&
+    mass_mixo2,mass_mixar,mass_mixch4, mmwtot, mass_mixco2, vol_mixco2
     real, dimension(maxlaym) :: rspecific_co2, cvco2, cvtot, rsp_tot, malr
     real :: htransp, currentmaxhtr
     real, dimension(maxlaym) :: newur
@@ -132,6 +134,7 @@ MODULE VARIABLES
     real :: gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,&
     gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3
     integer :: gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,mixco2_prescribed_on,steps_before_toa_adj,cloudloctype
+    real :: gas_amt_p_high_ch4, gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4
     real :: psurf_override,mixco2_prescribed,a_green,b_green,c_green,H_green
     real :: h_scale,f_cor,beta,gamma_d
     real, dimension(maxncols) :: d_mid,d_trop

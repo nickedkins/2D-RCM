@@ -25,8 +25,8 @@ os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcols = 1
-nlays = 30
-tp = 0.5
+nlays = 200
+tp = 1.0
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
@@ -386,22 +386,12 @@ for ncols in ncolss:
 	pa = 0.3    
 	sc = [1362.0]
 
-	#pico2s = np.linspace(400e-6,3200e-6,num=5)
-
-	#pico2s = np.logspace(-4,2,num=5,base=10.0)
-
-	# pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
-	# pico2_facs = np.array([1e-2,0.5,1,2,8])
-	pico2_facs = np.array([1.0])
-	pico2s = np.array([420e-6]) * pico2_facs
-	# pico2s = np.array([420e-6])
-
-	# pin2s = np.logspace(-1,2,num=10,base=10.0)
-	pin2s = [1.0]
-	# pin2s = [2.0]
-
-	#pico2s = [400e-6,3200e-6]
-
+	pico2s = np.array([0.2]) #rcemip
+	pin2s = np.array([0.78084]) #%
+	pin2s = np.array([0.8,1.2]) #%
+	pio2 = 0.20946 #%
+	piar = 0.009340 #%
+	pich4 = 1650e-9 #rcemip
 
 	pertlay=0
 	pertcol=0
@@ -438,32 +428,33 @@ for ncols in ncolss:
 	# cld_heights = np.linspace(0,12,5)
 	cld_heights = [5.0]
 	# cld_height = [5.0]
-	cld_taus = np.linspace(0.1,9.9,10)
-	# cld_taus = [9.9]
+	# cld_taus = np.linspace(0.1,9.9,10)
+	cld_taus = [9.9]
 
 	# mixco2_prescribed_facs = np.array([0.03125,0.0625,0.125,0.25,0.5,1,2,4,8])
 	mixco2_prescribed_fac = 1.0
 	# mixco2_prescribed_facs = np.array([0.03125])
 
-	# psurf_overrides = [1000.,2000.]
-	psurf_overrides = [1000.]
+	# psurf_overrides = [1000.]
+	psurf_overrides = [0.]
 	#fsws = np.linspace(200,500,num=8)
-	fsws = [260.] #238.24 to replicate RD
+	# fsws = [260.] #238.24 to replicate RD
+	fsws = [128.]
 	# add_cld_alts = [0.0,6.1]
 	add_cld_alts = [0.0]
 	# lcs = np.linspace(10,2,10)
 	# lcs = lcs * -1.
-	lcs = [-5.7] * ncols
+	lcs = [-9.8] * ncols
 	lapse_types = [2] # 1=H82, 2=Mason
 	pperts = np.linspace(1000,50,1)
 	# pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
 	# print pperts
 	co2_facs = [1.]
 	gas_amt_fac_co2 = co2_facs[0]
-	# h2o_facs = [1.0]
 	h2o_facs = [1.0]
+	# h2o_facs = [0.0]
 	lf_as = [0.0] # 0.0 default
-	h2o_sources=[0]
+	h2o_sources=[1] #0=ERA-Interim mixh2o, 1=MW67 RH, 2=Cess, 3=Kasting, 4=Ramirez
 	# twarms = [288.,293.,298.,303.,308.]
 	twarms = [288.]
 	# tcolds = [268.,263.,258.,253.,248.]
@@ -510,6 +501,9 @@ for ncols in ncolss:
 																		# secsperloop = 1.5 #home
 																		print("Estimated mins: ",nloops*secsperloop/60.)
 
+																		inv_sum = (pin2+pico2+pio2+piar+pich4) * 1e3
+																		print(inv_sum,'inv_sum')
+
 																		# nlays = nlayss[i_pso]
 																		pgrid = np.linspace(psurf_override,min_press,nlays+1)
 
@@ -520,7 +514,7 @@ for ncols in ncolss:
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
 																		# manual_clouds.append([450,0.66,9.9])
-																		manual_clouds.append([5.0,0.5,cld_tau])
+																		# manual_clouds.append([5.0,0.5,cld_tau])
 																		
 														
 																		# sa = [sa] * ncols
@@ -554,27 +548,28 @@ for ncols in ncolss:
 																		# interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
 																		# interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 
-																		interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,[1.0]*ncols)
-																		interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
-																		interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
-																		interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
+																		# interpolate_createprrtminput_lev('q',q_latp_max,q_ps,q_lats,[1.0]*ncols)
+																		# interpolate_createprrtminput_lev('o3',o3_latp_max,o3_ps,o3_lats,[1.0]*ncols)
+																		# interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
+																		# interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																	
 																		# lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
-																		# lc = [-6.5] * ncols
+																		lc = [-9.8] * ncols
 																		#lc = [-15.] * ncols
 																		# for i in range(len(lc)):
 																		#    lc[i] *= 1.5
 
 																		lch = createlatdistbn('Cloud Top Height')
-																		srh = createlatdistbn('Relative Humidity')
-																		# srh = [0.8] * ncols
-																		sa = createlatdistbn('Surface Reflectance')
+																		# srh = createlatdistbn('Relative Humidity')
+																		srh = [0.8] * ncols
+																		# sa = createlatdistbn('Surface Reflectance')
 																		# sa = list(sa * lat_facs)
-																		# sa = [0.2] * ncols
+																		sa = [0.66] * ncols
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
 																		# tg = createlatdistbn('Surface Temperature')
 																		tg = createlatdistbn('Doug Mason Temperature vs Latitude')
+																		tg = [240.] * ncols
 																		# for i in range(len(tg)):
 																		# 	tg[i] += 20.
 																		# print(tg)
@@ -609,12 +604,12 @@ for ncols in ncolss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [500.] * ncols
+																		fth = [800.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 0
+																		fswon = 1
 																		fsw = fsw
 																		fp = 0
 																		ps1 = 0
@@ -653,7 +648,8 @@ for ncols in ncolss:
 																		mtranspon = 1
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
-																		gas_amt_fac_o3 = 1.0
+																		gas_amt_fac_o3 = 0.0
+																		gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - 50.
 																		gas_amt_p_high_h2o = 1e6
@@ -662,11 +658,14 @@ for ncols in ncolss:
 																		gas_amt_p_low_co2 = 0.
 																		gas_amt_p_high_o3 = 1e6
 																		gas_amt_p_low_o3 = 0.
+																		gas_amt_p_high_ch4 = 1e6
+																		gas_amt_p_low_ch4 = 0.
 																		gas_amt_pert_h2o = 1 #1 = on, 0=off
 																		gas_amt_pert_co2 = 1 #1 = on, 0=off
 																		gas_amt_pert_o3 = 1 #1 = on, 0=off
+																		gas_amt_pert_ch4 = 1
 																		psurf_override = psurf_override #override the inventory base psurf calc and set explicit psurf; set < 0 to turn this option off.
-																		mixco2_prescribed_on = 1
+																		mixco2_prescribed_on = 0
 																		mixco2_prescribed = 400e-6 * mixco2_prescribed_fac
 																		steps_before_toa_adj = 5
 																		a_green = 0.4
@@ -674,7 +673,7 @@ for ncols in ncolss:
 																		c_green = 5.
 																		H_green = 7.
 																		cloudloctype = 1 #1 for altitude, 2 for pressure, 3 for temperature
-																		surf_emiss_on = 1 #0 for no surface emission, 1 for normal surface emission
+																		surf_emiss_on = 0 #0 for no surface emission, 1 for normal surface emission
 																		# lapse_type = 1
 																		h2o_sb = 1 #h2o foreign broadening 0=off, 1=on
 																		h2o_for = 1
@@ -684,6 +683,7 @@ for ncols in ncolss:
 																		gas_addmolec_h2o = 0.0
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
+																		gas_addmolec_ch4 = 0.0
 																		max_rh = 1.1e6
 																	
 																		ur1 = ur
@@ -693,11 +693,12 @@ for ncols in ncolss:
 																		ur = ur1
 																	
 																		params = [ncols,ncloudcols+1,pa,sc,list(tg),lc,days,mc,ur,icldm,rmin,hct,hcf,hcod,mct,mcf,mcod,lch,lcf,lcod,tp,sa,list(fth),ol,asp,cs,pbo,fswon,fsw,fp,srh,ps1,af,dalr,
-																		npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, n2inv, o2inv, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
+																		npb,o3sw,h2osw, nl, maxhtr, asf, tuf, pico2, pin2, pio2, htransp, ipe, dp, mtranspfac,boxnetfluxfac,pertlay,pertcol,list(collats),inversion_strength,inversion_col,
 																		twarm,tcold,phim,ks,kl,eta,planet_radius,planet_rotation,list(latbounds),t_min,sebfac,sfc_heating,playtype,ur_htr,ur_toafnet,ur_seb,couple_tgta,mtranspon,min_press,
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
-																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot]
+																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot,piar,pich4,
+																		gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:

@@ -187,7 +187,7 @@ subroutine wrapper
     read(73,*) lapse_type !type of lapse rate 0: critical lapse rate input 1: Held's parameterisation
     read(73,*) h2o_sb !H2O self-broadening 0:off 1:on
     read(73,*) h2o_for !H2O foreign broadening 0:off 1:on
-    read(73,*) h2o_source ! 1=MW67 RH, 2=ERA-Interim mixh2o
+    read(73,*) h2o_source ! 0=ERA-Interim mixh2o, 1=MW67 RH, 2=Cess, 3=Kasting, 4=Ramirez
     read(73,*) ur_mt !under-relaxation constant for meridional transport
     read(73,*) mtransp_type !source of meridional transport 1:simple diffusion 2:Vladilo
     read(73,*) steps_before_first_eqbcheck !number of steps before first adjustment to approach TOA equilibrium
@@ -196,6 +196,13 @@ subroutine wrapper
     read(73,*) gas_addmolec_o3
     read(73,*) max_rh
     read(73,*) snapshot
+    read(73,*) piar
+    read(73,*) pich4
+    read(73,*) gas_amt_p_high_ch4
+    read(73,*) gas_amt_p_low_ch4
+    read(73,*) gas_amt_pert_ch4
+    read(73,*) gas_amt_fac_ch4
+    read(73,*) gas_addmolec_ch4
 
     close(73)
 
@@ -280,36 +287,46 @@ subroutine wrapper
     mixo2 = 0.21
 
     ! Gas inventories
-    n2_inv = pin2 * 1.0e5
-    o2_inv = pio2 * 1.0e5
-    air_inv = n2_inv + o2_inv
-    co2_inv = pico2 * 1.0e5 ! convert the input in bar to Pa
+    pin2 = pin2 * 1e5 !convert the input in bar to Pa
+    pico2 = pico2 * 1e5 !convert the input in bar to Pa
+    pio2 = pio2 * 1e5 !convert the input in bar to Pa
+    piar = piar * 1e5 !convert the input in bar to Pa
+    pich4 = pich4 * 1e5 !convert the input in bar to Pa
+    piair = pin2 + pio2 + piar
 
-    massatmo_co2 = co2_inv / gravity ! [kg]
-    massatmo_n2 = n2_inv / gravity ! [kg]
-    massatmo_o2 = o2_inv / gravity ! [kg]
+    massatmo_co2 = pico2 / gravity ! [kg]
+    massatmo_n2 = pin2 / gravity ! [kg]
+    massatmo_o2 = pio2 / gravity ! [kg]
+    massatmo_ar = piar / gravity ! [kg]
+    massatmo_ch4 = pich4 / gravity ! [kg]
 
-    massatmo = massatmo_co2 + massatmo_n2 + massatmo_o2
+    massatmo = massatmo_co2 + massatmo_n2 + massatmo_o2 + massatmo_ar + massatmo_ch4
 
     ! Gas mass mixing ratios 
     mass_mixco2 = massatmo_co2 / massatmo
     mass_mixn2 = massatmo_n2 / massatmo
     mass_mixo2 = massatmo_o2 / massatmo
+    mass_mixar = massatmo_ar / massatmo
+    mass_mixch4 = massatmo_ch4 / massatmo
 
     ! Number of molecules of each gas
     molec_co2 = massatmo_co2 / mmwco2 * avogadro
     molec_n2 = massatmo_n2 / mmwn2 * avogadro
     molec_o2 = massatmo_o2 / mmwo2 * avogadro
+    molec_ar = massatmo_ar / mmwar * avogadro
+    molec_ch4 = massatmo_ch4 / mmwch4 * avogadro
 
-    totmolec = molec_co2 + molec_n2 + molec_o2
+    totmolec = molec_co2 + molec_n2 + molec_o2 + molec_ar + molec_ch4
 
     ! Gas volume mixing ratios
     vol_mixco2 = molec_co2 / totmolec
     vol_mixn2 = molec_n2 / totmolec
     vol_mixo2 = molec_o2 / totmolec
+    vol_mixar = molec_ar / totmolec
+    vol_mixch4 = molec_ch4 / totmolec
 
     ! Mean molecular weight of the atmosphere
-    mmwtot = mmwco2 * vol_mixco2 + mmwn2 * vol_mixn2 + mmwo2 * vol_mixo2
+    mmwtot = mmwco2 * vol_mixco2 + mmwn2 * vol_mixn2 + mmwo2 * vol_mixo2 + mmwar*vol_mixar + mmwch4*vol_mixch4
 
     do i=1,nlayersm
         cpco2(i) = 0.000879 * tavelm(i) + 0.589073
@@ -347,7 +364,8 @@ subroutine wrapper
     if (psurf_override > 0.0) then 
         surfacep = psurf_override * 100.
     else
-        surfacep = air_inv+co2_inv !Pascals !NJE changed
+        ! surfacep = air_inv+co2_inv !Pascals !NJE changed
+        surfacep = piair+pico2 !Pascals !NJE changed
     end if
     if (ipe == 0) surfacep = air_inv !If you want to neglect the effect of CO2 on the surface pressure
     pzm(0) = surfacep/100
@@ -386,10 +404,13 @@ subroutine wrapper
         if (mixco2_prescribed_on ==1) then
             wklm(2,i) = mperlayr(i) * 1.0e-4 * mixco2_prescribed
         else
-            wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+            ! wklm(2,i) = mperlayr_co2(i) * 1.0e-4
+            wklm(2,i) = mperlayr(i) * 1.0e-4 * vol_mixco2
         endif
         wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
         ! wklm(3,i) = (2.69e19) * (1000. / pzm(0) ) * (u_lw(i-1) - u_lw(i)) 
+        wklm(6,i) = mperlayr(i) * 1.0e-4 * vol_mixch4
+        wklm(7,i) = mperlayr(i) * 1.0e-4 * vol_mixo2
     enddo
 
     ! Use Green's analytic ozone formula to calculate u_lw(i), which is the amount of ozone (in cm NTP) above layer i in the atmosphere. (The subscript lw means that we use this ozone amount for the longwave radiative transfer)
@@ -492,9 +513,9 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-                read(83,*) mixo3(i)
-                mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
-                read(90,*) tzm(i)
+                ! read(83,*) mixo3(i)
+                ! mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
+                ! read(90,*) tzm(i)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
                 !                read(86,*) ciwc(i)
@@ -653,6 +674,12 @@ subroutine wrapper
                     if (gas_amt_pert_o3 == 1) then
                         wklm(3,i) = wklm(3,i) * gas_amt_fac_o3
                         wklm(3,i) = wklm(3,i) + gas_addmolec_o3
+                    end if
+                end if
+                if(pzm(i) < gas_amt_p_high_ch4 .and. pzm(i) > gas_amt_p_low_ch4) then 
+                    if (gas_amt_pert_ch4 == 1) then
+                        wklm(6,i) = wklm(6,i) * gas_amt_fac_ch4
+                        wklm(6,i) = wklm(6,i) + gas_addmolec_ch4
                     end if
                 end if
             enddo
