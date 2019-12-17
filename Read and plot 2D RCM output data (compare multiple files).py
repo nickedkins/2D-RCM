@@ -10,9 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-
-
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
@@ -20,40 +18,40 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/tg vs ncols/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/nonlinear expts/lapse/new/'
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything equal/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/lapse rate varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/h2o varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/abs sw varies/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything varies/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything equal/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/lapse rate varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/h2o varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/abs SW varies/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything varies/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/no transport/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/diffusion/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=1/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=2/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=240/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/mw67/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.01/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=200/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/individual/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative bottom up/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative top down/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/individual/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative bottom up/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative top down/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/constant/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear scaled/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/individual/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/cumulative/',
-]
+# directories = [
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/tg vs ncols/'
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/nonlinear expts/lapse/new/'
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything equal/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/lapse rate varies/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/h2o varies/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/abs sw varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything varies/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything equal/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/lapse rate varies/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/h2o varies/',
+# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/abs SW varies/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything varies/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/no transport/',
+# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/diffusion/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=1/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=2/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=240/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/mw67/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.01/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=200/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/individual/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative bottom up/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative top down/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/individual/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative bottom up/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative top down/'
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/constant/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear scaled/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/individual/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/cumulative/',
+# ]
 
 directions = [1,1,2]
 # directions = [2]
@@ -411,7 +409,6 @@ for directory in directories:
 
     i_fn = 0
     for fn in a:
-        print fn
         if (fn=='.DS_Store'):
             continue
         tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
@@ -543,7 +540,7 @@ for directory in directories:
 
                 plt.figure(i1+1)
                 # plt.figure(1)
-                plt.subplot(341)
+                # plt.subplot(341)
                 plt.title('tzm')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
@@ -568,98 +565,98 @@ for directory in directories:
 
 
                 
-                plt.figure(i1+1)
-                plt.subplot(342)
-                plt.title('htrm')
-                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
-                plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.axvline(-0.1,ls='--')
-                plt.axvline(0.1,ls='--')
-                if(legends_on==1):
-                    plt.legend()
-                
-                plt.figure(i1+1)
-                plt.subplot(343)
-                plt.title('totuflum')
-                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
-                # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
-                # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
-                plt.axvline(0,ls='--')
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(345)
-                plt.title('abs_o3')
-                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,7)
-                plt.title('wklm1 (h2o)')
-                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,8)
-                plt.title('wklm2 (co2)')
-                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,9)
-                plt.title('wklm3 (o3)')
-                plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,10)
-                plt.title('wbrodlm')
-                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,11)
-                plt.title('htro3')
-                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
-
-                plt.figure(i1+1)
-                plt.subplot(3,4,12)
-                plt.title('htrh2o')
-                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                # plt.figure(i1+1)
+                # plt.subplot(342)
+                # plt.title('htrm')
+                # plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
                 # plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                if(legends_on==1):
-                    plt.legend()
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # plt.axvline(-0.1,ls='--')
+                # plt.axvline(0.1,ls='--')
+                # if(legends_on==1):
+                #     plt.legend()
+                
+                # plt.figure(i1+1)
+                # plt.subplot(343)
+                # plt.title('totuflum')
+                # plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
+                # # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
+                # # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
+                # plt.axvline(0,ls='--')
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(345)
+                # plt.title('abs_o3')
+                # plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,7)
+                # plt.title('wklm1 (h2o)')
+                # plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,8)
+                # plt.title('wklm2 (co2)')
+                # plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,9)
+                # plt.title('wklm3 (o3)')
+                # plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,10)
+                # plt.title('wbrodlm')
+                # plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,11)
+                # plt.title('htro3')
+                # plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                # plt.xlim(-5,5)
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
+
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,12)
+                # plt.title('htrh2o')
+                # plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                # # plt.xlim(-5,5)
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # if(legends_on==1):
+                #     plt.legend()
 
                 
 
-                plt.figure(i1+1)
-                plt.subplot(3,4,6)
-                plt.title('htrmlw')
-                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                plt.xlim(-5,5)
-                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                plt.axvline(-0.03,ls='--')
-                plt.axvline(0.03,ls='--')
-                if(legends_on==1):
-                    plt.legend()
+                # plt.figure(i1+1)
+                # plt.subplot(3,4,6)
+                # plt.title('htrmlw')
+                # plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                # plt.xlim(-5,5)
+                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                # plt.axvline(-0.03,ls='--')
+                # plt.axvline(0.03,ls='--')
+                # if(legends_on==1):
+                #     plt.legend()
 
                 i3+=1
 
@@ -712,6 +709,32 @@ for directory in directories:
 
     # master indices for conv_trop_ind: master[file][column]
     conv_trop_ind_master = np.array(conv_trop_ind_master)
+
+    print conv_trop_ind_master
+
+    # Bs = pzm_master[:,conv_trop_ind_master[:,range(ncols)],range(ncols)]
+    As = np.zeros(len(a))
+    Bs = np.zeros(len(a))
+
+    for i_fn in range(len(a)):
+        As[i_fn] = tzm_master[i_fn,conv_trop_ind_master[i_fn],:] / tzm_master[0,conv_trop_ind_master[0],:]
+        Bs[i_fn] = ( pzm_master[i_fn,conv_trop_ind_master[i_fn],:] / pzm_master[0,conv_trop_ind_master[0],:] ) ** (lapsecritcols_master[i_fn,0,0]*0.287/9.8)
+
+
+    pico2_facs = np.array([1./32.,1./16.,1./4.,1,4,16,32])
+    pico2s = np.array([420e-6]) * pico2_facs
+
+    # plt.title('Absolute value of influence of $p_{trop}$ and $T_{trop}$ on $T_{surf}$')
+    # plt.title('Influence of $p_{trop}$ and $T_{trop}$ on $T_{surf}$')
+    # # plt.plot(pico2s,abs((As-1.0)*tzm_master[0,0,:]),'-o',label='$T_{trop}$')
+    # # plt.plot(pico2s,abs((Bs-1.0)*tzm_master[0,0,:]),'-o',label='$p_{trop}$')
+    # plt.semilogx(pico2s,(As-1.0)*tzm_master[0,0,:],'-o',label='$T_{trop}$')
+    # plt.plot(pico2s,(Bs-1.0)*tzm_master[0,0,:],'-o',label='$p_{trop}$')
+    # # plt.plot(pico2s,(As*Bs-1.0)*tzm_master[0,0,:],'-o',label='AB (trop)')
+    # plt.axhline(0,linestyle='--')
+    # plt.xlabel('$p_{I,CO_2}$ (bar)')
+    # plt.ylabel('Change in $T_{surf}$ caused by change in variable (K)')
+    # plt.legend()
 
     # pperts = np.linspace(1000,50,20)
     # pperts = np.insert(pperts,0,np.array([2000.]),axis=0)
@@ -766,14 +789,14 @@ for directory in directories:
 
     # print tzm_master[:,0,0]
 
-    plt.figure(1)
-    plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in the 100 hPa above a given pressure')
-    plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
-    plt.xlabel('$\Delta T$ (K)')
-    plt.ylabel('Pressure at bottom of perturbation (hPa)')
-    plt.ylim(1000,0)
-    plt.legend()
-    # plt.xlim(0,0.2)
+    # plt.figure(1)
+    # plt.title('Change in equilibrium surface temperature with an \n increase in number of H$_2$O molecules in the 100 hPa above a given pressure')
+    # plt.plot((tzm_master[1:,0,0]-tzm_master[0,0,0]),pperts,'-o',label=dir_label)
+    # plt.xlabel('$\Delta T$ (K)')
+    # plt.ylabel('Pressure at bottom of perturbation (hPa)')
+    # plt.ylim(1000,0)
+    # plt.legend()
+    # # plt.xlim(0,0.2)
 
     # for i in range(1,len(a)):
     #     print pperts[i-1],',', tzm_master[i,0,0]-tzm_master[0,0,0]
