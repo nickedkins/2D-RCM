@@ -20,19 +20,19 @@ DUMMY=
 #
 # Flags
 #
-ABSOFT_F95_FLAGS= -O3 -Rp -apo -m64 -openmp -s -speed_math=10 -speed_openmp=5 -stack:1f40000
-ABSOFT_F77_FLAGS= -O3 -Rp -apo -f77_compat -m64 -openmp -s -speed_math=10 -speed_openmp=5 -stack:1f40000
-RC_FLAGS= 
-GCC_FLAGS=  -O3 -m64
-MAKE_FLAGS=  -k
-ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on       -stack:1f40000 -m64 -speed_openmp=5 -openmp -apo -speed_math=10 -O3
+ABSOFT_F95_FLAGS= -g -m64 -s -stack:1f40000
+ABSOFT_F77_FLAGS= -f77_compat -g -m64 -s -stack:1f40000
+RC_FLAGS=
+GCC_FLAGS= -g -m64
+MAKE_FLAGS= -k
+ABSOFT_F95_LINKER_FLAGS=-IPA:debug=on -IPA:source_pu_order=on       -stack:1f40000 -m64 -g
 
 #
 # Name of the executable
 #
 TARGET=2D RCM GitHub
 OUTDIR=.
-OBJDIR=./Release
+OBJDIR=./Debug
 
 #
 # Files for this executable
@@ -150,4 +150,4 @@ ScanAll: "$(OUTDIR)" "$(OBJDIR)" MakeDepsAll
 # Scan for all F77/F95, and c/c++ dependencies
 #
 MakeDepsAll:
-	$(MKDEP) -quiet "-pre./Release/" -Y -modInfo -errdel -f90 -f makefile.amake -a -info  -O3 -Rp -apo -m64 -openmp -s -speed_math=10 -speed_openmp=5 -stack:1f40000 -info "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95" "src 3.6/cldprop.f" "src 3.6/disort.f" "src 3.6/ErrPack.f" "src 3.6/extra.f" "src 3.6/k_g.f" "src 3.6/LINPAK.f" "src 3.6/RDI1MACH.f" "src 3.6/rrtatm.f" "src 3.6/rrtm.f" "src 3.6/rtr.f" "src 3.6/rtrcld.f" "src 3.6/rtrcldmr.f" "src 3.6/rtrdis.f" "src 3.6/rtreg.f" "src 3.6/rtregcld.f" "src 3.6/rtregcldmr.f" "src 3.6/setcoef.f" "src 3.6/taumol.f" 
+	$(MKDEP) -quiet "-pre./Debug/" -Y -modInfo -errdel -f90 -f makefile.amake -a -info  -g -m64 -s -stack:1f40000 -info "wrapper v1.1 2018-08-13 return to backup after VARIABLES module issue.f95" "MYSUBS.f95" "VARIABLES.f95" "myprrtm copy.f95" "src 3.6/cldprop.f" "src 3.6/disort.f" "src 3.6/ErrPack.f" "src 3.6/extra.f" "src 3.6/k_g.f" "src 3.6/LINPAK.f" "src 3.6/RDI1MACH.f" "src 3.6/rrtatm.f" "src 3.6/rrtm.f" "src 3.6/rtr.f" "src 3.6/rtrcld.f" "src 3.6/rtrcldmr.f" "src 3.6/rtrdis.f" "src 3.6/rtreg.f" "src 3.6/rtregcld.f" "src 3.6/rtregcldmr.f" "src 3.6/setcoef.f" "src 3.6/taumol.f" 

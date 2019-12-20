@@ -203,6 +203,7 @@ subroutine wrapper
     read(73,*) gas_amt_pert_ch4
     read(73,*) gas_amt_fac_ch4
     read(73,*) gas_addmolec_ch4
+    read(73,*) forcing_expt
 
     close(73)
 
@@ -523,7 +524,7 @@ subroutine wrapper
             enddo
 
             tzm(0) = tzm(1)
-            tboundm = tzm(0)
+            ! tboundm = tzm(0) !don't need to do this since I change tboundm directly
 
 
             close(83)
@@ -1356,7 +1357,7 @@ subroutine wrapper
 
 
         ! Equilibrium check (eqbcheck)
-        if (j > steps_before_first_eqbcheck ) then !NJE
+        if (j > steps_before_first_eqbcheck .or. maxval(currentmaxhtrcols) < maxhtr ) then !NJE
             if ((maxval(currentmaxhtrcols) < maxhtr .and. stepssinceboxadj > 5) .or. stepssinceboxadj > steps_before_toa_adj)then
                 ! if (stepssinceboxadj > steps_before_toa_adj) then
                 print*, 

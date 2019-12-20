@@ -31,15 +31,19 @@ od_low = 3.0*0.
 od_mid = 3.0*0.
 od_high = 3.0*0.
 nperts = 1
-tp = 0.001
 timesteps = 5000
 ur_htr = 0.5
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 30
+steps_before_first_eqbcheck = 200
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
+maxhtr = 0.03
+forcing_expt = 1 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
+tp = 0.001
+if (forcing_expt==1):
+	tp = tp * 1e12
 
 
 for nlays in nlayss:
@@ -415,10 +419,12 @@ for nlays in nlayss:
 			#pico2s = np.logspace(-4,2,num=5,base=10.0)
 
 			# pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
-			pico2_facs = np.array([1./32.,1./16.,1./4.,1,4,16,32])
+			if(forcing_expt==0):
+				pico2_facs = np.array([1,64])
+			else:
+				pico2_facs = np.array([64])
 			# pico2_facs = np.array([1.0])
 			pico2s = np.array([420e-6]) * pico2_facs
-			print pico2s
 			# pico2 = 348e-6 #rcemip
 			pin2 = 0.78084 #%
 			pio2 = 0.20946 #%
@@ -484,7 +490,7 @@ for nlays in nlayss:
 			add_cld_alts = [0.0]
 			# lcs = np.linspace(10,2,10)
 			# lcs = lcs * -1.
-			lcs = [-9.8]
+			lcs = [-5.7]
 			lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
 			# nperts = 5
 			pert_thickness = 1000./nperts
@@ -600,7 +606,7 @@ for nlays in nlayss:
 																		# if (lapse_type == 2):
 																		# 	lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		
-																		lc = [-9.8] * ncols
+																		lc = [-5.7] * ncols
 																		# print(lc, 'lc')
 																		
 
@@ -613,7 +619,7 @@ for nlays in nlayss:
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
 																		# tg = createlatdistbn('Surface Temperature')
-																		tg = createlatdistbn('Doug Mason Temperature vs Latitude')
+																		# tg = createlatdistbn('Doug Mason Temperature vs Latitude')
 																		# for i in range(len(tg)):
 																		# 	tg[i] += 20.
 																		# print(tg)
@@ -621,7 +627,7 @@ for nlays in nlayss:
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols
-																		# tg = [288.4] * ncols
+																		tg = [283.632] * ncols
 
 																	
 																		#lc = [-5.88]*ncols
@@ -648,7 +654,7 @@ for nlays in nlayss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [500.] * ncols
+																		fth = [24.3156] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -663,7 +669,6 @@ for nlays in nlayss:
 																		o3sw = 1
 																		h2osw = 1
 																		nl = nlays
-																		maxhtr = 0.1
 																		asf = 4.0
 																		tuf = 1.0   
 																		htransp = 1.0 #reduce lapse rate to account for horizontal transport
@@ -752,7 +757,7 @@ for nlays in nlayss:
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
 																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot,
-																		piar,pich4,gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4]
+																		piar,pich4,gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4,forcing_expt]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:

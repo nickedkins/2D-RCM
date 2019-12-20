@@ -11,47 +11,16 @@ import matplotlib.colors as colors
 # import pandas as pd
 
 plot_all_vert_profiles = 1
-legends_on = 0
+legends_on = 1
 grids_on = 1
 
 directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/tg vs ncols/'
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/nonlinear expts/lapse/new/'
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything equal/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/lapse rate varies/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/h2o varies/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/abs sw varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp off/everything varies/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything equal/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/lapse rate varies/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/h2o varies/',
-# # # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/abs SW varies/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/high precision dT expts/mtransp on/everything varies/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/no transport/',
-# # # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/diffusion/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=1/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/different mtransp dT expts/vladilo/fac=2/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=240/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/mw67/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.01/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=200/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/individual/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative bottom up/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=20/individual/tp=0.001/nl=600/cumulative top down/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/individual/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative bottom up/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/cumulative top down/'
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/constant/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/linear scaled/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/individual/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/h2o pert p/new 1.07/fsw on/fsw=260/erai/nperts=10/absolute/erai/scale height/quadratic scaled/cumulative/',
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cartoons/'
+]
 
 directions = [1,1,2]
 # directions = [2]
@@ -1116,7 +1085,7 @@ for directory in directories:
     # plt.subplot(221)
     # plt.plot(lats,tzm_master[0,0,range(ncols)])
     # plt.plot(lats,tzm_master[1,0,range(ncols)])
-    # plt.subplot(222)
+    # plt.subplot(222)  
     # plt.plot(lats,tzm_master[0,conv_trop_ind_master[0,:],range(ncols)])
     # plt.plot(lats,tzm_master[1,conv_trop_ind_master[1,:],range(ncols)])
     # plt.legend()

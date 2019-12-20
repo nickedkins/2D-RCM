@@ -33,15 +33,28 @@ MODULE MYSUBS
 
         select case(convecttype)
         case(0) !critical lapse rate
-            do i=1,nlayersm
-                if( (tzm(i) - tzm(i-1))/(altzm(i)-altzm(i-1))*1000.0 < lapsecrit .or. pzm(i) > fixed_trop(col)) then
-                    tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000.0
-                    if (tzm(i) < t_min) tzm(i) = t_min
-                    conv(i,col) = 1
-                else
-                    conv(i,col) = 0
-                endif
-            end do
+            select case(forcing_expt)
+            case(0)
+                do i=1,nlayersm
+                    if( (tzm(i) - tzm(i-1))/(altzm(i)-altzm(i-1))*1000.0 < lapsecrit .or. pzm(i) > fixed_trop(col)) then
+                        tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000.0
+                        if (tzm(i) < t_min) tzm(i) = t_min
+                        conv(i,col) = 1
+                    else
+                        conv(i,col) = 0
+                    endif
+                end do
+            case(1)
+                do i=1,nlayersm
+                    if(pzm(i) > fixed_trop(col)) then !for forcing expt
+                        tzm(i) = tzm(i-1) +lapsecrit*(altzm(i)-altzm(i-1))/1000.0
+                        if (tzm(i) < t_min) tzm(i) = t_min
+                        conv(i,col) = 1
+                    else
+                        conv(i,col) = 0
+                    endif
+                end do
+            end select
         case(2) !moist adiabatic lapse rate
             do i=1,nlayersm
                 if( (tavelm(i) - tzm(i-1))/(altlaym(i)-altzm(i-1))*1000.0 < (malr(i)*1000.0) .or. &
