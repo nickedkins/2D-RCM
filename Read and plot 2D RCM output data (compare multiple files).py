@@ -138,7 +138,7 @@ p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
 # plt.ylim(max(p_obs),min(p_obs))
 
 
-linestyles = ['-','--','--','o']
+linestyles = ['-','--','-']
 
 # colors = ['b','r','g','orange','purple','yellow','pink']
 
@@ -512,10 +512,12 @@ for directory in directories:
                 # plt.subplot(341)
                 plt.title('tzm')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn))
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i_fn])
+                plt.xlabel('Temperature (K)')
+                plt.ylabel('Pressure (hPa)')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
                 # plt.plot(tzmcols[conv_trop_ind,col],altzmcols[conv_trop_ind,col]/1000.,'*',markersize=20)
-                plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'*',markersize=20)
+                plt.plot(tzmcols[conv_trop_ind,col],pzmcols[conv_trop_ind,col],'o',alpha=0.5)
                 plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
                 if(grids_on==2):
                     plt.gca().minorticks_on()
@@ -523,16 +525,6 @@ for directory in directories:
                     plt.grid(which='both',axis='both')
                 if(legends_on==1):
                     plt.legend()    
-
-                # dt_obs = np.zeros(nlayersm)
-                # dz_obs = np.zeros(nlayersm)
-                # plt.subplot(222)
-                # for i in range(1,nlayersm):
-                #     dt_obs[i] = tzmcols[i,col] - tzmcols[i-1,col]
-                #     dz_obs[i] = (altzmcols[i,col] - altzmcols[i-1,col]) / 1000.
-                # plt.plot(-dt_obs/dz_obs,pzmcols[1:,col])
-
-
                 
                 # plt.figure(i1+1)
                 # plt.subplot(342)

@@ -38,9 +38,9 @@ min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
-h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
+h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
 maxhtr = 0.03
-forcing_expt = 1 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
+forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
 tp = 0.001
 if (forcing_expt==1):
 	tp = tp * 1e12
@@ -606,7 +606,7 @@ for nlays in nlayss:
 																		# if (lapse_type == 2):
 																		# 	lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		
-																		lc = [-5.7] * ncols
+																		lc = [-9.8] * ncols
 																		# print(lc, 'lc')
 																		
 
@@ -654,7 +654,7 @@ for nlays in nlayss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [24.3156] * ncols
+																		fth = [500.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
