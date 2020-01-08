@@ -19,7 +19,7 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/cartoons/co2+o3+h2o+cld/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cartoons/co2 nosurfemiss/'
 ]
 
 directions = [1,1,2]
@@ -509,12 +509,13 @@ for directory in directories:
                 # for i in range(len(altzmcols[:,col])):
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
 
-                plt.figure(i1+1)
-                # plt.figure(1)
-                # plt.subplot(341)
+                # plt.figure(i1+1)
+                plt.figure(1)
+                plt.subplot(341)
                 plt.title('tzm')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
                 plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i_fn])
+                # plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
                 plt.xlabel('Temperature (K)')
                 plt.ylabel('Pressure (hPa)')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col],'-o',label=str(fn))
@@ -528,98 +529,99 @@ for directory in directories:
                 if(legends_on==1):
                     plt.legend()    
                 
-                # plt.figure(i1+1)
-                # plt.subplot(342)
-                # plt.title('htrm')
-                # plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
-                # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # plt.axvline(-0.1,ls='--')
-                # plt.axvline(0.1,ls='--')
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(342)
+                plt.title('htrm')
+                plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
+                # plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
+                plt.xlim(-5,5)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                plt.axvline(-0.01,ls='--')
+                plt.axvline(0.01,ls='--')
+                if(legends_on==1):
+                    plt.legend()
                 
-                # plt.figure(i1+1)
-                # plt.subplot(343)
-                # plt.title('totuflum')
-                # plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
-                # # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
-                # # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
-                # plt.axvline(0,ls='--')
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(343)
+                plt.title('totuflum')
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
+                # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
+                # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
+                plt.axvline(0,ls='--')
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(345)
-                # plt.title('abs_o3')
-                # plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(345)
+                plt.title('abs_o3')
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,7)
-                # plt.title('wklm1 (h2o)')
-                # plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,7)
+                plt.title('wklm1 (h2o)')
+                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,8)
-                # plt.title('wklm2 (co2)')
-                # plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,8)
+                plt.title('wklm2 (co2)')
+                plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,9)
-                # plt.title('wklm3 (o3)')
-                # plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,9)
+                plt.title('wklm3 (o3)')
+                plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,10)
-                # plt.title('wbrodlm')
-                # plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,10)
+                plt.title('wbrodlm')
+                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,11)
-                # plt.title('htro3')
-                # plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.figure(i1+1)
+                plt.subplot(3,4,11)
+                plt.title('htro3')
+                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlim(-5,5)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
+
+                plt.figure(i1+1)
+                plt.subplot(3,4,12)
+                plt.title('htrh2o')
+                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
-
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,12)
-                # plt.title('htrh2o')
-                # plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
                 
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,6)
-                # plt.title('htrmlw')
-                # plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # plt.axvline(-0.03,ls='--')
-                # plt.axvline(0.03,ls='--')
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,6)
+                plt.title('htrmlw')
+                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                plt.xlim(-5,5)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                plt.axvline(-0.03,ls='--')
+                plt.axvline(0.03,ls='--')
+                if(legends_on==1):
+                    plt.legend()
 
                 i3+=1
 

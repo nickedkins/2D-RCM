@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
@@ -39,8 +39,8 @@ cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
 h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
-maxhtr = 0.03
-forcing_expt = 1 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
+maxhtr = 0.01
+forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
 tp = 0.001
 if (forcing_expt==1):
 	tp = tp * 1e12
@@ -420,9 +420,9 @@ for nlays in nlayss:
 
 			# pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
 			if(forcing_expt==0):
-				pico2_facs = np.array([1,64])
+				pico2_facs = np.array([1,2])
 			else:
-				pico2_facs = np.array([64])
+				pico2_facs = np.array([2])
 			# pico2_facs = np.array([1.0])
 			pico2s = np.array([420e-6]) * pico2_facs
 			# pico2 = 348e-6 #rcemip
@@ -506,7 +506,7 @@ for nlays in nlayss:
 			co2_facs = [1.]
 			gas_amt_fac_co2s = [1.0]
 			gas_amt_fac_ch4s = [0.]		
-			gas_amt_fac_h2os = [1.0]
+			gas_amt_fac_h2os = [0.]
 
 			lf_as = [0.0] # 0.0 default
 			# twarms = [288.,293.,298.,303.,308.]
@@ -562,7 +562,7 @@ for nlays in nlayss:
 																		manual_clouds = []
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
-																		manual_clouds.append([750.,0.5,3.])
+																		# manual_clouds.append([750.,0.5,3.])
 																		
 														
 																		# sa = [sa] * ncols
@@ -625,7 +625,7 @@ for nlays in nlayss:
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols
-																		tg = [288.26799999999997] * ncols
+																		tg = [269.487] * ncols
 
 																	
 																		#lc = [-5.88]*ncols
@@ -652,7 +652,7 @@ for nlays in nlayss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [187.48500000000001] * ncols
+																		fth = [500.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -692,7 +692,7 @@ for nlays in nlayss:
 																		mtranspon = 1
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
-																		gas_amt_fac_o3 = 1.0
+																		gas_amt_fac_o3 = 0.
 																		# gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - pert_thickness
