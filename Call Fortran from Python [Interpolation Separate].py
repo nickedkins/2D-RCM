@@ -18,8 +18,8 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
@@ -40,7 +40,7 @@ steps_before_first_eqbcheck = 200
 snapshot=0
 h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
 maxhtr = 0.03
-forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
+forcing_expt = 1 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
 tp = 0.001
 if (forcing_expt==1):
 	tp = tp * 1e12
@@ -429,7 +429,7 @@ for nlays in nlayss:
 			pin2 = 0.78084 #%
 			pio2 = 0.20946 #%
 			piar = 0.009340 #%
-			pich4 = 1650e-9  #rcemip
+			pich4 = 1650e-9 * 0.  #rcemip
 
 			inv_sum = (pico2s[0]+pin2+pio2+piar+pich4) * 1e3
 			# pico2s = np.array([420e-6])
@@ -505,10 +505,9 @@ for nlays in nlayss:
 			# print pperts
 			co2_facs = [1.]
 			gas_amt_fac_co2s = [1.0]
-			gas_amt_fac_ch4s = [1.0]		
+			gas_amt_fac_ch4s = [0.]		
 			gas_amt_fac_h2os = [1.0]
-			# h2o_facs = [1.0]
-			h2o_facs = [1.0]
+
 			lf_as = [0.0] # 0.0 default
 			# twarms = [288.,293.,298.,303.,308.]
 			twarm = 288.
@@ -526,7 +525,7 @@ for nlays in nlayss:
 						lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
 						lat_facs = lat_facs * ncols / sum(lat_facs)
 						i_cf=0
-						for gas_amt_fac_h2o in h2o_facs:
+						for gas_amt_fac_h2o in gas_amt_fac_h2os:
 							i_lt = 0
 							for lapse_type in lapse_types:
 								i_lc = 0
@@ -547,7 +546,7 @@ for nlays in nlayss:
 																		nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)\
 																		*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
 																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(lcs)\
-																		*len(h2o_facs)
+																		*len(gas_amt_fac_h2os)
 																		print("Number of loops: ", nloops)
 																		secsperloop = 0.5 #uni
 																		# secsperloop = 1.5 #home
@@ -563,8 +562,7 @@ for nlays in nlayss:
 																		manual_clouds = []
 																		# if (psurf_override > 1000.):
 																		#     manual_clouds.append([1000.,0.99,cld_tau])
-																		# manual_clouds.append([450,0.66,9.9])
-																		# manual_clouds.append([550,0.5,3.0])
+																		manual_clouds.append([750.,0.5,3.])
 																		
 														
 																		# sa = [sa] * ncols
@@ -606,7 +604,7 @@ for nlays in nlayss:
 																		# if (lapse_type == 2):
 																		# 	lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																		
-																		lc = [-9.8] * ncols
+																		lc = [lc] * ncols
 																		# print(lc, 'lc')
 																		
 
@@ -627,7 +625,7 @@ for nlays in nlayss:
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols
-																		tg = [283.632] * ncols
+																		tg = [288.26799999999997] * ncols
 
 																	
 																		#lc = [-5.88]*ncols
@@ -654,7 +652,7 @@ for nlays in nlayss:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [500.] * ncols
+																		fth = [187.48500000000001] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -694,7 +692,7 @@ for nlays in nlayss:
 																		mtranspon = 1
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
-																		gas_amt_fac_o3 = 0.0
+																		gas_amt_fac_o3 = 1.0
 																		# gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - pert_thickness

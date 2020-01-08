@@ -19,7 +19,7 @@ directories = [
 ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/cartoons/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/cartoons/co2+o3+h2o+cld/'
 ]
 
 directions = [1,1,2]
@@ -498,6 +498,8 @@ for directory in directories:
                 p_trop = pzmcols[conv_trop_ind,col]
                 t_trop = tzmcols[conv_trop_ind,col]
                 z_trop = altzmcols[conv_trop_ind,col]
+
+                print 'ptrop, ttrop, ztrop, psurf, tsurf'
 
                 print(p_trop,',', t_trop,',', z_trop/1000.,',', pzmcols[0,col],',', tzmcols[0,col])
 
