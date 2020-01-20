@@ -18,15 +18,15 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1]
+ncolss = [5]
 # ncolss = [1]
 ncloudcolss = [2]
-nlayss = [600]	
+nlayss = [100]	
 od_low = 3.0*0.
 od_mid = 3.0*0.
 od_high = 3.0*0.
@@ -287,7 +287,7 @@ for nlays in nlayss:
 				f = interp1d(lats,z)
 
 				weights = np.zeros( len(latgridbounds)-1 )
-				lats_int = np.linspace(-90,90,ncols*8)
+				lats_int = np.linspace(-90,90,ncols*2.)
 				varss_int = np.zeros(len(latgridbounds)-1)
 				for i_lat in range(len(lats_int)):
 					for i_latg in range(len(latgridbounds)-1):
@@ -418,13 +418,17 @@ for nlays in nlayss:
 
 			#pico2s = np.logspace(-4,2,num=5,base=10.0)
 
+			gas_amt_fac_co2s = [1/16.,1/8.,1/4.,1/2.,1.0,2.,4.,8.,16.]
+			gas_amt_fac_ch4s = [1.]		
+			gas_amt_fac_h2os = [1.]
+
 			# pico2_facs = np.array([1e-2,0.0625,0.125,0.25,0.5,1,2,4,8])
-			if(forcing_expt==0):
-				pico2_facs = np.array([1,2])
-			else:
-				pico2_facs = np.array([2])
+			# if(forcing_expt==0):
+			# 	gas_amt_fac_co2s = np.array([1,2])
+			# else:
+			# 	gas_amt_fac_co2s = np.array([2])
 			# pico2_facs = np.array([1.0])
-			pico2s = np.array([420e-6]) * pico2_facs
+			pico2s = np.array([420e-6]) * gas_amt_fac_co2s
 			# pico2 = 348e-6 #rcemip
 			pin2 = 0.78084 #%
 			pio2 = 0.20946 #%
@@ -491,7 +495,7 @@ for nlays in nlayss:
 			# lcs = np.linspace(10,2,10)
 			# lcs = lcs * -1.
 			lcs = [-5.7]
-			lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
+			lapse_types = [1] # 0=critical lapse rate, 1=H82, 2=Mason (same as 0)
 			# nperts = 5
 			pert_thickness = 1000./nperts
 			# pperts = np.linspace(1000,pert_thickness,nperts)
@@ -503,10 +507,7 @@ for nlays in nlayss:
 			# pperts = np.linspace(pert_thickness,1000,nperts)
 			# pperts = np.insert(pperts,0,np.array([-1000.]),axis=0)
 			# print pperts
-			co2_facs = [1.]
-			gas_amt_fac_co2s = [1.0]
-			gas_amt_fac_ch4s = [0.]		
-			gas_amt_fac_h2os = [0.]
+			
 
 			lf_as = [0.0] # 0.0 default
 			# twarms = [288.,293.,298.,303.,308.]
@@ -545,7 +546,7 @@ for nlays in nlayss:
 
 																		nloops = len(cld_heights)*len(fsws)*len(psurf_overrides)\
 																		*len(cld_taus)*len(tboundms)*len(sas)*len(pin2s)*len(pico2s)*len(lapse_types)*len(pperts)\
-																		*ncols*nlays*ncloudcols*len(co2_facs)*len(lf_as)*len(h2o_sources)*len(lcs)\
+																		*ncols*nlays*ncloudcols*len(lf_as)*len(h2o_sources)*len(lcs)\
 																		*len(gas_amt_fac_h2os)
 																		print("Number of loops: ", nloops)
 																		secsperloop = 0.5 #uni
@@ -616,7 +617,7 @@ for nlays in nlayss:
 																		# sa = [0.2] * ncols
 																		lcf = createlatdistbn('Cloud Fraction')
 																		lcod = createlatdistbn('Cloud Optical Thickness')
-																		# tg = createlatdistbn('Surface Temperature')
+																		tg = createlatdistbn('Surface Temperature')
 																		# tg = createlatdistbn('Doug Mason Temperature vs Latitude')
 																		# for i in range(len(tg)):
 																		# 	tg[i] += 20.
@@ -625,7 +626,7 @@ for nlays in nlayss:
 																		# tg = tg * lat_facs
 
 																		# tg = [tboundm] * ncols
-																		tg = [269.487] * ncols
+																		# tg = [270.594] * ncols
 
 																	
 																		#lc = [-5.88]*ncols
@@ -657,7 +658,7 @@ for nlays in nlayss:
 																		asp = 2.0   
 																		cs = 0
 																		pbo = 0 
-																		fswon = 1
+																		fswon = 0
 																		# fsw = 240.
 																		fp = 0
 																		ps1 = 0
@@ -735,9 +736,9 @@ for nlays in nlayss:
 																		# h2o_source = 2 # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez
 																		ur_mt = 1.0
 																		# mtransp_type = 1 #1=simple diffusion, 2=Vladilo
-																		# gas_addmolec_h2o = 0.0
+																		gas_addmolec_h2o = 0.0
 																		# gas_addmolec_h2o = 1.0e19 * (ppert/1000.) * 3.83 / 3.3
-																		gas_addmolec_h2o = 3.82 / 2.31 * 1.0e19 * (ppert/1000.)**2
+																		# gas_addmolec_h2o = 3.82 / 2.31 * 1.0e19 * (ppert/1000.)**2
 																		gas_addmolec_co2 = 0.0
 																		gas_addmolec_o3 = 0.0
 																		gas_addmolec_ch4 = 0.0
