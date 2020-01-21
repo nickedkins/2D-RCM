@@ -204,6 +204,7 @@ subroutine wrapper
     read(73,*) gas_amt_fac_ch4
     read(73,*) gas_addmolec_ch4
     read(73,*) forcing_expt
+    read(73,*) o3_source
 
     close(73)
 
@@ -515,8 +516,13 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-                read(83,*) mixo3(i)
-                mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
+            	select case(o3_source)
+            	case(1)
+                	read(83,*) mixo3(i)
+                	mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
+                case(2)
+                	mixo3(i) = (3.6478*(pzm(i)**0.83209))*exp(-pzm(i)/11.3515)*1e-6
+                end select
                 read(90,*) tzm(i)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
@@ -1735,9 +1741,9 @@ subroutine wrapper
 
     tot_albedo = 1.0 - tot_sol_abs_lh / sol_inc
 
-    if (detailprint==1) then
-        write(*,'(A,F6.2)') "total LH albedo: ", tot_albedo
-    endif
+    ! if (detailprint==1) then
+    !     write(*,'(A,F6.2)') "total LH albedo: ", tot_albedo
+    ! endif
 
     write(62,1002) vol_mixco2,totuflum(OLR_layer)
     write(63,'(E8.2)') vol_mixco2

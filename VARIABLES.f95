@@ -39,7 +39,7 @@ MODULE VARIABLES
     real :: tcels,t1_vl=288.0,t2_vl=268.0,delta_pv_star,delta_x_lats,delta_temp
     real, dimension(0:maxncols) :: x_edge,delta_x_edge,delta_T_edge,meridtransp_edge,delta_y_edge
     real,dimension(MAXNCOLS) :: delta_meridtransp_edge
-    integer :: adj1,adj2,adj3,edge,forcing_expt
+    integer :: adj1,adj2,adj3,edge,forcing_expt,o3_source
     
 
     ! ----------------------------------- NJE trying something here

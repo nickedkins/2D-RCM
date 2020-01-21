@@ -10,16 +10,16 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 1
-legends_on = 1
+plot_all_vert_profiles = 0
+legends_on = 0
 grids_on = 1
 
-directories = [
-'_Current Output/'
-]
+# directories = [
+# '_Current Output/'
+# ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/cartoons/co2 not fixed trop/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/rcemip o3/'
 ]
 
 directions = [1,1,2]
@@ -346,6 +346,10 @@ for directory in directories:
     rel_hum_master = []
     wklm1_master = []
     wbrodlm_master = []
+    ptrops_master = []
+    ttrops_master = []
+    ztrops_master = []
+    tsurfs_master = []
 
     filenames = []
 
@@ -375,6 +379,7 @@ for directory in directories:
 
     T1s = np.zeros(5)
     T2s = np.zeros(5)
+
 
     i_fn = 0
     for fn in a:
@@ -427,6 +432,16 @@ for directory in directories:
             if conv_trop_ind > nlayersm:    
                 conv_trop_ind = nlayersm
             conv_trop_ind_cols[col] = int(conv_trop_ind)
+
+            p_trop = pzmcols[conv_trop_ind,col]
+            t_trop = tzmcols[conv_trop_ind,col]
+            z_trop = altzmcols[conv_trop_ind,col]
+            tsurf = tzmcols[0,col]
+
+            ptrops_master.append(p_trop)
+            ttrops_master.append(t_trop)
+            ztrops_master.append(z_trop)
+            tsurfs_master.append(tsurf)
 
 
         conv_trop_ind_cols = conv_trop_ind_cols.astype(int)
@@ -509,12 +524,12 @@ for directory in directories:
                 # for i in range(len(altzmcols[:,col])):
                 #     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
 
-                # plt.figure(i1+1)
-                plt.figure(1)
-                plt.subplot(211)
+                plt.figure(i1+1)
+                # plt.figure(1)
+                plt.subplot(341)
                 plt.title('tzm')
                 # plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
-                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i_fn])
+                plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i1])
                 # plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
                 plt.xlabel('Temperature (K)')
                 plt.ylabel('Pressure (hPa)')
@@ -530,7 +545,7 @@ for directory in directories:
                     plt.legend()    
                 
                 plt.figure(i1+1)
-                plt.subplot(212)
+                plt.subplot(342)
                 plt.title('htrm')
                 plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
                 # plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
@@ -541,32 +556,32 @@ for directory in directories:
                 if(legends_on==1):
                     plt.legend()
                 
-                # plt.figure(i1+1)
-                # plt.subplot(343)
-                # plt.title('totuflum')
-                # plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
-                # # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
-                # # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
-                # plt.axvline(0,ls='--')
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(343)
+                plt.title('totuflum')
+                plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
+                # plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
+                # plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
+                plt.axvline(0,ls='--')
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(345)
-                # plt.title('abs_o3')
-                # plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(345)
+                plt.title('abs_o3')
+                plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # # plt.figure(i1+1)
-                # # plt.subplot(3,4,7)
-                # # plt.title('wklm1 (h2o)')
-                # # plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # # if(legends_on==1):
-                # #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,7)
+                plt.title('wklm1 (h2o)')
+                plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
                 plt.figure(i1+1)
                 plt.subplot(3,4,8)
@@ -576,52 +591,52 @@ for directory in directories:
                 if(legends_on==1):
                     plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,9)
-                # plt.title('wklm3 (o3)')
-                # plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,9)
+                plt.title('wklm3 (o3)')
+                plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,10)
-                # plt.title('wbrodlm')
-                # plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,10)
+                plt.title('wbrodlm')
+                plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,11)
-                # plt.title('htro3')
-                # plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.figure(i1+1)
+                plt.subplot(3,4,11)
+                plt.title('htro3')
+                plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
+                plt.xlim(-5,5)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
+
+                plt.figure(i1+1)
+                plt.subplot(3,4,12)
+                plt.title('htrh2o')
+                plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
                 # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
-
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,12)
-                # plt.title('htrh2o')
-                # plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-                # # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                if(legends_on==1):
+                    plt.legend()
 
                 
 
-                # plt.figure(i1+1)
-                # plt.subplot(3,4,6)
-                # plt.title('htrmlw')
-                # plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-                # plt.xlim(-5,5)
-                # plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-                # plt.axvline(-0.03,ls='--')
-                # plt.axvline(0.03,ls='--')
-                # if(legends_on==1):
-                #     plt.legend()
+                plt.figure(i1+1)
+                plt.subplot(3,4,6)
+                plt.title('htrmlw')
+                plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
+                plt.xlim(-5,5)
+                plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+                plt.axvline(-0.03,ls='--')
+                plt.axvline(0.03,ls='--')
+                if(legends_on==1):
+                    plt.legend()
 
                 i3+=1
 
@@ -667,6 +682,25 @@ for directory in directories:
     rel_hum_master=np.array(rel_hum_master)
     wklm1_master=np.array(wklm1_master)
     wbrodlm_master=np.array(wbrodlm_master)
+    ptrops_master=np.array(ptrops_master)
+    ttrops_master=np.array(ttrops_master)
+    ztrops_master=np.array(ztrops_master)
+    tsurfs_master=np.array(tsurfs_master)
+
+    plt.figure(1)
+
+    plt.subplot(121)
+    plt.plot(tsurfs_master-tsurfs_master[1] ,ptrops_master-ptrops_master[1])
+    plt.xlabel("$\Delta T_{surf}$")
+    plt.ylabel("$\Delta p_{trop}$")
+
+    plt.subplot(122)
+    plt.plot(tsurfs_master-tsurfs_master[1],ttrops_master-ttrops_master[1])
+    plt.plot(tsurfs_master-tsurfs_master[1],tsurfs_master-tsurfs_master[1],linestyle='--')
+    plt.axhline(0)
+    plt.axvline(0)
+    plt.xlabel("$\Delta T_{surf}$")
+    plt.ylabel("$\Delta T_{trop}$")
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
