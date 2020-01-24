@@ -140,6 +140,8 @@ MODULE VARIABLES
     real, dimension(maxncols) :: d_mid,d_trop
     integer :: lapse_type,h2o_sb,h2o_for,h2o_source,mtransp_type,steps_before_first_eqbcheck,snapshot
     real :: ur_mt,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,omega_rh,gamma_r13,s_r13,bowen_r13
+    real,dimension(maxlaym) :: esat_ice,esat_liq,esat_tot,alpha
+    integer,dimension(maxncols) :: coldpoint_trop_ind
 
 
     !Lacis and Hansen Ozone variables

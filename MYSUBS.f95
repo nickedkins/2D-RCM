@@ -851,6 +851,12 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) coldpoint_trop_ind(col)
+            end do
+        end do
+
 
         close(50)
 

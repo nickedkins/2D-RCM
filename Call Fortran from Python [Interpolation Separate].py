@@ -31,15 +31,15 @@ od_mid = 3.0*0.
 od_high = 3.0*0.
 nperts = 1
 timesteps = 5000
-ur_htr = 0.5
-#ur_htr = 3.0
+#ur_htr = 0.5
+ur_htr = 1.0
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
-h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat
-o3_source = 2 #1=erai, 2=RCEMIP
+h2o_sources=[6] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
+o3_source = 1 #1=erai, 2=RCEMIP
 maxhtr = 0.05
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
 tp = 0.01
@@ -668,12 +668,12 @@ for nlays in nlayss:
 																	asp = 2.0   
 																	cs = 0
 																	pbo = 0 
-																	fswon = 1
+																	fswon = 0
 																	# fsw = 240.
 																	fp = 0
 																	ps1 = 0
 																	af = 1.0
-																	convecttype = 2 #convection type
+																	convecttype = 2 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 																	npb = 1
 																	o3sw = 1
 																	h2osw = 1
@@ -703,7 +703,7 @@ for nlays in nlayss:
 																	mtranspon = 1
 																	# gas_amt_fac_h2o = 1.0
 																	# gas_amt_fac_co2 = 1.0
-																	gas_amt_fac_o3 = 1.0
+																	gas_amt_fac_o3 = 1.
 																	# gas_amt_fac_ch4 = 1.0
 																	# gas_amt_p_high_h2o = ppert
 																	# gas_amt_p_low_h2o = ppert - pert_thickness

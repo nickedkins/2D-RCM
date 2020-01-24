@@ -516,13 +516,14 @@ subroutine wrapper
 
 
             do i=1,nlayersm
-            	select case(o3_source)
-            	case(1)
-                	read(83,*) mixo3(i)
-                	mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
+                select case(o3_source)
+                case(1)
+                    read(83,*) mixo3(i)
+                    mixo3(i) = mixo3(i) * mmwtot / (48.0*1e-3)
                 case(2)
-                	mixo3(i) = (3.6478*(pzm(i)**0.83209))*exp(-pzm(i)/11.3515)*1e-6
+                    mixo3(i) = (3.6478*(pzm(i)**0.83209))*exp(-pzm(i)/11.3515)*1e-6
                 end select
+                wklm(3,i) = mperlayr(i) * 1.0e-4 * mixo3(i)
                 read(90,*) tzm(i)
                 !                read(84,*) fracs(i)
                 !                read(85,*) clwc(i)
@@ -612,28 +613,31 @@ subroutine wrapper
                 if (pzm(i) < 0.0) u_lw(i) = 1.0e-4
             enddo
 
+            coldpoint_trop_ind(col) = minloc(tzm(1:nlayersm),dim=1)
+
             do i=1,nlayersm
-                es(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
-                
+               esat_liq(i) = 6.1094*exp(17.625*(tzm(i)-273.15)/(tzm(i)-273.15+243.04))
+
                 select case(h2o_source)
                 case(0) !ERA-Interim
                     read(82,*) mixh2o(i)
                     mixh2o(i) = mixh2o(i) * mmwtot / (18.014*1e-3)
+                    rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / (esat_liq(i) * (0.622 + mixh2o(i)) )
                 case(1) !MW67
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
-                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    mixh2o(i) = 0.622*rel_hum(i)*esat_liq(i)/(pavelm(i)-rel_hum(i)*esat_liq(i))
                 case(2) !Cess
                     omega_rh = 1. - 0.03*(tzm(0)-288.)
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0)**omega_rh
-                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*esat_liq(i))
                 case(3) !Kasting and Ackerman
-                    omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
+                    omega_rh = 1. - (esat_liq(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
                     if (omega_rh > 1.) omega_rh=1
                     if (omega_rh < 0.) omega_rh=0
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
-                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    mixh2o(i) = 0.622*rel_hum(i)*esat_liq(i)/(pavelm(i)-rel_hum(i)*esat_liq(i))
                 case(4) !Ramirez 2013
-                    omega_rh = 1. - ( es(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
+                    omega_rh = 1. - (esat_liq(1)/pzm(0) - 0.0166 ) / ( 0.1 - 0.0166 )
                     if (omega_rh > 1.) omega_rh=1
                     if (omega_rh < 0.) omega_rh=0
                     density = pavelm(1) * 100. / (rsp_tot(1) * tavelm(1))
@@ -647,20 +651,30 @@ subroutine wrapper
                     surf_rh = 1. - (1. - 0.8) * ( ( abs_surf_lh - fnetm(0) ) / ( 97. )) * ( 1.225 / density ) *&
                     & ( 0.0166 / (es(1)/pzm(0)) ) * ( ( 1. + 0.59 )/( 1. + bowen_r13 ) )
                     rel_hum(i) = surf_rh*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)**omega_rh
-                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    mixh2o(i) = 0.622*rel_hum(i)*esat_liq(i)/(pavelm(i)-rel_hum(i)*esat_liq(i))
                 case(5) !option to keep h2o constant in all columns
                     h2o_dummy_temp(i) = max(280.+altzm(i)/1000.*lapsecritcols(col), 200.)
-                    es(i) = 6.1094*exp(17.625*(h2o_dummy_temp(i)-273.15)/&
+                   esat_liq(i) = 6.1094*exp(17.625*(h2o_dummy_temp(i)-273.15)/&
                         &(h2o_dummy_temp(i)-273.15+243.04)) 
                     rel_hum(i) = 0.8*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
-                    mixh2o(i) = 0.622*rel_hum(i)*es(i)/(pavelm(i)-rel_hum(i)*es(i))
+                    mixh2o(i) = 0.622*rel_hum(i)*esat_liq(i)/(pavelm(i)-rel_hum(i)*esat_liq(i))
+                case(6)
+                    alpha(i) = ( ( tzm(i) - 273.16 + 23 ) / ( 23 ) )**2
+                    if (alpha(i) < 0) alpha(i) = 0.
+                    if (alpha(i) > 1) alpha(i) = 1.
+                    esat_ice(i) = 6.1121 * exp( 22.587 * ( tzm(i) - 273.16) / ( tzm(i) + 0.7 ) ) !note different e0 for ice and liq - should synthesise
+                    esat_tot(i) = alpha(i)*esat_liq(i) + (1.-alpha(i)) * esat_ice(i)                    
+                    rel_hum(i) = 0.8*(pzm(i)/1000.0 - 0.02)/(1.0-0.02)
+                    mixh2o(i) = 0.622*rel_hum(i)*esat_tot(i)/(pavelm(i)-rel_hum(i)*esat_tot(i))
+                    if (i>coldpoint_trop_ind(col)) then
+                        mixh2o(i) = mixh2o(coldpoint_trop_ind(col))
+                    endif
                 end select
                 if (mixh2o(i) < rmin) mixh2o(i) = rmin
                 if (rel_hum(i) < 1e-3) rel_hum(i) = 1e-3
-                rel_hum_cols(i,col) = mixh2o(i) * pavelm(i) / ( es(i) * (0.622 + mixh2o(i)) )
                 if (rel_hum_cols(i,col) > max_rh) then
                     rel_hum_cols(i,col) = max_rh
-                    mixh2o(i) = 0.622*max_rh*es(i)/(pavelm(i)-max_rh*es(i))
+                    mixh2o(i) = 0.622*max_rh*esat_liq(i)/(pavelm(i)-max_rh*esat_liq(i))
                 end if
             enddo
 
@@ -929,6 +943,7 @@ subroutine wrapper
                 call levconvect !nje t0
 
                 conv_trop_ind(col) = minloc(conv(:,col),dim=1)
+                coldpoint_trop_ind(col) = minloc(tzmcols(:,col),dim=1)
 
                 do i=1,nlayersm
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
