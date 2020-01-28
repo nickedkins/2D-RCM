@@ -18,31 +18,31 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [1]
+ncolss = [5]
 ncloudcolss = [2]
-nlayss = [200]	
-od_low = 3.0*0.
-od_mid = 3.0*0.
-od_high = 3.0*0.
+nlayss = [100]	
+od_low = 3.0
+od_mid = 3.0
+od_high = 3.0
 nperts = 1
 timesteps = 5000
-#ur_htr = 0.5
-ur_htr = 1.0
+ur_htr = 0.5
+# ur_htr = 1.0
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
-h2o_sources=[6] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
-o3_source = 1 #1=erai, 2=RCEMIP
+h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
+o3_source = 1	 #1=erai, 2=RCEMIP
 maxhtr = 0.05
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-tp = 0.01
+tp = 1.0
 if (forcing_expt==1):
 	tp = tp * 1e12
 
@@ -495,8 +495,8 @@ for nlays in nlayss:
 			add_cld_alts = [0.0]
 			# lcs = np.linspace(10,2,10)
 			# lcs = lcs * -1.
-			lcs = [-5.7]
-			lapse_types = [0] # 0=critical lapse rate, 1=H82
+			lcs = [-9.8]
+			lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason
 			# nperts = 5
 			pert_thickness = 1000./nperts
 			# pperts = np.linspace(1000,pert_thickness,nperts)
@@ -558,8 +558,6 @@ for nlays in nlayss:
 																	print("lapse_type=",lapse_type)
 																	print("lc=",lc)
 																	print("fsw=",fsw)
-																	print("pico2=",pico2)
-																	print("pico2=",pico2)
 
 
 																	# nlays = nlayss[i_pso]
@@ -611,10 +609,10 @@ for nlays in nlayss:
 																	# interpolate_createprrtminput_sfc('fal',fal_lat_max,fal_lats,[1.0]*ncols)
 																	interpolate_createprrtminput_lev('t',t_latp_max,t_ps,t_lats,[1.0]*ncols)
 																
-																	# if (lapse_type == 2):
-																	# 	lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
+																	if (lapse_type == 2):
+																		lc = createlatdistbn('Doug Mason Lapse Rate vs Latitude')
 																	
-																	if(ncols>1):
+																	if(ncols>1 and lapse_type==0):
 																		lc = [lc] * ncols
 																	# print(lc, 'lc')
 																	
@@ -673,7 +671,7 @@ for nlays in nlayss:
 																	fp = 0
 																	ps1 = 0
 																	af = 1.0
-																	convecttype = 2 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
+																	convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 																	npb = 1
 																	o3sw = 1
 																	h2osw = 1

@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 legends_on = 0
 grids_on = 1
 
@@ -18,10 +18,9 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/figs/h2o varied/ERA-I/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/figs/h2o varied/Manabe 67/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/kluft19/2d/',
+]
 
 directions = [1,1,2]
 # directions = [2]
@@ -689,35 +688,35 @@ for directory in directories:
     ztrops_master=np.array(ztrops_master)
     tsurfs_master=np.array(tsurfs_master)
 
+    print shape(tsurfs_master)
+
     
 	#kluftfig
-    # plt.figure(1)
+    plt.figure(1)
 
+    plt.subplot(121)
+    plt.plot(tsurfs_master-tsurfs_master[1] ,ptrops_master-ptrops_master[1],'-o',label=dir_label)
+    plt.xlabel("$\Delta T_{surf}$",labelpad=20)
+    plt.ylabel("$\Delta p_{trop}$")
+    plt.legend()
+    plt.grid(True)
 
-    # plt.subplot(121)
-    # plt.plot(tsurfs_master-tsurfs_master[1] ,ptrops_master-ptrops_master[1],'-o',label=dir_label)
-    # plt.xlabel("$\Delta T_{surf}$")
-    # plt.ylabel("$\Delta p_{trop}$")
-    # plt.legend()
-    # plt.grid(True)
-
-
-    # plt.subplot(122)
-    # plt.plot(tsurfs_master-tsurfs_master[1],ttrops_master-ttrops_master[1],'-o',label=dir_label)
-    # if(i_dir==1):
-	   #  data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_mw67.txt',delimiter=',')
-	   #  x_k19 = data[:,0]
-	   #  y_k19 = data[:,1]
-	   #  plt.plot(x_k19,y_k19,'o',label='Kluft using Manabe 67')
-	   #  data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_phat.txt',delimiter=',')
-	   #  x_k19 = data[:,0]
-	   #  y_k19 = data[:,1]
-	   #  plt.plot(x_k19,y_k19,'--',c='b',alpha=0.5,label='PHAT')
-	   #  plt.plot(tsurfs_master-tsurfs_master[1],tsurfs_master-tsurfs_master[1],ls='--',c='r',alpha=0.5,label='FAP')	    
-    # plt.xlabel("$\Delta T_{surf}$")
-    # plt.ylabel("$\Delta T_{trop}$")
-    # plt.grid(True)
-    # plt.legend()
+    plt.subplot(122)
+    plt.plot(tsurfs_master-tsurfs_master[1],ttrops_master-ttrops_master[1],'-o',label=dir_label)
+    if(i_dir==1):
+	    data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_mw67.txt',delimiter=',')
+	    x_k19 = data[:,0]
+	    y_k19 = data[:,1]
+	    plt.plot(x_k19,y_k19,'o',label='Kluft using Manabe 67')
+	    data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_phat.txt',delimiter=',')
+	    x_k19 = data[:,0]
+	    y_k19 = data[:,1]
+	    plt.plot(x_k19,y_k19,'--',c='b',alpha=0.5,label='PHAT')
+	    plt.plot(tsurfs_master-tsurfs_master[1],tsurfs_master-tsurfs_master[1],ls='--',c='r',alpha=0.5,label='FAP')	    
+    plt.xlabel("$\Delta T_{surf}$",labelpad=20)
+    plt.ylabel("$\Delta T_{trop}$")
+    plt.grid(True)
+    plt.legend()
 
 
 
@@ -733,9 +732,9 @@ for directory in directories:
     As = np.zeros(len(a))
     Bs = np.zeros(len(a))
 
-    for i_fn in range(len(a)):
-        As[i_fn] = tzm_master[i_fn,conv_trop_ind_master[i_fn],:] / tzm_master[0,conv_trop_ind_master[0],:]
-        Bs[i_fn] = ( pzm_master[i_fn,conv_trop_ind_master[i_fn],:] / pzm_master[0,conv_trop_ind_master[0],:] ) ** (lapsecritcols_master[i_fn,0,0]*0.287/9.8)
+    # for i_fn in range(len(a)):
+    #     As[i_fn] = tzm_master[i_fn,conv_trop_ind_master[i_fn],:] / tzm_master[0,conv_trop_ind_master[0],:]
+    #     Bs[i_fn] = ( pzm_master[i_fn,conv_trop_ind_master[i_fn],:] / pzm_master[0,conv_trop_ind_master[0],:] ) ** (lapsecritcols_master[i_fn,0,0]*0.287/9.8)
 
 
     pico2_facs = np.array([1./32.,1./16.,1./4.,1,4,16,32])
