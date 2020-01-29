@@ -10,16 +10,16 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 legends_on = 0
 grids_on = 1
 
-directories = [
-'_Current Output/'
-]
+# directories = [
+# '_Current Output/'
+# ]
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/kluft19/2d/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/2d/',
 ]
 
 directions = [1,1,2]
@@ -429,7 +429,7 @@ for directory in directories:
         conv_trop_ind_cols = np.zeros(ncols)
 
         for col in range(ncols):
-            conv_trop_ind = int(convcols[0,col])
+            conv_trop_ind = int(convcols[i_fn,col])
             if conv_trop_ind > nlayersm:    
                 conv_trop_ind = nlayersm
             conv_trop_ind_cols[col] = int(conv_trop_ind)
@@ -504,7 +504,7 @@ for directory in directories:
 
             for col in range(ncols):
 
-                conv_trop_ind = int(convcols[0,col])
+                conv_trop_ind = int(convcols[i_fn,col])
                 if conv_trop_ind > nlayersm:    
                     conv_trop_ind = nlayersm
 
@@ -687,46 +687,51 @@ for directory in directories:
     ttrops_master=np.array(ttrops_master)
     ztrops_master=np.array(ztrops_master)
     tsurfs_master=np.array(tsurfs_master)
-
-    print shape(tsurfs_master)
-
     
-	#kluftfig
-    plt.figure(1)
+    # master indices for conv_trop_ind: master[file][column]
+    # to get trop values for tzm, use tzm_matser[file,conv_trop_ind_master[file,column],column][0][file] (slightly ugly but functional)
+    conv_trop_ind_master = np.array(conv_trop_ind_master)
 
-    plt.subplot(121)
-    plt.plot(tsurfs_master-tsurfs_master[1] ,ptrops_master-ptrops_master[1],'-o',label=dir_label)
-    plt.xlabel("$\Delta T_{surf}$",labelpad=20)
-    plt.ylabel("$\Delta p_{trop}$")
-    plt.legend()
-    plt.grid(True)
+    print tzm_master[:,conv_trop_ind_master[:,0],0][:][:]
+    print np.diagonal(tzm_master[:,conv_trop_ind_master[:,0],0])
+    # print(pzm_master[:,conv_trop_ind_master[0,:],0])
+    
+	# kluftfig
+    # plt.figure(1)
 
-    plt.subplot(122)
-    plt.plot(tsurfs_master-tsurfs_master[1],ttrops_master-ttrops_master[1],'-o',label=dir_label)
-    if(i_dir==1):
-	    data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_mw67.txt',delimiter=',')
-	    x_k19 = data[:,0]
-	    y_k19 = data[:,1]
-	    plt.plot(x_k19,y_k19,'o',label='Kluft using Manabe 67')
-	    data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_phat.txt',delimiter=',')
-	    x_k19 = data[:,0]
-	    y_k19 = data[:,1]
-	    plt.plot(x_k19,y_k19,'--',c='b',alpha=0.5,label='PHAT')
-	    plt.plot(tsurfs_master-tsurfs_master[1],tsurfs_master-tsurfs_master[1],ls='--',c='r',alpha=0.5,label='FAP')	    
-    plt.xlabel("$\Delta T_{surf}$",labelpad=20)
-    plt.ylabel("$\Delta T_{trop}$")
-    plt.grid(True)
-    plt.legend()
+    # for col in range(ncols):
+
+	   #  plt.subplot(121)
+	   #  # plt.plot(tsurfs_master-tsurfs_master[1] ,ptrops_master-ptrops_master[1],'-o',label=dir_label)
+	   #  plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],np.diagonal(pzm_master[:,conv_trop_ind_master[:,0],col])-np.diagonal(pzm_master[:,conv_trop_ind_master[:,0],col])[1],'-o',label=dir_label)
+	   #  plt.xlabel("$\Delta T_{surf}$",labelpad=20)
+	   #  plt.ylabel("$\Delta p_{trop}$")
+	   #  plt.legend()
+	   #  plt.grid(True)
+
+	   #  plt.subplot(122)
+	   #  plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],np.diagonal(tzm_master[:,conv_trop_ind_master[:,0],col])-np.diagonal(tzm_master[:,conv_trop_ind_master[:,0],col])[1],'-o',label=dir_label)
+	   #  if(i_dir==1):
+		  #   data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_mw67.txt',delimiter=',')
+		  #   x_k19 = data[:,0]
+		  #   y_k19 = data[:,1]
+		  #   plt.plot(x_k19,y_k19,'o',label='Kluft using Manabe 67')
+		  #   data = np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/2020-01 (January)/x[dTsurf]_y[dTtrop]_kluft2019fig8_phat.txt',delimiter=',')
+		  #   x_k19 = data[:,0]
+		  #   y_k19 = data[:,1]
+		  #   plt.plot(x_k19,y_k19,'--',c='b',alpha=0.5,label='PHAT')
+		  #   plt.plot(tzm_master[:,0,0]-tzm_master[1,0,0],tzm_master[:,0,0]-tzm_master[1,0,0],ls='--',c='r',alpha=0.5,label='FAP')	    
+	   #  plt.xlabel("$\Delta T_{surf}$",labelpad=20)
+	   #  plt.ylabel("$\Delta T_{trop}$")
+	   #  plt.grid(True)
+	    # plt.legend()
 
 
 
     box_abssw_tot_master = abs_surf_cols_master + abs_h2o_cols_master + abs_o3_cols_master
     # boxtotnetflux_master = meridtransp_master[:,0,:] + box_abssw_tot_master[:,0,:] - totuflumcols_master[:,-1,:]
 
-    # master indices for conv_trop_ind: master[file][column]
-    conv_trop_ind_master = np.array(conv_trop_ind_master)
-
-    print conv_trop_ind_master
+    
 
     # Bs = pzm_master[:,conv_trop_ind_master[:,range(ncols)],range(ncols)]
     As = np.zeros(len(a))
