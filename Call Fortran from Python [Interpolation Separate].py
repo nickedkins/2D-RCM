@@ -18,31 +18,31 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [5]
 ncloudcolss = [2]
-nlayss = [600]	
+nlayss = [600]
 od_low = 3.0
 od_mid = 3.0
 od_high = 3.0
 nperts = 1
 timesteps = 5000
-ur_htr = 0.5
-# ur_htr = 1.0
+# ur_htr = 0.5
+ur_htr = 3.0
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
-h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
-o3_source = 1	 #1=erai, 2=RCEMIP
+h2o_sources=[0,1,6] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
+o3_source = 2	 #1=erai, 2=RCEMIP
 maxhtr = 0.05
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-tp = 1.0
+tp = 0.1
 if (forcing_expt==1):
 	tp = tp * 1e12
 
@@ -496,7 +496,7 @@ for nlays in nlayss:
 			# lcs = np.linspace(10,2,10)
 			# lcs = lcs * -1.
 			lcs = [-9.8]
-			lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason
+			lapse_types = [1,2] # 0=critical lapse rate, 1=H82, 2=Mason
 			# nperts = 5
 			pert_thickness = 1000./nperts
 			# pperts = np.linspace(1000,pert_thickness,nperts)
@@ -518,11 +518,12 @@ for nlays in nlayss:
 
 			mtransp_type = 2
 
-			i_pco2=0
-			for pico2 in pico2s:
-				gas_amt_fac_co2 = gas_amt_fac_co2s[i_pco2]
-				i_h2osrc=0
-				for h2o_source in h2o_sources:
+			i_h2osrc=0
+			for h2o_source in h2o_sources:
+				i_pco2=0
+				for pico2 in pico2s:
+					gas_amt_fac_co2 = gas_amt_fac_co2s[i_pco2]
+					
 					i_lfa = 0
 					for lf_a in lf_as:
 						lat_facs = 1.0 + abs(np.sin(np.deg2rad(collats))) * lf_a #multiply a variable by a latitude-dependent factor to change the meridional gradient
@@ -671,7 +672,7 @@ for nlays in nlayss:
 																	fp = 0
 																	ps1 = 0
 																	af = 1.0
-																	convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
+																	convecttype = 1 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 																	npb = 1
 																	o3sw = 1
 																	h2osw = 1
@@ -813,8 +814,8 @@ for nlays in nlayss:
 							i_lt+=1
 						i_cf+=1
 					i_lfa+=1
-				i_h2osrc+=1
-			i_pco2+=1
+				i_pco2+=1
+			i_h2osrc+=1
 
 ########################################################################################################################
 
