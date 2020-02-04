@@ -15,18 +15,17 @@ kluftfig=1
 legends_on = 0
 grids_on = 1
 
-# directories = [
-# '_Current Output/'
-# ]
-
 directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/kluft19/all 2d/vary h2o/2d/tp=0.1/erai/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/kluft19/all 2d/vary h2o/2d/tp=0.1/manabe67/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/kluft19/all 2d/vary h2o/2d/tp=0.1/kluft19/',
+'_Current Output/'
 ]
 
-directions = [1,1,2]
-# directions = [2]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/erai/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/manabe67/',
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/kluft19/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/erai o3/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/rcemip o3/',
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -740,7 +739,9 @@ for directory in directories:
 
 			plt.subplot(122)
 			# plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],np.diagonal(tzm_master[:,conv_trop_ind_master[:,0],col])-np.diagonal(tzm_master[:,conv_trop_ind_master[:,0],col])[1],'-',alpha=0.5,color='grey')
-			plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],ttrops[:,col]-ttrops[1,col],'-',alpha=0.5,color='grey')
+			# plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],ttrops[:,col]-ttrops[1,col],'-',alpha=0.5,color='grey')
+			plt.plot(tzm_master[:,0,col]-tzm_master[1,0,col],ttrops[:,col]-ttrops[1,col],'-',alpha=0.5,label=col)
+			print tzm_master[:,0,col]-tzm_master[1,0,col]
 
 		# for i_fn in range(len(a)):
 		# 	plt.plot(latwghtavg(tzm_master[i_fn,0,:]-tzm_master[1,0,:],lats ),latwghtavg( ttrops[i_fn,:]-ttrops[1,:],lats), 'o',c='b' )
