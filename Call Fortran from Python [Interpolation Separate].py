@@ -18,12 +18,12 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [5]
+ncolss = [1]
 ncloudcolss = [2]
 nlayss = [600]
 od_low = 3.0
@@ -31,8 +31,8 @@ od_mid = 3.0
 od_high = 3.0
 nperts = 1
 timesteps = 500
-# ur_htr = 0.5
-ur_htr = 3.0
+ur_htr = 0.3
+# ur_htr = 3.0
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
@@ -49,6 +49,7 @@ if (forcing_expt==1):
 
 for nlays in nlayss:
 	nlays = int(nlays)
+	ur_htr = nlays/2000.
 
 	for ncols in ncolss:
 		ncols = int(ncols)
@@ -419,7 +420,8 @@ for nlays in nlayss:
 
 			#pico2s = np.logspace(-4,2,num=5,base=10.0)
 
-			gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
+			# gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
+			gas_amt_fac_co2s = [1.]
 			gas_amt_fac_ch4s = [1.]		
 			gas_amt_fac_h2os = [1.]
 

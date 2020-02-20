@@ -898,7 +898,13 @@ subroutine wrapper
             ! applyhtr
             if(snapshot /= 1) then
                 do i=1,nlayersm
-                    tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+                    if(htrm(i-1)/(newur(i)) > 5.) then
+                        tavelm(i) = tavelm(i)+5.
+                    else if(htrm(i-1)/(newur(i)) < -5.) then
+                        tavelm(i) = tavelm(i)-5.
+                    else
+                        tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+                    end if
                     if (tavelm(i) < t_min) then 
                         tavelm(i) = t_min
                     end if

@@ -10,8 +10,8 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 0
-kluftfig=1
+plot_all_vert_profiles = 1
+kluftfig=0
 legends_on = 0
 grids_on = 1
 
@@ -19,13 +19,13 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/erai/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/manabe67/',
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/kluft19/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/erai o3/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/rcemip o3/',
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/erai/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/manabe67/',
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/kluft19/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/erai o3/',
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/rcemip o3/',
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -706,12 +706,12 @@ for directory in directories:
 
 	ttrops = np.zeros((6,ncols))
 
-	i_co2 = 0
-	for i_co2 in range(6):
-		i_lat = 0
-		for i_lat in range(ncols):
-			cti = conv_trop_ind_master[i_co2,i_lat]
-			ttrops[i_co2,i_lat] = tzm_master[i_co2,cti,i_lat]
+	# i_co2 = 0
+	# for i_co2 in range(6):
+	# 	i_lat = 0
+	# 	for i_lat in range(ncols):
+	# 		cti = conv_trop_ind_master[i_co2,i_lat]
+	# 		ttrops[i_co2,i_lat] = tzm_master[i_co2,cti,i_lat]
 
 
 
