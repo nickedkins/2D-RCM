@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 kluftfig=0
 legends_on = 0
 grids_on = 1
@@ -106,6 +106,14 @@ def latwghtavg_dim(x,lats,dim):
 		x_avg[i] = sum(x[i,:] * np.cos(np.deg2rad(lats))) / sum(np.cos(np.deg2rad(lats)))
 	return x_avg
 
+def make_csv(x,fname):
+	f=open(str(fname+".csv"),"w+")
+	for i in range(len(x)):
+		mystr = str(str(i) + ',' + str(x[i]))
+		f.write(mystr)
+		f.write('\n')
+	f.close
+	
 
 
 obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
@@ -362,6 +370,11 @@ for directory in directories:
 	ttrops_master = []
 	ztrops_master = []
 	tsurfs_master = []
+	tavelm_master = []
+	wklm2_master = []
+	wklm3_master = []
+	totdflumcols_master = []
+	pavelm_master = []
 
 	filenames = []
 
@@ -419,6 +432,11 @@ for directory in directories:
 		rel_hum_master.append(rel_hum_cols)
 		wklm1_master.append(wklm1cols)
 		wbrodlm_master.append(wbrodlmcols)
+		tavelm_master.append(tavelmcols)  
+		wklm2_master.append(wklm2cols)
+		wklm3_master.append(wklm3cols)
+		totdflumcols_master.append(totdflumcols)
+		pavelm_master.append(pavelmcols)  
 
 		# T1s[int(i_fn)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
 
@@ -697,6 +715,11 @@ for directory in directories:
 	ttrops_master=np.array(ttrops_master)
 	ztrops_master=np.array(ztrops_master)
 	tsurfs_master=np.array(tsurfs_master)
+	tavelm_master = np.array(tavelm_master)
+	wklm2_master=np.array(wklm2_master)
+	wklm3_master=np.array(wklm3_master)
+	totdflumcols_master=np.array(totdflumcols_master)
+	pavelm_master = np.array(pavelm_master)
 	
 	# master indices for conv_trop_ind: master[file][column]
 	# to get trop values for tzm, use tzm_master[file,conv_trop_ind_master[file,column],column][0][file] (slightly ugly but functional)
@@ -705,6 +728,20 @@ for directory in directories:
 	lats = boxlatcols_master[0,0,:]
 
 	ttrops = np.zeros((6,ncols))
+
+	make_csv(tzm_master[0,:,0],'tzm')
+	make_csv(tavelm_master[0,:,0],'tavelm')
+	make_csv(wklm1_master[0,:,0],'wklm1 (h2o)')
+	make_csv(wklm2_master[0,:,0],'wklm2 (co2)')
+	make_csv(wklm3_master[0,:,0],'wklm3 (o3)')
+	make_csv(wbrodlm_master[0,:,0],'wbrodlm')
+	make_csv(totuflumcols_master[0,:,0],'totuflum')
+	make_csv(totdflumcols_master[0,:,0],'totdflum')
+	make_csv(pavelm_master[0,:,0],'pavelm')
+	make_csv(pzm_master[0,:,0],'pzm')
+	make_csv(altzm_master[0,:,0],'altzm')
+
+	plt.plot()
 
 	# i_co2 = 0
 	# for i_co2 in range(6):
@@ -1253,4 +1290,4 @@ for directory in directories:
 ############################################################
 print('Done')
 # plt.tight_layout()
-show()
+# show()
