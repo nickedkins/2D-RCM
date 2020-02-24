@@ -740,6 +740,13 @@ for directory in directories:
 	make_csv(pavelm_master[0,:,0],'pavelm')
 	make_csv(pzm_master[0,:,0],'pzm')
 	make_csv(altzm_master[0,:,0],'altzm')
+	make_csv(abspncols_master[0,:,0]*1362./4.,'abs sw h2o')
+	make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
+
+	print sum(abspncols_master[0,:,0]) * 1362./4. + sum(A_oz_lcols_master[0,:,0]) * 1362./4. + abs_surf_cols_master[0,0,0]
+	print sum(A_oz_lcols_master[0,:,0]) * 1362./4.
+	print abs_surf_cols_master[0,0,0]
+	# print sum(abspncols_master[0,:,0]) * 1362./4.
 
 	plt.plot()
 
