@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 kluftfig=0
 legends_on = 0
 grids_on = 1
@@ -19,10 +19,10 @@ directories = [
 '_Current Output/'
 ]
 
-directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary tp/nl=600/'
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary sbfec/'
-]
+# directories = [
+# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary tp/nl=600/'
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary sbfec/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -550,8 +550,8 @@ for directory in directories:
 				# for i in range(len(altzmcols[:,col])):
 				#     print altzmcols[i,col]/1000., ',', pzmcols[i,col], ',', tzmcols[i,col]
 
-				# plt.figure(i1+1)
-				plt.figure(i_dir)
+				plt.figure(i1+1)
+				# plt.figure(i_dir)
 				plt.subplot(341)
 				plt.title('tzm')
 				# plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
@@ -570,19 +570,19 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()    
 				
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(342)
 				plt.title('htrm')
-				plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
-				# plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
-				plt.xlim(-5,5)
+				# plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
+				plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
+				# plt.xlim(-5,5)
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-				plt.axvline(-0.01,ls='--')
-				plt.axvline(0.01,ls='--')
+				plt.axvline(-0.03,ls='--')
+				plt.axvline(0.03,ls='--')
 				if(legends_on==1):
 					plt.legend()
 				
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(343)
 				plt.title('totuflum')
 				plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
@@ -593,7 +593,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(345)
 				plt.title('abs_o3')
 				plt.semilogy(A_oz_lcols[:,col]*1362./4.,pzmcols[1:,col],ls=linestyles[i1])
@@ -601,7 +601,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,7)
 				plt.title('wklm1 (h2o)')
 				plt.loglog(wklm1cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
@@ -609,7 +609,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,8)
 				plt.title('wklm2 (co2)')
 				plt.semilogy(wklm2cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
@@ -617,15 +617,15 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
-				plt.subplot(3,4,9)
+				plt.figure(i1+1)
+				# plt.subplot(3,4,9)
 				plt.title('wklm3 (o3)')
 				plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,10)
 				plt.title('wbrodlm')
 				plt.semilogy(wbrodlmcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
@@ -633,7 +633,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,11)
 				plt.title('htro3')
 				plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
@@ -642,7 +642,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,12)
 				plt.title('htrh2o')
 				plt.semilogy(htrh2ocols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
@@ -653,7 +653,7 @@ for directory in directories:
 
 				
 
-				# plt.figure(i1+1)
+				plt.figure(i1+1)
 				plt.subplot(3,4,6)
 				plt.title('htrmlw')
 				plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
@@ -740,33 +740,33 @@ for directory in directories:
 	# make_csv(abspncols_master[0,:,0]*1362./4.,'abs sw h2o')
 	# make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
 
-	print sum(abspncols_master[0,:,0]) * 413.177 + sum(A_oz_lcols_master[0,:,0]) * 413.177 + abs_surf_cols_master[0,0,0]
-	print abs_surf_cols_master[0,0,0]
-	print sum(A_oz_lcols_master[0,:,0]) * 413.177
-	print sum(abspncols_master[0,:,0]) * 413.177
+	# print sum(abspncols_master[0,:,0]) * 413.177 + sum(A_oz_lcols_master[0,:,0]) * 413.177 + abs_surf_cols_master[0,0,0]
+	# print abs_surf_cols_master[0,0,0]
+	# print sum(A_oz_lcols_master[0,:,0]) * 413.177
+	# print sum(abspncols_master[0,:,0]) * 413.177
 
 	tpexps = np.array([3,2,1,0,-1,-2,-3,-4,-5,-6,-7])
 	tps = 2.**tpexps
 
 	sbfecs = [100,200,400,800,1600]
 
-	plt.figure(1)
-	plt.subplot(221)
-	plt.plot(sbfecs,ptrops_master,'-o')
-	plt.xlabel('Timesteps')
-	plt.ylabel('Tropopause Pressure (hPa)')
-	plt.subplot(222)
-	plt.plot(sbfecs,ttrops_master,'-o')
-	plt.xlabel('Timesteps')
-	plt.ylabel('Tropopause Temperature (K)')
-	plt.subplot(223)
-	plt.semilogx(sbfecs,ptrops_master,'-o')
-	plt.xlabel('Timesteps')
-	plt.ylabel('Tropopause Pressure (hPa)')
-	plt.subplot(224)
-	plt.semilogx(sbfecs,ttrops_master,'-o')
-	plt.xlabel('Timesteps')
-	plt.ylabel('Tropopause Temperature (K)')
+	# plt.figure(1)
+	# plt.subplot(221)
+	# plt.plot(sbfecs,ptrops_master,'-o')
+	# plt.xlabel('Timesteps')
+	# plt.ylabel('Tropopause Pressure (hPa)')
+	# plt.subplot(222)
+	# plt.plot(sbfecs,ttrops_master,'-o')
+	# plt.xlabel('Timesteps')
+	# plt.ylabel('Tropopause Temperature (K)')
+	# plt.subplot(223)
+	# plt.semilogx(sbfecs,ptrops_master,'-o')
+	# plt.xlabel('Timesteps')
+	# plt.ylabel('Tropopause Pressure (hPa)')
+	# plt.subplot(224)
+	# plt.semilogx(sbfecs,ttrops_master,'-o')
+	# plt.xlabel('Timesteps')
+	# plt.ylabel('Tropopause Temperature (K)')
 
 
 	# i_co2 = 0

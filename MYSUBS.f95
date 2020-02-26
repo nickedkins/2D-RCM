@@ -523,7 +523,8 @@ MODULE MYSUBS
         Rbar = Rbar_a + (1.0-Rbar_a)*(1.0-Rbarbarstar_a)*R_g/(1.0-Rbarbarstar_a*R_g)
 
         ! do i=1,nlayersm - 1
-        do i=2,nlayersm - 1
+        ! do i=2,nlayersm - 1
+        do i=2,nlayersm
             ! A_oz_l(i) =   mu_0* ( A_oz_x(i) - A_oz_x(i+1) + Rbar * (A_oz_xstar(i+1) - A_oz_xstar(i)) ) 
             A_oz_l(i) =   mu_0* ( A_oz_x(i-1) - A_oz_x(i) + Rbar * (A_oz_xstar(i) - A_oz_xstar(i-1)) ) 
             htro3_lh(i) = sol_inc  *  A_oz_l(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0 !May need to add mu_0 and /2.0 (for night/day) in here

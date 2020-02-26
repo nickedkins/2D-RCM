@@ -821,7 +821,7 @@ subroutine wrapper
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
-            htrm(nlayersm) = 0.0
+            ! htrm(nlayersm) = 0.0
 
             ! Undo the if block from before the call to rrtm (i.e., set the surface pressure back to whatever it was before it was set to 1 bar)
             if (pb_new == 0) then
@@ -903,6 +903,7 @@ subroutine wrapper
                     else if(htrm(i-1)/(newur(i)) < -5.) then
                         tavelm(i) = tavelm(i)-5.
                     else
+                        ! tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
                         tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
                     end if
                     if (tavelm(i) < t_min) then 
