@@ -18,12 +18,12 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [5]
+ncolss = [7]
 ncloudcolss = [2]
 nlayss = [600]
 od_low = 3.0
@@ -38,8 +38,8 @@ min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
 steps_before_first_eqbcheck = 200
 snapshot=0
-h2o_sources=[0,1,6] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
-o3_sources = [1,2]	 #1=erai, 2=RCEMIP
+h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
+o3_sources = [1]	 #1=erai, 2=RCEMIP
 maxhtr = 0.03
 lcs = [-5.7]
 lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason
@@ -50,11 +50,11 @@ fswon = 0 #0:off, 1:on
 fsws = [240.] #238.24 to replicate RD
 mtransp_types = [2] #1=simple diffusion, 2=Vladilo
 # gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
-gas_amt_fac_co2s = [1/4.,1.,4.,16.]
+gas_amt_fac_co2s = [1.]
 gas_amt_fac_ch4s = [1.]		
 gas_amt_fac_h2os = [1.]
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-tp = 5.
+tp = 0.1
 if (forcing_expt==1):
 	tp = tp * 1e12
 
@@ -62,7 +62,8 @@ if (forcing_expt==1):
 
 for nlays in nlayss:
 	nlays = int(nlays)
-	ur_htr = nlays/1000.
+	# ur_htr = nlays/1000.
+	ur_htr = nlays/500.
 
 	for ncols in ncolss:
 		ncols = int(ncols)
@@ -658,7 +659,7 @@ for nlays in nlayss:
 																	
 																		ur = ur_htr
 																		icldm = 1
-																		rmin = 3e-6 * 1e-10
+																		rmin = 3e-6
 																		hct = 230.0
 																		hcf = 0.04e-9   
 																		hcod = 0.7e-9

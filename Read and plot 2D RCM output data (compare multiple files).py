@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 kluftfig=0
 legends_on = 0
 grids_on = 1
@@ -1297,4 +1297,4 @@ for directory in directories:
 ############################################################
 print('Done')
 # plt.tight_layout()
-# show()
+show()
