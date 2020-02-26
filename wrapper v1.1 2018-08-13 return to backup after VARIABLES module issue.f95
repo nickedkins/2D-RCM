@@ -1474,8 +1474,9 @@ subroutine wrapper
                         boxnettotflux(col) = boxnetradflux(col)
                     end if
 
-                    if (boxnettotflux(col) / boxnettotflux_prev(col) < 0.0) then 
-                        ur_toafnet(col) = ur_toafnet(col) * 2.0
+                    if (boxnettotflux_prev(col) .ne. 0 .and. boxnettotflux(col) / boxnettotflux_prev(col) < 0.0) then 
+                        ! ur_toafnet(col) = ur_toafnet(col) * 2.0
+                        ur_toafnet(col) = ur_toafnet(col) * 1.1
                         print*, 'ur_toafnet increased to: ', ur_toafnet(col), 'in col: ', col, boxnettotflux(col),&
                         & boxnettotflux_prev(col)
                     end if
