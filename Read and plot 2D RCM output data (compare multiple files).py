@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 kluftfig=0
 legends_on = 0
 grids_on = 1
@@ -19,13 +19,10 @@ directories = [
 '_Current Output/'
 ]
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/erai/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/manabe67/',
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary h2o/kluft19/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/erai o3/',
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/kluft2019/tp=0.1/vary o3/rcemip o3/',
-# ]
+directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary tp/nl=600/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary sbfec/'
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -729,26 +726,48 @@ for directory in directories:
 
 	ttrops = np.zeros((6,ncols))
 
-	make_csv(tzm_master[0,:,0],'tzm')
-	make_csv(tavelm_master[0,:,0],'tavelm')
-	make_csv(wklm1_master[0,:,0],'wklm1 (h2o)')
-	make_csv(wklm2_master[0,:,0],'wklm2 (co2)')
-	make_csv(wklm3_master[0,:,0],'wklm3 (o3)')
-	make_csv(wbrodlm_master[0,:,0],'wbrodlm')
-	make_csv(totuflumcols_master[0,:,0],'totuflum')
-	make_csv(totdflumcols_master[0,:,0],'totdflum')
-	make_csv(pavelm_master[0,:,0],'pavelm')
-	make_csv(pzm_master[0,:,0],'pzm')
-	make_csv(altzm_master[0,:,0],'altzm')
-	make_csv(abspncols_master[0,:,0]*1362./4.,'abs sw h2o')
-	make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
+	# make_csv(tzm_master[0,:,0],'tzm')
+	# make_csv(tavelm_master[0,:,0],'tavelm')
+	# make_csv(wklm1_master[0,:,0],'wklm1 (h2o)')
+	# make_csv(wklm2_master[0,:,0],'wklm2 (co2)')
+	# make_csv(wklm3_master[0,:,0],'wklm3 (o3)')
+	# make_csv(wbrodlm_master[0,:,0],'wbrodlm')
+	# make_csv(totuflumcols_master[0,:,0],'totuflum')
+	# make_csv(totdflumcols_master[0,:,0],'totdflum')
+	# make_csv(pavelm_master[0,:,0],'pavelm')
+	# make_csv(pzm_master[0,:,0],'pzm')
+	# make_csv(altzm_master[0,:,0],'altzm')
+	# make_csv(abspncols_master[0,:,0]*1362./4.,'abs sw h2o')
+	# make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
 
-	print sum(abspncols_master[0,:,0]) * 1362./4. + sum(A_oz_lcols_master[0,:,0]) * 1362./4. + abs_surf_cols_master[0,0,0]
-	print sum(A_oz_lcols_master[0,:,0]) * 1362./4.
+	print sum(abspncols_master[0,:,0]) * 413.177 + sum(A_oz_lcols_master[0,:,0]) * 413.177 + abs_surf_cols_master[0,0,0]
 	print abs_surf_cols_master[0,0,0]
-	# print sum(abspncols_master[0,:,0]) * 1362./4.
+	print sum(A_oz_lcols_master[0,:,0]) * 413.177
+	print sum(abspncols_master[0,:,0]) * 413.177
 
-	plt.plot()
+	tpexps = np.array([3,2,1,0,-1,-2,-3,-4,-5,-6,-7])
+	tps = 2.**tpexps
+
+	sbfecs = [100,200,400,800,1600]
+
+	plt.figure(1)
+	plt.subplot(221)
+	plt.plot(sbfecs,ptrops_master,'-o')
+	plt.xlabel('Timesteps')
+	plt.ylabel('Tropopause Pressure (hPa)')
+	plt.subplot(222)
+	plt.plot(sbfecs,ttrops_master,'-o')
+	plt.xlabel('Timesteps')
+	plt.ylabel('Tropopause Temperature (K)')
+	plt.subplot(223)
+	plt.semilogx(sbfecs,ptrops_master,'-o')
+	plt.xlabel('Timesteps')
+	plt.ylabel('Tropopause Pressure (hPa)')
+	plt.subplot(224)
+	plt.semilogx(sbfecs,ttrops_master,'-o')
+	plt.xlabel('Timesteps')
+	plt.ylabel('Tropopause Temperature (K)')
+
 
 	# i_co2 = 0
 	# for i_co2 in range(6):

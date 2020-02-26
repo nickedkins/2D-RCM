@@ -18,12 +18,12 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
-ncolss = [7]
+ncolss = [1]
 ncloudcolss = [2]
 nlayss = [600]
 od_low = 3.0
@@ -36,9 +36,10 @@ ur_htr = 0.3
 days = timesteps/ur_htr
 min_press = 1.
 cloud_source = 0 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 200
+# steps_before_first_eqbcheck = 200
+sbfecs = [50,100,200,400,800,1600]
 snapshot=0
-h2o_sources=[1] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
+h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1]	 #1=erai, 2=RCEMIP
 maxhtr = 0.03
 lcs = [-5.7]
@@ -54,13 +55,19 @@ gas_amt_fac_co2s = [1.]
 gas_amt_fac_ch4s = [1.]		
 gas_amt_fac_h2os = [1.]
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-tp = 0.1
+# tpexps = np.array([3,2,1,0,-1,-2,-3,-4,-5,-6,-7])
+# tps = 2.**tpexps
+tp = 1e3
 if (forcing_expt==1):
 	tp = tp * 1e12
 
 
+nlays = nlayss[0]
+for steps_before_first_eqbcheck in sbfecs:
 
-for nlays in nlayss:
+	
+
+# for nlays in nlayss:
 	nlays = int(nlays)
 	# ur_htr = nlays/1000.
 	ur_htr = nlays/500.

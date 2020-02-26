@@ -575,8 +575,10 @@ MODULE MYSUBS
             call EXIT(11)
         endif
 
-        abs_h2o = sum(abspn(:nlayersm-1))*sol_inc !total absorption of SW by H2O  
-        abs_o3 = sum(A_oz_l(2:nlayersm))*sol_inc ! total absorption of SW by O3
+        ! abs_h2o = sum(abspn(:nlayersm-1))*sol_inc !total absorption of SW by H2O  
+        ! abs_o3 = sum(A_oz_l(2:nlayersm))*sol_inc ! total absorption of SW by O3
+        abs_h2o = sum(abspn)*sol_inc !total absorption of SW by H2O  
+        abs_o3 = sum(A_oz_l)*sol_inc ! total absorption of SW by O3
         if (abs_o3 .ne. abs_o3) abs_o3 = 3.0
         tot_sol_abs_lh = abs_h2o + abs_o3 + abs_surf_lh ! Total absorption of SW 
 
