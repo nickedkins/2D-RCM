@@ -12,12 +12,14 @@ import matplotlib.colors as colors
 
 plot_all_vert_profiles = 1
 kluftfig=0
-legends_on = 0
+legends_on = 1
 grids_on = 1
 
 directories = [
 '_Current Output/'
 ]
+
+skip_ifn = []
 
 # directories = [
 # # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary tp/nl=600/'
@@ -405,6 +407,9 @@ for directory in directories:
 
 	i_fn = 0
 	for fn in a:
+		if(i_fn in skip_ifn):
+			i_fn +=1
+			continue
 		if (fn=='.DS_Store'):
 			continue
 		tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
@@ -555,7 +560,8 @@ for directory in directories:
 				plt.subplot(341)
 				plt.title('tzm')
 				# plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
-				plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i1])
+				# plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i1])
+				plt.semilogy(tavelmcols[:,col],pavelmcols[:,col],label=str(fn),ls=linestyles[i1])
 				# plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
 				plt.xlabel('Temperature (K)')
 				plt.ylabel('Pressure (hPa)')
@@ -574,7 +580,7 @@ for directory in directories:
 				plt.subplot(342)
 				plt.title('htrm')
 				# plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
-				plt.semilogy(htrmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
+				plt.semilogy(htrmcols[:nlayersm-1,col],pzmcols[:nlayersm-1,col],'-o',label=str(fn))
 				# plt.xlim(-5,5)
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				plt.axvline(-0.03,ls='--')
@@ -586,8 +592,8 @@ for directory in directories:
 				plt.subplot(343)
 				plt.title('totuflum')
 				plt.semilogy(totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='up '+dir_label)
-				# plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
-				# plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
+				plt.semilogy(totdflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='down '+dir_label)
+				plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
 				plt.axvline(0,ls='--')
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				if(legends_on==1):
@@ -618,7 +624,7 @@ for directory in directories:
 					plt.legend()
 
 				plt.figure(i1+1)
-				# plt.subplot(3,4,9)
+				plt.subplot(3,4,9)
 				plt.title('wklm3 (o3)')
 				plt.semilogy(wklm3cols[1:,col],pzmcols[2:,col],ls=linestyles[i1],label=str(fn))
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
@@ -637,7 +643,7 @@ for directory in directories:
 				plt.subplot(3,4,11)
 				plt.title('htro3')
 				plt.semilogy(htro3cols[:,col],pzmcols[1:,col],ls=linestyles[i1],label=str(fn))
-				plt.xlim(-5,5)
+				# plt.xlim(-5,5)
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				if(legends_on==1):
 					plt.legend()
@@ -657,7 +663,7 @@ for directory in directories:
 				plt.subplot(3,4,6)
 				plt.title('htrmlw')
 				plt.semilogy(htrmlwcols[:,col],pzmcols[1:,col],ls=linestyles[i1])
-				plt.xlim(-5,5)
+				# plt.xlim(-5,5)
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				plt.axvline(-0.03,ls='--')
 				plt.axvline(0.03,ls='--')

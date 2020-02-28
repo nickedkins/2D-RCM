@@ -821,7 +821,6 @@ subroutine wrapper
                 if(swo3 == 1 .and. i > 1)  htrm(i) = htrm(i) + htro3_lh(i-1)
             enddo
 
-            ! htrm(nlayersm) = 0.0
 
             ! Undo the if block from before the call to rrtm (i.e., set the surface pressure back to whatever it was before it was set to 1 bar)
             if (pb_new == 0) then
@@ -860,7 +859,8 @@ subroutine wrapper
             !            
             !            currentmaxhtr = max(currentmaxhtr1, currentmaxhtr2 )
 
-            currentmaxhtr = maxval( abs( htrm( conv_trop_ind(col)+1:nlayersm-5 ) ) ) ! Current maximum heating rate for the whole atmosphere
+            ! currentmaxhtr = maxval( abs( htrm( conv_trop_ind(col)+1:nlayersm-5 ) ) ) ! Current maximum heating rate for the whole atmosphere
+            currentmaxhtr = maxval( abs( htrm( conv_trop_ind(col)+1:nlayersm-1 ) ) )
             !            if (conv_trop_ind(col)+4 > nlayersm-4) then 
             !              currentmaxhtr = maxval(abs(htrm(conv_trop_ind(col)+1:-1)))
             !            endif
@@ -952,7 +952,11 @@ subroutine wrapper
                 conv_trop_ind(col) = minloc(conv(:,col),dim=1)
                 coldpoint_trop_ind(col) = minloc(tzmcols(:,col),dim=1)
 
-                do i=1,nlayersm
+                ! do i=1,nlayersm
+                !     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
+                ! end do
+
+                do i=1,conv_trop_ind(col)
                     tavelm(i) = (tzm(i-1) + tzm(i)) / 2.0
                 end do
 
@@ -1382,6 +1386,10 @@ subroutine wrapper
         endif
 
         transpcalled = 0
+
+        if (j==150) then
+            print*, 'j=150'
+        end if
 
 
         ! Equilibrium check (eqbcheck)

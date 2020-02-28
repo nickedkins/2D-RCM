@@ -31,17 +31,17 @@ od_mid = 3.0
 od_high = 3.0
 nperts = 1
 timesteps = 3000
-ur_htr = 0.3
-# ur_htr = 3.0
+# ur_htr = 0.3
+ur_htr = 3.0
 days = timesteps/ur_htr
 min_press = 1.0
 cloud_source = 0 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 200
+steps_before_first_eqbcheck = 600
 # sbfecs = [50,100,200,400,800,1600]
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1]	 #1=erai, 2=RCEMIP
-maxhtr = 0.03
+maxhtr = 0.005
 lcs = [-5.7]
 lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason
 convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
@@ -52,10 +52,11 @@ fsws = [240.] #238.24 to replicate RD
 mtransp_types = [2] #1=simple diffusion, 2=Vladilo
 # gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
 gas_amt_fac_co2s = [1.]
-gas_amt_fac_ch4s = [1.]		
+gas_amt_fac_ch4s = [0.]		
 gas_amt_fac_h2os = [1.]
-o3sw = 1
-h2osw = 1
+gas_amt_fac_o3 = 1.
+o3sw = 0
+h2osw = 0
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
 tp = 1e3
 if (forcing_expt==1):
@@ -709,7 +710,7 @@ for nlays in nlayss:
 																		mtranspon = 1
 																		# gas_amt_fac_h2o = 1.0
 																		# gas_amt_fac_co2 = 1.0
-																		gas_amt_fac_o3 = 1.
+																		# gas_amt_fac_o3 = 1.
 																		# gas_amt_fac_ch4 = 1.0
 																		# gas_amt_p_high_h2o = ppert
 																		# gas_amt_p_low_h2o = ppert - pert_thickness
