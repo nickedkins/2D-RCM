@@ -10,7 +10,7 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 1
+plot_all_vert_profiles = 0
 kluftfig=0
 legends_on = 1
 grids_on = 1
@@ -21,10 +21,9 @@ directories = [
 
 skip_ifn = []
 
-# directories = [
-# # '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary tp/nl=600/'
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/vary sbfec/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/eqb conds/vary maxhtr/sw on/'
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -751,28 +750,35 @@ for directory in directories:
 	# print sum(A_oz_lcols_master[0,:,0]) * 413.177
 	# print sum(abspncols_master[0,:,0]) * 413.177
 
-	tpexps = np.array([3,2,1,0,-1,-2,-3,-4,-5,-6,-7])
-	tps = 2.**tpexps
 
-	sbfecs = [100,200,400,800,1600]
+	mhexps = np.array([0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10])
+	maxhtrs = 2.0**mhexps
 
-	# plt.figure(1)
-	# plt.subplot(221)
-	# plt.plot(sbfecs,ptrops_master,'-o')
-	# plt.xlabel('Timesteps')
-	# plt.ylabel('Tropopause Pressure (hPa)')
-	# plt.subplot(222)
-	# plt.plot(sbfecs,ttrops_master,'-o')
-	# plt.xlabel('Timesteps')
-	# plt.ylabel('Tropopause Temperature (K)')
-	# plt.subplot(223)
-	# plt.semilogx(sbfecs,ptrops_master,'-o')
-	# plt.xlabel('Timesteps')
-	# plt.ylabel('Tropopause Pressure (hPa)')
-	# plt.subplot(224)
-	# plt.semilogx(sbfecs,ttrops_master,'-o')
-	# plt.xlabel('Timesteps')
-	# plt.ylabel('Tropopause Temperature (K)')
+	plt.figure(1)
+	plt.subplot(231)
+	plt.plot(maxhtrs,ptrops_master,'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Tropopause Pressure (hPa)')
+	plt.subplot(232)
+	plt.plot(maxhtrs,ttrops_master,'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Tropopause Temperature (K)')
+	plt.subplot(234)
+	plt.semilogx(maxhtrs,ptrops_master,'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Tropopause Pressure (hPa)')
+	plt.subplot(235)
+	plt.semilogx(maxhtrs,ttrops_master,'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Tropopause Temperature (K)')
+	plt.subplot(233)
+	plt.plot(maxhtrs,tzm_master[:,0,:],'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Surface Temperature (K)')
+	plt.subplot(236)
+	plt.semilogx(maxhtrs,tzm_master[:,0,:],'-o')
+	plt.xlabel('Max heating rate (K/day)')
+	plt.ylabel('Surface Temperature (K)')
 
 
 	# i_co2 = 0
@@ -1321,5 +1327,5 @@ for directory in directories:
 
 ############################################################
 print('Done')
-# plt.tight_layout()
+plt.tight_layout()
 show()
