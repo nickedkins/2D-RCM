@@ -22,7 +22,7 @@ directories = [
 skip_ifn = []
 
 directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/eqb conds/vary maxhtr/sw on/'
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/held82 replication/'
 ]
 
 # set the colormap and centre the colorbar
@@ -751,34 +751,31 @@ for directory in directories:
 	# print sum(abspncols_master[0,:,0]) * 413.177
 
 
-	mhexps = np.array([0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10])
-	maxhtrs = 2.0**mhexps
+	lcs = np.arange(-10,-3)
+
+	data=np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/held82_x[lapse]_y[ztrop].txt',delimiter=',')
+	lapse_h82=data[:,0]*-1.
+	ztrop_h82=data[:,1]
 
 	plt.figure(1)
-	plt.subplot(231)
-	plt.plot(maxhtrs,ptrops_master,'-o')
-	plt.xlabel('Max heating rate (K/day)')
+	plt.subplot(221)
+	plt.plot(lcs,ptrops_master,'-o')
+	plt.xlabel('Lapse Rate (K/km)')
 	plt.ylabel('Tropopause Pressure (hPa)')
-	plt.subplot(232)
-	plt.plot(maxhtrs,ttrops_master,'-o')
-	plt.xlabel('Max heating rate (K/day)')
+	plt.subplot(222)
+	plt.plot(lcs,ttrops_master,'-o')
+	plt.xlabel('Lapse Rate (K/km)')
 	plt.ylabel('Tropopause Temperature (K)')
-	plt.subplot(234)
-	plt.semilogx(maxhtrs,ptrops_master,'-o')
-	plt.xlabel('Max heating rate (K/day)')
-	plt.ylabel('Tropopause Pressure (hPa)')
-	plt.subplot(235)
-	plt.semilogx(maxhtrs,ttrops_master,'-o')
-	plt.xlabel('Max heating rate (K/day)')
-	plt.ylabel('Tropopause Temperature (K)')
-	plt.subplot(233)
-	plt.plot(maxhtrs,tzm_master[:,0,:],'-o')
-	plt.xlabel('Max heating rate (K/day)')
+	plt.subplot(223)
+	plt.plot(lcs,tzm_master[:,0,:],'-o')
+	plt.xlabel('Lapse Rate (K/km)')
 	plt.ylabel('Surface Temperature (K)')
-	plt.subplot(236)
-	plt.semilogx(maxhtrs,tzm_master[:,0,:],'-o')
-	plt.xlabel('Max heating rate (K/day)')
-	plt.ylabel('Surface Temperature (K)')
+	plt.subplot(224)
+	plt.plot(lcs,ztrops_master*1e-3,'-o')
+	plt.plot(lapse_h82,ztrop_h82,'-',label='Held 1982')
+	plt.legend()
+	plt.xlabel('Lapse Rate (K/km)')
+	plt.ylabel('Tropopause Height (km)')
 
 
 	# i_co2 = 0
