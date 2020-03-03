@@ -12,7 +12,7 @@ import matplotlib.colors as colors
 
 plot_all_vert_profiles = 0
 kluftfig=0
-legends_on = 1
+legends_on = 0
 grids_on = 1
 
 directories = [
@@ -21,9 +21,9 @@ directories = [
 
 skip_ifn = []
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/held82 replication/'
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -745,37 +745,12 @@ for directory in directories:
 	# make_csv(abspncols_master[0,:,0]*1362./4.,'abs sw h2o')
 	# make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
 
-	# print sum(abspncols_master[0,:,0]) * 413.177 + sum(A_oz_lcols_master[0,:,0]) * 413.177 + abs_surf_cols_master[0,0,0]
-	# print abs_surf_cols_master[0,0,0]
-	# print sum(A_oz_lcols_master[0,:,0]) * 413.177
-	# print sum(abspncols_master[0,:,0]) * 413.177
-
-
-	lcs = np.arange(-10,-3)
-
-	data=np.genfromtxt('/Users/nickedkins/Dropbox/Figure Data/held82_x[lapse]_y[ztrop].txt',delimiter=',')
-	lapse_h82=data[:,0]*-1.
-	ztrop_h82=data[:,1]
-
+	#currfig
 	plt.figure(1)
-	plt.subplot(221)
-	plt.plot(lcs,ptrops_master,'-o')
-	plt.xlabel('Lapse Rate (K/km)')
-	plt.ylabel('Tropopause Pressure (hPa)')
-	plt.subplot(222)
-	plt.plot(lcs,ttrops_master,'-o')
-	plt.xlabel('Lapse Rate (K/km)')
-	plt.ylabel('Tropopause Temperature (K)')
-	plt.subplot(223)
-	plt.plot(lcs,tzm_master[:,0,:],'-o')
-	plt.xlabel('Lapse Rate (K/km)')
-	plt.ylabel('Surface Temperature (K)')
-	plt.subplot(224)
-	plt.plot(lcs,ztrops_master*1e-3,'-o')
-	plt.plot(lapse_h82,ztrop_h82,'-',label='Held 1982')
-	plt.legend()
-	plt.xlabel('Lapse Rate (K/km)')
-	plt.ylabel('Tropopause Height (km)')
+	plt.plot(ttrops_master,ptrops_master,'o')
+	plt.xlabel('$T_{trop}$ (K)')
+	plt.ylabel('$p_{trop}$ (hPa)')
+
 
 
 	# i_co2 = 0
@@ -1324,5 +1299,5 @@ for directory in directories:
 
 ############################################################
 print('Done')
-plt.tight_layout()
+# plt.tight_layout()
 show()

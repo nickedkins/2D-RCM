@@ -18,21 +18,21 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [5]
 ncloudcolss = [2]
-nlays = 600
+nlays = 200
 od_low = 3.0
 od_mid = 3.0
 od_high = 3.0
 nperts = 1
 timesteps = 3000
 ur_htr = 1.0
-#ur_htr = 3.0
+# ur_htr = 3.0
 days = timesteps/ur_htr
 min_press = 1.0
 cloud_source = 0 #0 for manual, 1 for MISR
@@ -43,13 +43,13 @@ snapshot=0
 h2o_sources=[0,1,2] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1,2]	 #1=erai, 2=RCEMIP
 lcs = [-5.7]
-lapse_types = [0] # 0=critical lapse rate, 1=H82, 2=Mason
+lapse_types = [2] # 0=critical lapse rate, 1=H82, 2=Mason
 convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 manual_clouds = []
 # manual_clouds.append([750.,0.5,3.])
 fswon = 0 #0:off, 1:on
 fsws = [240.] #238.24 to replicate RD
-mtransp_types = [2] #1=simple diffusion, 2=Vladilo
+mtransp_types = [1,2] #1=simple diffusion, 2=Vladilo
 # gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
 gas_amt_fac_co2s = [0.25,1.,4.,8.]
 gas_amt_fac_ch4s = [0.]		
