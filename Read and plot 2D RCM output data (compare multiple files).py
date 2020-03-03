@@ -15,15 +15,15 @@ kluftfig=0
 legends_on = 0
 grids_on = 1
 
-directories = [
-'_Current Output/'
-]
+# directories = [
+# '_Current Output/'
+# ]
 
 skip_ifn = []
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -156,7 +156,7 @@ p_obs, t_obs = zip(*sorted(zip(p_obs, t_obs)))
 
 linestyles = ['-','--','-']
 
-# colors = ['b','r','g','orange','purple','yellow','pink']
+colors = ['b','r','g','orange','purple','yellow','pink']
 
 
 
@@ -493,33 +493,66 @@ for directory in directories:
 		# plt.ylabel('Surface temperature (K)')
 		# plt.legend()
 
-		# for col in range(ncols):
-		#     if(col==1):
-		#         plt.subplot(223)
-		#         plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
-		#         plt.xlabel('Latitude')
-		#         plt.ylabel('Tropopause temperature (K)')
-		#         plt.legend()
-		#     else:
-		#         plt.subplot(223)
-		#         plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
-		#         plt.xlabel('Latitude')
-		#         plt.ylabel('Tropopause temperature (K)')
-		#         plt.legend()
+		# plt.figure(1)
 
 		# for col in range(ncols):
-		#     if(col==1):
-		#         plt.subplot(224)
-		#         plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',label=str(fn),color=colors[i2])
-		#         plt.xlabel('Latitude')
-		#         plt.ylabel('Tropopause altitude (km)')
-		#         plt.legend()
-		#     else:
-		#         plt.subplot(224)
-		#         plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',color=colors[i2])
-		#         plt.xlabel('Latitude')
-		#         plt.ylabel('Tropopause altitude (km)')
-		#         plt.legend()
+		# 	if(col==1):
+		# 		plt.subplot(221)
+		# 		plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause temperature (K)')
+		# 		# plt.legend()
+		# 	else:
+		# 		plt.subplot(221)
+		# 		plt.plot(boxlatcols[1,col],tzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause temperature (K)')
+		# 		# plt.legend()
+
+		# for col in range(ncols):
+		# 	if(col==1):
+		# 		plt.subplot(222)
+		# 		plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',label=str(fn),color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause altitude (km)')
+		# 		# plt.legend()
+		# 	else:
+		# 		plt.subplot(222)
+		# 		plt.plot(boxlatcols[1,col],altzmcols[conv_trop_ind_cols[col],col]/1000.,'-o',color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause altitude (km)')
+		# 		# plt.legend()
+
+
+		# for col in range(ncols):
+		# 	if(col==1):
+		# 		plt.subplot(223)
+		# 		plt.plot(boxlatcols[1,col],pzmcols[conv_trop_ind_cols[col],col],'-o',label=str(fn),color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause pressure (hPa)')
+		# 		# plt.legend()
+		# 	else:
+		# 		plt.subplot(222)
+		# 		plt.plot(boxlatcols[1,col],pzmcols[conv_trop_ind_cols[col],col],'-o',color=colors[i2])
+		# 		plt.xlabel('Latitude')
+		# 		plt.ylabel('Tropopause pressure (hPa)')
+		# 		# plt.legend()
+
+
+		# for col in range(ncols):
+		   #  plt.subplot(223)
+		   #  plt.plot(boxlatcols[1,col],pzmcols[conv_trop_ind_cols[col],col],'o',color=colors[i2])
+		   #  plt.xlabel('Latitude')
+		   #  plt.ylabel('Tropopause pressure (hPa)')
+		   #  # plt.legend()
+
+
+		# for col in range(ncols):
+		   #  plt.subplot(224)
+		   #  plt.plot(boxlatcols[1,col],tzmcols[0,col],'-o',color=colors[i2])
+		   #  plt.xlabel('Latitude')
+		   #  plt.ylabel('Surface temperature (K)')
+		   #  # plt.legend()
 
 		# plt.subplot(221)
 		# plt.plot(boxlatcols[1,:],-1.0*lapsecritcols[1,:],'-o',label=str(fn))
@@ -528,7 +561,7 @@ for directory in directories:
 		# plt.legend()
 
 
-		i3=0
+		# i3=0
 
 		if (plot_all_vert_profiles == 1):
 
@@ -746,10 +779,13 @@ for directory in directories:
 	# make_csv(A_oz_lcols_master[0,:,0]*1362./4.,'abs sw o3')
 
 	#currfig
-	plt.figure(1)
-	plt.plot(ttrops_master,ptrops_master,'o')
-	plt.xlabel('$T_{trop}$ (K)')
-	plt.ylabel('$p_{trop}$ (hPa)')
+	# plt.figure(1)
+	# plt.plot(ttrops_master,ptrops_master,'o')
+	# plt.xlabel('$T_{trop}$ (K)')
+	# plt.ylabel('$p_{trop}$ (hPa)')
+
+	# plt.figure(1)
+	# plt.plot(lats,ttrops_master[i_fn,:],'-o')
 
 
 
