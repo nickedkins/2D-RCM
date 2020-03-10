@@ -53,13 +53,13 @@ mtransp_types = [2] #1=simple diffusion, 2=Vladilo
 # gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
 gas_amt_fac_co2s = [1.]
 gas_amt_fac_ch4s = [0.]		
-gas_amt_fac_h2os = [1.]
-gas_amt_fac_o3 = 1.
-o3sw = 1
-h2osw = 1
+gas_amt_fac_h2os = [0.]
+gas_amt_fac_o3 = 0.
+o3sw = 0
+h2osw = 0
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-maxhtrs = [0.1,0.01,0.001,0.0001]
-tp = 0.01
+maxhtrs = [0.0001]
+tp = 1e3
 if (forcing_expt==1):
 	tp = tp * 1e12	
 

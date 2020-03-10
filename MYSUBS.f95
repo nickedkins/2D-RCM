@@ -528,7 +528,7 @@ MODULE MYSUBS
             ! A_oz_l(i) =   mu_0* ( A_oz_x(i) - A_oz_x(i+1) + Rbar * (A_oz_xstar(i+1) - A_oz_xstar(i)) ) 
             A_oz_l(i) =   mu_0* ( A_oz_x(i-1) - A_oz_x(i) + Rbar * (A_oz_xstar(i) - A_oz_xstar(i-1)) ) 
             htro3_lh(i) = sol_inc  *  A_oz_l(i) * gravity / (delta_p(i)*100.0 * cplh)*60.0*60.0*24.0 !May need to add mu_0 and /2.0 (for night/day) in here
-            htro3_lh(i) = htro3_lh(i) * 3.14 * pzm(0) / 1000. !  Check the validity of this line and the one above - do I have the correct incident flux?
+            ! htro3_lh(i) = htro3_lh(i) * 3.14 * pzm(0) / 1000. ! no factor of pi; lacis uses pi * F0 ot mean the incident flux and I got confused. leaving for reference
             if (i < 4) htro3_lh(i) = 0.0
             if (htro3_lh(i) .ne. htro3_lh(i)) htro3_lh(i) = 0.0
 
@@ -857,6 +857,12 @@ MODULE MYSUBS
         do col=1,ncols
             do i=1,nlayersm
                 write(50,*) coldpoint_trop_ind(col)
+            end do
+        end do
+
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) insolcols(col)
             end do
         end do
 

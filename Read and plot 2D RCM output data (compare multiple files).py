@@ -12,14 +12,14 @@ import matplotlib.colors as colors
 
 plot_all_vert_profiles = 1
 kluftfig=0
-legends_on = 0
+legends_on = 1
 grids_on = 1
 
 directories = [
 '_Current Output/'
 ]
 
-skip_ifn = []
+skip_ifn = [0]
 
 # directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
@@ -198,6 +198,8 @@ def readfile(fn,counter):
 	d_mid = np.zeros((nlayersm,ncols))
 	d_trop = np.zeros((nlayersm,ncols))
 	rel_hum_cols = np.zeros((nlayersm,ncols))
+	cold_point_trop_ind_cols = np.zeros((nlayersm,ncols))
+	insolcols = np.zeros((nlayersm,ncols))
 	
 
  
@@ -321,6 +323,14 @@ def readfile(fn,counter):
 		for i in range(nlayersm):
 			rel_hum_cols[i,col] = f.readline()            
 
+	for col in range(ncols):        
+		for i in range(nlayersm):
+			cold_point_trop_ind_cols[i,col] = f.readline()            
+
+	for col in range(ncols):        
+		for i in range(nlayersm):
+			insolcols[i,col] = f.readline()            
+
 
 	
 	# abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
@@ -330,7 +340,8 @@ def readfile(fn,counter):
 
 	return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
 	abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
-	lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols
+	lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols,cold_point_trop_ind_cols,\
+	insolcols
 
 i1 = 0
 
@@ -413,7 +424,8 @@ for directory in directories:
 			continue
 		tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
 		abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
-		meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols = readfile(fn,counter)
+		meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols,cold_point_trop_ind_cols,insolcols,\
+		 = readfile(fn,counter)
 
 		tzm_master.append(tzmcols)  
 		pzm_master.append(pzmcols)
@@ -630,18 +642,17 @@ for directory in directories:
 				plt.semilogy(totdflumcols[:,col]-totuflumcols[:,col],pzmcols[:,col],ls=linestyles[i1],label='net '+dir_label)
 				plt.axvline(0,ls='--')
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-				if(legends_on==1):
-					plt.legend()
+				# if(legends_on==1):
+				# 	plt.legend()
 
 				for i in range(1,nlayersm):
-					lay_abs_rad[i,col] = totuflumcols[i,col] - totuflumcols[i-1,col] + totdflumcols[i,col] - totdflumcols[i-1,col] + (abspncols[i,col] + A_oz_lcols[i,col]) * sol_inc
+					lay_abs_rad[i,col] = (totdflumcols[i,col]-totdflumcols[i-1,col])+(totuflumcols[i,col]-totuflumcols[i-1,col])# + (abspncols[i,col] + A_oz_lcols[i,col]) * insolcols[i,col]
 
 				plt.figure(i1+1)
 				plt.subplot(344)
+				plt.title('layer abs rad')
 				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col])
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-				plt.xlabel('Layer absorbed radiation (Wm$^{-2}$')
-				plt.ylabel('Pressure (hPa)')
 				if(legends_on==1):
 					plt.legend()
 				plt.axvline(-0.01)
