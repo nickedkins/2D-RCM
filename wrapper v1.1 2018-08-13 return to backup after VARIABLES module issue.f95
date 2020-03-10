@@ -929,10 +929,17 @@ subroutine wrapper
 
 
             if(snapshot/=1) then
-                do i=1,nlayersm-1
-                    tzm(i)=(tavelm(i)+tavelm(i+1))/2
-                    if (tzm(i) < t_min) tzm(i) = t_min
-                enddo
+                ! do i=1,nlayersm-1
+                !     tzm(i)=(tavelm(i)+tavelm(i+1))/2
+                !     if (tzm(i) < t_min) tzm(i) = t_min
+                ! enddo
+
+                do i=2,nlayersm-1
+                    tzm(i)=&
+                    (pzm(i)-pavelm(i))*(pzm(i)+pavelm(i+1))/((pavelm(i-1)-pavelm(i))*(pavelm(i-1)*pavelm(i+1)))*tavelm(i-1)+&
+                    (pzm(i)-pavelm(i-1))*(pzm(i)+pavelm(i+1))/((pavelm(i)-pavelm(i-1))*(pavelm(i)*pavelm(i+1)))*tavelm(i)+&
+                    (pzm(i)-pavelm(i-1))*(pzm(i)+pavelm(i))/((pavelm(i+1)-pavelm(i-1))*(pavelm(i+1)*pavelm(i)))*tavelm(i+1)
+                end do
 
                 !Set temperature of very top level
                 tzm(nlayersm) = 2.0*tavelm(nlayersm)-tzm(nlayersm-1)

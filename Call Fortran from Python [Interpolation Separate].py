@@ -18,14 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcolss = [2]
-nlays = 600
+nlays = 200
 od_low = 3.0
 od_mid = 3.0
 od_high = 3.0
@@ -58,7 +58,7 @@ gas_amt_fac_o3 = 0.
 o3sw = 0
 h2osw = 0
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-maxhtrs = [0.0001]
+maxhtrs = [0.001]
 tp = 1e3
 if (forcing_expt==1):
 	tp = tp * 1e12	

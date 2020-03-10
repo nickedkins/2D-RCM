@@ -19,7 +19,7 @@ directories = [
 '_Current Output/'
 ]
 
-skip_ifn = [0]
+skip_ifn = []
 
 # directories = [
 # '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
