@@ -10,20 +10,20 @@ from os import listdir
 import matplotlib.colors as colors
 # import pandas as pd
 
-plot_all_vert_profiles = 0
+plot_all_vert_profiles = 1
 kluftfig=0
 legends_on = 0
 grids_on = 1
 
-# directories = [
-# '_Current Output/'
-# ]
+directories = [
+'_Current Output/'
+]
 
 skip_ifn = []
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -112,7 +112,7 @@ def make_csv(x,fname):
 		f.write('\n')
 	f.close
 	
-
+sol_inc = 1362.0/4.0
 
 obs_file = '/Users/nickedkins/Dropbox/Figure Data/shinesinha_deltaTvsp.txt'
 obs_data = np.genfromtxt(obs_file,delimiter=',')
@@ -322,7 +322,7 @@ def readfile(fn,counter):
 			rel_hum_cols[i,col] = f.readline()            
 
 
-	sol_inc = 1362.0/4.0
+	
 	# abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
 	# abs_o3 = sum(A_oz_lcols[2:nlayersm,:])*sol_inc/ncols / factor
 	# abs_surf = np.mean(abs_surf_lhcols[0,:]) / factor
@@ -560,8 +560,10 @@ for directory in directories:
 		# plt.ylabel('Lapse rate (K/km)')
 		# plt.legend()
 
+		lay_abs_rad = np.zeros((nlayersm,ncols))
 
-		# i3=0
+
+		i3=0
 
 		if (plot_all_vert_profiles == 1):
 
@@ -612,11 +614,11 @@ for directory in directories:
 				plt.subplot(342)
 				plt.title('htrm')
 				# plt.semilogy(htrmcols[:,col],pzmcols[:,col],ls=linestyles[i1],label=str(fn))
-				plt.semilogy(htrmcols[:nlayersm-1,col],pzmcols[:nlayersm-1,col],'-o',label=str(fn))
+				plt.semilogy(htrmcols[:nlayersm-1,col],pzmcols[:nlayersm-1,col],label=str(fn))
 				# plt.xlim(-5,5)
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-				plt.axvline(-0.03,ls='--')
-				plt.axvline(0.03,ls='--')
+				plt.axvline(-0.01,ls='--')
+				plt.axvline(0.01,ls='--')
 				if(legends_on==1):
 					plt.legend()
 				
@@ -630,6 +632,20 @@ for directory in directories:
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
 				if(legends_on==1):
 					plt.legend()
+
+				for i in range(1,nlayersm):
+					lay_abs_rad[i,col] = totuflumcols[i,col] - totuflumcols[i-1,col] + totdflumcols[i,col] - totdflumcols[i-1,col] + (abspncols[i,col] + A_oz_lcols[i,col]) * sol_inc
+
+				plt.figure(i1+1)
+				plt.subplot(344)
+				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col])
+				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+				plt.xlabel('Layer absorbed radiation (Wm$^{-2}$')
+				plt.ylabel('Pressure (hPa)')
+				if(legends_on==1):
+					plt.legend()
+				plt.axvline(-0.01)
+				plt.axvline(0.01)
 
 				plt.figure(i1+1)
 				plt.subplot(345)
@@ -702,7 +718,7 @@ for directory in directories:
 				if(legends_on==1):
 					plt.legend()
 
-				i3+=1
+				# i3+=1
 
 		i_fn += 1
 
