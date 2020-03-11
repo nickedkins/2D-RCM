@@ -25,7 +25,7 @@ os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcolss = [2]
-nlays = 600	
+nlays = 200
 od_low = 3.0
 od_mid = 3.0
 od_high = 3.0
@@ -42,7 +42,7 @@ steps_before_toa_adj = 10
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1]	 #1=erai, 2=RCEMIP
-lcs = [-50]
+lcs = [-9.8]
 lapse_types = [0] # 0=critical lapse rate, 1=H82, 2=Mason
 convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 manual_clouds = []
@@ -679,7 +679,7 @@ for maxhtr in maxhtrs:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [1000.] * ncols
+																		fth = [500.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0

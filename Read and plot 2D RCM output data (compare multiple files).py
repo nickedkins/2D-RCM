@@ -21,9 +21,9 @@ directories = [
 
 skip_ifn = []
 
-directories = [
-'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/layradbudg/lapse/'
-]
+# directories = [
+# '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/layradbudg/timesteps/'
+# ]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -200,6 +200,7 @@ def readfile(fn,counter):
 	rel_hum_cols = np.zeros((nlayersm,ncols))
 	cold_point_trop_ind_cols = np.zeros((nlayersm,ncols))
 	insolcols = np.zeros((nlayersm,ncols))
+	fnetmcols = np.zeros((nlayersm+1,ncols))
 	
 
  
@@ -331,6 +332,9 @@ def readfile(fn,counter):
 		for i in range(nlayersm):
 			insolcols[i,col] = f.readline()            
 
+	for col in range(ncols):        
+		for i in range(nlayersm):
+			fnetmcols[i,col] = f.readline()  
 
 	
 	# abs_h2o = sum(abspncols[:nlayersm-1,:])*sol_inc/ncols / factor
@@ -341,7 +345,7 @@ def readfile(fn,counter):
 	return tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,\
 	abspncols,abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,\
 	lapsecritcols,meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols,cold_point_trop_ind_cols,\
-	insolcols
+	insolcols,fnetmcols
 
 i1 = 0
 
@@ -384,6 +388,7 @@ for directory in directories:
 	wklm3_master = []
 	totdflumcols_master = []
 	pavelm_master = []
+	fnetm_master = []
 
 	filenames = []
 
@@ -424,7 +429,7 @@ for directory in directories:
 			continue
 		tzmcols,pzmcols,wklm1cols,totuflumcols,htrmcols,altzmcols,pavelmcols,htro3cols,totdflumcols,wklm2cols,A_oz_lcols,abspncols,\
 		abs_surf_lhcols,tboundmcols,tavelmcols,nlayersm,ncols,boxlatcols,htrh2ocols,wklm3cols,convcols,wbrodlmcols,lapsecritcols,\
-		meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols,cold_point_trop_ind_cols,insolcols,\
+		meridtransp,abs_h2o_cols,abs_o3_cols,abs_surf_cols,d_mid,d_trop,rel_hum_cols,cold_point_trop_ind_cols,insolcols,fnetmcols\
 		 = readfile(fn,counter)
 
 		tzm_master.append(tzmcols)  
@@ -450,6 +455,7 @@ for directory in directories:
 		wklm3_master.append(wklm3cols)
 		totdflumcols_master.append(totdflumcols)
 		pavelm_master.append(pavelmcols)  
+		fnetm_master.append(fnetmcols)
 
 		# T1s[int(i_fn)] = latwghtavg(tzmcols[0,:],boxlatcols[0,:])
 
@@ -607,7 +613,7 @@ for directory in directories:
 				plt.title('tzm')
 				# plt.plot(tzmcols[:,col],altzmcols[:,col]/1000.,ls=linestyles[i1],label='Spectral '+str(fn))
 				# plt.semilogy(tzmcols[:,col],pzmcols[:,col],label=str(fn),ls=linestyles[i1])
-				plt.semilogy(tavelmcols[:,col],pavelmcols[:,col],label=str(fn),ls=linestyles[i1])
+				plt.semilogy(tavelmcols[:,col],pavelmcols[:,col],'-o',label=str(fn),ls=linestyles[i1])
 				# plt.semilogy(tzmcols[:,col],pzmcols[:,col],'-o',label=str(fn))
 				plt.xlabel('Temperature (K)')
 				plt.ylabel('Pressure (hPa)')
@@ -647,15 +653,18 @@ for directory in directories:
 
 				for i in range(1,nlayersm):
 					lay_abs_rad[i,col] = (totdflumcols[i,col]-totdflumcols[i-1,col])+(totuflumcols[i,col]-totuflumcols[i-1,col])# + (abspncols[i,col] + A_oz_lcols[i,col]) * insolcols[i,col]
+					lay_abs_rad[i,col] = (totuflumcols[i,col]-totdflumcols[i,col]) - (totuflumcols[i-1,col]-totdflumcols[i-1,col])
+					# lay_abs_rad[i,col] = fnetmcols[i,col]# - fnetmcols[i-1,col]
 
 				plt.figure(3)
 				# plt.subplot(344)
 				# plt.title('layer abs rad')
 				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col],label=dir_label+' '+fn)
+				# plt.semilogy(totuflumcols-totdflumcols,pzmcols,'--')
 				plt.xlabel('Layer radiation budget (Wm$^{-2}$)')
 				plt.ylabel('Pressure (hPa)')
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
-				plt.xlim(-0.5)
+				# plt.xlim(-0.5)
 				if(legends_on==1):
 					plt.legend()
 				plt.axvline(-0.01)
@@ -785,6 +794,7 @@ for directory in directories:
 	wklm3_master=np.array(wklm3_master)
 	totdflumcols_master=np.array(totdflumcols_master)
 	pavelm_master = np.array(pavelm_master)
+	fnetm_master = np.array(fnetm_master)
 	
 	# master indices for conv_trop_ind: master[file][column]
 	# to get trop values for tzm, use tzm_master[file,conv_trop_ind_master[file,column],column][0][file] (slightly ugly but functional)

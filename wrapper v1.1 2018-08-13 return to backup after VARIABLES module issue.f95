@@ -904,8 +904,8 @@ subroutine wrapper
                     else if(htrm(i-1)/(newur(i)) < -5.) then
                         tavelm(i) = tavelm(i)-5.
                     else
-                        ! tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
-                        tavelm(i) = tavelm(i) + (totuflum(i)-totuflum(i-1)-(totdflum(i)-totdflum(i-1)))/(pzm(i)-pzm(i-1))*8.49
+                        tavelm(i) = tavelm(i) + htrm(i-1)/(newur(i))
+                        ! tavelm(i) = tavelm(i) + (totuflum(i)-totuflum(i-1)-(totdflum(i)-totdflum(i-1)))/(pzm(i)-pzm(i-1))*8.49
                     end if
                     if (tavelm(i) < t_min) then 
                         tavelm(i) = t_min
@@ -1035,6 +1035,7 @@ subroutine wrapper
             tau_cldcols(:,col) = tau_cld
             fracscols(:,col) = cld_fracs
             R_gcols(col) = R_g
+            fnetmcols(:,col) = fnetm
 
 
             olrcols(col) = totuflum(OLR_layer)
@@ -1403,8 +1404,8 @@ subroutine wrapper
 
         transpcalled = 0
 
-        if (j==150) then
-            print*, 'j=150'
+        if (j==400) then
+            print*, 'j=400'
         end if
 
 

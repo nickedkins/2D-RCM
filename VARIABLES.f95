@@ -80,7 +80,7 @@ MODULE VARIABLES
     real, dimension(maxlaym) :: newur
     integer :: detailprint
     real,dimension(0:maxlaym) :: kappa,theta,montgomery,exner,geopotential
-    real,dimension(0:maxlaym,MAXNCOLS) :: tzmcols,altzmcols,totuflumcols,totdflumcols,htrmcols,pzmcols
+    real,dimension(0:maxlaym,MAXNCOLS) :: tzmcols,altzmcols,totuflumcols,totdflumcols,htrmcols,pzmcols,fnetmcols
     real,dimension(maxlaym,MAXNCOLS) :: tavelmcols,htrh2ocols,htro3cols,wklm1cols,wklm2cols,wklm3cols,wbrodlmcols,abspncols,&
     a_oz_lcols,altlaymcols,pavelmcols,tboundmcols,tau_cldcols,fracscols,rel_hum_cols
     real,dimension(maxncols) :: abs_surf_lhcols

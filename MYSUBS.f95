@@ -866,6 +866,12 @@ MODULE MYSUBS
             end do
         end do
 
+        do col=1,ncols
+            do i=1,nlayersm
+                write(50,*) fnetmcols(i,col)
+            end do
+        end do        
+
 
         close(50)
 
