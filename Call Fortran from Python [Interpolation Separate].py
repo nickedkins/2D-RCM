@@ -18,14 +18,14 @@ from os import listdir
 from time import localtime, strftime
 from scipy import stats
 
-# project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
-project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
+project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/'
+#project_dir = '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/'
 
 os.chdir(project_dir)
 
 ncolss = [1]
 ncloudcolss = [2]
-nlays = 200
+nlays = 600	
 od_low = 3.0
 od_mid = 3.0
 od_high = 3.0
@@ -36,13 +36,13 @@ ur_htr = 1.0
 days = timesteps/ur_htr
 min_press = 1.0
 cloud_source = 0 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 600
-steps_before_toa_adj = 100
+steps_before_first_eqbcheck = 800
+steps_before_toa_adj = 10
 # sbfecs = [50,100,200,400,800,1600]
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1]	 #1=erai, 2=RCEMIP
-lcs = [-5.7]
+lcs = [-50]
 lapse_types = [0] # 0=critical lapse rate, 1=H82, 2=Mason
 convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 manual_clouds = []
@@ -61,7 +61,8 @@ forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tr
 maxhtrs = [0.001]
 tp = 1e3
 if (forcing_expt==1):
-	tp = tp * 1e12	
+	tp = tp * 1e12
+t_intp_type = 1 #0: linear, 1: quadratic	
 
 # for nlays in nlayss:
 nlays = int(nlays)
@@ -678,7 +679,7 @@ for maxhtr in maxhtrs:
 																		#fth = np.zeros(ncols)
 																		#for i in range(ncols):
 																		#    fth[i] = 15.0 - abs(collats[i])/18.0
-																		fth = [500.] * ncols
+																		fth = [1000.] * ncols
 																		ol = nlays
 																		asp = 2.0   
 																		cs = 0
@@ -775,7 +776,7 @@ for maxhtr in maxhtrs:
 																		gas_amt_fac_h2o,gas_amt_fac_co2,gas_amt_fac_o3,gas_amt_p_high_h2o,gas_amt_p_low_h2o,gas_amt_p_high_co2,gas_amt_p_low_co2,gas_amt_p_high_o3,gas_amt_p_low_o3,
 																		gas_amt_pert_h2o,gas_amt_pert_co2,gas_amt_pert_o3,psurf_override,mixco2_prescribed_on,mixco2_prescribed,steps_before_toa_adj,a_green,b_green,c_green,H_green,cloudloctype,
 																		surf_emiss_on,lapse_type,h2o_for,h2o_sb,h2o_source,ur_mt,mtransp_type,steps_before_first_eqbcheck,gas_addmolec_h2o,gas_addmolec_co2,gas_addmolec_o3,max_rh,snapshot,
-																		piar,pich4,gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4,forcing_expt,o3_source]
+																		piar,pich4,gas_amt_p_high_ch4,gas_amt_p_low_ch4,gas_amt_pert_ch4,gas_amt_fac_ch4,gas_addmolec_ch4,forcing_expt,o3_source,t_intp_type]
 																		
 																		f = open(project_dir+'/Earth RCM Parameters','w')
 																		for m in params:

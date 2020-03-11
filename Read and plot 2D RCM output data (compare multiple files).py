@@ -21,9 +21,9 @@ directories = [
 
 skip_ifn = []
 
-# directories = [
-# '/Users/nickedkins/Dropbox/GitHub Repositories/Home/2D-RCM/_Useful Data/ptrop vs ttrop/nl=200/'
-# ]
+directories = [
+'/Users/nickedkins/Dropbox/GitHub Repositories/Uni/2D-RCM/_Useful Data/layradbudg/lapse/'
+]
 
 # set the colormap and centre the colorbar
 class MidpointNormalize(colors.Normalize):
@@ -648,11 +648,14 @@ for directory in directories:
 				for i in range(1,nlayersm):
 					lay_abs_rad[i,col] = (totdflumcols[i,col]-totdflumcols[i-1,col])+(totuflumcols[i,col]-totuflumcols[i-1,col])# + (abspncols[i,col] + A_oz_lcols[i,col]) * insolcols[i,col]
 
-				plt.figure(i1+1)
-				plt.subplot(344)
-				plt.title('layer abs rad')
-				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col])
+				plt.figure(3)
+				# plt.subplot(344)
+				# plt.title('layer abs rad')
+				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col],label=dir_label+' '+fn)
+				plt.xlabel('Layer radiation budget (Wm$^{-2}$)')
+				plt.ylabel('Pressure (hPa)')
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))
+				plt.xlim(-0.5)
 				if(legends_on==1):
 					plt.legend()
 				plt.axvline(-0.01)

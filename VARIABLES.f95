@@ -158,7 +158,7 @@ MODULE VARIABLES
     real :: abs_surf_lhwghtd,abs_h2owghtd,abs_o3wghtd
     real :: sebfac,seb,lhf,shf,bowen,c_drag,meanwind,density
     real, dimension(maxncols) :: sebcols
-    integer :: sfc_heating,playtype,mtranspon,surf_emiss_on
+    integer :: sfc_heating,playtype,mtranspon,surf_emiss_on,t_intp_type
 
     !To keep the terminal open
     character*1 KeyBuf

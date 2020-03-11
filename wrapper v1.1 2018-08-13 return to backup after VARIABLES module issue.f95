@@ -205,6 +205,7 @@ subroutine wrapper
     read(73,*) gas_addmolec_ch4
     read(73,*) forcing_expt
     read(73,*) o3_source
+    read(73,*) t_intp_type
 
     close(73)
 
@@ -929,20 +930,28 @@ subroutine wrapper
 
 
             if(snapshot/=1) then
-                ! do i=1,nlayersm-1
-                !     tzm(i)=(tavelm(i)+tavelm(i+1))/2
-                !     if (tzm(i) < t_min) tzm(i) = t_min
-                ! enddo
+                select case(t_intp_type)                
+                case(0)
+                    do i=1,nlayersm-1
+                        tzm(i)=(tavelm(i)+tavelm(i+1))/2
+                        if (tzm(i) < t_min) tzm(i) = t_min
+                    enddo
+                    !Set temperature of very top level
+                    tzm(nlayersm) = 2.0*tavelm(nlayersm)-tzm(nlayersm-1)
+                case(1)
+                    ! quadratic interpolation of tzm
+                    do i=2,nlayersm-1
+                        tzm(i)=&
+((pzm(i)-pavelm(i))*(pzm(i)-pavelm(i+1)))/((pavelm(i-1)-pavelm(i))*(pavelm(i-1)-pavelm(i+1)))*tavelm(i-1)+&
+((pzm(i)-pavelm(i-1))*(pzm(i)-pavelm(i+1)))/((pavelm(i)-pavelm(i-1))*(pavelm(i)-pavelm(i+1)))*tavelm(i)+&
+((pzm(i)-pavelm(i-1))*(pzm(i)-pavelm(i)))/((pavelm(i+1)-pavelm(i-1))*(pavelm(i+1)-pavelm(i)))*tavelm(i+1)
+                    end do
+                    tzm(nlayersm)=&
+((pzm(nlayersm)-pavelm(i-1))*(pzm(nlayersm)-pavelm(i)))/((pavelm(i-2)-pavelm(i-1))*(pavelm(i-2)-pavelm(i)))*tavelm(i-2)+&
+((pzm(nlayersm)-pavelm(i-2))*(pzm(nlayersm)-pavelm(i)))/((pavelm(i-1)-pavelm(i-2))*(pavelm(i-1)-pavelm(i)))*tavelm(i-1)+&
+((pzm(nlayersm)-pavelm(i-2))*(pzm(nlayersm)-pavelm(i-1)))/((pavelm(i)-pavelm(i-2))*(pavelm(i)-pavelm(i-1)))*tavelm(i)
+                end select
 
-                do i=2,nlayersm-1
-                    tzm(i)=&
-                    (pzm(i)-pavelm(i))*(pzm(i)+pavelm(i+1))/((pavelm(i-1)-pavelm(i))*(pavelm(i-1)*pavelm(i+1)))*tavelm(i-1)+&
-                    (pzm(i)-pavelm(i-1))*(pzm(i)+pavelm(i+1))/((pavelm(i)-pavelm(i-1))*(pavelm(i)*pavelm(i+1)))*tavelm(i)+&
-                    (pzm(i)-pavelm(i-1))*(pzm(i)+pavelm(i))/((pavelm(i+1)-pavelm(i-1))*(pavelm(i+1)*pavelm(i)))*tavelm(i+1)
-                end do
-
-                !Set temperature of very top level
-                tzm(nlayersm) = 2.0*tavelm(nlayersm)-tzm(nlayersm-1)
 
                 conv(:,col) = 0
 
