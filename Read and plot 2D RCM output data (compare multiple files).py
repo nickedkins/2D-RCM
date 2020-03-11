@@ -652,15 +652,21 @@ for directory in directories:
 				# 	plt.legend()
 
 				for i in range(1,nlayersm):
-					lay_abs_rad[i,col] = (totdflumcols[i,col]-totdflumcols[i-1,col])+(totuflumcols[i,col]-totuflumcols[i-1,col])# + (abspncols[i,col] + A_oz_lcols[i,col]) * insolcols[i,col]
-					lay_abs_rad[i,col] = (totuflumcols[i,col]-totdflumcols[i,col]) - (totuflumcols[i-1,col]-totdflumcols[i-1,col])
-					# lay_abs_rad[i,col] = fnetmcols[i,col]# - fnetmcols[i-1,col]
+					# lay_abs_rad[i,col] = (totdflumcols[i,col]-totdflumcols[i-1,col])+(totuflumcols[i,col]-totuflumcols[i-1,col])# + (abspncols[i,col] + A_oz_lcols[i,col]) * insolcols[i,col]
+					# lay_abs_rad[i,col] = (totuflumcols[i,col]-totdflumcols[i,col]) - (totuflumcols[i-1,col]-totdflumcols[i-1,col])
+					lay_abs_rad[i,col] = fnetmcols[i,col] - fnetmcols[i-1,col]
+					# if(i>0):
+					# 	lay_abs_rad[i,col] -= A_oz_lcols[i-1,col] * insolcols[i,col]
+					# if(i<nlayersm-1):
+					# 	lay_abs_rad[i,col] -= abspncols[i+1,col] * insolcols[i,col]
+
+
+					# -(abspncols[i+1,col] + A_oz_lcols[i-1,col]) * insolcols[i,col]
 
 				plt.figure(3)
 				# plt.subplot(344)
 				# plt.title('layer abs rad')
 				plt.semilogy(lay_abs_rad[:,col],pzmcols[1:,col],label=dir_label+' '+fn)
-				# plt.semilogy(totuflumcols-totdflumcols,pzmcols,'--')
 				plt.xlabel('Layer radiation budget (Wm$^{-2}$)')
 				plt.ylabel('Pressure (hPa)')
 				plt.ylim(max(pzmcols[:,col]),min(pzmcols[:,col]))

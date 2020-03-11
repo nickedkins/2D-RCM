@@ -36,13 +36,13 @@ ur_htr = 1.0
 days = timesteps/ur_htr
 min_press = 1.0
 cloud_source = 0 #0 for manual, 1 for MISR
-steps_before_first_eqbcheck = 800
+steps_before_first_eqbcheck = 100
 steps_before_toa_adj = 10
 # sbfecs = [50,100,200,400,800,1600]
 snapshot=0
 h2o_sources=[0] # 0=ERA-I mixh2o, 1=MW67 RH, 2=Cess RH, 3=Kasting, 4=Ramirez, 5=constant with lat, 6=Kluft19
 o3_sources = [1]	 #1=erai, 2=RCEMIP
-lcs = [-9.8]
+lcs = [-5.7]
 lapse_types = [0] # 0=critical lapse rate, 1=H82, 2=Mason
 convecttype = 0 #convection type. 0: normal critical lapse 1: for forcing expt, convect to fixed ptrop and no higher 2: MALR
 manual_clouds = []
@@ -53,12 +53,12 @@ mtransp_types = [2] #1=simple diffusion, 2=Vladilo
 # gas_amt_fac_co2s = [1/2.,1.,2.,4.,8.,16.]
 gas_amt_fac_co2s = [1.]
 gas_amt_fac_ch4s = [0.]		
-gas_amt_fac_h2os = [0.]
-gas_amt_fac_o3 = 0.
+gas_amt_fac_h2os = [1.]
+gas_amt_fac_o3 = 1.
 o3sw = 0
 h2osw = 0
 forcing_expt = 0 #0=normal, 1=forcing expt: stratosphere adjusts, surface and tropopshere are fixed, ptrop fixed
-maxhtrs = [0.001]
+maxhtrs = [0.0001]
 tp = 1e3
 if (forcing_expt==1):
 	tp = tp * 1e12
